@@ -6,7 +6,6 @@ import sqlite3
 import sys
 from collections import Counter, defaultdict
 from datetime import UTC, date, datetime, timedelta
-from decimal import localcontext
 from pathlib import Path
 from uuid import uuid4
 
@@ -16,9 +15,11 @@ from app.clients.common import ProviderError
 from app.config import ROOT_DIR, Settings
 from app.database import Database
 from app.models.data import EquityObservation, TokenObservation
+from app.models.research import OPENING_MINUTES
 from app.models.trust import TrustPolicy
 from app.services.data_layer import DataLayer
 from app.services.ingestion import HistoricalIngestion
+from app.services.opening_target import opening_outcome
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
 
@@ -123,71 +124,6 @@ def captured_records(model, table):
     if len(rows) > 5000:
         raise ValueError("Capture read bound reached; no completeness claim")
     return [model.model_validate_json(row[0]) for row in rows]
-
-
-def opening_outcome(bars, previous_close, opening):
-    """A separately labeled outcome; never a feature available before reopening."""
-    reference = [
-        b
-        for b in bars
-        if b.kind == "BAR"
-        and b.interval == "1minute"
-        and b.source_timestamp + timedelta(minutes=1) == previous_close
-    ]
-    target = [
-        b
-        for b in bars
-        if b.kind == "BAR" and b.interval == "5minute" and b.source_timestamp == opening
-    ]
-    if not reference or not target:
-        return {
-            "status": "UNSCORABLE",
-            "reason": "PREVIOUS_REGULAR_CLOSE_OR_FIRST_5M_BAR_MISSING",
-            "opening_return": None,
-            "target_available_at": None,
-        }
-    previous, first = reference[0], target[0]
-    if (
-        previous.source != "MASSIVE"
-        or first.source != "MASSIVE"
-        or previous.data_mode != "LIVE"
-        or first.data_mode != "LIVE"
-        or previous.data_quality != "HISTORICAL"
-        or first.data_quality != "HISTORICAL"
-        or previous.ticker != first.ticker
-        or previous.adjusted != first.adjusted
-    ):
-        return {
-            "status": "UNSCORABLE",
-            "reason": "CONFLICTING_OUTCOME_PROVENANCE",
-            "opening_return": None,
-            "target_available_at": None,
-        }
-    target_end = opening + timedelta(minutes=5)
-    if first.ingestion_timestamp < target_end or previous.ingestion_timestamp < previous_close:
-        return {
-            "status": "UNSCORABLE",
-            "reason": "UNCOMPLETED_BAR",
-            "opening_return": None,
-            "target_available_at": None,
-        }
-    with localcontext() as context:
-        context.prec = 256
-        value = (first.close - previous.close) / previous.close
-    return {
-        "status": "SCORABLE_OUTCOME_ONLY",
-        "previous_close": str(previous.close),
-        "reference_bar_start": previous.source_timestamp.isoformat(),
-        "reference_close_at": previous_close.isoformat(),
-        "first_5m_close": str(first.close),
-        "target_bar_start": first.source_timestamp.isoformat(),
-        "target_bar_completed_at": target_end.isoformat(),
-        "target_available_at": max(first.ingestion_timestamp, target_end).isoformat(),
-        "opening_return": str(value),
-        "adjusted": first.adjusted,
-        "point_in_time_revision_history_verified": False,
-        "outcome_is_decision_feature": False,
-    }
 
 
 def leakage_summary(tokens, equities, news, decision, target):
@@ -328,7 +264,7 @@ def main():
         five = []
         try:
             five = layer.equity.get_historical_bars(
-                "NVDA", "2026-10-05", "2026-10-05", multiplier=5, max_pages=2
+                "NVDA", "2026-10-05", "2026-10-05", multiplier=OPENING_MINUTES, max_pages=2
             )
             attempted["equity_5m"] = {
                 "inserted": layer.repository.save(five),

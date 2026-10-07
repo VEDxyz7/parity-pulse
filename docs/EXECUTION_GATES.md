@@ -1,5 +1,25 @@
 # Development and execution capability gates
 
+## Master engineering Phase 5 evidence — October 7, 2026
+
+The separately authorized Research / Prediction machinery is implemented and verified:
+**PHASE 5 IMPLEMENTATION=PASS; PHASE 5 DATA GATE=BLOCKED**. This is an engineering-stage
+result, not a canonical Trust/Opportunity or LIVE gate advancement. [Phase 5 report](PHASE_5_REPORT.md)
+and [real replay evidence](evidence/PHASE_5_REAL_REPLAY.json) preserve the distinction.
+
+The research data gate requires point-in-time verified features/ratios/revisions/calendar/news/
+liquidity, 30 qualifying baseline episodes, 30 independent opening-model samples in a supported
+exact scope, 3 available analogues and a valid local fit. Current real counts remain 0/30, 0/30,
+0/3. It unlocks only evidenced non-executable research predictions/retrieval; no existing production
+gate is changed or implicitly passed. Synthetic tests certify software only.
+
+Unchanged production states: DATA_GATE=PASS; DRY_RUN_GATE=PASS; TRUST_GATE=BLOCKED;
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST; SWAP_LIVE_GATE=BLOCKED; RFQ_LIVE_GATE=BLOCKED;
+AGENTIC_WALLET_LIVE_GATE=BLOCKED. No Trust threshold, risk, wallet, simulation, confirmation,
+transaction equivalence, RFQ or fail-closed requirement changes. Research replay has no execution
+client and writes only to a separate research artifact store. Every earlier section below is
+preserved historical evidence. Stop after Phase 5; Phase 6 requires a separate instruction.
+
 ## Latest Trust data investigation gate — 2026-10-06T17:56Z
 
 CANONICAL_PHASE_1_GATE=PASS; DATA_GATE=PASS; DRY_RUN_GATE=PASS; **TRUST_GATE=BLOCKED**; OPPORTUNITY_GATE=BLOCKED_BY_TRUST; SWAP_LIVE_GATE=BLOCKED; RFQ_LIVE_GATE=BLOCKED; AGENTIC_WALLET_LIVE_GATE=BLOCKED.

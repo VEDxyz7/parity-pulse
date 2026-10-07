@@ -1,5 +1,19 @@
 # Product phases and engineering stages
 
+## Authorized master engineering Phase 5 — October 7, 2026
+
+**Engineering Phase 5 — RESEARCH / PREDICTION: implementation PASS, real data gate BLOCKED.**
+The user's separate authorization explicitly permits complete research machinery with insufficient
+real historical evidence. This is not a canonical product Phase 5 or a Trust/Opportunity PASS.
+See the [Phase 5 report](PHASE_5_REPORT.md) for the audit, real replay and unchanged safety boundaries.
+
+Current canonical product state stays Phase 2 — Trust Layer, TRUST_GATE=BLOCKED;
+Canonical Phase 3 production Opportunity remains BLOCKED_BY_TRUST. DATA/DRY_RUN remain PASS,
+all three LIVE gates BLOCKED. The completed isolated DEMO pipeline is preserved and browser-verified.
+Existing history/mapping below remains intact. Next engineering phase is **Phase 6 — Multi-Agent
+Intelligence**, only under separate authorization and with blocked/insufficient evidence propagated.
+No agents or next-phase work were implemented. Real data remediation remains necessary.
+
 ## Latest remediation state — 2026-10-06
 
 Current canonical phase remains **Phase2 — Trust Layer, implemented / TRUST_GATE=BLOCKED**. News decision-window coverage is corrected and actually verified; full-history/hourly limitations persist. Independent current-equity entitlement, verified comparable liquidity and sufficient real episodes/analogues remain unavailable. Canonical Phase1/DATA/DRY_RUN remain PASS; OPPORTUNITY_GATE=BLOCKED_BY_TRUST; all LIVE gates remain BLOCKED.302 backend /47 frontend tests and the existing checks pass.

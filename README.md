@@ -1,5 +1,14 @@
 # Parity Pulse
 
+Master engineering Phase 5 — Research / Prediction is implemented; its real data gate remains
+**BLOCKED**. Offline point-in-time episodes, cosine retrieval, rolling Decimal OLS and deterministic
+replay reuse existing Trust evidence. No production gate or completed DEMO behavior changes.
+See [Phase 5 architecture, exact data blockers and verification](docs/PHASE_5_REPORT.md).
+From the repository root, run `.venv/bin/python scripts/replay-research.py`; it needs no API key or
+network and writes only to the separate, Git-ignored `data/research/phase5/` artifact store.
+Predictions remain unavailable on the current real history: 0/30 baseline, 0/30 model episodes,
+0/3 analogues. Next engineering phase is Phase 6, requiring separate authorization.
+
 Hackathon Demo Stage 4 extends the explicit **DEMO SANDBOX** through Trust → Opportunity → Risk → synthetic Quote → Risk revalidation → unsigned Request Preparation → local constraint Simulation → Paper Fill → Position → synthetic Monitor/Exit → calculated P&L → ledger-derived Scorecard. Three synthetic scenarios use the unchanged Trust engine; economic targets/costs and financial risk limits are separate marked assumptions. Opt in with `RUNTIME_MODE=DEMO DATA_MODE=DEMO`; sandbox databases are disposable memory and analysis references are bounded in-memory caches. Production Trust and Opportunity remain blocked. The default `RUNTIME_MODE=LIVE` preserves the existing application path and does not enable live trading. See the [Stage 1 sandbox runbook](docs/DEMO_TRUST_SANDBOX.md), [Stage 3A core contracts](docs/DEMO_OPPORTUNITY_STAGE_3A.md) and [Stage 3B contracts, flow and verification](docs/DEMO_PREPARATION_STAGE_3B.md). These quotes/requests are synthetic, simulation is a local constraint check, and nothing is executable, signed or broadcast. The paper ledger is isolated in memory, idempotent within a DEMO backend session and cleared on restart. See the [Stage 4 paper lifecycle, runbook and evidence](docs/DEMO_PAPER_STAGE_4.md). No real funds move.
 
 Canonical Phase 1 — Working Ask Flow is PASS for deterministic, non-executable exposure estimates and persisted DRY_RUN proposals. Engineering Stages 1/2 remain PASS. The backend implements dynamic Binance RWA discovery, market data, independent Massive equity/news adapters, a versioned U.S. calendar, exact Decimal normalization and isolated SQLite persistence. The frontend accepts stock budget requests and displays backend-authoritative estimates, issuer comparison, unknown costs and execution blockers. Canonical Phase 2 adds a separate deterministic analytical Trust endpoint/panel; its gate remains BLOCKED by unavailable real evidence. Production Opportunity Mode, agents and live execution remain deferred.

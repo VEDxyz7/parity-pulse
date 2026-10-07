@@ -1,5 +1,31 @@
 # Architecture decision record — through Phase 2
 
+## Master engineering Phase 5 — isolated production research machinery
+
+October 7, 2026: [Phase 5 report](PHASE_5_REPORT.md) records implementation PASS / data gate BLOCKED.
+`HistoricalSource` reads existing analytical SQLite tables in read-only transactions and the existing
+official raw history capture. Its payload/dataset provenance preserves first availability and null
+historical ratios. Neither experimental pool data nor Twelve Data is admitted to production Trust.
+
+`ResearchEpisodeBuilder` reuses the unchanged Trust evaluator, calendar, normalization, reference,
+news, liquidity, baselines and 30-minute episode builder through an in-memory historical snapshot.
+Opening outcomes are separately typed and use the shared five-minute target configuration. Explicit
+payload-bound effective/availability/revision proofs precede feature eligibility. Raw posthoc targets
+remain separate from decision information. Current ratios never become historical ratios.
+
+Research vector/retrieval and rolling Decimal QR OLS operate on exact, same-scope, completed,
+available episodes. They return counts, provenance and insufficient/not-ready states. Walk-forward
+replay includes rejected candidates, uses the existing Opportunity arithmetic through a shared pure
+helper, and abstains when costs/risk evidence is absent. No real row is converted to a DEMO risk
+contract. Global production gates continue blocking action; equity outcomes are not execution P&L.
+
+`ResearchStore` publishes immutable, integrity-checked JSON artifacts containing the complete dataset,
+policy/cost inputs, source hashes, deterministic IDs and results under Git-ignored `data/research/`.
+It never opens or modifies production execution databases. The explicit offline command is
+`.venv/bin/python scripts/replay-research.py`; it loads no credentials and has no network client.
+No startup hook, endpoint, scheduler, frontend calculation, agent, live route or wallet is added.
+The existing DEMO flow and API/gate contracts remain unchanged. Earlier sections are preserved snapshots.
+
 ## Latest bounded Trust correction — 2026-10-06
 
 Architecture and financial/execution rules are unchanged. MassiveProvider now resets and verifies a descending latest-news prefix boundary; NewsAlignmentService checks whether that prefix covers the required window while retaining full-history partial and hourly-feed reasons. The existing TrustService passes this provenance only; no agent, scheduler, gateway or new production endpoint was added. Independent403, missing liquidity and zero real history keep TRUST_GATE=BLOCKED. [Remediation audit](PHASE_2_TRUST_REMEDIATION.md) distinguishes diagnostic-only pool/last-trade reads from application permissions and preserves previous evidence.

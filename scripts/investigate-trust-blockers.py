@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 from app.clients.binance_web3 import PREFIX, BinanceWeb3Client  # noqa: E402
 from app.clients.common import ProviderError  # noqa: E402
 from app.clients.massive import MassiveClient  # noqa: E402
+from app.models.research import OPENING_MINUTES  # noqa: E402
 from app.providers.massive import Bar, validate  # noqa: E402
 from app.services.calendar import USEquityCalendar  # noqa: E402
 
@@ -344,7 +345,11 @@ def collect():
         for number, window in enumerate(candidates, 1):
             for multiplier, lo, hi in [
                 (1, window["close"] - timedelta(minutes=1), window["close"]),
-                (5, window["open"], window["open"] + timedelta(minutes=5)),
+                (
+                    OPENING_MINUTES,
+                    window["open"],
+                    window["open"] + timedelta(minutes=OPENING_MINUTES),
+                ),
             ]:
                 path = f"/v2/aggs/ticker/NVDA/range/{multiplier}/minute/{ms(lo)}/{ms(hi) - 1}"
                 ledger = {
@@ -673,7 +678,11 @@ def deepen():
         for window in windows(calendar, min(older), dt(data["requested_start"])):
             for multiplier, lo, hi in [
                 (1, window["close"] - timedelta(minutes=1), window["close"]),
-                (5, window["open"], window["open"] + timedelta(minutes=5)),
+                (
+                    OPENING_MINUTES,
+                    window["open"],
+                    window["open"] + timedelta(minutes=OPENING_MINUTES),
+                ),
             ]:
                 path = f"/v2/aggs/ticker/NVDA/range/{multiplier}/minute/{ms(lo)}/{ms(hi) - 1}"
                 ledger = {
@@ -781,7 +790,7 @@ def outcome(rows, close, opening, source):
         r
         for r in rows
         if r["source"] == source
-        and r.get("interval") == "5minute"
+        and r.get("interval") == f"{OPENING_MINUTES}minute"
         and dt(r["start_utc"]) == opening
     ]
     if not reference or not target:
@@ -805,7 +814,7 @@ def outcome(rows, close, opening, source):
         or previous.get("ticker") != "NVDA"
         or first.get("ticker") != "NVDA"
         or dt(previous["first_seen"]) < close
-        or dt(first["first_seen"]) < opening + timedelta(minutes=5)
+        or dt(first["first_seen"]) < opening + timedelta(minutes=OPENING_MINUTES)
     ):
         return {
             "status": "UNSCORABLE",
@@ -821,7 +830,7 @@ def outcome(rows, close, opening, source):
         "previous_close": previous["close"],
         "first_5m_close": first["close"],
         "opening_return": str(value),
-        "completed_at": (opening + timedelta(minutes=5)).isoformat(),
+        "completed_at": (opening + timedelta(minutes=OPENING_MINUTES)).isoformat(),
         "first_seen": first["first_seen"],
         "decision_feature": False,
         "revision_history_asof_verified": False,

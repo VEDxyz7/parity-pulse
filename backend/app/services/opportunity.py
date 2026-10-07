@@ -6,11 +6,39 @@ from uuid import uuid4
 
 from app.models.opportunity import OpportunityDecision, OpportunityEconomics
 from app.services.demo_sandbox import MARKER
-from app.services.normalization import bounded_decimal, comparable_economics
+from app.services.normalization import bounded_decimal, comparable_economics, financial
 
 
 def rounded(value):
     return value.quantize(Decimal("1e-18"), rounding=ROUND_FLOOR)
+
+
+def analytical_edge(*, effective, target, notional, slippage_bps, fees, gas, buffer):
+    """Shared exact arithmetic only; callers retain their own eligibility and safety checks."""
+    for value in (notional, slippage_bps, fees, gas, buffer):
+        bounded_decimal(value)
+    # Effective/target prices can be internally derived 256-digit Decimal quotients.
+    # Their source lexemes were validated by the caller; do not truncate exact arithmetic.
+    for value in (effective, target):
+        value = financial(value)
+        if abs(value.adjusted()) > 36 or len(value.as_tuple().digits) > 256:
+            raise ValueError("Unsupported analytical magnitude")
+    if (
+        effective <= 0
+        or target <= 0
+        or notional <= 0
+        or any(v < 0 for v in (slippage_bps, fees, gas, buffer))
+        or slippage_bps > 10000
+    ):
+        raise ValueError("Invalid analytical economics")
+    with localcontext() as context:
+        context.prec = 256
+        adjustment = target - effective
+        change = adjustment / effective
+        gross = notional * change
+        slippage = notional * slippage_bps / Decimal(10000)
+        net = gross - slippage - fees - gas - buffer
+        return adjustment, change, gross, slippage, net
 
 
 class OpportunityEngine:
@@ -91,16 +119,14 @@ class OpportunityEngine:
                     price, representation.token_to_share_ratio, equity_price
                 )
                 effective = comparison["effective_price_per_share_usd"]
-                adjustment = inputs.target_share_price_usd - effective
-                change = adjustment / effective
-                gross = inputs.requested_notional_usd * change
-                slippage = inputs.requested_notional_usd * inputs.slippage_bps / Decimal(10000)
-                net = (
-                    gross
-                    - slippage
-                    - inputs.fees_usd
-                    - inputs.gas_usd
-                    - inputs.execution_buffer_usd
+                adjustment, change, gross, slippage, net = analytical_edge(
+                    effective=effective,
+                    target=inputs.target_share_price_usd,
+                    notional=inputs.requested_notional_usd,
+                    slippage_bps=inputs.slippage_bps,
+                    fees=inputs.fees_usd,
+                    gas=inputs.gas_usd,
+                    buffer=inputs.execution_buffer_usd,
                 )
                 economics = OpportunityEconomics(
                     **MARKER,

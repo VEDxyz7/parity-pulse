@@ -16,6 +16,7 @@ frontend/coverage/
 *.tsbuildinfo
 data/*.db
 data/*.db-*
+data/research/
 *.log
 .DS_Store
 playwright-report/
