@@ -1,0 +1,284 @@
+{
+  "audited_at_utc": "2026-10-07T04:39:04.001169+00:00",
+  "stage": "HACKATHON_DEMO_STAGE_2",
+  "status": "BLOCKED_NO_EXISTING_OPPORTUNITY_SERVICE",
+  "stop_boundary": "Completed DEMO Trust assessment; no downstream Opportunity implementation to invoke",
+  "user_stop_instruction": "If an existing downstream component cannot operate from DEMO inputs, stop at the cleanest supported boundary and report what is missing rather than bypassing it.",
+  "source_changed": false,
+  "tests_added": 0,
+  "real_provider_calls": 0,
+  "execution_calls": 0,
+  "new_downstream_components": 0,
+  "new_downstream_api_endpoints": 0,
+  "scenario_results": [
+    {
+      "id": "steady",
+      "trust_classification": "NORMAL",
+      "trust_confidence": "LOW",
+      "deviation": "0.007",
+      "baseline_count": 30,
+      "analogue_count": 3,
+      "opportunity_analysis": "NOT_RUN_SERVICE_ABSENT",
+      "opportunity_direction": null,
+      "expected_adjustment": null,
+      "expected_net_edge": null,
+      "risk_checks": "NOT_RUN_SERVICE_ABSENT",
+      "proposed_notional": null,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "production_gates": {
+        "DATA_GATE": "PASS",
+        "DRY_RUN_GATE": "PASS",
+        "TRUST_GATE": "BLOCKED",
+        "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+        "SWAP_LIVE_GATE": "BLOCKED",
+        "RFQ_LIVE_GATE": "BLOCKED",
+        "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+      }
+    },
+    {
+      "id": "thin-move",
+      "trust_classification": "LIKELY_NOISE",
+      "trust_confidence": "LOW",
+      "deviation": "0.02",
+      "baseline_count": 30,
+      "analogue_count": 3,
+      "opportunity_analysis": "NOT_RUN_SERVICE_ABSENT",
+      "opportunity_direction": null,
+      "expected_adjustment": null,
+      "expected_net_edge": null,
+      "risk_checks": "NOT_RUN_SERVICE_ABSENT",
+      "proposed_notional": null,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "production_gates": {
+        "DATA_GATE": "PASS",
+        "DRY_RUN_GATE": "PASS",
+        "TRUST_GATE": "BLOCKED",
+        "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+        "SWAP_LIVE_GATE": "BLOCKED",
+        "RFQ_LIVE_GATE": "BLOCKED",
+        "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+      }
+    },
+    {
+      "id": "supported-move",
+      "trust_classification": "LIKELY_INFORMATION",
+      "trust_confidence": "LOW",
+      "deviation": "0.02",
+      "baseline_count": 30,
+      "analogue_count": 3,
+      "opportunity_analysis": "NOT_RUN_SERVICE_ABSENT",
+      "opportunity_direction": null,
+      "expected_adjustment": null,
+      "expected_net_edge": null,
+      "risk_checks": "NOT_RUN_SERVICE_ABSENT",
+      "proposed_notional": null,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "production_gates": {
+        "DATA_GATE": "PASS",
+        "DRY_RUN_GATE": "PASS",
+        "TRUST_GATE": "BLOCKED",
+        "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+        "SWAP_LIVE_GATE": "BLOCKED",
+        "RFQ_LIVE_GATE": "BLOCKED",
+        "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+      }
+    }
+  ],
+  "phase1_indicative_quote_probe": {
+    "status": "DRY_RUN",
+    "route_type": "INDICATIVE_MARKET_ESTIMATE",
+    "quote_status": "INDICATIVE_ONLY",
+    "provider_quote_id": null,
+    "simulation_status": "UNAVAILABLE",
+    "fee_status": "UNKNOWN",
+    "execution_ready": false,
+    "transaction_broadcast": false,
+    "execution_blockers": [
+      "TRUST_NOT_IMPLEMENTED",
+      "FEES_SLIPPAGE_GAS_UNKNOWN",
+      "LIQUIDITY_NOT_VERIFIED",
+      "FUNDING_AND_WALLET_NOT_VERIFIED",
+      "PROVIDER_ROUTE_NOT_VERIFIED",
+      "SIMULATION_UNAVAILABLE",
+      "SWAP_LIVE_GATE_BLOCKED",
+      "RFQ_LIVE_GATE_BLOCKED",
+      "AGENTIC_WALLET_LIVE_GATE_BLOCKED",
+      "INDEPENDENT_CURRENT_EQUITY_UNAVAILABLE"
+    ]
+  },
+  "opportunity_api_availability": {
+    "/api/opportunity": 404,
+    "/api/demo/opportunity": 404
+  },
+  "registered_routes": [],
+  "unchanged_information_fixture_quote_compatibility": {
+    "purpose": "Read-only synthetic input compatibility probe; not an Opportunity recommendation",
+    "explicit_probe_budget_usd": "50",
+    "fixture_observation_kind": "PRICE_INFO",
+    "status": "NO_PROPOSAL",
+    "quote_status": "UNAVAILABLE",
+    "selected_representation": null,
+    "exclusion_reasons": [
+      "TOKEN_PRICE_MISSING_OR_WRONG_KIND"
+    ],
+    "simulation_status": "UNAVAILABLE",
+    "transaction_broadcast": false
+  },
+  "network_attempts": 0,
+  "implemented_service_classes": {
+    "backend/app/services/__init__.py": [],
+    "backend/app/services/asset_discovery.py": [
+      "AssetDiscoveryService"
+    ],
+    "backend/app/services/calendar.py": [
+      "USEquityCalendar"
+    ],
+    "backend/app/services/data_layer.py": [
+      "DataLayer"
+    ],
+    "backend/app/services/demo_sandbox.py": [
+      "DemoMarketProvider",
+      "DemoTrustSandbox"
+    ],
+    "backend/app/services/exposure.py": [
+      "ExposureService"
+    ],
+    "backend/app/services/ingestion.py": [
+      "HistoricalIngestion"
+    ],
+    "backend/app/services/intent.py": [],
+    "backend/app/services/normalization.py": [],
+    "backend/app/services/trust.py": [
+      "TrustService"
+    ],
+    "backend/app/services/trust_classifier.py": [
+      "TrustClassifier"
+    ],
+    "backend/app/services/trust_evidence.py": [
+      "MarketRegimeService",
+      "IndependentReferenceService",
+      "LiquidityEvidenceService",
+      "NewsAlignmentService"
+    ],
+    "backend/app/services/trust_history.py": [
+      "BaselineService",
+      "EpisodeBuilder",
+      "AnalogueService"
+    ]
+  },
+  "existing_architecture_only_components": [
+    "Opportunity engine/API/candidate and decision contracts",
+    "Financial Risk Engine and approved risk policy",
+    "Provider QuoteService",
+    "Transaction builder and fingerprint/equivalence validation",
+    "Simulation service",
+    "Opening prediction/expected-adjustment model"
+  ],
+  "verified_at_utc": "2026-10-07T04:41:03.084367+00:00",
+  "checkpoint": {
+    "head": "83a0a2bc38549b84bbabcc44b4b50b28b05a4b6e",
+    "tag": "v0.2-demo-trust",
+    "tag_commit": "83a0a2bc38549b84bbabcc44b4b50b28b05a4b6e",
+    "unchanged": true,
+    "automatically_committed": false
+  },
+  "preservation": {
+    "pre_existing_artifacts": 230,
+    "all_pre_existing_artifacts_byte_identical": true,
+    "all_8_existing_databases_byte_identical": true,
+    "real_database_counts_before_and_after": {
+      "parity-pulse.db": {
+        "trust_samples": 0,
+        "trust_episodes": 0,
+        "trust_assessments": 0,
+        "token_observations": 0,
+        "equity_observations": 0
+      },
+      "phase1-demo-verification.db": {
+        "token_observations": 0,
+        "equity_observations": 0
+      },
+      "phase1-live-verification.db": {
+        "token_observations": 2,
+        "equity_observations": 0
+      },
+      "phase2-trust-demo-verification.db": {
+        "trust_samples": 0,
+        "trust_episodes": 0,
+        "trust_assessments": 0,
+        "token_observations": 0,
+        "equity_observations": 0
+      },
+      "phase2-trust-history-investigation.db": {
+        "trust_samples": 0,
+        "trust_episodes": 0,
+        "trust_assessments": 1,
+        "token_observations": 83,
+        "equity_observations": 2083
+      },
+      "phase2-trust-live-verification.db": {
+        "trust_samples": 0,
+        "trust_episodes": 0,
+        "trust_assessments": 1,
+        "token_observations": 4,
+        "equity_observations": 0
+      },
+      "phase2-trust-remediation-verification.db": {
+        "trust_samples": 0,
+        "trust_episodes": 0,
+        "trust_assessments": 2,
+        "token_observations": 8,
+        "equity_observations": 0
+      },
+      "phase2-verification.db": {
+        "token_observations": 25,
+        "equity_observations": 946
+      }
+    },
+    "formal_trust_gate_sha256": "f84e8489a756df2924b9a21f5486d84d563c9270362f076e0463f6c79c8aabdd",
+    "production_gate_document_sha256": "4315228ac4027adeb508f83435288d579db738db7bd6162ad205962248def4d9",
+    "retained_browser_evidence_sha256": "ad4ae1e6ed8d4af2d3398d5bb5629843ce3c613b74a5ff171a5ff31c9c71ac9b"
+  },
+  "validation": {
+    "backend_tests": {
+      "command": ".venv/bin/python -m pytest",
+      "passed": 345,
+      "failed": 0
+    },
+    "frontend_tests": {
+      "command": "npm test",
+      "passed": 66,
+      "failed": 0
+    },
+    "typecheck_build": {
+      "command": "npm run build",
+      "status": "PASS"
+    },
+    "ruff_lint": {
+      "command": ".venv/bin/ruff check backend scripts",
+      "status": "PASS"
+    },
+    "ruff_format": {
+      "command": ".venv/bin/ruff format --check backend scripts",
+      "status": "PASS",
+      "files": 78
+    },
+    "security": {
+      "command": ".venv/bin/python scripts/check-security.py",
+      "status": "PASS"
+    },
+    "git_diff_check": "PASS",
+    "browser": {
+      "rerun": false,
+      "reason": "No frontend or behavior changes; prior verified Stage1 browser evidence and corresponding source/fixture hashes remain identical"
+    },
+    "known_warning": "Existing Starlette/httpx TestClient deprecation"
+  },
+  "files_added": [
+    "docs/DEMO_OPPORTUNITY_STAGE_2_AUDIT.md",
+    "docs/evidence/DEMO_OPPORTUNITY_STAGE_2_AUDIT.json"
+  ]
+}
