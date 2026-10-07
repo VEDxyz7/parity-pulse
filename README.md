@@ -38,6 +38,12 @@ npm run dev
 
 Open <http://127.0.0.1:5173>. Vite proxies `/api` to the backend at port 8000. No provider credentials are needed. Stop each service with Ctrl+C; backend shutdown disposes its database engine.
 
+### Judge-facing DEMO SANDBOX
+
+Start the existing backend with `RUNTIME_MODE=DEMO DATA_MODE=DEMO` (see the [DEMO UI runbook](docs/DEMO_UI_INTEGRATION.md) for the complete command), then run `npm run dev` from the repository root. Open <http://127.0.0.1:5173/#demo-sandbox> or select **DEMO SANDBOX** in navigation. NORMAL and LIKELY_NOISE show backend stand-down reasons; LIKELY_INFORMATION can proceed through the existing quote, preparation, local simulation, paper position/exit/P&L and scorecard stages. Every stage has an explicit status; React performs no financial calculations.
+
+Overview's **Assess trust** remains the canonical assessment. The production Opportunity sidebar item remains disabled. In the ordinary runtime, the sandbox page explains that DEMO APIs are disabled and makes no fallback calls. Production gates and all live execution restrictions are unchanged.
+
 ### An existing development server occupies the port
 
 Run only one backend on port 8000 and one frontend on port 5173. A second launch can initialize successfully and then fail to bind because the first instance is still running. Inspect the listener before taking action:

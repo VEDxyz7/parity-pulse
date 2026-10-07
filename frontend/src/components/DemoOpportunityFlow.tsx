@@ -3,8 +3,10 @@ import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
 import { fetchOpportunity, fetchRisk, type OpportunityResult, type RiskResult } from '../services/demoOpportunity'
 import { DemoPreparationFlow } from './DemoPreparationFlow'
+import { useDemoPipeline } from './DemoPipeline'
 
 export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
+  const pipeline = useDemoPipeline()
   const [opportunity, setOpportunity] = useState<OpportunityResult | null>(null)
   const [risk, setRisk] = useState<RiskResult | null>(null)
   const [busy, setBusy] = useState<'opportunity' | 'risk' | null>(null)
@@ -24,18 +26,31 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
     const controller = new AbortController()
     pending.current = controller
     setBusy(stage); setError(''); setRisk(null)
+    pipeline.resetFrom(stage === 'opportunity' ? 'OPPORTUNITY' : 'QUOTE')
+    pipeline.report(stage === 'opportunity' ? 'OPPORTUNITY' : 'RISK', 'running', stage === 'opportunity' ? 'Evaluating existing Opportunity and Routing services' : 'Checking existing Risk rules')
     if (stage === 'opportunity') setOpportunity(null)
     const timer = setTimeout(() => controller.abort(), 60_000)
     try {
       if (stage === 'opportunity') {
         const response = await fetchOpportunity(trust, controller.signal)
-        if (pending.current === controller && !controller.signal.aborted) setOpportunity(response)
+        if (pending.current === controller && !controller.signal.aborted) {
+          setOpportunity(response)
+          pipeline.report('OPPORTUNITY', response.opportunity.status === 'ACTIONABLE' ? 'pass' : 'rejected', `${response.opportunity.status}: ${response.opportunity.reason_codes.join(' · ')}`)
+          const route = response.route_decision
+          pipeline.report('ROUTING', route?.status === 'ROUTE_SELECTED' ? 'pass' : route ? 'rejected' : 'pending', route ? `${route.status}: ${route.explanation}` : 'Routing result not supplied')
+        }
       } else if (opportunity) {
         const response = await fetchRisk(opportunity, controller.signal)
-        if (pending.current === controller && !controller.signal.aborted) setRisk(response)
+        if (pending.current === controller && !controller.signal.aborted) {
+          setRisk(response)
+          pipeline.report('RISK', response.risk.status === 'PASS' ? 'pass' : 'rejected', `${response.risk.status}: ${response.risk.reason_codes.join(' · ')}`)
+        }
       }
     } catch {
-      if (pending.current === controller) setError('Demo analysis unavailable, expired or invalid. No action was approved. Run the scenario again if needed.')
+      if (pending.current === controller) {
+        setError('Demo analysis unavailable, expired or invalid. No action was approved. Run the scenario again if needed.')
+        pipeline.report(stage === 'opportunity' ? 'OPPORTUNITY' : 'RISK', 'failed', 'API result unavailable, expired or invalid; no action approved')
+      }
     } finally {
       clearTimeout(timer)
       if (pending.current === controller) setBusy(null)

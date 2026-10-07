@@ -1,4 +1,5 @@
 import { RouteComparison } from './RouteComparison'
+import { useDemoPipeline } from './DemoPipeline'
 import { DemoPaperFlow } from './DemoPaperFlow'
 import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
@@ -8,6 +9,7 @@ import { fetchPreparation, fetchQuote, fetchSimulation, type PreparationResult, 
 export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpired }: {
   trust: DemoResult; opportunity: OpportunityResult; risk: RiskResult; opportunityExpired: boolean
 }) {
+  const pipeline = useDemoPipeline()
   const [paperFilled, setPaperFilled] = useState(false)
   const [quote, setQuote] = useState<QuoteResult | null>(null)
   const [prepared, setPrepared] = useState<PreparationResult | null>(null)
@@ -27,22 +29,37 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
     pending.current?.abort()
     const controller = new AbortController(); pending.current = controller
     setBusy(stage); setError(''); setSimulation(null)
+    const label = stage === 'quote' ? 'QUOTE' : stage === 'prepare' ? 'PREPARATION' : 'SIMULATION'
+    pipeline.resetFrom(label); pipeline.report(label, 'running', 'Calling the existing DEMO service')
     if (stage !== 'simulate') setPrepared(null)
     if (stage === 'quote') setQuote(null)
     const timer = setTimeout(() => controller.abort(), 60_000)
     try {
       if (stage === 'quote') {
         const response = await fetchQuote(trust, opportunity, risk, controller.signal)
-        if (pending.current === controller && !controller.signal.aborted) setQuote(response)
+        if (pending.current === controller && !controller.signal.aborted) {
+          setQuote(response)
+          pipeline.report('QUOTE', response.status === 'QUOTED' ? 'pass' : 'rejected', `${response.status}: ${response.reason_codes.join(' · ')}`)
+          if (response.route_decision) pipeline.report('ROUTING', response.route_decision.status === 'ROUTE_SELECTED' ? 'pass' : 'rejected', `${response.route_decision.status}: ${response.route_decision.explanation}`)
+        }
       } else if (stage === 'prepare' && quote) {
         const response = await fetchPreparation(quote, opportunity, controller.signal)
-        if (pending.current === controller && !controller.signal.aborted) setPrepared(response)
+        if (pending.current === controller && !controller.signal.aborted) {
+          setPrepared(response)
+          pipeline.report('PREPARATION', response.status === 'PREPARED' ? 'pass' : 'rejected', `${response.status}: ${response.reason_codes.join(' · ')}`)
+        }
       } else if (stage === 'simulate' && quote && prepared) {
         const response = await fetchSimulation(quote, prepared, opportunity, controller.signal)
-        if (pending.current === controller && !controller.signal.aborted) setSimulation(response)
+        if (pending.current === controller && !controller.signal.aborted) {
+          setSimulation(response)
+          pipeline.report('SIMULATION', response.simulation.status === 'SIMULATION_PASS' ? 'pass' : 'rejected', `${response.simulation.status}: ${response.simulation.reason_codes.join(' · ')}`)
+        }
       }
     } catch {
-      if (pending.current === controller) setError('DEMO downstream result unavailable, expired or invalid. No execution occurred. Refresh the analysis/quote before retrying.')
+      if (pending.current === controller) {
+        setError('DEMO downstream result unavailable, expired or invalid. No execution occurred. Refresh the analysis/quote before retrying.')
+        pipeline.report(label, 'failed', 'API result unavailable, expired or invalid; no execution occurred')
+      }
     } finally {
       clearTimeout(timer)
       if (pending.current === controller) setBusy(null)

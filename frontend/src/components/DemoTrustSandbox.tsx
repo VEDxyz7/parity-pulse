@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { fetchDemoCatalog, fetchDemoScenario, type DemoResult, type DemoScenario, type ScenarioId } from '../services/demoSandbox'
 import { TrustEvidence } from './TrustEvidence'
 import { DemoOpportunityFlow } from './DemoOpportunityFlow'
+import { DemoPipelineContext, DemoPipelineStatus, demoStages, pendingPipeline, type DemoStage, type StageStatus } from './DemoPipeline'
 
 export function DemoTrustSandbox() {
   const [scenarios, setScenarios] = useState<DemoScenario[]>([])
@@ -9,6 +10,13 @@ export function DemoTrustSandbox() {
   const [result, setResult] = useState<DemoResult | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [progress, setProgress] = useState(pendingPipeline)
+  const report = useCallback((stage: DemoStage, status: StageStatus, detail: string) => {
+    setProgress(current => ({ ...current, [stage]: { status, detail } }))
+  }, [])
+  const resetFrom = useCallback((stage: DemoStage) => {
+    setProgress(current => ({ ...current, ...Object.fromEntries(demoStages.slice(demoStages.indexOf(stage)).map(key => [key, { status: 'pending', detail: 'Not run' }])) }))
+  }, [])
   const pending = useRef<AbortController | null>(null)
   useEffect(() => {
     const controller = new AbortController()
@@ -17,7 +25,7 @@ export function DemoTrustSandbox() {
     void fetchDemoCatalog(controller.signal).then(rows => {
       if (!controller.signal.aborted) setScenarios(rows)
     }).catch(() => { if (!cancelled) setError('Demo fixtures unavailable. No live data was substituted.') }).finally(() => clearTimeout(timer))
-    return () => { cancelled = true; clearTimeout(timer); controller.abort(); pending.current?.abort() }
+    return () => { cancelled = true; clearTimeout(timer); controller.abort(); pending.current?.abort(); pending.current = null }
   }, [])
   async function run(event: React.FormEvent) {
     event.preventDefault()
@@ -25,30 +33,45 @@ export function DemoTrustSandbox() {
     const controller = new AbortController()
     pending.current = controller
     setResult(null); setError(''); setBusy(true)
+    resetFrom('TRUST'); report('TRUST', 'running', 'Evaluating the selected synthetic fixture')
     const timer = setTimeout(() => controller.abort(), 60_000)
     try {
       const response = await fetchDemoScenario(selected, controller.signal)
-      if (pending.current === controller && !controller.signal.aborted) setResult(response)
+      if (pending.current === controller && !controller.signal.aborted) {
+        setResult(response)
+        const rows = response.assessment.representations
+        report('TRUST', rows.length > 0 && rows.every(row => row.classification !== 'INSUFFICIENT_EVIDENCE') ? 'pass' : 'rejected', rows.map(row => `${row.classification}: ${row.reason_codes.join(' · ')}`).join('; ') || 'No representation evidence returned')
+      }
     } catch {
-      if (pending.current === controller) setError('Demo evidence unavailable or invalid. No classification was substituted.')
+      if (pending.current === controller) {
+        setError('Demo evidence unavailable or invalid. No classification was substituted.')
+        report('TRUST', 'failed', 'Demo evidence unavailable or invalid; no fallback was used')
+      }
     } finally {
       clearTimeout(timer)
       if (pending.current === controller) setBusy(false)
     }
   }
-  return <section className="panel trust-panel demo-sandbox" id="trust" aria-label="Demo Trust sandbox">
+  return <DemoPipelineContext.Provider value={{ report, resetFrom }}><section className="panel trust-panel demo-sandbox" id="demo-sandbox" aria-label="Demo Trust sandbox">
     <div className="panel-heading"><div><h2>DEMO SANDBOX</h2><p>SIMULATED DATA — NOT LIVE MARKET DATA</p></div></div>
+    <p className="demo-funds-notice"><strong>NO REAL FUNDS WILL MOVE</strong></p>
     <p className="trust-note">Synthetic scenarios use the existing deterministic Trust rules. Production Trust remains BLOCKED. These results are demonstrations, not historical replay or execution authority.</p>
     <form className="trust-form" onSubmit={event => { void run(event) }}>
       <label htmlFor="demo-scenario">Scenario</label>
       <select id="demo-scenario" value={selected} disabled={scenarios.length === 0} onChange={event => {
         pending.current?.abort(); pending.current = null; setBusy(false); setResult(null); setError('')
+        resetFrom('TRUST')
         setSelected(event.target.value as ScenarioId)
       }}>{scenarios.map(row => <option key={row.scenario_id} value={row.scenario_id}>{row.title}</option>)}</select>
+      <div className="demo-scenario-buttons" role="group" aria-label="Demo scenarios">{scenarios.map(row => <button
+        key={row.scenario_id} type="button" className="refresh-button" aria-pressed={selected === row.scenario_id}
+        onClick={() => { pending.current?.abort(); pending.current = null; setBusy(false); setResult(null); setError(''); resetFrom('TRUST'); setSelected(row.scenario_id) }}
+      >{row.title}</button>)}</div>
       <button type="submit" className="refresh-button" disabled={busy || scenarios.length === 0}>{busy ? 'Evaluating demo evidence…' : 'Run demo scenario'}</button>
     </form>
     <p>{scenarios.find(row => row.scenario_id === selected)?.description}</p>
     {error && <p role="alert">{error}</p>}
+    <DemoPipelineStatus progress={progress} />
     {result && <>
       <p>Dataset: {result.dataset_type} · Synthetic: true · Production eligible: false</p>
       <p>Fixed synthetic clock: <time>{result.assessment.evaluated_at}</time> · Fixture version: {result.fixture_version}</p>
@@ -71,5 +94,5 @@ export function DemoTrustSandbox() {
       <DemoOpportunityFlow key={result.assessment.assessment_id} trust={result} />
       <p>Production TRUST_GATE: BLOCKED · OPPORTUNITY_GATE: BLOCKED_BY_TRUST · All LIVE gates: BLOCKED</p>
     </>}
-  </section>
+  </section></DemoPipelineContext.Provider>
 }

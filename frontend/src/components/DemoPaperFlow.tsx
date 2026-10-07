@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import type { OpportunityResult } from '../services/demoOpportunity'
 import type { PreparationResult, QuoteResult, SimulationResult } from '../services/demoPreparation'
 import { paperRequest, parseLifecycle, parseScorecard, type Lifecycle, type Scorecard } from '../services/demoPaper'
+import { useDemoPipeline } from './DemoPipeline'
 
 export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, onFilled }: {
   quote: QuoteResult; prepared: PreparationResult; simulation: SimulationResult; origin: OpportunityResult; expired: boolean; onFilled: () => void
 }) {
+  const pipeline = useDemoPipeline()
   const [row, setRow] = useState<Lifecycle | null>(null)
   const [score, setScore] = useState<Scorecard | null>(null)
   const [busy, setBusy] = useState(false), [error, setError] = useState('')
@@ -15,6 +17,8 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
     if (!prepared.transaction || simulation.simulation.status !== 'SIMULATION_PASS') return
     pending.current?.abort(); const controller = new AbortController(); pending.current = controller
     setBusy(true); setError('')
+    const label = stage === 'fill' ? 'PAPER EXECUTION' : stage === 'monitor' ? 'MONITOR' : stage === 'exit' ? 'EXIT' : 'SCORECARD'
+    pipeline.report(label, 'running', 'Calling the existing isolated paper ledger')
     const timer = setTimeout(() => controller.abort(), 60_000)
     try {
       const base = 'positions/' + row?.position.position_id
@@ -23,10 +27,21 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
       }) : stage === 'score' ? await paperRequest(base + '/scorecard', controller.signal) :
         await paperRequest(base + '/' + stage, controller.signal, stage === 'exit' ? { observation_id: row?.observation?.observation_id } : {})
       if (pending.current !== controller || controller.signal.aborted) return
-      if (stage === 'score' && row) setScore(parseScorecard(value, row, origin))
-      else { setRow(parseLifecycle(value, quote, prepared, simulation, origin)); onFilled() }
+      if (stage === 'score' && row) {
+        const result = parseScorecard(value, row, origin)
+        setScore(result); pipeline.report('SCORECARD', 'pass', `${result.execution_status}: ledger-derived scorecard`)
+      } else {
+        const result = parseLifecycle(value, quote, prepared, simulation, origin)
+        setRow(result); onFilled()
+        pipeline.report(label, 'pass', stage === 'fill' ? result.order.status : stage === 'exit' ? result.position.state : 'Explicit synthetic observation returned')
+        pipeline.report('POSITION', 'pass', `${result.position.state}: ${result.position.position_id}`)
+        if (result.pnl) pipeline.report('P&L', 'pass', `Backend-calculated net PAPER P&L: ${result.pnl.net_pnl_usd} USD`)
+      }
     } catch {
-      if (pending.current === controller) setError('Paper step unavailable, expired or invalid. Existing ledger records are retained. No real funds moved; retrying the same paper fill cannot duplicate it.')
+      if (pending.current === controller) {
+        setError('Paper step unavailable, expired or invalid. Existing ledger records are retained. No real funds moved; retrying the same paper fill cannot duplicate it.')
+        pipeline.report(label, 'failed', 'Paper API result unavailable, expired or invalid; ledger records retained')
+      }
     } finally { clearTimeout(timer); if (pending.current === controller) setBusy(false) }
   }
   if (simulation.simulation.status !== 'SIMULATION_PASS') return null
