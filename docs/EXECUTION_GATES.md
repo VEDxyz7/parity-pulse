@@ -1,5 +1,22 @@
 # Development and execution capability gates
 
+## Master Phase 7 — Opportunity Mode, October 8, 2026
+
+PHASE_7_IMPLEMENTATION=PASS. The user explicitly authorized non-executable Opportunity
+machinery while the production Trust/data prerequisite remains blocked. The full-universe
+scan, candidate audit, shared routing/ranking, top-K=5, existing Phase 6 agents and
+request-bound ex-ante Risk sizing are verified. See [Phase 7 report](PHASE_7_REPORT.md).
+
+DATA_GATE=PASS; DRY_RUN_GATE=PASS; TRUST_GATE=BLOCKED;
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST; all three LIVE gates=BLOCKED.
+Real history remains 0/30 baseline, 0/30 opening-model, 0/3 analogues.
+Implementation PASS does not pass any production gate. Phase 8 has NOT started.
+
+The dated sections below preserve historical checkpoints. Their earlier “not started” or
+“next phase” statements are superseded only for implementation status by this explicitly
+authorized Phase 7 milestone. Production eligibility, safety rules and prerequisites
+remain unchanged. The sole authoritative master is `docs/MASTER_SPEC.md`.
+
 ## Master Phase 6 — Multi-Agent Intelligence, October 7, 2026
 
 **PHASE 6 IMPLEMENTATION=PASS; PHASE 6 DATA DEPENDENCY=BLOCKED.**

@@ -1,14 +1,19 @@
+import asyncio
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
+from sqlalchemy.engine import make_url
 from starlette.exceptions import HTTPException
 
 from app import __version__
+from app.agents.memory import AgentStore
+from app.agents.orchestrator import AgentOrchestrator
 from app.api.assets import router as assets_router
 from app.api.demo_opportunity import router as demo_opportunity_router
 from app.api.demo_paper import router as demo_paper_router
@@ -16,18 +21,22 @@ from app.api.demo_preparation import router as demo_preparation_router
 from app.api.demo_sandbox import router as demo_sandbox_router
 from app.api.exposure import router as exposure_router
 from app.api.middleware import RequestContextMiddleware
+from app.api.opportunity_scan import router as opportunity_scan_router
 from app.api.system import router
 from app.api.trust import router as trust_router
 from app.clients.common import ProviderError
 from app.config import Settings
 from app.database import Database
 from app.demo import load_demo_fixture
+from app.repositories.opportunity_scan import OpportunityScanStore
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
 from app.services.demo_paper import DemoPaperLedger
 from app.services.demo_preparation import DemoPreparationFlow
 from app.services.demo_sandbox import DemoTrustSandbox
 from app.services.exposure import ExposureService
+from app.services.opportunity_scan import OpportunityScanService
+from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
 
@@ -80,6 +89,28 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             app.state.data_layer = DataLayer(configured, database)
             app.state.exposure = ExposureService(app.state.data_layer, database)
             app.state.trust = TrustService(app.state.data_layer, database)
+            database_file = make_url(configured.database_url).database
+            scan_directory = (
+                None
+                if (
+                    configured.runtime_mode == "DEMO"
+                    or configured.app_env == "test"
+                    or database_file == ":memory:"
+                )
+                else (Path(database_file).resolve().parent / "opportunity/phase7")
+            )
+            app.state.opportunity_scan_store = OpportunityScanStore(scan_directory)
+            agent_store = AgentStore(scan_directory / "agents" if scan_directory else None)
+            app.state.opportunity_scan = OpportunityScanService(
+                store=app.state.opportunity_scan_store,
+                orchestrator=AgentOrchestrator(store=agent_store),
+            )
+            app.state.opportunity_source = (
+                DemoScanSource()
+                if configured.runtime_mode == "DEMO"
+                else DataLayerScanSource(app.state.data_layer, app.state.trust)
+            )
+            app.state.opportunity_scan_lock = asyncio.Lock()
             app.state.demo_sandbox = (
                 DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
             )
@@ -136,6 +167,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             app.state.demo_opportunity = None
             app.state.demo_preparation = None
             app.state.demo_paper = None
+            if getattr(app.state, "opportunity_scan_store", None) is not None:
+                app.state.opportunity_scan_store.close()
+            if getattr(app.state, "opportunity_scan", None) is not None:
+                app.state.opportunity_scan.agents.store.close()
+            app.state.opportunity_scan = None
+            app.state.opportunity_source = None
             if database is not None:
                 database.close()
             app.state.database = None
@@ -185,6 +222,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(assets_router)
     app.include_router(exposure_router)
     app.include_router(trust_router)
+    app.include_router(opportunity_scan_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)

@@ -1,5 +1,21 @@
 # Parity Pulse
 
+Master Phase 7 — Opportunity Mode: **IMPLEMENTATION PASS**. The production Opportunity gate
+remains **BLOCKED_BY_TRUST**; all LIVE execution remains blocked. See
+[Phase 7 report](docs/PHASE_7_REPORT.md) for the full candidate contract, rejection/ranking,
+risk-budget semantics, tests and remaining real-data limitations. Phase 8 is not started.
+
+Offline synthetic scan (existing DEMO fixtures; no provider calls or real funds):
+
+```sh
+.venv/bin/python scripts/scan-opportunities.py --demo supported-move --budget 60 --risk-budget 2
+```
+
+Analytical API: `POST /api/opportunities/scan`, `GET /api/opportunities/{run_id}`.
+Budget and risk budget are explicit separate inputs; the risk budget is ex-ante and does
+not guarantee a maximum realized loss. Ordinary production navigation remains locked.
+The older dated milestone descriptions below are retained as history.
+
 Master Phase 6 — Multi-Agent Intelligence is implemented; its production data dependency remains
 BLOCKED. The authoritative specification is [docs/MASTER_SPEC.md](docs/MASTER_SPEC.md).
 Six structured agents share DEMO/LIVE_READ_ONLY evidence adapters, bounded calls/tools,

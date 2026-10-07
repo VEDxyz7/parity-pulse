@@ -289,6 +289,33 @@ class Candidate(DataModel):
     tradable: StrictBool | None = None
     risk_flags: Codes = ()
     evidence_refs: Refs
+    # Phase 7 supplies these facts before top-K interpretation. Optional for captured Phase 6 runs.
+    company: Annotated[StrictStr, Field(max_length=160)] | None = None
+    token: Identifier | None = None
+    token_to_share_ratio: Price | None = None
+    token_price_usd: Price | None = None
+    independent_equity_price_usd: Price | None = None
+    independent_equity_source: Annotated[StrictStr, Field(max_length=128)] | None = None
+    regime: Code | None = None
+    volume_usd: Amount | None = None
+    persistence_seconds: Amount | None = None
+    news_state: Code | None = None
+    historical_pattern: Code | None = None
+    prediction_interval_low: Derived | None = None
+    prediction_interval_high: Derived | None = None
+    prediction_status: Literal["READY", "INSUFFICIENT_DATA", "NOT_READY"] = "NOT_READY"
+    economics_basis: Literal["OPENING_MODEL", "SYNTHETIC_SCENARIO", "UNAVAILABLE"] = "UNAVAILABLE"
+    proposed_notional_usd: Amount | None = None
+    stress_adverse_move_fraction: Annotated[Amount, Field(gt=0, le=1)] | None = None
+    stress_loss_usd: Amount | None = None
+    estimated_slippage_usd: Amount | None = None
+    fees_usd: Amount | None = None
+    gas_usd: Amount | None = None
+    execution_buffer_usd: Amount | None = None
+    gross_expected_edge_usd: Derived | None = None
+    rejection_reasons: Codes = ()
+    liquidity_state: Code | None = None
+    source_timestamps: dict[Code, datetime | None] = Field(default_factory=dict, max_length=16)
 
     _utc = field_validator("observed_at", "available_at")(utc)
 
@@ -311,7 +338,7 @@ class EvidenceBundle(DataModel):
     decision_at: datetime
     assessment: TrustAssessment
     assets: Annotated[tuple[TrackedAsset, ...], Field(max_length=100)] = ()
-    articles: Annotated[tuple[NewsEvent, ...], Field(max_length=10)] = ()
+    articles: Annotated[tuple[NewsEvent, ...], Field(max_length=50)] = ()
     candidates: Annotated[tuple[Candidate, ...], Field(max_length=5)] = ()
     references: Annotated[tuple[EvidenceRef, ...], Field(max_length=64)]
     research: Annotated[tuple[ResearchInput, ...], Field(max_length=5)] = ()
@@ -376,7 +403,8 @@ class EvidenceBundle(DataModel):
             if (
                 r.current.data_mode != mode
                 or r.current.decision_at != at
-                or r.current.ticker != self.assessment.ticker
+                or r.current.ticker
+                not in ({self.assessment.ticker} | {c.ticker for c in self.candidates})
             ):
                 raise ValueError("Research mode/time mismatch")
             if any(e.decision.data_mode != mode for e in r.episodes):

@@ -18,6 +18,7 @@ data/*.db
 data/*.db-*
 data/research/
 data/agents/
+data/opportunity/
 *.log
 .DS_Store
 playwright-report/

@@ -1,16 +1,77 @@
 """Deterministic financial limits; a PASS is solely synthetic analytical approval."""
 
-from decimal import ROUND_FLOOR, Decimal, localcontext
+from decimal import ROUND_CEILING, ROUND_FLOOR, Decimal, localcontext
 from uuid import uuid4
 
-from app.models.risk import RiskCheck, RiskDecision
+from app.models.risk import OpportunityRiskContext, RiskCheck, RiskDecision
 from app.services.demo_sandbox import MARKER
+from app.services.normalization import bounded_decimal
 from app.services.opportunity import rounded
 
 CONFIDENCE = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
 
 
 class RiskEngine:
+    def size_opportunity(self, mandate, constraints, costs, liquidity, *, now, mode):
+        """Phase 7 ex-ante sizing, stricter cost-inclusive stress and system caps.
+
+        This is an analytical preview only. Existing final Risk validation remains mandatory.
+        No confidence input is accepted. Unknown wallet/system constraints never become zero.
+        """
+        if constraints is None or costs is None or liquidity is None:
+            return None, None, ("RISK_CONSTRAINTS_UNAVAILABLE",)
+        c = OpportunityRiskContext.model_validate(constraints.model_dump())
+        for v in (mandate.budget_usd, mandate.risk_budget_usd, liquidity):
+            bounded_decimal(v)
+        reasons = []
+        if c.data_mode != mode or costs.data_mode != mode:
+            raise ValueError("Mixed risk sizing modes")
+        if not c.system_resolved or not c.wallet_allowed:
+            reasons.append("WALLET_OR_SYSTEM_RESTRICTED")
+        if not 0 <= (now - c.observed_at).total_seconds() <= 120:
+            reasons.append("STALE_RISK_CONSTRAINTS")
+        if mandate.risk_budget_usd > c.max_risk_budget_usd:
+            reasons.append("RISK_BUDGET_LIMIT")
+        if c.daily_loss_usd >= c.max_daily_loss_usd:
+            reasons.append("DAILY_LOSS_LIMIT")
+        if c.trades_today >= c.max_trades_per_day:
+            reasons.append("TRADE_COUNT_LIMIT")
+        if (
+            c.last_trade_at is not None
+            and (now - c.last_trade_at).total_seconds() < c.cooldown_seconds
+        ):
+            reasons.append("COOLDOWN")
+        with localcontext() as context:
+            context.prec = 256
+            fixed = costs.fees_usd + costs.gas_usd + costs.execution_buffer_usd
+            slip = costs.slippage_bps / Decimal(10000)
+            loss_fraction = c.stress_adverse_move_fraction + slip
+            caps = position_caps(
+                budget=mandate.budget_usd,
+                risk_budget=mandate.risk_budget_usd,
+                wallet=c.wallet_available_usd,
+                existing=c.existing_exposure_usd,
+                daily_loss=c.daily_loss_usd,
+                liquidity=liquidity,
+                policy=c,
+                fixed=fixed,
+                slippage_fraction=slip,
+                loss_fraction=loss_fraction,
+            )
+            size = rounded(min(costs.quoted_notional_usd, *caps.values()))
+            if size <= 0:
+                reasons.append("NO_POSITIVE_RISK_SIZE")
+            # Real quotes/costs are size-specific: require a new observed quote rather than
+            # estimating a more favorable fee or liquidity at a different size.
+            if mode != "DEMO" and size != costs.quoted_notional_usd:
+                reasons.append("COST_NOTIONAL_MISMATCH_REQUOTE_REQUIRED")
+            stress = (size * c.stress_adverse_move_fraction).quantize(
+                Decimal("1e-18"), rounding=ROUND_CEILING
+            )
+            if stress > mandate.risk_budget_usd:
+                reasons.append("STRESS_RISK_BUDGET")
+        return (None, None, tuple(reasons)) if reasons else (size, stress, ())
+
     def evaluate(self, opportunity, inputs, policy, *, now):
         checks = []
 
@@ -118,26 +179,18 @@ class RiskEngine:
             slippage_fraction = costs.slippage_bps / Decimal(10000)
             loss_fraction = inputs.adverse_move_fraction + slippage_fraction
             liquidity_cap = (liquidity or Decimal(0)) * policy.max_liquidity_fraction
-            caps = {
-                "POSITION_CAP": policy.max_position_usd,
-                "BUDGET_CAP": max(
-                    Decimal(0), (inputs.budget_usd - fixed) / (1 + slippage_fraction)
-                ),
-                "WALLET_LIMIT": max(
-                    Decimal(0), (inputs.wallet_available_usd - fixed) / (1 + slippage_fraction)
-                ),
-                "PORTFOLIO_CAP": max(
-                    Decimal(0), policy.max_portfolio_exposure_usd - inputs.existing_exposure_usd
-                ),
-                "STRESS_RISK_BUDGET": max(
-                    Decimal(0), (inputs.risk_budget_usd - fixed) / loss_fraction
-                ),
-                "STRESS_DAILY_LOSS": max(
-                    Decimal(0),
-                    (policy.max_daily_loss_usd - inputs.daily_loss_usd - fixed) / loss_fraction,
-                ),
-                "LIQUIDITY_POSITION_CAP": liquidity_cap,
-            }
+            caps = position_caps(
+                budget=inputs.budget_usd,
+                risk_budget=inputs.risk_budget_usd,
+                wallet=inputs.wallet_available_usd,
+                existing=inputs.existing_exposure_usd,
+                daily_loss=inputs.daily_loss_usd,
+                liquidity=liquidity or Decimal(0),
+                policy=policy,
+                fixed=fixed,
+                slippage_fraction=slippage_fraction,
+                loss_fraction=loss_fraction,
+            )
             requested = costs.requested_notional_usd
             for code, cap in caps.items():
                 check(
@@ -184,3 +237,30 @@ class RiskEngine:
                 slippage_tolerance_bps=policy.max_slippage_bps,
                 liquidity_notional_cap_usd=rounded(liquidity_cap),
             )
+
+
+def position_caps(
+    *,
+    budget,
+    risk_budget,
+    wallet,
+    existing,
+    daily_loss,
+    liquidity,
+    policy,
+    fixed,
+    slippage_fraction,
+    loss_fraction,
+):
+    """Shared exact caps used by existing DEMO Risk and full-universe sizing."""
+    return {
+        "POSITION_CAP": policy.max_position_usd,
+        "BUDGET_CAP": max(Decimal(0), (budget - fixed) / (1 + slippage_fraction)),
+        "WALLET_LIMIT": max(Decimal(0), (wallet - fixed) / (1 + slippage_fraction)),
+        "PORTFOLIO_CAP": max(Decimal(0), policy.max_portfolio_exposure_usd - existing),
+        "STRESS_RISK_BUDGET": max(Decimal(0), (risk_budget - fixed) / loss_fraction),
+        "STRESS_DAILY_LOSS": max(
+            Decimal(0), (policy.max_daily_loss_usd - daily_loss - fixed) / loss_fraction
+        ),
+        "LIQUIDITY_POSITION_CAP": liquidity * policy.max_liquidity_fraction,
+    }

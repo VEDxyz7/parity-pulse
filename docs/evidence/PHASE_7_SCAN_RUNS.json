@@ -1,0 +1,1395 @@
+{
+  "phase": "MASTER_PHASE_7",
+  "verified_date": "2026-10-08",
+  "status": "PASS",
+  "mode_scope": "THREE_EXISTING_SYNTHETIC_FIXTURES_AND_EXPLICIT_REAL_UNAVAILABLE_BOUNDARY",
+  "real_capture_claim": false,
+  "live_provider_calls": 0,
+  "execution_calls": 0,
+  "audit_roundtrip": "PASS",
+  "runs": [
+    {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "0f4b023fb86cf06f792fa4edaf2561f09989cb5dbffea3711133abba2cb0d429",
+      "decision_id": "decision:0f4b023fb86cf06f792fa4edaf2561f09989cb5dbffea3711133abba2cb0d429",
+      "correlation_id": "0f4b023fb86cf06f792fa4edaf2561f09989cb5dbffea3711133abba2cb0d429",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "DEMO",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "60",
+        "risk_budget_usd": "2",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 1,
+      "eligible_count": 0,
+      "rejected_count": 1,
+      "candidates": [
+        {
+          "candidate": {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "NORMAL",
+            "confidence": "LOW",
+            "deviation": "0.007",
+            "volume_percentile": "0.03333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333",
+            "effective_cost": "100.70",
+            "liquidity_usd": "5000",
+            "slippage_bps": "20",
+            "net_edge_usd": "2.281578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052632",
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "REJECTED",
+            "tradable": true,
+            "risk_flags": [
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "evidence_refs": [
+              "evidence:bf56e50ac18d5e74ead18b08bd53b7d167e6e4598037aeec6924a9dbf9c0e605"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "50.350",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "1000",
+            "persistence_seconds": "900",
+            "news_state": "NO_RELEVANT_NEWS",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": "50.000000000000000000",
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": "1.000000000000000000",
+            "estimated_slippage_usd": "0.100000000000000000",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": "2.631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052631578947368421052632",
+            "rejection_reasons": [
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          },
+          "inclusion": "INCLUDED",
+          "rejection_reasons": [
+            "NEWS_UNAVAILABLE_OR_UNALIGNED",
+            "TRUST_NOT_LIKELY_INFORMATION"
+          ],
+          "rank": null,
+          "agent_selected": false,
+          "route": null
+        }
+      ],
+      "catalog_rejections": [],
+      "top_k": [],
+      "selected_candidate": null,
+      "final_action": "NO_QUALIFYING_OPPORTUNITY",
+      "blockers": [],
+      "rejection_counts": {
+        "NEWS_UNAVAILABLE_OR_UNALIGNED": 1,
+        "TRUST_NOT_LIKELY_INFORMATION": 1
+      },
+      "provenance": [
+        {
+          "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "data_mode": "DEMO",
+          "source": "EXISTING_DEMO_DISCOVERY",
+          "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        },
+        {
+          "evidence_id": "evidence:bf56e50ac18d5e74ead18b08bd53b7d167e6e4598037aeec6924a9dbf9c0e605",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_SCAN_EVIDENCE",
+          "digest": "bf56e50ac18d5e74ead18b08bd53b7d167e6e4598037aeec6924a9dbf9c0e605",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        }
+      ],
+      "agent_run": null,
+      "risk_validation": "UNAVAILABLE",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    },
+    {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "c615ec599336233d71b6fce5a1908151b938be25586a79be7827740f0d060b17",
+      "decision_id": "decision:c615ec599336233d71b6fce5a1908151b938be25586a79be7827740f0d060b17",
+      "correlation_id": "c615ec599336233d71b6fce5a1908151b938be25586a79be7827740f0d060b17",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "DEMO",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "60",
+        "risk_budget_usd": "2",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 1,
+      "eligible_count": 0,
+      "rejected_count": 1,
+      "candidates": [
+        {
+          "candidate": {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "LIKELY_NOISE",
+            "confidence": "LOW",
+            "deviation": "0.02",
+            "volume_percentile": "0",
+            "effective_cost": "102.0",
+            "liquidity_usd": "10",
+            "slippage_bps": "20",
+            "net_edge_usd": "-0.2462784313725490196078431372549019607843137254901960784313725490196078431372549019607843137254901960784313725490196078431372549019607843137254901960784313725490196078431372549019607843137254901960784313725490196078431372549019607843137254901960784313725490",
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "REJECTED",
+            "tradable": true,
+            "risk_flags": [
+              "INSUFFICIENT_LIQUIDITY",
+              "NET_EDGE_BELOW_MINIMUM",
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "evidence_refs": [
+              "evidence:c4bbd78bf19108dc32f22866df51943fad355bef88e45b63cc9c8cd1f72a70e1"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "51.00",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "100",
+            "persistence_seconds": "0",
+            "news_state": "NO_RELEVANT_NEWS",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": "0.100000000000000000",
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": "0.002000000000000000",
+            "estimated_slippage_usd": "0.000200000000000000",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": "0.003921568627450980392156862745098039215686274509803921568627450980392156862745098039215686274509803921568627450980392156862745098039215686274509803921568627450980392156862745098039215686274509803921568627450980392156862745098039215686274509803921568627450980",
+            "rejection_reasons": [
+              "INSUFFICIENT_LIQUIDITY",
+              "NET_EDGE_BELOW_MINIMUM",
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          },
+          "inclusion": "INCLUDED",
+          "rejection_reasons": [
+            "INSUFFICIENT_LIQUIDITY",
+            "NET_EDGE_BELOW_MINIMUM",
+            "NEWS_UNAVAILABLE_OR_UNALIGNED",
+            "TRUST_NOT_LIKELY_INFORMATION"
+          ],
+          "rank": null,
+          "agent_selected": false,
+          "route": null
+        }
+      ],
+      "catalog_rejections": [],
+      "top_k": [],
+      "selected_candidate": null,
+      "final_action": "NO_QUALIFYING_OPPORTUNITY",
+      "blockers": [],
+      "rejection_counts": {
+        "INSUFFICIENT_LIQUIDITY": 1,
+        "NET_EDGE_BELOW_MINIMUM": 1,
+        "NEWS_UNAVAILABLE_OR_UNALIGNED": 1,
+        "TRUST_NOT_LIKELY_INFORMATION": 1
+      },
+      "provenance": [
+        {
+          "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "data_mode": "DEMO",
+          "source": "EXISTING_DEMO_DISCOVERY",
+          "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        },
+        {
+          "evidence_id": "evidence:c4bbd78bf19108dc32f22866df51943fad355bef88e45b63cc9c8cd1f72a70e1",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_SCAN_EVIDENCE",
+          "digest": "c4bbd78bf19108dc32f22866df51943fad355bef88e45b63cc9c8cd1f72a70e1",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        }
+      ],
+      "agent_run": null,
+      "risk_validation": "UNAVAILABLE",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    },
+    {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+      "decision_id": "decision:44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+      "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "DEMO",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "60",
+        "risk_budget_usd": "2",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 1,
+      "eligible_count": 1,
+      "rejected_count": 0,
+      "candidates": [
+        {
+          "candidate": {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "LIKELY_INFORMATION",
+            "confidence": "LOW",
+            "deviation": "0.02",
+            "volume_percentile": "1",
+            "effective_cost": "102.000000000000000000",
+            "liquidity_usd": "5000",
+            "slippage_bps": "20",
+            "net_edge_usd": "1.610784313725490196",
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "ELIGIBLE",
+            "tradable": true,
+            "risk_flags": [],
+            "evidence_refs": [
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "51.00",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "3000",
+            "persistence_seconds": "900",
+            "news_state": "CORROBORATING",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": "50.000000000000000000",
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": "1.000000000000000000",
+            "estimated_slippage_usd": "0.100000000000000000",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": "1.960784313725490196",
+            "rejection_reasons": [],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          },
+          "inclusion": "INCLUDED",
+          "rejection_reasons": [],
+          "rank": 1,
+          "agent_selected": true,
+          "route": {
+            "schema_version": "routing-1",
+            "route_id": "371034d9-f924-5a14-8327-58bb4a81e641",
+            "underlying": "NVDA",
+            "requested_notional_usd": "50.000000000000000000",
+            "data_mode": "DEMO",
+            "source": "DETERMINISTIC_ROUTER",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "valid_until": "2026-10-06T16:00:30Z",
+            "policy": {
+              "version": "routing-1",
+              "purpose": "OPPORTUNITY",
+              "require_costs": true,
+              "require_liquidity": true,
+              "require_trust": true,
+              "require_risk": true,
+              "min_liquidity_usd": "1000",
+              "max_slippage_bps": "50",
+              "max_age_seconds": 120,
+              "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+              "weights": null,
+              "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+            },
+            "status": "ROUTE_SELECTED",
+            "selected_representation": {
+              "underlying": "NVDA",
+              "issuer": "demo-issuer",
+              "chain_id": "DEMO",
+              "contract": "demo:NVDA",
+              "token": "NVDADEMO"
+            },
+            "issuer": "demo-issuer",
+            "candidates": [
+              {
+                "candidate_id": "8854896f-fe83-5b5b-b920-19f8cff07b82",
+                "inputs": {
+                  "identity": {
+                    "underlying": "NVDA",
+                    "issuer": "demo-issuer",
+                    "chain_id": "DEMO",
+                    "contract": "demo:NVDA",
+                    "token": "NVDADEMO"
+                  },
+                  "data_mode": "DEMO",
+                  "token_price_usd": "51.00",
+                  "token_to_share_ratio": "0.5",
+                  "price_source": "CAPTURED_DEMO_TRUST",
+                  "price_timestamp": "2026-10-06T16:00:00Z",
+                  "price_quality": "DEMO",
+                  "ratio_source": "DEMO_DATA",
+                  "ratio_observed_at": "2026-10-06T16:00:00Z",
+                  "ratio_source_timestamp": "2026-10-06T16:00:00Z",
+                  "supported": true,
+                  "normalization_eligible": true,
+                  "normalization_reasons": [],
+                  "market_state": "regular",
+                  "tradable": true,
+                  "liquidity_usd": "5000",
+                  "liquidity_status": "AVAILABLE",
+                  "liquidity_source": "DEMO_MARKET",
+                  "liquidity_timestamp": "2026-10-06T16:00:00Z",
+                  "volume_usd": "3000",
+                  "fees_usd": "0.10",
+                  "gas_usd": "0.05",
+                  "slippage_bps": "20",
+                  "cost_status": "AVAILABLE",
+                  "cost_source": "SYNTHETIC_DEMO_ECONOMICS",
+                  "cost_timestamp": "2026-10-06T16:00:00Z",
+                  "trust_state": "LIKELY_INFORMATION",
+                  "trust_source": "DETERMINISTIC_TRUST_SERVICE",
+                  "trust_timestamp": "2026-10-06T16:00:00Z",
+                  "trust_assessment_id": "e243b0a4-690d-57bd-82db-dd34b3c68898",
+                  "risk_state": "PASS",
+                  "risk_source": "DETERMINISTIC_RISK_ENGINE",
+                  "risk_timestamp": "2026-10-06T16:00:00Z",
+                  "risk_id": "46cc80bc-d7ee-56de-8282-0d8ac471ca95",
+                  "risk_max_notional_usd": "50.000000000000000000",
+                  "risk_reason_codes": [
+                    "ALL_DEMO_ANALYTICAL_CHECKS_PASSED"
+                  ],
+                  "route_available": true,
+                  "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                },
+                "eligible": true,
+                "rank": 1,
+                "rejection_reasons": [],
+                "limitations": [],
+                "effective_cost_per_share_usd": "102.000000000000000000",
+                "estimated_costs_usd": "0.250000000000000000",
+                "all_in_cost_per_share_usd": "102.510000000000000000",
+                "ranking_cost_per_share_usd": "102.510000000000000000",
+                "liquidity_state": "AVAILABLE",
+                "cost_state": "AVAILABLE",
+                "trust_state": "LIKELY_INFORMATION",
+                "tradability": "TRADABLE"
+              }
+            ],
+            "selected_candidate": {
+              "candidate_id": "8854896f-fe83-5b5b-b920-19f8cff07b82",
+              "inputs": {
+                "identity": {
+                  "underlying": "NVDA",
+                  "issuer": "demo-issuer",
+                  "chain_id": "DEMO",
+                  "contract": "demo:NVDA",
+                  "token": "NVDADEMO"
+                },
+                "data_mode": "DEMO",
+                "token_price_usd": "51.00",
+                "token_to_share_ratio": "0.5",
+                "price_source": "CAPTURED_DEMO_TRUST",
+                "price_timestamp": "2026-10-06T16:00:00Z",
+                "price_quality": "DEMO",
+                "ratio_source": "DEMO_DATA",
+                "ratio_observed_at": "2026-10-06T16:00:00Z",
+                "ratio_source_timestamp": "2026-10-06T16:00:00Z",
+                "supported": true,
+                "normalization_eligible": true,
+                "normalization_reasons": [],
+                "market_state": "regular",
+                "tradable": true,
+                "liquidity_usd": "5000",
+                "liquidity_status": "AVAILABLE",
+                "liquidity_source": "DEMO_MARKET",
+                "liquidity_timestamp": "2026-10-06T16:00:00Z",
+                "volume_usd": "3000",
+                "fees_usd": "0.10",
+                "gas_usd": "0.05",
+                "slippage_bps": "20",
+                "cost_status": "AVAILABLE",
+                "cost_source": "SYNTHETIC_DEMO_ECONOMICS",
+                "cost_timestamp": "2026-10-06T16:00:00Z",
+                "trust_state": "LIKELY_INFORMATION",
+                "trust_source": "DETERMINISTIC_TRUST_SERVICE",
+                "trust_timestamp": "2026-10-06T16:00:00Z",
+                "trust_assessment_id": "e243b0a4-690d-57bd-82db-dd34b3c68898",
+                "risk_state": "PASS",
+                "risk_source": "DETERMINISTIC_RISK_ENGINE",
+                "risk_timestamp": "2026-10-06T16:00:00Z",
+                "risk_id": "46cc80bc-d7ee-56de-8282-0d8ac471ca95",
+                "risk_max_notional_usd": "50.000000000000000000",
+                "risk_reason_codes": [
+                  "ALL_DEMO_ANALYTICAL_CHECKS_PASSED"
+                ],
+                "route_available": true,
+                "route_support": "SYNTHETIC_DEMO_PREPARATION"
+              },
+              "eligible": true,
+              "rank": 1,
+              "rejection_reasons": [],
+              "limitations": [],
+              "effective_cost_per_share_usd": "102.000000000000000000",
+              "estimated_costs_usd": "0.250000000000000000",
+              "all_in_cost_per_share_usd": "102.510000000000000000",
+              "ranking_cost_per_share_usd": "102.510000000000000000",
+              "liquidity_state": "AVAILABLE",
+              "cost_state": "AVAILABLE",
+              "trust_state": "LIKELY_INFORMATION",
+              "tradability": "TRADABLE"
+            },
+            "ranking_basis": "ALL_IN_ESTIMATE",
+            "reason_codes": [
+              "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+              "IDENTITY_TIE_BREAK"
+            ],
+            "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+            "execution_ready": false,
+            "transaction_broadcast": false,
+            "live_trading_enabled": false,
+            "execution_mode": "DRY_RUN",
+            "provider_execution_mode": null,
+            "no_broadcast_statement": "No real transaction was broadcast."
+          }
+        }
+      ],
+      "catalog_rejections": [],
+      "top_k": [
+        {
+          "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+          "ticker": "NVDA",
+          "issuer": "demo-issuer",
+          "chain_id": "DEMO",
+          "contract": "demo:NVDA",
+          "data_mode": "DEMO",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "trust": "LIKELY_INFORMATION",
+          "confidence": "LOW",
+          "deviation": "0.02",
+          "volume_percentile": "1",
+          "effective_cost": "102.000000000000000000",
+          "liquidity_usd": "5000",
+          "slippage_bps": "20",
+          "net_edge_usd": "1.610784313725490196",
+          "predicted_open_return": null,
+          "prediction_samples": 0,
+          "baseline_samples": 30,
+          "analogue_count": 3,
+          "eligibility": "ELIGIBLE",
+          "tradable": true,
+          "risk_flags": [],
+          "evidence_refs": [
+            "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+          ],
+          "company": "Nvidia (DEMO)",
+          "token": "NVDADEMO",
+          "token_to_share_ratio": "0.5",
+          "token_price_usd": "51.00",
+          "independent_equity_price_usd": "100",
+          "independent_equity_source": "DEMO_EQUITY",
+          "regime": "REGULAR",
+          "volume_usd": "3000",
+          "persistence_seconds": "900",
+          "news_state": "CORROBORATING",
+          "historical_pattern": null,
+          "prediction_interval_low": null,
+          "prediction_interval_high": null,
+          "prediction_status": "NOT_READY",
+          "economics_basis": "SYNTHETIC_SCENARIO",
+          "proposed_notional_usd": "50.000000000000000000",
+          "stress_adverse_move_fraction": "0.02",
+          "stress_loss_usd": "1.000000000000000000",
+          "estimated_slippage_usd": "0.100000000000000000",
+          "fees_usd": "0.10",
+          "gas_usd": "0.05",
+          "execution_buffer_usd": "0.10",
+          "gross_expected_edge_usd": "1.960784313725490196",
+          "rejection_reasons": [],
+          "liquidity_state": "AVAILABLE",
+          "source_timestamps": {
+            "TOKEN": "2026-10-06T16:00:00Z",
+            "RATIO": "2026-10-06T16:00:00Z",
+            "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+            "EQUITY": "2026-10-06T16:00:00Z",
+            "LIQUIDITY": "2026-10-06T16:00:00Z",
+            "TRUST": "2026-10-06T16:00:00Z",
+            "COSTS": "2026-10-06T16:00:00Z"
+          }
+        }
+      ],
+      "selected_candidate": {
+        "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+        "ticker": "NVDA",
+        "issuer": "demo-issuer",
+        "chain_id": "DEMO",
+        "contract": "demo:NVDA",
+        "data_mode": "DEMO",
+        "observed_at": "2026-10-06T16:00:00Z",
+        "available_at": "2026-10-06T16:00:00Z",
+        "trust": "LIKELY_INFORMATION",
+        "confidence": "LOW",
+        "deviation": "0.02",
+        "volume_percentile": "1",
+        "effective_cost": "102.000000000000000000",
+        "liquidity_usd": "5000",
+        "slippage_bps": "20",
+        "net_edge_usd": "1.610784313725490196",
+        "predicted_open_return": null,
+        "prediction_samples": 0,
+        "baseline_samples": 30,
+        "analogue_count": 3,
+        "eligibility": "ELIGIBLE",
+        "tradable": true,
+        "risk_flags": [],
+        "evidence_refs": [
+          "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+        ],
+        "company": "Nvidia (DEMO)",
+        "token": "NVDADEMO",
+        "token_to_share_ratio": "0.5",
+        "token_price_usd": "51.00",
+        "independent_equity_price_usd": "100",
+        "independent_equity_source": "DEMO_EQUITY",
+        "regime": "REGULAR",
+        "volume_usd": "3000",
+        "persistence_seconds": "900",
+        "news_state": "CORROBORATING",
+        "historical_pattern": null,
+        "prediction_interval_low": null,
+        "prediction_interval_high": null,
+        "prediction_status": "NOT_READY",
+        "economics_basis": "SYNTHETIC_SCENARIO",
+        "proposed_notional_usd": "50.000000000000000000",
+        "stress_adverse_move_fraction": "0.02",
+        "stress_loss_usd": "1.000000000000000000",
+        "estimated_slippage_usd": "0.100000000000000000",
+        "fees_usd": "0.10",
+        "gas_usd": "0.05",
+        "execution_buffer_usd": "0.10",
+        "gross_expected_edge_usd": "1.960784313725490196",
+        "rejection_reasons": [],
+        "liquidity_state": "AVAILABLE",
+        "source_timestamps": {
+          "TOKEN": "2026-10-06T16:00:00Z",
+          "RATIO": "2026-10-06T16:00:00Z",
+          "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+          "EQUITY": "2026-10-06T16:00:00Z",
+          "LIQUIDITY": "2026-10-06T16:00:00Z",
+          "TRUST": "2026-10-06T16:00:00Z",
+          "COSTS": "2026-10-06T16:00:00Z"
+        }
+      },
+      "final_action": "BUY",
+      "blockers": [],
+      "rejection_counts": {},
+      "provenance": [
+        {
+          "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "data_mode": "DEMO",
+          "source": "EXISTING_DEMO_DISCOVERY",
+          "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        },
+        {
+          "evidence_id": "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_SCAN_EVIDENCE",
+          "digest": "d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        }
+      ],
+      "agent_run": {
+        "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+        "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+        "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+        "data_mode": "DEMO",
+        "timestamp": "2026-10-06T16:00:00Z",
+        "policy": {
+          "version": "agents-1",
+          "max_calls": 12,
+          "max_calls_per_agent": 2,
+          "max_llm_calls": 5,
+          "timeout_seconds": 5,
+          "retries": 1,
+          "top_k": 5,
+          "max_tool_calls": 24,
+          "max_tools_per_agent": 6,
+          "max_depth": 1,
+          "memory_k": 4,
+          "max_age_seconds": 120,
+          "news_window_seconds": 3600,
+          "confidence_cap": "LOW",
+          "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID"
+        },
+        "evidence": [
+          {
+            "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+            "data_mode": "DEMO",
+            "source": "EXISTING_DEMO_DISCOVERY",
+            "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "synthetic": true
+          },
+          {
+            "evidence_id": "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e",
+            "data_mode": "DEMO",
+            "source": "DETERMINISTIC_SCAN_EVIDENCE",
+            "digest": "d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "synthetic": true
+          }
+        ],
+        "candidate_table": [
+          {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "LIKELY_INFORMATION",
+            "confidence": "LOW",
+            "deviation": "0.02",
+            "volume_percentile": "1",
+            "effective_cost": "102.000000000000000000",
+            "liquidity_usd": "5000",
+            "slippage_bps": "20",
+            "net_edge_usd": "1.610784313725490196",
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "ELIGIBLE",
+            "tradable": true,
+            "risk_flags": [],
+            "evidence_refs": [
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "51.00",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "3000",
+            "persistence_seconds": "900",
+            "news_state": "CORROBORATING",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": "50.000000000000000000",
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": "1.000000000000000000",
+            "estimated_slippage_usd": "0.100000000000000000",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": "1.960784313725490196",
+            "rejection_reasons": [],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          }
+        ],
+        "responses": [
+          {
+            "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+            "agent": "INTENT",
+            "version": "agents-1",
+            "data_mode": "DEMO",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "evidence_refs": [
+              "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "status": "OK",
+            "output": {
+              "mandate": {
+                "mode": "OPPORTUNITY",
+                "ticker": null,
+                "budget_usd": "60",
+                "risk_budget_usd": "2",
+                "time_window": "PRE_OPEN",
+                "strategy": null,
+                "allocation_stock_percent": null,
+                "allocation_cash_percent": null,
+                "approval_mode": "PROPOSE_ONLY"
+              },
+              "needs_clarification": false
+            },
+            "confidence": {
+              "tier": "LOW",
+              "evidence_status": "SUPPORTED",
+              "factors": {
+                "data_quality": "AVAILABLE",
+                "baseline_samples": 30,
+                "analogue_count": 3,
+                "model_samples": 0,
+                "feature_agreement": true,
+                "news_corroboration": true,
+                "persistence_supported": true,
+                "regime_certain": true,
+                "agent_disagreement": false
+              },
+              "cap": "LOW",
+              "calibrated": false,
+              "reasons": [
+                "UNCALIBRATED_EXISTING_LOW_CAP",
+                "EVIDENCE_SUPPORTED"
+              ]
+            },
+            "limitations": [],
+            "conflicts": [],
+            "provider": "DETERMINISTIC",
+            "model": "deterministic-agents-1"
+          },
+          {
+            "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+            "agent": "MARKET",
+            "version": "agents-1",
+            "data_mode": "DEMO",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "evidence_refs": [
+              "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "status": "OK",
+            "output": {
+              "views": [
+                {
+                  "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+                  "classification": "LIKELY_INFORMATION",
+                  "direction": "UP",
+                  "risk_flags": []
+                }
+              ]
+            },
+            "confidence": {
+              "tier": "LOW",
+              "evidence_status": "SUPPORTED",
+              "factors": {
+                "data_quality": "AVAILABLE",
+                "baseline_samples": 30,
+                "analogue_count": 3,
+                "model_samples": 0,
+                "feature_agreement": true,
+                "news_corroboration": true,
+                "persistence_supported": true,
+                "regime_certain": true,
+                "agent_disagreement": false
+              },
+              "cap": "LOW",
+              "calibrated": false,
+              "reasons": [
+                "UNCALIBRATED_EXISTING_LOW_CAP",
+                "EVIDENCE_SUPPORTED"
+              ]
+            },
+            "limitations": [],
+            "conflicts": [],
+            "provider": "DETERMINISTIC",
+            "model": "deterministic-agents-1"
+          },
+          {
+            "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+            "agent": "NEWS",
+            "version": "agents-1",
+            "data_mode": "DEMO",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "evidence_refs": [
+              "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "status": "OK",
+            "output": {
+              "views": [
+                {
+                  "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+                  "relevance": "CORROBORATING",
+                  "direction": "UP",
+                  "event_type": "HEADLINE_EVIDENCE",
+                  "article_ids": [
+                    "synthetic-guidance-2026-10-06"
+                  ],
+                  "publication_times": [
+                    "2026-10-06T15:25:00Z"
+                  ],
+                  "causal_claim": false
+                }
+              ]
+            },
+            "confidence": {
+              "tier": "LOW",
+              "evidence_status": "SUPPORTED",
+              "factors": {
+                "data_quality": "AVAILABLE",
+                "baseline_samples": 30,
+                "analogue_count": 3,
+                "model_samples": 0,
+                "feature_agreement": true,
+                "news_corroboration": true,
+                "persistence_supported": true,
+                "regime_certain": true,
+                "agent_disagreement": false
+              },
+              "cap": "LOW",
+              "calibrated": false,
+              "reasons": [
+                "UNCALIBRATED_EXISTING_LOW_CAP",
+                "EVIDENCE_SUPPORTED"
+              ]
+            },
+            "limitations": [
+              "PUBLICATION_AND_FIRST_AVAILABILITY_REQUIRED",
+              "CORROBORATION_NOT_CAUSALITY"
+            ],
+            "conflicts": [],
+            "provider": "DETERMINISTIC",
+            "model": "deterministic-agents-1"
+          },
+          {
+            "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+            "agent": "RESEARCH",
+            "version": "agents-1",
+            "data_mode": "DEMO",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "evidence_refs": [
+              "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "status": "OK",
+            "output": {
+              "retrieval_status": "NOT_READY",
+              "model_status": "NOT_READY",
+              "model_samples": 0,
+              "retrieved_analogues": 0,
+              "views": [
+                {
+                  "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+                  "similar_episodes": [
+                    "synthetic-supported-move-2026-09-17",
+                    "synthetic-supported-move-2026-10-01",
+                    "synthetic-supported-move-2026-10-05"
+                  ],
+                  "historical_pattern": "CONTINUATION",
+                  "opening_direction": "UNKNOWN",
+                  "prediction_status": "NOT_READY",
+                  "prediction_samples": 0,
+                  "priors": [],
+                  "memory_ids": []
+                }
+              ]
+            },
+            "confidence": {
+              "tier": "LOW",
+              "evidence_status": "SUPPORTED",
+              "factors": {
+                "data_quality": "AVAILABLE",
+                "baseline_samples": 30,
+                "analogue_count": 3,
+                "model_samples": 0,
+                "feature_agreement": true,
+                "news_corroboration": true,
+                "persistence_supported": true,
+                "regime_certain": true,
+                "agent_disagreement": false
+              },
+              "cap": "LOW",
+              "calibrated": false,
+              "reasons": [
+                "UNCALIBRATED_EXISTING_LOW_CAP",
+                "EVIDENCE_SUPPORTED"
+              ]
+            },
+            "limitations": [
+              "OPENING_DIRECTION_IS_NOT_TOKEN_REVERSAL",
+              "PRIORS_ARE_NOT_LOCAL_MEASUREMENTS",
+              "SYNTHETIC_DEMO_IS_NOT_PRODUCTION_EVIDENCE"
+            ],
+            "conflicts": [],
+            "provider": "DETERMINISTIC",
+            "model": "deterministic-agents-1"
+          },
+          {
+            "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+            "agent": "OPPORTUNITY",
+            "version": "agents-1",
+            "data_mode": "DEMO",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "evidence_refs": [
+              "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "status": "OK",
+            "output": {
+              "action": "BUY",
+              "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+              "eligible_ids": [
+                "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c"
+              ],
+              "rejected_ids": [],
+              "strengths": [
+                "DETERMINISTICALLY_ELIGIBLE",
+                "RANKED_BACKEND_ECONOMICS"
+              ],
+              "weaknesses": []
+            },
+            "confidence": {
+              "tier": "LOW",
+              "evidence_status": "SUPPORTED",
+              "factors": {
+                "data_quality": "AVAILABLE",
+                "baseline_samples": 30,
+                "analogue_count": 3,
+                "model_samples": 0,
+                "feature_agreement": true,
+                "news_corroboration": true,
+                "persistence_supported": true,
+                "regime_certain": true,
+                "agent_disagreement": false
+              },
+              "cap": "LOW",
+              "calibrated": false,
+              "reasons": [
+                "UNCALIBRATED_EXISTING_LOW_CAP",
+                "EVIDENCE_SUPPORTED"
+              ]
+            },
+            "limitations": [
+              "INTERPRETATION_NOT_RISK_OR_EXECUTION_AUTHORITY"
+            ],
+            "conflicts": [],
+            "provider": "DETERMINISTIC",
+            "model": "deterministic-agents-1"
+          },
+          {
+            "run_id": "f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "decision_id": "decision:f2b5ac39354b4918c1b3407344e5996938745ce929393bd9add893cbae918604",
+            "correlation_id": "44d9937803c81f5eaa958e6cfcbd8bcdd186de2d9cc51e335516b6e8d20034eb",
+            "agent": "DECISION",
+            "version": "agents-1",
+            "data_mode": "DEMO",
+            "timestamp": "2026-10-06T16:00:00Z",
+            "evidence_refs": [
+              "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "status": "OK",
+            "output": {
+              "decision": "BUY",
+              "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+              "ticker": "NVDA",
+              "issuer": "demo-issuer",
+              "reasons": [
+                "DEMO_ANALYTICAL_BUY_ONLY_NO_EXECUTION_AUTHORITY"
+              ],
+              "risk_preview_status": "PASS",
+              "execution_authorized": false
+            },
+            "confidence": {
+              "tier": "LOW",
+              "evidence_status": "SUPPORTED",
+              "factors": {
+                "data_quality": "AVAILABLE",
+                "baseline_samples": 30,
+                "analogue_count": 3,
+                "model_samples": 0,
+                "feature_agreement": true,
+                "news_corroboration": true,
+                "persistence_supported": true,
+                "regime_certain": true,
+                "agent_disagreement": false
+              },
+              "cap": "LOW",
+              "calibrated": false,
+              "reasons": [
+                "UNCALIBRATED_EXISTING_LOW_CAP",
+                "EVIDENCE_SUPPORTED"
+              ]
+            },
+            "limitations": [
+              "ALL_LIVE_GATES_REMAIN_BLOCKED",
+              "NO_REAL_FUNDS_MOVE"
+            ],
+            "conflicts": [],
+            "provider": "DETERMINISTIC",
+            "model": "deterministic-agents-1"
+          }
+        ],
+        "calls": [
+          {
+            "agent": "INTENT",
+            "attempt": 1,
+            "status": "OK"
+          },
+          {
+            "agent": "MARKET",
+            "attempt": 1,
+            "status": "OK"
+          },
+          {
+            "agent": "NEWS",
+            "attempt": 1,
+            "status": "OK"
+          },
+          {
+            "agent": "RESEARCH",
+            "attempt": 1,
+            "status": "OK"
+          },
+          {
+            "agent": "OPPORTUNITY",
+            "attempt": 1,
+            "status": "OK"
+          },
+          {
+            "agent": "DECISION",
+            "attempt": 1,
+            "status": "OK"
+          }
+        ],
+        "tool_calls": 8,
+        "llm_calls": 0,
+        "decision": {
+          "decision": "BUY",
+          "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+          "ticker": "NVDA",
+          "issuer": "demo-issuer",
+          "reasons": [
+            "DEMO_ANALYTICAL_BUY_ONLY_NO_EXECUTION_AUTHORITY"
+          ],
+          "risk_preview_status": "PASS",
+          "execution_authorized": false
+        },
+        "status": "COMPLETED",
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        },
+        "execution_mode": "DRY_RUN",
+        "approval_mode": "PROPOSE_ONLY",
+        "execution_authorized": false,
+        "transaction_broadcast": false,
+        "no_broadcast_statement": "No real transaction was broadcast."
+      },
+      "risk_validation": "PASS",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    },
+    {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "3973379089ba333317f28ec53b149e85acc87f63229b39a837c918629492a56a",
+      "decision_id": "decision:3973379089ba333317f28ec53b149e85acc87f63229b39a837c918629492a56a",
+      "correlation_id": "3973379089ba333317f28ec53b149e85acc87f63229b39a837c918629492a56a",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "LIVE_READ_ONLY",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "100",
+        "risk_budget_usd": "10",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 0,
+      "eligible_count": 0,
+      "rejected_count": 0,
+      "candidates": [],
+      "catalog_rejections": [],
+      "top_k": [],
+      "selected_candidate": null,
+      "final_action": "DEFER",
+      "blockers": [
+        "CURRENT_REAL_EVIDENCE_UNAVAILABLE",
+        "PRODUCTION_OPPORTUNITY_GATE_BLOCKED_BY_TRUST",
+        "REAL_ANALOGUES_0_OF_3",
+        "REAL_BASELINE_0_OF_30",
+        "REAL_OPENING_MODEL_0_OF_30"
+      ],
+      "rejection_counts": {},
+      "provenance": [
+        {
+          "evidence_id": "evidence:753b7f990203edeb5a9c0264f9f7a92ef0a579efc11902c0526aa260c151998c",
+          "data_mode": "LIVE_READ_ONLY",
+          "source": "UNAVAILABLE_REAL_EVIDENCE",
+          "digest": "753b7f990203edeb5a9c0264f9f7a92ef0a579efc11902c0526aa260c151998c",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": false
+        }
+      ],
+      "agent_run": null,
+      "risk_validation": "UNAVAILABLE",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    }
+  ],
+  "synthetic_performance": [
+    {
+      "synthetic_representations": 10,
+      "stocks": 10,
+      "seconds": 0.034915,
+      "eligible": 10,
+      "top_k": 5,
+      "agent_calls": 6,
+      "llm_calls": 0,
+      "action": "BUY"
+    },
+    {
+      "synthetic_representations": 25,
+      "stocks": 25,
+      "seconds": 0.090803,
+      "eligible": 25,
+      "top_k": 5,
+      "agent_calls": 6,
+      "llm_calls": 0,
+      "action": "BUY"
+    },
+    {
+      "synthetic_representations": 50,
+      "stocks": 50,
+      "seconds": 0.22769,
+      "eligible": 50,
+      "top_k": 5,
+      "agent_calls": 6,
+      "llm_calls": 0,
+      "action": "BUY"
+    },
+    {
+      "synthetic_representations": 100,
+      "stocks": 100,
+      "seconds": 0.724757,
+      "eligible": 100,
+      "top_k": 5,
+      "agent_calls": 6,
+      "llm_calls": 0,
+      "action": "BUY"
+    }
+  ]
+}

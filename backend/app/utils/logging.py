@@ -27,6 +27,13 @@ SAFE_FIELDS = {
     "proposal_id",
     "proposal_status",
     "data_mode",
+    "decision_id",
+    "universe_count",
+    "eligible_count",
+    "rejected_count",
+    "action",
+    "agent_calls",
+    "llm_calls",
 }
 
 
