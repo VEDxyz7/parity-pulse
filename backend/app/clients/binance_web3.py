@@ -1,4 +1,4 @@
-"""The sole Binance signer. Only explicitly reviewed market read operations exist."""
+"""The sole Binance signer, restricted to reviewed non-mutating contracts."""
 
 import base64
 import hashlib
@@ -26,13 +26,39 @@ READ_OPERATIONS = {
     "POST": {"price", "price-info", "token/basic-info"},
 }
 PREFIX = "/api/v1/dex/market/"
+# Explicit non-mutating Phase 8 contracts. No submit, broadcast or wallet operation.
+SAFETY_PATHS = {
+    "GET": {
+        "/api/v1/dex/aggregator/supported/chain",
+        "/api/v1/dex/aggregator/quote",
+        "/api/v1/dex/aggregator/swap",
+        "/api/v1/dex/aggregator/approve-transaction",
+        "/api/v1/dex/aggregator/history",
+        "/api/v1/dex/pre-transaction/supported/chain",
+    },
+    "POST": {"/api/v1/dex/pre-transaction/simulate"},
+}
 
 
 def sign_request(
     secret: SecretStr, timestamp: str, method: str, wire_path: str, body: bytes
 ) -> str:
-    if not wire_path.startswith("/build/api/v1/dex/market/"):
-        raise ValueError("Signing requires the exact /build market path")
+    import re
+
+    path = wire_path.split("?", 1)[0]
+    safety = path.startswith("/build/") and path.removeprefix("/build") in SAFETY_PATHS.get(
+        method.upper(), set()
+    )
+    market = path.startswith("/build" + PREFIX) and path[len("/build" + PREFIX) :] in (
+        READ_OPERATIONS.get(method.upper(), set())
+    )
+    status = (
+        method.upper() == "GET"
+        and re.fullmatch(r"/build/api/v1/dex/aggregator/order/[A-Za-z0-9_-]{1,128}", path)
+        and not path.endswith("/submit")
+    )
+    if not (market or safety or status):
+        raise ValueError("Signing requires an explicitly reviewed /build operation")
     message = (timestamp + method.upper() + wire_path).encode() + body
     return base64.b64encode(
         hmac.new(secret.get_secret_value().encode(), message, hashlib.sha256).digest()

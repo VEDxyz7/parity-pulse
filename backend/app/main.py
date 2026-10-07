@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from contextlib import asynccontextmanager
+from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
@@ -24,16 +25,20 @@ from app.api.middleware import RequestContextMiddleware
 from app.api.opportunity_scan import router as opportunity_scan_router
 from app.api.system import router
 from app.api.trust import router as trust_router
+from app.clients.binance_trading import BinanceSafetyClient
 from app.clients.common import ProviderError
 from app.config import Settings
 from app.database import Database
 from app.demo import load_demo_fixture
+from app.models.execution import ExecutionControls
+from app.repositories.execution import ExecutionStore
 from app.repositories.opportunity_scan import OpportunityScanStore
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
 from app.services.demo_paper import DemoPaperLedger
 from app.services.demo_preparation import DemoPreparationFlow
 from app.services.demo_sandbox import DemoTrustSandbox
+from app.services.execution import SafetyExecutionService
 from app.services.exposure import ExposureService
 from app.services.opportunity_scan import OpportunityScanService
 from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
@@ -111,6 +116,27 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 else DataLayerScanSource(app.state.data_layer, app.state.trust)
             )
             app.state.opportunity_scan_lock = asyncio.Lock()
+            execution_directory = (
+                None
+                if scan_directory is None
+                else Path(database_file).resolve().parent / "execution/phase8"
+            )
+            app.state.execution_store = ExecutionStore(execution_directory)
+            app.state.safety_client = (
+                BinanceSafetyClient(
+                    configured.binance_web3_api_key,
+                    configured.binance_web3_secret_key,
+                    cache_ttl=0,
+                )
+                if configured.data_mode == "LIVE_READ_ONLY"
+                else None
+            )
+            app.state.safety_execution = SafetyExecutionService(
+                app.state.safety_client,
+                app.state.execution_store,
+                ExecutionControls(data_mode=configured.data_mode),
+                clock=lambda: datetime.now(UTC),
+            )
             app.state.demo_sandbox = (
                 DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
             )
@@ -173,6 +199,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 app.state.opportunity_scan.agents.store.close()
             app.state.opportunity_scan = None
             app.state.opportunity_source = None
+            if getattr(app.state, "safety_client", None) is not None:
+                app.state.safety_client.close()
+            if getattr(app.state, "execution_store", None) is not None:
+                app.state.execution_store.close()
+            app.state.safety_execution = None
             if database is not None:
                 database.close()
             app.state.database = None

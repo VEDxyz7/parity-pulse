@@ -1,5 +1,18 @@
 # Parity Pulse
 
+Master Phase 8 — Safety and Execution: **IMPLEMENTATION PASS**. Deterministic Risk,
+funding/base-unit checks, Binance quote/build contracts, approvals, fingerprints, simulation,
+durable state/status tracking and a fail-closed ExecutionGateway are implemented as host-only
+services. No public execution API, signing, broadcast or RFQ submission is enabled.
+See [Phase 8 report and changed files](docs/PHASE_8_REPORT.md) and
+[verification evidence](docs/evidence/PHASE_8_VERIFICATION.json).
+
+Production gates remain DATA_GATE=PASS, DRY_RUN_GATE=PASS, TRUST_GATE=BLOCKED,
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST and all three LIVE gates=BLOCKED.
+Fixture simulation does not prove live execution equivalence. Phase 9 was NOT started.
+The sole authoritative specification is [docs/MASTER_SPEC.md](docs/MASTER_SPEC.md).
+The dated milestone descriptions below remain historical checkpoints.
+
 Master Phase 7 — Opportunity Mode: **IMPLEMENTATION PASS**. The production Opportunity gate
 remains **BLOCKED_BY_TRUST**; all LIVE execution remains blocked. See
 [Phase 7 report](docs/PHASE_7_REPORT.md) for the full candidate contract, rejection/ranking,

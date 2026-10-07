@@ -28,6 +28,8 @@ SAFE_FIELDS = {
     "proposal_status",
     "data_mode",
     "decision_id",
+    "execution_id",
+    "status",
     "universe_count",
     "eligible_count",
     "rejected_count",

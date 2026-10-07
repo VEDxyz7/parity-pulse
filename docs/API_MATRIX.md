@@ -1,5 +1,38 @@
 # API matrix — contracts and implementation through Phase 2
 
+## Master Phase 8 safety contracts — October 8, 2026
+
+Official [Trading API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api),
+[Transaction API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/transaction-api)
+and published schema were inspected. Typed adapters and MockTransport tests are implemented;
+**no authenticated provider entitlement/build/simulation or live execution call was performed**.
+Documentation verification and synthetic protocol tests do not establish actual account access.
+See [Phase 8 contract audit](PHASE_8_REPORT.md) and [verification](evidence/PHASE_8_VERIFICATION.json).
+
+All paths below have the existing signed `/build` base. No public execution API was added.
+
+| Operation | Exact request contract | Implementation / safety boundary |
+|---|---|---|
+| GET `/api/v1/dex/aggregator/supported/chain` | No invented parameters | Validate actual BSC support before preparation |
+| GET `/api/v1/dex/aggregator/quote` | `binanceChainId`, integer-string sell `amount`, `fromTokenAddress`, `toTokenAddress`, `userWalletAddress` | Retain route ID/vendor/mode, token decimals/prices, fees/impact, spender and route; local validity bounded to 30s from request start |
+| GET `/api/v1/dex/aggregator/swap` | Exact quote inputs plus `quoteId`, `slippagePercent`, `autoSlippage=false` | Validate exactly one SWAP EVM or RFQ branch; mode comes from selected quote, never issuer |
+| GET `/api/v1/dex/aggregator/approve-transaction` | Chain, token, exact `approveAmount`; `vendor` for RFQ only | Validate returned array, exact ERC-20 spender/amount calldata and gas; no approval broadcast |
+| GET `/api/v1/dex/pre-transaction/supported/chain` | No invented parameters | Validate BSC simulation capability |
+| POST `/api/v1/dex/pre-transaction/simulate` | `binanceChainId="56"`, exactly one `evmTx{from,to,value,data}` | SUCCESS/FAILED schema checked; gas/nonce fields are not covered by this documented body; final RFQ settlement unavailable |
+| POST `/api/v1/dex/aggregator/order/submit` | UUIDv4 `requestId`, `userSignature`, `vendor`, `quoteId=rfq.orderId`, applicable `signingScheme` | Offline body/path contract only; signed material excluded from persistence/logs; HTTP submission denied before transport |
+| GET `/api/v1/dex/aggregator/order/{platformOrderId}` | Exact external order ID | Bounded status tracking; pending/unknown never creates another order |
+| GET `/api/v1/dex/aggregator/history` | Chain and `txHash` | Read-only SWAP status; null/hash alone is not terminal success |
+
+The published swap RFQ schema omits `orderId`, while submit prose requires `rfq.orderId`.
+Missing binding fails closed; no ID is invented. Opaque hex typed data is retained but cannot
+prove signing/settlement semantics. Contradictory tx+RFQ builds, unknown modes, incomplete
+fee/spender/gas fields and unsupported custom/tax fees are rejected. Simulation coverage remains
+limited and `live_equivalence_verified=false`, including successful synthetic responses.
+
+Production states stay DATA_GATE=PASS, DRY_RUN_GATE=PASS, TRUST_GATE=BLOCKED,
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST and all three LIVE gates=BLOCKED. Phase 9 was NOT started.
+Every earlier endpoint/result ledger below is preserved historical evidence.
+
 ## Latest read-only historical investigation — 2026-10-06T17:56Z
 
 Existing production contracts/allowlists are unchanged. The isolated diagnostic uses only established Market/equity reads; no Trading, Transaction, RFQ or Wallet endpoint was called. Full sanitized endpoint/status/timestamp ledger: [actual investigation](evidence/CANONICAL_PHASE_2_TRUST_DATA_INVESTIGATION.json). No credential, raw denial body or authenticated URL query is retained.

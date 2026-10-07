@@ -12,6 +12,97 @@ CONFIDENCE = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
 
 
 class RiskEngine:
+    def evaluate_execution(self, evidence, *, now):
+        """Independent hard controls for exact preparation, never live authorization.
+
+        Shared caps from Phases 3A/7; no LLM input or inferred risk tolerance.
+        """
+        from app.models.execution import (
+            ExecutionRiskDecision,
+            ExecutionRiskEvidence,
+            fingerprint,
+        )
+
+        e = ExecutionRiskEvidence.model_validate_json(evidence.model_dump_json())
+        c = e.context
+        checks = []
+
+        def check(code, passed):
+            checks.append(RiskCheck(code=code, passed=bool(passed), detail=code))
+
+        check("RISK_CONTEXT_AVAILABLE", c is not None)
+        check("REQUIRED_EVIDENCE_VALID", e.required_evidence_valid)
+        check("SYSTEM_RESOLVED", e.system_resolved and c is not None and c.system_resolved)
+        check("TRADABLE_ROUTE", e.tradable and e.route_available)
+        times = (e.token_observed_at, e.equity_observed_at, e.evidence_observed_at)
+        check("DATA_FRESHNESS", all(0 <= (now - t).total_seconds() <= 120 for t in times))
+        check("TIMESTAMP_ALIGNMENT", abs((times[0] - times[1]).total_seconds()) <= 30)
+        check("TRUST_REQUIRED", e.trust_state in ("NORMAL", "LIKELY_INFORMATION"))
+        check(
+            "OPPORTUNITY_TRUST", e.purpose != "OPPORTUNITY" or e.trust_state == "LIKELY_INFORMATION"
+        )
+        check("PRODUCTION_TRUST_GATE", e.data_mode == "DEMO")
+        check("PRODUCTION_OPPORTUNITY_GATE", e.purpose != "OPPORTUNITY" or e.data_mode == "DEMO")
+        stress, maximum = None, None
+        if c is not None:
+            check("RISK_CONTEXT_FRESH", 0 <= (now - c.observed_at).total_seconds() <= 120)
+            check("WALLET_ALLOWED", c.wallet_allowed)
+            check("RISK_BUDGET_LIMIT", e.risk_budget_usd <= c.max_risk_budget_usd)
+            check("DAILY_LOSS_LIMIT", c.daily_loss_usd < c.max_daily_loss_usd)
+            check("TRADE_COUNT_LIMIT", c.trades_today < c.max_trades_per_day)
+            check(
+                "COOLDOWN",
+                c.last_trade_at is None
+                or (now - c.last_trade_at).total_seconds() >= c.cooldown_seconds,
+            )
+            check("CONFIDENCE_MINIMUM", CONFIDENCE[e.confidence] >= CONFIDENCE[c.min_confidence])
+            check("SLIPPAGE_LIMIT", e.slippage_bps <= c.max_slippage_bps)
+            check(
+                "LIQUIDITY_MINIMUM",
+                e.liquidity_usd is not None and e.liquidity_usd >= c.min_liquidity_usd,
+            )
+            check(
+                "LIQUIDITY_PERCENTILE",
+                e.liquidity_usd is not None
+                and e.liquidity_p50_usd is not None
+                and e.liquidity_usd >= e.liquidity_p50_usd,
+            )
+            check(
+                "NET_EDGE_MINIMUM",
+                e.purpose != "OPPORTUNITY" or e.net_expected_edge_usd >= c.min_net_edge_usd,
+            )
+            with localcontext() as ctx:
+                ctx.prec = 256
+                fixed = e.costs_usd + e.conversion_cost_usd
+                slip = e.slippage_bps / Decimal(10000)
+                caps = position_caps(
+                    budget=e.budget_usd,
+                    risk_budget=e.risk_budget_usd,
+                    wallet=c.wallet_available_usd,
+                    existing=c.existing_exposure_usd,
+                    daily_loss=c.daily_loss_usd,
+                    liquidity=e.liquidity_usd or Decimal(0),
+                    policy=c,
+                    fixed=fixed,
+                    slippage_fraction=slip,
+                    loss_fraction=c.stress_adverse_move_fraction + slip,
+                )
+                for code, cap in caps.items():
+                    check(code, e.notional_usd <= cap)
+                maximum = rounded(min(caps.values()))
+                stress = e.notional_usd * (c.stress_adverse_move_fraction + slip) + fixed
+                check("COST_INCLUSIVE_STRESS", stress <= e.risk_budget_usd)
+        return ExecutionRiskDecision(
+            evidence_digest=fingerprint(e),
+            evaluated_at=now,
+            decision_id=e.decision_id,
+            data_mode=e.data_mode,
+            status="PASS" if all(c.passed for c in checks) else "FAIL",
+            checks=tuple(checks),
+            stress_loss_usd=stress,
+            maximum_notional_usd=maximum,
+        )
+
     def size_opportunity(self, mandate, constraints, costs, liquidity, *, now, mode):
         """Phase 7 ex-ante sizing, stricter cost-inclusive stress and system caps.
 

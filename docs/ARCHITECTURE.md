@@ -1,5 +1,40 @@
 # Architecture decision record — through Phase 2
 
+## Master Phase 8 — host-only safety and execution, October 8, 2026
+
+**Implementation PASS; all production gates unchanged.** [Phase 8 report](PHASE_8_REPORT.md)
+describes contracts, eligibility, exact arithmetic, persistence and test evidence. The existing
+Trust, research, routing, six-agent and Phase 7 analytical services are reused without new logic
+in agents or React. The complete DEMO paper lifecycle and frontend remain unchanged.
+
+`SafetyExecutionService` accepts typed host Risk/funding/allowance evidence and can consume the
+existing Phase 7 decision. `RiskEngine.evaluate_execution` shares existing position-cap arithmetic
+and adds hard execution controls. Funding resolution uses existing market discovery/metadata;
+USD notional, funding-token base units and native gas units remain separate.
+
+`BinanceSafetyClient` reuses the sole signer and bounded HTTP transport, permitting only reviewed
+quote/build/simulation/approval-build/status operations. `AggregatorQuoteService` validates exact
+request bindings and ranks provider routes deterministically; issuer routing is unchanged.
+Builders resolve SWAP/RFQ from the actual route, retain exact provider artifacts and compute
+canonical fingerprints. Approvals have separate route-bound fingerprints/simulation. RFQ typed
+data and submission bodies are prepared offline; no submission transport exists.
+
+Simulation admits only the documented BSC EVM payload and records its limited coverage.
+RFQ settlement is explicitly unavailable; fixture success never certifies live equivalence.
+Strict transitions, bounded status reads, idempotent UUIDs, versioned compare-and-swap and
+chained audit snapshots support fail-closed recovery. Unknown status cannot authorize a retry
+or be locally dismissed to create another order.
+
+Only `DryRunExecutionGateway` implements the execution boundary; it independently rechecks hard
+controls and always refuses execution. There is no public execution/approval endpoint and agents
+cannot invoke the gateway. Startup injects a real read-only client only in LIVE_READ_ONLY;
+DEMO has no real safety client. The separate journal is memory-only for DEMO/tests or stored
+under ignored `data/execution/phase8/` beside persistent application data. No historical writes occur.
+
+DATA/DRY_RUN remain PASS; TRUST remains BLOCKED; OPPORTUNITY remains BLOCKED_BY_TRUST;
+all three LIVE gates remain BLOCKED. Phase 9 wallet/runtime/signing integration was NOT started.
+Earlier sections retain dated architecture history. `docs/MASTER_SPEC.md` is unchanged.
+
 ## Master Phase 7 — Opportunity Mode, October 8, 2026
 
 PHASE_7_IMPLEMENTATION=PASS. The user explicitly authorized non-executable Opportunity

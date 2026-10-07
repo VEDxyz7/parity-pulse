@@ -1,5 +1,23 @@
 # Product phases and engineering stages
 
+## Master Phase 8 — Safety and Execution, October 8, 2026
+
+**PHASE_8_IMPLEMENTATION=PASS.** This separately authorized master engineering milestone
+implements Risk/funding checks, quote/build/approval/simulation contracts, fingerprints,
+state/status persistence and a DRY_RUN-only gateway. [Phase 8 report](PHASE_8_REPORT.md)
+records exact evidence and remaining external dependencies.
+
+The canonical product Trust/data prerequisite remains blocked: DATA_GATE=PASS,
+DRY_RUN_GATE=PASS, TRUST_GATE=BLOCKED, OPPORTUNITY_GATE=BLOCKED_BY_TRUST; SWAP_LIVE_GATE,
+RFQ_LIVE_GATE and AGENTIC_WALLET_LIVE_GATE remain BLOCKED. Implementation advancement
+does not relabel older Data Layer reports, complete canonical Trust or unlock production action.
+The existing canonical/engineering mapping and historical evidence below remain intact.
+
+Master Phase 9 — Agentic Wallet was NOT started. It requires separate authorization and verified
+runtime/worker interfaces; signing, broadcast, live RFQ/SWAP and autonomous live execution remain
+unavailable. Earlier next-phase/not-started statements below are preserved dated checkpoints.
+The sole authority is the unchanged `docs/MASTER_SPEC.md`.
+
 ## Master Phase 7 — Opportunity Mode, October 8, 2026
 
 PHASE_7_IMPLEMENTATION=PASS. The user explicitly authorized non-executable Opportunity

@@ -1,5 +1,36 @@
 # Development and execution capability gates
 
+## Master Phase 8 — Safety and Execution, October 8, 2026
+
+**PHASE_8_IMPLEMENTATION=PASS** certifies deterministic safety infrastructure and fail-closed
+contracts, not live execution readiness. [Phase 8 report](PHASE_8_REPORT.md) and
+[verification](evidence/PHASE_8_VERIFICATION.json) record the exact scope and evidence.
+
+```text
+DATA_GATE=PASS
+DRY_RUN_GATE=PASS
+TRUST_GATE=BLOCKED
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST
+SWAP_LIVE_GATE=BLOCKED
+RFQ_LIVE_GATE=BLOCKED
+AGENTIC_WALLET_LIVE_GATE=BLOCKED
+```
+
+Every production gate retains its existing purpose, prerequisites and evidence requirement.
+DRY_RUN_GATE retains its previously verified scope; synthetic protocol simulation is not a
+production certificate. Safety preparation is host-only, has no public execution endpoint and
+cannot submit, sign or broadcast. The only gateway implementation always stops before execution.
+
+SWAP simulation models only the documented EVM from/to/value/data payload; gas/nonce/ABI effects
+and execution equivalence remain unverified. RFQ final settlement remains unavailable for exact
+simulation. Builders, EIP-712 extraction, approval simulation and status readers unlock neither
+live gate. Wallet runtime/signing remains unimplemented. Real Trust history remains 0/30 baseline,
+0/30 opening-model and 0/3 analogues. No threshold, production gate or safety rule is weakened.
+
+Phase 9 was NOT started. The dated sections below remain historical snapshots; their earlier
+“not started” statements are superseded only for implementation status by this authorized Phase 8
+milestone. The sole master remains `docs/MASTER_SPEC.md`, unchanged.
+
 ## Master Phase 7 — Opportunity Mode, October 8, 2026
 
 PHASE_7_IMPLEMENTATION=PASS. The user explicitly authorized non-executable Opportunity

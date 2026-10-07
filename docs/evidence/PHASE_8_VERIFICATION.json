@@ -1,0 +1,186 @@
+{
+  "phase": "MASTER_PHASE_8_SAFETY_AND_EXECUTION",
+  "verified_date": "2026-10-08",
+  "timezone": "Asia/Kolkata",
+  "authoritative_spec": {
+    "path": "docs/MASTER_SPEC.md",
+    "read_completely_before_coding": true,
+    "lines": 5321,
+    "sha256": "f69a9bd01a622c001c3ec6cb654e00562f6b3d03a8310f9e5ccf68efe4b49c84",
+    "modified": false
+  },
+  "starting_commit": "e9275011b9d92206923720254af350f44feea9cb",
+  "starting_working_tree": "CLEAN",
+  "phase_8_implementation": "PASS",
+  "phase_9_started": false,
+  "commit_created": false,
+  "backend": {
+    "command": ".venv/bin/python -m pytest -q",
+    "passed": 846,
+    "failed": 0,
+    "retained": 707,
+    "new": 139,
+    "duration_seconds": "17.26",
+    "warnings": [
+      "Existing Starlette/httpx TestClient deprecation"
+    ]
+  },
+  "phase_8_tests": {
+    "command": ".venv/bin/python -m pytest -q backend/tests/unit/test_execution_safety.py backend/tests/integration/test_execution_contracts.py",
+    "passed": 139,
+    "failed": 0,
+    "source": "SYNTHETIC_PROTOCOL_FIXTURES_AND_MOCKTRANSPORT_NOT_REAL_EXECUTION_EVIDENCE",
+    "duration_seconds": "0.60"
+  },
+  "frontend": {
+    "command": "npm test",
+    "passed": 173,
+    "failed": 0,
+    "test_files": 9
+  },
+  "typecheck_build": {
+    "command": "npm run build",
+    "status": "PASS",
+    "frontend_source_changed": false,
+    "bundle_names": [
+      "index-woaTY6Gu.css",
+      "index-B5A2-KSx.js"
+    ]
+  },
+  "ruff": {
+    "command": ".venv/bin/ruff check backend scripts && .venv/bin/ruff format --check backend scripts",
+    "lint": "PASS",
+    "format": "PASS",
+    "files": 157
+  },
+  "security": {
+    "command": ".venv/bin/python scripts/check-security.py",
+    "status": "PASS",
+    "artifacts_scanned": 370,
+    "expanded_configured_secret_scan": "PASS",
+    "expanded_artifacts_scanned": 359
+  },
+  "dependency_check": {
+    "command": ".venv/bin/python -m pip check",
+    "status": "PASS",
+    "dependencies_changed": false,
+    "scope": "Installed dependency compatibility, not a new vulnerability-database audit"
+  },
+  "diff_whitespace": {
+    "command": "git diff --check",
+    "status": "PASS"
+  },
+  "browser": {
+    "status": "PASS",
+    "command": "node /private/tmp/parity-phase8/check-demo-ui.mjs",
+    "scenarios": 6,
+    "viewports": [
+      "desktop",
+      "mobile"
+    ],
+    "local_api_requests": 39,
+    "production_trust_calls_from_demo": 0,
+    "live_execution_calls": 0,
+    "evidence": "docs/evidence/PHASE_8_BROWSER.json",
+    "ordinary_overview_trust": "INSUFFICIENT_EVIDENCE",
+    "ordinary_opportunity_navigation": "LOCKED",
+    "temporary_servers_cleanup": "PASS_OWNED_8011_8012_8013_5174_ONLY"
+  },
+  "safety_runs": {
+    "evidence": "docs/evidence/PHASE_8_SAFETY_RUNS.json",
+    "cases": 3,
+    "source": "SYNTHETIC_PROTOCOL_FIXTURE_NOT_LIVE_EVIDENCE",
+    "scenarios": [
+      "SWAP_SUFFICIENT_ALLOWANCE",
+      "SWAP_APPROVAL_REQUIRED",
+      "RFQ_SETTLEMENT_UNAVAILABLE"
+    ],
+    "store_roundtrip": "PASS"
+  },
+  "official_contracts": {
+    "verification": "DOCUMENTATION_AND_MOCKTRANSPORT_ONLY",
+    "sources": [
+      "https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api",
+      "https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/transaction-api",
+      "https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/1.0.0/schema.json"
+    ],
+    "authenticated_entitlements": "NOT_TESTED",
+    "live_equivalence_verified": false,
+    "simulation_coverage": "EVM_FROM_TO_VALUE_DATA_ONLY",
+    "rfq_settlement_simulation": "UNAVAILABLE"
+  },
+  "activity": {
+    "real_provider_api_calls": 0,
+    "wallet_signatures": 0,
+    "broadcasts": 0,
+    "rfq_submissions": 0,
+    "live_trades": 0,
+    "wallet_setting_changes": 0,
+    "production_history_writes": 0,
+    "live_alignment_test_run": false
+  },
+  "gates": {
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "TRUST_GATE": "BLOCKED",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+  },
+  "real_history": {
+    "qualifying_baseline": 0,
+    "required_baseline": 30,
+    "qualifying_opening_model": 0,
+    "required_opening_model": 30,
+    "real_analogues": 0,
+    "required_analogues": 3,
+    "changed": false
+  },
+  "preservation": {
+    "status": "PASS",
+    "protected_artifacts": 83,
+    "changed": [],
+    "scope": "Existing authoritative spec, historical evidence and data; full protected digest list in private audit manifest"
+  },
+  "files_changed": [
+    ".gitignore",
+    "README.md",
+    "backend/app/clients/binance_trading.py",
+    "backend/app/clients/binance_web3.py",
+    "backend/app/clients/execution_gateway.py",
+    "backend/app/main.py",
+    "backend/app/models/execution.py",
+    "backend/app/repositories/execution.py",
+    "backend/app/services/aggregator_quote.py",
+    "backend/app/services/eip712_validation.py",
+    "backend/app/services/execution.py",
+    "backend/app/services/execution_builders.py",
+    "backend/app/services/execution_simulation.py",
+    "backend/app/services/execution_state_machine.py",
+    "backend/app/services/execution_status.py",
+    "backend/app/services/funding.py",
+    "backend/app/services/risk.py",
+    "backend/app/utils/logging.py",
+    "backend/tests/fixtures/execution_fixtures.py",
+    "backend/tests/integration/test_execution_contracts.py",
+    "backend/tests/unit/test_execution_safety.py",
+    "docs/API_MATRIX.md",
+    "docs/ARCHITECTURE.md",
+    "docs/EXECUTION_GATES.md",
+    "docs/PHASE_8_REPORT.md",
+    "docs/PHASE_MAP.md",
+    "docs/evidence/PHASE_8_BROWSER.json",
+    "docs/evidence/PHASE_8_SAFETY_RUNS.json",
+    "docs/evidence/PHASE_8_VERIFICATION.json"
+  ],
+  "remaining_blockers": [
+    "Independent equity/live alignment and authoritative liquidity",
+    "Historical as-of ratios and scoped 30/30/3 real episodes",
+    "Authoritative current wallet/funding/gas/allowance evidence",
+    "Actual read-only quote/build/approval/simulation entitlements and payloads",
+    "RFQ orderId/schema/vendor binding and exact settlement equivalence",
+    "SWAP ABI/effects/gas/nonce equivalence and terminal/finality verification",
+    "Verified controlled wallet runtime/worker; Phase 9 not implemented"
+  ]
+}
