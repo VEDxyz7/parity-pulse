@@ -1,5 +1,20 @@
 # Development and execution capability gates
 
+## Master Phase 6 — Multi-Agent Intelligence, October 7, 2026
+
+**PHASE 6 IMPLEMENTATION=PASS; PHASE 6 DATA DEPENDENCY=BLOCKED.**
+The six agents, strict schemas, bounded orchestrator, controlled readers, structured K=4 memory,
+deterministic confidence and abstention are implemented as reusable non-executable services.
+[Phase 6 report](PHASE_6_REPORT.md) records architecture, policy, tests and data limitations.
+The current authority is [MASTER_SPEC.md](MASTER_SPEC.md), read completely and left unchanged.
+
+Production states remain DATA_GATE=PASS, DRY_RUN_GATE=PASS, TRUST_GATE=BLOCKED,
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST and all three LIVE gates=BLOCKED. Real history remains
+0/30 baseline, 0/30 opening-model, 0/3 analogue evidence. Synthetic DEMO verification passes
+software boundaries only. All earlier sections below are preserved dated snapshots.
+Phase 7 has NOT started; its exact next engineering title is MASTER PHASE 7 — OPPORTUNITY MODE,
+requiring separate authorization and the unchanged data/Trust/Opportunity dependencies.
+
 ## Master engineering Phase 5 evidence — October 7, 2026
 
 The separately authorized Research / Prediction machinery is implemented and verified:

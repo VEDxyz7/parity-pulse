@@ -1,0 +1,130 @@
+{
+  "agent_evidence": {
+    "audit_load_roundtrip": "PASS",
+    "audited_runs": 4,
+    "deterministic_default_llm_calls": 0,
+    "external_provider_calls": 0,
+    "real_historical_decision": "DEFER",
+    "real_history": {
+      "analogues": 0,
+      "baseline": 0,
+      "opening_model": 0
+    }
+  },
+  "authoritative_spec": {
+    "lines": 5321,
+    "modified": false,
+    "path": "docs/MASTER_SPEC.md",
+    "read_completely_before_coding": true,
+    "sha256": "f69a9bd01a622c001c3ec6cb654e00562f6b3d03a8310f9e5ccf68efe4b49c84"
+  },
+  "backend": {
+    "command": ".venv/bin/python -m pytest -q",
+    "failed": 0,
+    "new_phase6_controls": 70,
+    "passed": 628,
+    "retained_existing": 558,
+    "warning": "Existing Starlette/httpx TestClient deprecation"
+  },
+  "browser": {
+    "http200_requests": 39,
+    "live_execution_calls": 0,
+    "live_provider_calls": 0,
+    "ordinary_overview": "INSUFFICIENT_EVIDENCE",
+    "production_opportunity_navigation_disabled": true,
+    "production_trust_calls_from_demo": 0,
+    "scenarios": 6,
+    "status": "PASS",
+    "temporary_test_servers_stopped": true
+  },
+  "commit_created": false,
+  "components": {
+    "Decision": "IMPLEMENTED_AND_VERIFIED",
+    "Intent": "IMPLEMENTED_AND_VERIFIED",
+    "K4_structured_memory": "IMPLEMENTED_AND_VERIFIED",
+    "Market": "IMPLEMENTED_AND_VERIFIED",
+    "News": "IMPLEMENTED_AND_VERIFIED",
+    "Opportunity": "IMPLEMENTED_AND_VERIFIED",
+    "Research": "IMPLEMENTED_AND_VERIFIED",
+    "abstention_conflicts": "IMPLEMENTED_AND_VERIFIED",
+    "bounded_orchestrator": "IMPLEMENTED_AND_VERIFIED",
+    "controlled_tools": "IMPLEMENTED_AND_VERIFIED",
+    "deterministic_confidence": "IMPLEMENTED_AND_VERIFIED",
+    "mode_scoped_adapters": "IMPLEMENTED_AND_VERIFIED",
+    "strict_contracts": "IMPLEMENTED_AND_VERIFIED"
+  },
+  "dependencies": "PASS",
+  "files_changed": [
+    ".gitignore",
+    "README.md",
+    "backend/app/agents/__init__.py",
+    "backend/app/agents/adapters.py",
+    "backend/app/agents/confidence.py",
+    "backend/app/agents/decision_agent.py",
+    "backend/app/agents/intent_agent.py",
+    "backend/app/agents/market_agent.py",
+    "backend/app/agents/memory.py",
+    "backend/app/agents/news_agent.py",
+    "backend/app/agents/opportunity_agent.py",
+    "backend/app/agents/orchestrator.py",
+    "backend/app/agents/provider.py",
+    "backend/app/agents/research_agent.py",
+    "backend/app/agents/schemas.py",
+    "backend/app/agents/tools.py",
+    "backend/tests/integration/test_agent_evidence.py",
+    "backend/tests/unit/test_agents.py",
+    "docs/ARCHITECTURE.md",
+    "docs/EXECUTION_GATES.md",
+    "docs/PHASE_6_REPORT.md",
+    "docs/PHASE_MAP.md",
+    "docs/evidence/PHASE_6_AGENT_RUNS.json",
+    "docs/evidence/PHASE_6_BROWSER.json",
+    "docs/evidence/PHASE_6_VERIFICATION.json",
+    "scripts/analyze-agents.py"
+  ],
+  "frontend": {
+    "command": "npm test",
+    "failed": 0,
+    "passed": 173
+  },
+  "gates": {
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED",
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "TRUST_GATE": "BLOCKED"
+  },
+  "live_llm_provider_entitlement": "NOT_VERIFIED_NO_PROVIDER_CALLED",
+  "next_phase": "MASTER PHASE 7 \u2014 OPPORTUNITY MODE; separate authorization and unchanged dependencies required",
+  "phase": "MASTER_PHASE_6_MULTI_AGENT_INTELLIGENCE",
+  "phase_6_data_dependency": "BLOCKED",
+  "phase_6_implementation": "PASS",
+  "phase_7_started": false,
+  "preservation": {
+    "changed_prior_artifacts": [],
+    "financial_service_changes": 0,
+    "frontend_changes": 0,
+    "hash_checked_artifacts": 123,
+    "master_modified": false,
+    "production_observation_writes": 0
+  },
+  "ruff": {
+    "files": 134,
+    "format": "PASS",
+    "lint": "PASS"
+  },
+  "security": {
+    "established_audit": "PASS",
+    "expanded_all_configured_provider_key_scan": "PASS",
+    "no_credentials_exposed": true
+  },
+  "starting_commit": "85e7a1ba7847fc2633329e3dd3abf2649a17fe57",
+  "typecheck_build": {
+    "command": "npm run build",
+    "status": "PASS"
+  },
+  "user_supplied_untracked_input_left_unchanged": "docs/MASTER_SPEC.md",
+  "verified_date": "2026-10-07"
+}

@@ -1,5 +1,31 @@
 # Parity Pulse
 
+Master Phase 6 — Multi-Agent Intelligence is implemented; its production data dependency remains
+BLOCKED. The authoritative specification is [docs/MASTER_SPEC.md](docs/MASTER_SPEC.md).
+Six structured agents share DEMO/LIVE_READ_ONLY evidence adapters, bounded calls/tools,
+look-ahead-safe memory and server-calculated confidence. Existing UI and production gates are unchanged.
+[Phase 6 report and validation](docs/PHASE_6_REPORT.md). Phase 7 has NOT started.
+
+Offline structured JSON, from the repository root; no credentials/network/execution calls:
+
+```sh
+.venv/bin/python scripts/analyze-agents.py --demo steady
+.venv/bin/python scripts/analyze-agents.py --demo thin-move
+.venv/bin/python scripts/analyze-agents.py --demo supported-move
+# Existing real replay only; expected DEFER/INSUFFICIENT_EVIDENCE:
+.venv/bin/python scripts/analyze-agents.py --real-replay \
+  data/research/phase5/a3e7be2630acccb2b7496d87f2e584ce2cf8af34811461738336d42aba59e98e.json
+```
+
+The default sample mandate is $60 with a separately explicit $2 risk budget, matching the existing
+synthetic risk inputs; it proposes no more than the existing $50 scenario notional. These are DEMO
+assumptions, not recommendations or live prices. `--intent` supplies another bounded explicit mandate;
+a risk-budget mismatch safely defers. Audit/memory storage is isolated under `data/agents/phase6/`;
+`--store` can select another separate directory. Optional LLM_PROVIDER/LLM_MODEL configuration
+belongs to a verified injected transport host; no provider is automatically enabled or assumed available.
+
+The following dated Phase 5 and earlier sections remain historical evidence.
+
 Master engineering Phase 5 — Research / Prediction is implemented; its real data gate remains
 **BLOCKED**. Offline point-in-time episodes, cosine retrieval, rolling Decimal OLS and deterministic
 replay reuse existing Trust evidence. No production gate or completed DEMO behavior changes.
@@ -11,7 +37,7 @@ Predictions remain unavailable on the current real history: 0/30 baseline, 0/30 
 
 Hackathon Demo Stage 4 extends the explicit **DEMO SANDBOX** through Trust → Opportunity → Risk → synthetic Quote → Risk revalidation → unsigned Request Preparation → local constraint Simulation → Paper Fill → Position → synthetic Monitor/Exit → calculated P&L → ledger-derived Scorecard. Three synthetic scenarios use the unchanged Trust engine; economic targets/costs and financial risk limits are separate marked assumptions. Opt in with `RUNTIME_MODE=DEMO DATA_MODE=DEMO`; sandbox databases are disposable memory and analysis references are bounded in-memory caches. Production Trust and Opportunity remain blocked. The default `RUNTIME_MODE=LIVE` preserves the existing application path and does not enable live trading. See the [Stage 1 sandbox runbook](docs/DEMO_TRUST_SANDBOX.md), [Stage 3A core contracts](docs/DEMO_OPPORTUNITY_STAGE_3A.md) and [Stage 3B contracts, flow and verification](docs/DEMO_PREPARATION_STAGE_3B.md). These quotes/requests are synthetic, simulation is a local constraint check, and nothing is executable, signed or broadcast. The paper ledger is isolated in memory, idempotent within a DEMO backend session and cleared on restart. See the [Stage 4 paper lifecycle, runbook and evidence](docs/DEMO_PAPER_STAGE_4.md). No real funds move.
 
-Canonical Phase 1 — Working Ask Flow is PASS for deterministic, non-executable exposure estimates and persisted DRY_RUN proposals. Engineering Stages 1/2 remain PASS. The backend implements dynamic Binance RWA discovery, market data, independent Massive equity/news adapters, a versioned U.S. calendar, exact Decimal normalization and isolated SQLite persistence. The frontend accepts stock budget requests and displays backend-authoritative estimates, issuer comparison, unknown costs and execution blockers. Canonical Phase 2 adds a separate deterministic analytical Trust endpoint/panel; its gate remains BLOCKED by unavailable real evidence. Production Opportunity Mode, agents and live execution remain deferred.
+Canonical Phase 1 — Working Ask Flow is PASS for deterministic, non-executable exposure estimates and persisted DRY_RUN proposals. Engineering Stages 1/2 remain PASS. The backend implements dynamic Binance RWA discovery, market data, independent Massive equity/news adapters, a versioned U.S. calendar, exact Decimal normalization and isolated SQLite persistence. The frontend accepts stock budget requests and displays backend-authoritative estimates, issuer comparison, unknown costs and execution blockers. Canonical Phase 2 adds a separate deterministic analytical Trust endpoint/panel; its gate remains BLOCKED by unavailable real evidence. Production Opportunity scanning and live execution remain deferred. Master Phase 6 adds bounded, non-executable agents; see the current Phase 6 report.
 
 **All LIVE execution is blocked.** The application rejects LIVE configuration even if a flag is set to true. Its ordinary runtime has no live order, broadcast, wallet mutation, portfolio or trading endpoints. DEMO paper APIs operate only on synthetic memory records.
 
@@ -83,7 +109,7 @@ Defaults work without an environment file. Optional settings can be supplied thr
 | BINANCE_WEB3_API_KEY / BINANCE_WEB3_SECRET_KEY | Required only for Binance LIVE_READ_ONLY reads |
 | MASSIVE_API_KEY | Required only for independent LIVE_READ_ONLY equity/news reads |
 | MASSIVE_DATA_QUALITY | UNKNOWN; UNKNOWN/DELAYED/REALTIME, subject to verified entitlement; a missing source time is never a fresh quote |
-| LLM_API_KEY | Optional future placeholder; unused |
+| LLM_API_KEY | Reserved for explicitly injected LLM transport; excluded from agent inputs/output; CLI does not load it |
 
 Boolean settings use `true` or `false`. Invalid enum values, malformed database URLs and unsafe combinations refuse startup with a sanitized error. LIVE_READ_ONLY enables reviewed provider reads when configured. It never loads DEMO fixtures or enables execution. Credential absence, permission failure or invalid data returns an explicit limitation/error, not substitute data. Keep MASSIVE_DATA_QUALITY=UNKNOWN unless an entitlement is independently verified; this account currently rejects current snapshots/NBBO.
 

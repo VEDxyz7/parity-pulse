@@ -1,5 +1,26 @@
 # Architecture decision record — through Phase 2
 
+## Master Phase 6 — bounded shared interpretation
+
+The current authoritative [MASTER_SPEC.md](MASTER_SPEC.md) was read entirely before Phase 6.
+[Phase 6 report](PHASE_6_REPORT.md) records implementation PASS / data dependency BLOCKED.
+`app.agents` consumes existing deterministic Trust/research and DEMO Opportunity/Risk/Route outputs.
+Intent → Market/News/Research → Opportunity → Decision/risk preview → audit/memory → STOP.
+No execution client or new financial calculation lives in this layer.
+
+DEMO and LIVE_READ_ONLY adapters use the same six classes. Input/output schemas enforce mode,
+provenance, chronology, budgets and uncalibrated confidence. Closed per-agent readers have no raw
+SQL/network/wallet/execute capability. Optional explicitly injected structured LLM calls cannot
+change deterministic facts, confidence or authorization; no vendor entitlement is claimed.
+
+Separate SQLite/SQLAlchemy agent audit and K=4 structured memory never touch application history
+or execution databases. Future publications/first availability, historical outcomes and scorecards
+are projected before workflow identity/tool access. The CLI `scripts/analyze-agents.py` emits
+structured JSON; no API/UI change is required for the reusable service milestone.
+
+Production gates and the full DEMO UI/paper pipeline remain unchanged and regression-verified.
+Phase 7 full-universe scanning has NOT started. Earlier architecture sections are historical snapshots.
+
 ## Master engineering Phase 5 — isolated production research machinery
 
 October 7, 2026: [Phase 5 report](PHASE_5_REPORT.md) records implementation PASS / data gate BLOCKED.

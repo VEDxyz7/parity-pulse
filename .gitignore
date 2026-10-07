@@ -17,6 +17,7 @@ frontend/coverage/
 data/*.db
 data/*.db-*
 data/research/
+data/agents/
 *.log
 .DS_Store
 playwright-report/
