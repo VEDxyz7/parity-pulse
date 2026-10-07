@@ -22,6 +22,8 @@ def parse(body: AskRequest, request: Request):
 
 @router.post("/exposure/quote", response_model=ExposureProposal)
 def quote(body: AskRequest, request: Request):
+    if request.query_params:
+        raise HTTPException(404)
     return request.app.state.exposure.propose(
         safe_text(body, request),
         run_id=request.app.state.run_id,

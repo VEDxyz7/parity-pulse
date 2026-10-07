@@ -1,3 +1,4 @@
+import { parseRoute, type RouteDecision } from './routing'
 import type { DemoResult } from './demoSandbox'
 import { compare, date, decimal, envelope, marked, object, parseOpportunity, parseRisk, strings, uuid,
   type OpportunityResult, type Risk, type RiskResult } from './demoOpportunity'
@@ -30,6 +31,7 @@ export interface Transaction extends Safety {
 }
 interface Base extends Safety { runtime_mode: 'DEMO'; scenario_id: string; inputs_fixture_sha256: string; reason_codes: string[] }
 export interface QuoteResult extends Base {
+  route_decision?: RouteDecision | null
   status: 'QUOTED' | 'BLOCKED'; quote: DemoQuote | null; opportunity: OpportunityResult['opportunity']
   risk_before_quote: Risk; quoted_opportunity: OpportunityResult['opportunity'] | null; risk_revalidation: Risk | null
 }
@@ -50,7 +52,7 @@ function base(v: unknown, o: OpportunityResult): v is Record<string, unknown> {
   return envelope(v, o.scenario_id) && safety(v) && v.inputs_fixture_sha256 === o.inputs_fixture_sha256 && strings(v.reason_codes)
 }
 function wrappedOpportunity(v: Record<string, unknown>, raw: unknown, trust: DemoResult, origin: OpportunityResult): OpportunityResult {
-  return parseOpportunity({ ...v, trust_fixture_sha256: origin.trust_fixture_sha256, opportunity: raw }, trust)
+  return parseOpportunity({ ...v, route_decision: null, trust_fixture_sha256: origin.trust_fixture_sha256, opportunity: raw }, trust)
 }
 export function parseQuote(v: unknown, trust: DemoResult, origin: OpportunityResult, risk: RiskResult): QuoteResult {
   if (!base(v, origin) || !['QUOTED', 'BLOCKED'].includes(String(v.status))) return invalid()
@@ -76,6 +78,10 @@ export function parseQuote(v: unknown, trust: DemoResult, origin: OpportunityRes
     const after = parseRisk({ ...v, risk: v.risk_revalidation }, quoted)
     if (v.status === 'QUOTED' && (before.risk.status !== 'PASS' || after.risk.status !== 'PASS' || risk.risk.status !== 'PASS')) return invalid()
   } else if (v.status === 'QUOTED' || v.quoted_opportunity !== null || v.risk_revalidation !== null) return invalid()
+  if (v.route_decision !== undefined && v.route_decision !== null) {
+    const route = parseRoute(v.route_decision, "DEMO", origin.opportunity.ticker, undefined, "OPPORTUNITY")
+    if (v.status === "QUOTED" && (route.status !== "ROUTE_SELECTED" || route.selected_representation?.contract !== origin.opportunity.contract || route.selected_representation?.issuer !== origin.opportunity.issuer)) return invalid()
+  }
   return v as unknown as QuoteResult
 }
 function quoteOpportunity(q: QuoteResult, origin: OpportunityResult): OpportunityResult {

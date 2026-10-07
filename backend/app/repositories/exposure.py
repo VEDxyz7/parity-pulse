@@ -41,9 +41,37 @@ class ExposureRepository:
                 return None
             proposal = ExposureProposal.model_validate_json(row.payload)
         if now >= proposal.valid_until and proposal.status == "DRY_RUN":
+            route = proposal.route_decision
+            if route is not None:
+                route = route.model_copy(
+                    update={
+                        "status": "NO_ROUTE",
+                        "selected_candidate": None,
+                        "selected_representation": None,
+                        "issuer": None,
+                        "reason_codes": ["ROUTE_EXPIRED"],
+                        "ranking_basis": "NONE",
+                        "candidates": [
+                            c.model_copy(
+                                update={
+                                    "eligible": False,
+                                    "rank": None,
+                                    "ranking_cost_per_share_usd": None,
+                                    "rejection_reasons": [*c.rejection_reasons, "ROUTE_EXPIRED"],
+                                }
+                            )
+                            for c in route.candidates
+                        ],
+                        "explanation": (
+                            "Recorded route expired; obtain current observations "
+                            "before selecting again."
+                        ),
+                    }
+                )
             return proposal.model_copy(
                 update={
                     "status": "EXPIRED",
+                    "route_decision": route,
                     "route_type": "NONE",
                     "quote_status": "UNAVAILABLE",
                     "selected": None,

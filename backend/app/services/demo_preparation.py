@@ -69,6 +69,7 @@ class DemoPreparationFlow:
                 "valid_until": min(refreshed.valid_until, source.opportunity.valid_until),
             }
         )
+        route = self.flow.route(trust, refreshed, dataset, now=now)
         before = self._risk(refreshed, now)
         reasons = []
         if previous.risk.status != "PASS":
@@ -77,6 +78,8 @@ class DemoPreparationFlow:
             reasons.append("DEMO_MARKET_INPUTS_CHANGED_REASSESS_REQUIRED")
         if before.status != "PASS":
             reasons.extend(before.reason_codes)
+        if route.status != "ROUTE_SELECTED":
+            reasons.append("NO_ELIGIBLE_ROUTE")
         quote = quoted = revalidated = None
         if not reasons:
             quote = self.quote_service.create(
@@ -92,6 +95,7 @@ class DemoPreparationFlow:
             if revalidated.status != "PASS":
                 reasons.extend(revalidated.reason_codes)
         result = DemoQuoteResult(
+            route_decision=route,
             **MARKER,
             inputs_fixture_sha256=self.flow.fixture_hash,
             scenario_id=scenario,

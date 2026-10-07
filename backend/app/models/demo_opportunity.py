@@ -9,6 +9,7 @@ from app.models.data import DataModel
 from app.models.demo_sandbox import DemoMarker, DemoProductionGates, ScenarioId
 from app.models.opportunity import OpportunityDecision, OpportunityInputs
 from app.models.risk import RiskDecision, RiskInputs, RiskPolicy
+from app.models.routing import RouteDecision
 
 
 class DemoOpportunityFixture(DemoMarker):
@@ -26,6 +27,7 @@ class RiskRequest(DataModel):
 
 
 class DemoOpportunityResult(DemoMarker):
+    route_decision: RouteDecision | None = None
     runtime_mode: Literal["DEMO"] = "DEMO"
     scenario_id: ScenarioId
     trust_fixture_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")

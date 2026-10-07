@@ -12,6 +12,7 @@ from app.models.data import DataModel, utc
 from app.models.demo_sandbox import DemoMarker, DemoProductionGates, ScenarioId
 from app.models.opportunity import Amount, Money, OpportunityDecision, OpportunityInputs, Price
 from app.models.risk import RiskCheck, RiskDecision
+from app.models.routing import RouteDecision
 
 
 def digest(value):
@@ -176,6 +177,7 @@ class DemoStageResult(DemoSafety):
 
 
 class DemoQuoteResult(DemoStageResult):
+    route_decision: RouteDecision | None = None
     status: Literal["QUOTED", "BLOCKED"]
     quote: DemoQuote | None
     opportunity: OpportunityDecision

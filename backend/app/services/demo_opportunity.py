@@ -12,9 +12,12 @@ from app.models.demo_opportunity import (
     DemoOpportunityResult,
     DemoRiskResult,
 )
+from app.models.opportunity import OpportunityDecision
 from app.services.demo_sandbox import MARKER
 from app.services.opportunity import OpportunityEngine
 from app.services.risk import RiskEngine
+from app.services.route_inputs import opportunity_input, opportunity_policy
+from app.services.routing import RoutingService
 
 
 class DemoOpportunityFlow:
@@ -28,6 +31,7 @@ class DemoOpportunityFlow:
         self.fixture_hash = hashlib.sha256(content).hexdigest()
         self.opportunity_engine = OpportunityEngine()
         self.risk_engine = RiskEngine()
+        self.router = RoutingService()
         self.trust_results = OrderedDict()
         self.opportunities = OrderedDict()
         self.risks = OrderedDict()
@@ -66,7 +70,18 @@ class DemoOpportunityFlow:
             self.fixture.economics,
             now=trust.assessment.evaluated_at + elapsed,
         )
+        route = self.route(trust, decision, dataset, now=decision.evaluated_at)
+        if route.status != "ROUTE_SELECTED" and decision.status == "ACTIONABLE":
+            decision = OpportunityDecision.model_validate(
+                {
+                    **decision.model_dump(),
+                    "status": "REJECTED",
+                    "action": "NONE",
+                    "reason_codes": [*decision.reason_codes, "NO_ELIGIBLE_ROUTE"],
+                }
+            )
         result = DemoOpportunityResult(
+            route_decision=route,
             **MARKER,
             scenario_id=trust.scenario_id,
             trust_fixture_sha256=trust.fixture_sha256,
@@ -92,3 +107,24 @@ class DemoOpportunityFlow:
         )
         self._save(self.risks, decision.risk_id, result)
         return result
+
+    def route(self, trust, decision, dataset, *, now):
+        risk = self.risk_engine.evaluate(
+            decision, self.fixture.risk_inputs, self.fixture.risk_policy, now=now
+        )
+        candidate = opportunity_input(
+            dataset.token.record,
+            dataset.price.record,
+            trust.assessment,
+            decision,
+            risk,
+            self.fixture.economics,
+        )
+        return self.router.decide(
+            decision.ticker,
+            self.fixture.economics.requested_notional_usd,
+            [candidate],
+            mode="DEMO",
+            now=now,
+            policy=opportunity_policy(self.fixture.risk_policy),
+        )

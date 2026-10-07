@@ -1,3 +1,4 @@
+import { parseRoute, type RouteDecision } from './routing'
 export interface Estimate {
   issuer: string; contract: string; chain_id: string; token_symbol: string
   token_to_share_ratio: string; token_price_usd: string | null
@@ -8,6 +9,7 @@ export interface Estimate {
   price_timestamp: string | null; price_quality: string; data_mode: 'DEMO' | 'LIVE'
 }
 export interface Proposal {
+  route_decision?: RouteDecision | null
   schema_version: 'ask-1'; proposal_id: string; status: 'DRY_RUN' | 'NO_PROPOSAL' | 'EXPIRED'
   data_mode: 'DEMO' | 'LIVE'; ticker: string | null; company_name: string | null
   requested_budget_usd: string | null; selected: Estimate | null; representations: Estimate[]
@@ -49,6 +51,11 @@ export function parseProposal(value: unknown, expectedMode: 'DEMO' | 'LIVE_READ_
           value.selected.estimate_eligible !== true || value.quote_status !== 'INDICATIVE_ONLY' :
           value.selected !== null || value.quote_status !== 'UNAVAILABLE')) {
     throw new Error('Proposal could not be verified. No execution is available.')
+  }
+  if (value.route_decision !== undefined && value.route_decision !== null) {
+    const route = parseRoute(value.route_decision, mode, value.ticker as string | null, value.requested_budget_usd as string | null)
+    if (value.status === "DRY_RUN" && (!route.selected_representation || !object(value.selected) || route.selected_representation.contract !== value.selected.contract || route.selected_representation.issuer !== value.selected.issuer || route.selected_representation.chain_id !== value.selected.chain_id)) throw new Error("Route/proposal identity mismatch")
+    if (value.status !== "DRY_RUN" && route.status !== "NO_ROUTE") throw new Error("Unavailable proposal cannot select a route")
   }
   return value as unknown as Proposal
 }

@@ -7,6 +7,7 @@ from uuid import UUID
 from pydantic import Field, StrictStr
 
 from app.models.data import DataMode, DataModel, Nonnegative, Positive, Quality
+from app.models.routing import RouteDecision
 
 
 class AskRequest(DataModel):
@@ -63,6 +64,7 @@ class IndependentReference(DataModel):
 
 
 class ExposureProposal(DataModel):
+    route_decision: RouteDecision | None = None
     schema_version: Literal["ask-1"] = "ask-1"
     policy_version: Literal["indicative-exposure-1"] = "indicative-exposure-1"
     proposal_id: UUID

@@ -1,3 +1,4 @@
+import { RouteComparison } from './RouteComparison'
 import { DemoPaperFlow } from './DemoPaperFlow'
 import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
@@ -59,6 +60,7 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
     {error && <p role="alert">{error}</p>}
     {quote && <>
       <h4>Quote: <strong>{quote.status}</strong>{expired || opportunityExpired ? ' (expired)' : ''}</h4>
+      {quote.route_decision && <RouteComparison route={quote.route_decision} expired={expired || opportunityExpired} />}
       <p>Quote reasons: {quote.reason_codes.join(' · ')}</p>
       <p>Risk before quote: {quote.risk_before_quote.status} · Risk after quoted economics: {quote.risk_revalidation?.status ?? 'NOT_RUN'}</p>
       {q && <>

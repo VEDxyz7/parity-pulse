@@ -1,3 +1,4 @@
+import { RouteComparison } from './RouteComparison'
 import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
 import { fetchOpportunity, fetchRisk, type OpportunityResult, type RiskResult } from '../services/demoOpportunity'
@@ -55,6 +56,7 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
       <p>Action: {decision.action} · {decision.ticker} / {decision.symbol} · Issuer: {decision.issuer}</p>
       <p>Source Trust: {decision.source_trust_classification} · Confidence: {decision.confidence ?? 'UNAVAILABLE'} (uncalibrated)</p>
       <p>Decision reasons: {decision.reason_codes.join(' · ')}</p>
+  {opportunity?.route_decision && <RouteComparison route={opportunity.route_decision} expired={expired} />}
       {economics && <dl className="trust-facts">
         <div><dt>Token price / USD</dt><dd>{economics.token_price_usd}</dd></div>
         <div><dt>Shares per token</dt><dd>{economics.token_to_share_ratio}</dd></div>

@@ -110,6 +110,12 @@ npm run test:integration
 
 Tests use temporary SQLite databases, sanitized real response fixtures and synthetic credentials without loading the developer's `.env` or contacting providers. They cover signing/wire contracts, adapters, precision, source timestamps, data quality, malformed schemas, retries/rate limits, calendar/DST, discovery, pagination, persistence/conflicts/resumability, mode isolation and Engineering Stage 1 regressions. The security audit reads configured values only into memory, scans source/docs/build/fixture/local-database artifacts without printing matches, validates Git ignore semantics in a temporary repository and checks frontend bundle isolation. This workspace is not automatically initialized or committed as a Git repository.
 
+## Deterministic routing milestone
+
+The Ask Flow now evaluates every discovered representation with the shared `RoutingService`, also used by the DEMO Opportunity and Quote adapters. The Route Comparison view exposes eligibility, ranking, rejection reasons and provenance. Verified complete costs use exact all-in cost per real share; missing costs produce a clearly labeled, non-executable price-only comparison. Opportunity routing additionally requires the existing Trust, Risk, liquidity and cost controls. No issuer or ticker is hardcoded as the winner.
+
+See the [routing architecture, policy, examples and verification](docs/ROUTING_MILESTONE.md). Production Trust and Opportunity gates remain blocked; all live execution gates remain blocked. Existing DEMO fixtures, production historical coverage and the scheduled timestamp-alignment diagnostic are unchanged. Routing does not authorize execution.
+
 ## Docker
 
 Docker Engine with Compose is required. No Binance credentials are passed to containers; `.env` files are excluded from build contexts. Compose only interpolates the explicitly listed application settings.

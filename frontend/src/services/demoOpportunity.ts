@@ -1,3 +1,4 @@
+import { parseRoute, type RouteDecision } from './routing'
 import type { DemoResult, ScenarioId } from './demoSandbox'
 
 interface Safety {
@@ -36,7 +37,7 @@ interface Envelope {
   runtime_mode: 'DEMO'; dataset_type: 'DEMO_FIXTURE'; synthetic: true; production_eligible: false
   scenario_id: ScenarioId; inputs_fixture_sha256: string; production_gates: Record<string, string>
 }
-export interface OpportunityResult extends Envelope { trust_fixture_sha256: string; opportunity: Opportunity }
+export interface OpportunityResult extends Envelope { route_decision?: RouteDecision | null; trust_fixture_sha256: string; opportunity: Opportunity }
 export interface RiskResult extends Envelope { risk: Risk }
 
 export function object(v: unknown): v is Record<string, unknown> { return v !== null && typeof v === 'object' && !Array.isArray(v) }
@@ -104,6 +105,10 @@ export function parseOpportunity(v: unknown, trust: DemoResult): OpportunityResu
     const e = o.economics as Record<string, string>
     if (compare(e.net_hypothetical_edge_usd, o.inputs.minimum_net_edge_usd as string) < 0 ||
       compare(e.hypothetical_adjustment_per_share_usd, '0') <= 0) return invalid()
+  }
+  if (v.route_decision !== undefined && v.route_decision !== null) {
+    const route = parseRoute(v.route_decision, "DEMO", o.ticker as string, undefined, "OPPORTUNITY")
+    if (o.status === "ACTIONABLE" && (route.status !== "ROUTE_SELECTED" || route.selected_representation?.contract !== o.contract || route.selected_representation?.issuer !== o.issuer || route.selected_representation?.chain_id !== o.chain_id)) return invalid()
   }
   return v as unknown as OpportunityResult
 }

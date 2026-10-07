@@ -18,6 +18,9 @@ from app.models.exposure import (
 from app.repositories.exposure import ExposureRepository
 from app.services.intent import parse_intent
 from app.services.normalization import bounded_decimal, effective_price_per_share
+from app.services.route_inputs import from_estimate
+from app.services.routing import RoutingService
+from app.services.routing_evidence import RoutingEvidenceReader
 
 logger = logging.getLogger("parity.exposure")
 BLOCKERS = [
@@ -153,12 +156,15 @@ def independent_reference(equity, ticker, mode, now):
 class ExposureService:
     def __init__(self, layer, database, *, clock=lambda: datetime.now(UTC)):
         self.layer, self.repository, self.clock = layer, ExposureRepository(database), clock
+        self.router = RoutingService()
+        self.routing_evidence = RoutingEvidenceReader(database)
 
     def propose(self, text, *, run_id, request_id, correlation_id):
         intent = parse_intent(text)
         mode = self.layer.mode
         now = self.clock()
         comparisons, limitations, asset, independent = [], {}, None, None
+        metadata = {}
         reason = intent.reason
         if intent.status == "VALID":
             try:
@@ -202,6 +208,7 @@ class ExposureService:
                             discovered.asset_type,
                         ):
                             raise ProviderError("EXPOSURE", "CONFLICTING_UNDERLYING")
+                        metadata[(token.platform_id, token.chain_id, token.contract)] = token
                         comparisons.append(
                             estimate(token, price, intent.budget_usd, self.clock(), mode)
                         )
@@ -234,19 +241,33 @@ class ExposureService:
                         ],
                     }
                 )
-        eligible = [item for item in comparisons if item.estimate_eligible]
-        selected = (
-            min(
-                eligible,
-                key=lambda item: (
-                    Fraction(item.token_price_usd) / Fraction(item.token_to_share_ratio),
-                    item.issuer,
-                    item.chain_id,
-                    item.contract,
-                ),
-            )
-            if eligible
-            else None
+        cached_trust = self.routing_evidence.latest(
+            asset.ticker if asset else None, mode=mode, now=now
+        )
+        route = self.router.decide(
+            asset.ticker if asset else None,
+            intent.budget_usd,
+            [
+                from_estimate(
+                    item,
+                    metadata[(item.issuer, item.chain_id, item.contract)],
+                    assessment=cached_trust,
+                )
+                for item in comparisons
+            ],
+            mode=mode,
+            now=now,
+        )
+        identity = route.selected_representation
+        selected = next(
+            (
+                item
+                for item in comparisons
+                if identity is not None
+                and (item.issuer, item.chain_id, item.contract)
+                == (identity.issuer, identity.chain_id, identity.contract)
+            ),
+            None,
         )
         reference = independent_reference(independent, asset.ticker if asset else "", mode, now)
         blockers = [*BLOCKERS]
@@ -262,6 +283,7 @@ class ExposureService:
                 selected.ratio_observed_at + timedelta(seconds=120),
             )
         proposal = ExposureProposal(
+            route_decision=route,
             proposal_id=uuid4(),
             created_at=now,
             valid_until=expiry,
@@ -278,12 +300,7 @@ class ExposureService:
             selected=selected,
             independent_equity=reference,
             route_type="INDICATIVE_MARKET_ESTIMATE" if selected else "NONE",
-            route_selection_reason=(
-                "Lowest verified token-price cost per real share among estimate-eligible "
-                "representations; deterministic issuer/chain/contract tie-break. Fees, slippage, "
-                "liquidity, trust and executable routes are unverified; this is not an all-in "
-                "cost comparison or trade authorization."
-            )
+            route_selection_reason=route.explanation
             if selected
             else (reason if reason != "EXPLICIT_USD_BUDGET" else "NO_ELIGIBLE_ESTIMATE"),
             quote_status="INDICATIVE_ONLY" if selected else "UNAVAILABLE",

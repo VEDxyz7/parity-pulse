@@ -1,3 +1,4 @@
+import { RouteComparison } from './RouteComparison'
 import { useEffect, useRef, useState } from 'react'
 import { requestProposal, type Proposal } from '../services/exposure'
 
@@ -47,6 +48,7 @@ export function AskFlow({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
       <p><strong>{expired ? 'EXPIRED — request a fresh estimate' : result.status}</strong> · {result.data_mode === 'DEMO' ? 'Synthetic DEMO values; not current market prices' : 'LIVE read-only observations'}</p>
       <p>{result.broadcast_statement}</p>
       <p>{result.route_selection_reason}</p>
+      {result.route_decision && <RouteComparison route={result.route_decision} expired={expired} />}
       {selected && <dl className="ask-details">
         <dt>Selected issuer / token</dt><dd>{selected.issuer} / {selected.token_symbol}</dd>
         <dt>Shares per token</dt><dd>{selected.token_to_share_ratio}</dd>

@@ -121,3 +121,11 @@ h1 { font-weight: 500; letter-spacing: -1.1px; font-size: clamp(24px, 2.4vw, 33p
 .demo-opportunity-flow dd, .demo-opportunity-flow p { overflow-wrap: anywhere; }
 .demo-opportunity-flow pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 400px; overflow: auto; font-size: 12px; }
 @media (max-width: 600px) { .demo-opportunity-flow { margin: 16px; } }
+
+/* Shared route comparison preserves the existing panels; the table scrolls locally. */
+.route-comparison { margin: 16px 0; min-width: 0; max-width: 100%; }
+.route-comparison p { overflow-wrap: anywhere; }
+.route-comparison table { width: 100%; min-width: 900px; border-collapse: collapse; text-align: left; font-size: 13px; }
+.route-comparison th, .route-comparison td { padding: 10px; border-bottom: 1px solid #e8ece5; vertical-align: top; overflow-wrap: anywhere; max-width: 260px; }
+.route-comparison caption { text-align: left; font-weight: 600; padding-bottom: 12px; }
+.route-comparison pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 400px; overflow: auto; font-size: 12px; }
