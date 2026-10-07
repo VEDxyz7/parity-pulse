@@ -1,0 +1,32 @@
+[
+  {
+    "endpoint": "GET /api/health",
+    "http_status": 200,
+    "result": "PASS",
+    "timestamp": "2026-10-06T11:56:31.779222+00:00"
+  },
+  {
+    "endpoint": "GET /api/system-status",
+    "http_status": 200,
+    "result": "PASS",
+    "timestamp": "2026-10-06T11:56:31.780227+00:00"
+  },
+  {
+    "endpoint": "GET /api/assets",
+    "http_status": 200,
+    "result": "PASS",
+    "timestamp": "2026-10-06T11:56:31.783336+00:00"
+  },
+  {
+    "endpoint": "GET /api/assets/NVDA",
+    "http_status": 200,
+    "result": "PASS",
+    "timestamp": "2026-10-06T11:56:31.784968+00:00"
+  },
+  {
+    "endpoint": "GET /api/assets/UNAVAILABLE",
+    "http_status": 200,
+    "result": "PASS",
+    "timestamp": "2026-10-06T11:56:31.785651+00:00"
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "endpoint_tested": "GET /api/v1/dex/market/supported/chain",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:02.279Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/market/rwa/platforms",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:02.851Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/market/rwa/tokens",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:07.339Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/aggregator/supported/chain",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:09.739Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/pre-transaction/supported/chain",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:10.221Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/pre-transaction/gas-price?binanceChainId=56",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:10.706Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/balance/supported/chain",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:46:11.193Z"
+  },
+  {
+    "endpoint_tested": "POST /api/v1/dex/market/token/basic-info?binanceChainId=56&tokenContractAddress=0x55d398326f99059fF775485246999027B3197955",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:47:34.539Z"
+  },
+  {
+    "endpoint_tested": "POST /api/v1/dex/market/price",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:47:36.126Z"
+  },
+  {
+    "endpoint_tested": "GET /api/v1/dex/aggregator/quote?binanceChainId=56&amount=1000000000000000000&fromTokenAddress=0x55d398326f99059fF775485246999027B3197955&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "http_business_status": {
+      "http": 200,
+      "business": 0
+    },
+    "permission_result": "VERIFIED_FOR_THIS_READ",
+    "capability_result": "VERIFIED",
+    "timestamp": "2026-10-06T09:47:36.655Z"
+  }
+]

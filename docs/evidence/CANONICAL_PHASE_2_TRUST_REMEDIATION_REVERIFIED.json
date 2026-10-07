@@ -1,0 +1,742 @@
+{
+  "timestamp_utc": "2026-10-06T17:29:14.832173+00:00",
+  "verification": "ACTUAL_READ_ONLY_PROVIDERS",
+  "assessment": {
+    "assessment_id": "e81fddbe-0b54-4fa1-aafd-4e620cef8d9a",
+    "run_id": "0592c2a2-a6a2-458e-9297-5a24e6cecd87",
+    "request_id": "4fd4c2e6-dbf3-492d-9341-f51ebf15605d",
+    "correlation_id": "b3692b4e-49cd-4632-a7d3-5ad28d6658c7",
+    "data_mode": "LIVE",
+    "evaluated_at": "2026-10-06T17:29:01.452420Z",
+    "ticker": "NVDA",
+    "status": "ASSESSED",
+    "regime": {
+      "state": "REGULAR",
+      "baseline_bucket": "REGULAR",
+      "evaluated_at": "2026-10-06T17:29:01.448687Z",
+      "previous_regular_open": "2026-10-05T13:30:00Z",
+      "previous_regular_close": "2026-10-05T20:00:00Z",
+      "next_open": "2026-10-07T13:30:00Z",
+      "early_close": false,
+      "reopening": false,
+      "multi_day_closure": false,
+      "schedule_version": "NYSE-2026-10-06",
+      "earnings_window": "UNAVAILABLE",
+      "scheduled_not_halt_status": true
+    },
+    "representations": [
+      {
+        "ticker": "NVDA",
+        "issuer": "bstock",
+        "chain_id": "56",
+        "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+        "symbol": "NVDAB",
+        "token_price_usd": "239.95",
+        "token_to_share_ratio": "1.000778223752807865",
+        "token_timestamp": "2026-10-06T17:28:50.630000Z",
+        "ratio_observed_at": "2026-10-06T17:28:45.750896Z",
+        "ratio_source_timestamp": null,
+        "reference": {
+          "status": "UNAVAILABLE",
+          "observation": null,
+          "reference_asof": null,
+          "timestamp_skew_seconds": null,
+          "token_age_seconds": "10.818687",
+          "reference_age_seconds": null,
+          "reason_codes": [
+            "INDEPENDENT_REFERENCE_UNAVAILABLE"
+          ]
+        },
+        "liquidity": {
+          "status": "UNAVAILABLE",
+          "source": "BINANCE_MARKET",
+          "observed_at": "2026-10-06T17:28:50.630000Z",
+          "volume_24h_usd": "14186800219",
+          "liquidity_usd": null,
+          "trade_count_24h": null,
+          "buy_volume_24h_usd": "4214417.25699488218507619522",
+          "sell_volume_24h_usd": "3160894.4604558801300010436",
+          "buy_transactions_24h": null,
+          "sell_transactions_24h": null,
+          "estimated_slippage": "UNAVAILABLE",
+          "excluded_inputs": [
+            "TRADE_PRICE_UNITS",
+            "CANDLE_VOLUME_UNITS"
+          ],
+          "reason_codes": [
+            "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+          ]
+        },
+        "news": {
+          "state": "RELEVANT_NEWS",
+          "directional_state": "UNKNOWN",
+          "coverage": "COMPLETE_REQUESTED_WINDOW",
+          "window_start": "2026-10-06T16:28:50.630000Z",
+          "window_end": "2026-10-06T17:29:01.448687Z",
+          "article_ids": [
+            "4025caa63d8e8c2013e456d6e248dc0a909af8250cea7817a6436fa0f48381a5",
+            "166ece0955db057bf3d36002580116a4be472df6db9445f0e6e4d7f976e8739d",
+            "3d3ef6b7a5a12e9a8f0e88190915efaaf1f7d430971e61a16d087346856d484f",
+            "72a5835efd8603ab4678ed48a7c320d0f727b026747f29f77d347fb356ffbbc5"
+          ],
+          "published_timestamps": [
+            "2026-10-06T16:30:00Z",
+            "2026-10-06T16:35:00Z",
+            "2026-10-06T16:37:12Z",
+            "2026-10-06T17:00:00Z"
+          ],
+          "first_seen_timestamps": [
+            "2026-10-06T17:29:01.420145Z",
+            "2026-10-06T17:29:01.420145Z",
+            "2026-10-06T17:29:01.420145Z",
+            "2026-10-06T17:29:01.420145Z"
+          ],
+          "directional_article_ids": [],
+          "method": "DETERMINISTIC_HEADLINE_RULES_V1",
+          "reason_codes": [
+            "HEADLINE_RULES_ARE_HEURISTIC_NOT_CAUSAL",
+            "NEWS_NOT_EXHAUSTIVE_MARKET_COVERAGE",
+            "BOUNDED_NEWS_HISTORY",
+            "DESCENDING_PREFIX_COVERS_REQUESTED_WINDOW",
+            "SOURCE_UPDATED_HOURLY_NOT_REALTIME_NEWS"
+          ],
+          "absence_proves_no_information": false,
+          "provider_llm_sentiment_used": false
+        },
+        "baseline": {
+          "status": "INSUFFICIENT",
+          "sample_count": 0,
+          "minimum_sample_count": 30,
+          "regime": "REGULAR",
+          "ticker": "NVDA",
+          "lookback_start": "2026-04-09T17:29:01.448687Z",
+          "decision_at": "2026-10-06T17:29:01.448687Z",
+          "deviation": null,
+          "absolute_deviation": null,
+          "volume": null,
+          "liquidity": null,
+          "persistence": null,
+          "deviation_percentile": null,
+          "volume_percentile": null,
+          "z_score": null,
+          "research_coefficients_used": false
+        },
+        "analogues": {
+          "status": "INSUFFICIENT",
+          "eligible_sample_count": 0,
+          "retrieved_sample_count": 0,
+          "minimum_sample_count": 3,
+          "method": "BASELINE_SCALED_L2_COSINE_TOP_3",
+          "matches": [],
+          "guaranteed_prediction": false
+        },
+        "economic_comparison": null,
+        "features": null,
+        "classification": "INSUFFICIENT_EVIDENCE",
+        "confidence": null,
+        "evidence_quality": "INSUFFICIENT",
+        "reason_codes": [
+          "ANALOGUES_INSUFFICIENT",
+          "BASELINE_INSUFFICIENT",
+          "FEATURES_UNAVAILABLE",
+          "INDEPENDENT_COMPARISON_UNAVAILABLE",
+          "INDEPENDENT_REFERENCE_UNAVAILABLE",
+          "LIQUIDITY_UNAVAILABLE",
+          "RATIO_SOURCE_ASOF_UNAVAILABLE_OBSERVED_AT_RECEIPT",
+          "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+        ],
+        "missing_evidence": [
+          "ANALOGUES_INSUFFICIENT",
+          "BASELINE_INSUFFICIENT",
+          "FEATURES_UNAVAILABLE",
+          "INDEPENDENT_COMPARISON_UNAVAILABLE",
+          "INDEPENDENT_REFERENCE_UNAVAILABLE",
+          "LIQUIDITY_UNAVAILABLE",
+          "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+        ]
+      },
+      {
+        "ticker": "NVDA",
+        "issuer": "ondo",
+        "chain_id": "56",
+        "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+        "symbol": "NVDAon",
+        "token_price_usd": "240.335164727778495035",
+        "token_to_share_ratio": "1.0017152487959898",
+        "token_timestamp": "2026-10-06T17:28:50.263000Z",
+        "ratio_observed_at": "2026-10-06T17:28:46.003943Z",
+        "ratio_source_timestamp": null,
+        "reference": {
+          "status": "UNAVAILABLE",
+          "observation": null,
+          "reference_asof": null,
+          "timestamp_skew_seconds": null,
+          "token_age_seconds": "11.185687",
+          "reference_age_seconds": null,
+          "reason_codes": [
+            "INDEPENDENT_REFERENCE_UNAVAILABLE"
+          ]
+        },
+        "liquidity": {
+          "status": "UNAVAILABLE",
+          "source": "BINANCE_MARKET",
+          "observed_at": "2026-10-06T17:28:50.263000Z",
+          "volume_24h_usd": "14015156140.41219039",
+          "liquidity_usd": null,
+          "trade_count_24h": 0,
+          "buy_volume_24h_usd": "29079.139735793556268462",
+          "sell_volume_24h_usd": "85954.49218337314153238641",
+          "buy_transactions_24h": 0,
+          "sell_transactions_24h": 0,
+          "estimated_slippage": "UNAVAILABLE",
+          "excluded_inputs": [
+            "TRADE_PRICE_UNITS",
+            "CANDLE_VOLUME_UNITS"
+          ],
+          "reason_codes": [
+            "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+          ]
+        },
+        "news": {
+          "state": "RELEVANT_NEWS",
+          "directional_state": "UNKNOWN",
+          "coverage": "COMPLETE_REQUESTED_WINDOW",
+          "window_start": "2026-10-06T16:28:50.263000Z",
+          "window_end": "2026-10-06T17:29:01.448687Z",
+          "article_ids": [
+            "4025caa63d8e8c2013e456d6e248dc0a909af8250cea7817a6436fa0f48381a5",
+            "166ece0955db057bf3d36002580116a4be472df6db9445f0e6e4d7f976e8739d",
+            "3d3ef6b7a5a12e9a8f0e88190915efaaf1f7d430971e61a16d087346856d484f",
+            "72a5835efd8603ab4678ed48a7c320d0f727b026747f29f77d347fb356ffbbc5"
+          ],
+          "published_timestamps": [
+            "2026-10-06T16:30:00Z",
+            "2026-10-06T16:35:00Z",
+            "2026-10-06T16:37:12Z",
+            "2026-10-06T17:00:00Z"
+          ],
+          "first_seen_timestamps": [
+            "2026-10-06T17:29:01.420145Z",
+            "2026-10-06T17:29:01.420145Z",
+            "2026-10-06T17:29:01.420145Z",
+            "2026-10-06T17:29:01.420145Z"
+          ],
+          "directional_article_ids": [],
+          "method": "DETERMINISTIC_HEADLINE_RULES_V1",
+          "reason_codes": [
+            "HEADLINE_RULES_ARE_HEURISTIC_NOT_CAUSAL",
+            "NEWS_NOT_EXHAUSTIVE_MARKET_COVERAGE",
+            "BOUNDED_NEWS_HISTORY",
+            "DESCENDING_PREFIX_COVERS_REQUESTED_WINDOW",
+            "SOURCE_UPDATED_HOURLY_NOT_REALTIME_NEWS"
+          ],
+          "absence_proves_no_information": false,
+          "provider_llm_sentiment_used": false
+        },
+        "baseline": {
+          "status": "INSUFFICIENT",
+          "sample_count": 0,
+          "minimum_sample_count": 30,
+          "regime": "REGULAR",
+          "ticker": "NVDA",
+          "lookback_start": "2026-04-09T17:29:01.448687Z",
+          "decision_at": "2026-10-06T17:29:01.448687Z",
+          "deviation": null,
+          "absolute_deviation": null,
+          "volume": null,
+          "liquidity": null,
+          "persistence": null,
+          "deviation_percentile": null,
+          "volume_percentile": null,
+          "z_score": null,
+          "research_coefficients_used": false
+        },
+        "analogues": {
+          "status": "INSUFFICIENT",
+          "eligible_sample_count": 0,
+          "retrieved_sample_count": 0,
+          "minimum_sample_count": 3,
+          "method": "BASELINE_SCALED_L2_COSINE_TOP_3",
+          "matches": [],
+          "guaranteed_prediction": false
+        },
+        "economic_comparison": null,
+        "features": null,
+        "classification": "INSUFFICIENT_EVIDENCE",
+        "confidence": null,
+        "evidence_quality": "INSUFFICIENT",
+        "reason_codes": [
+          "ANALOGUES_INSUFFICIENT",
+          "BASELINE_INSUFFICIENT",
+          "FEATURES_UNAVAILABLE",
+          "INDEPENDENT_COMPARISON_UNAVAILABLE",
+          "INDEPENDENT_REFERENCE_UNAVAILABLE",
+          "LIQUIDITY_UNAVAILABLE",
+          "RATIO_SOURCE_ASOF_UNAVAILABLE_OBSERVED_AT_RECEIPT",
+          "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+        ],
+        "missing_evidence": [
+          "ANALOGUES_INSUFFICIENT",
+          "BASELINE_INSUFFICIENT",
+          "FEATURES_UNAVAILABLE",
+          "INDEPENDENT_COMPARISON_UNAVAILABLE",
+          "INDEPENDENT_REFERENCE_UNAVAILABLE",
+          "LIQUIDITY_UNAVAILABLE",
+          "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+        ]
+      }
+    ],
+    "policy": {
+      "version": "trust-engineering-v1",
+      "provenance": "ENGINEERING_POLICY",
+      "lookback_days": 180,
+      "min_baseline_episodes": 30,
+      "min_analogues": 3,
+      "top_k": 3,
+      "max_age_seconds": 120,
+      "max_skew_seconds": 30,
+      "episode_minutes": 30,
+      "max_observation_gap_seconds": 120,
+      "similarity_floor": "0.8"
+    },
+    "limitations": [
+      "EARNINGS_CALENDAR_UNAVAILABLE",
+      "INDEPENDENT_EQUITY_FORBIDDEN",
+      "NO_EXECUTION_AUTHORITY",
+      "PARTIAL: 3 invalid representations excluded",
+      "TRADE_AND_CANDLE_UNITS_EXCLUDED",
+      "TRUST_GATE_BLOCKED_PENDING_ACCOUNT_AND_HISTORY_EVIDENCE",
+      "UNCALIBRATED_ENGINEERING_RULES"
+    ],
+    "execution_mode": "DRY_RUN",
+    "approval_mode": "PROPOSE_ONLY",
+    "live_trading_enabled": false,
+    "require_simulation": true,
+    "execution_ready": false,
+    "transaction_broadcast": false,
+    "no_broadcast_statement": "No real transaction was broadcast.",
+    "llm_authoritative": false,
+    "trust_gate": "BLOCKED"
+  },
+  "denial_diagnoses": [
+    {
+      "http": 403,
+      "business": "NOT_AUTHORIZED",
+      "cause": "ENTITLEMENT_DENIED"
+    },
+    {
+      "http": 403,
+      "business": "NOT_AUTHORIZED",
+      "cause": "ENTITLEMENT_DENIED"
+    },
+    {
+      "http": 403,
+      "business": "NOT_AUTHORIZED",
+      "cause": "ENTITLEMENT_DENIED"
+    }
+  ],
+  "account_plan": "UNKNOWN",
+  "alternative_last_trade": "NO_CURRENT_REFERENCE_VERIFIED",
+  "pool_diagnostics": [
+    {
+      "issuer": "bstock",
+      "pool_count": 15,
+      "received_at": "2026-10-06T17:29:02.036681+00:00",
+      "liquidity_usd_present_count": 10,
+      "market_measurement_time": "NOT_DOCUMENTED",
+      "authoritative_token_liquidity": false
+    },
+    {
+      "issuer": "ondo",
+      "pool_count": 8,
+      "received_at": "2026-10-06T17:29:02.281216+00:00",
+      "liquidity_usd_present_count": 0,
+      "market_measurement_time": "NOT_DOCUMENTED",
+      "authoritative_token_liquidity": false
+    }
+  ],
+  "news_prefix": {
+    "count": 100,
+    "full_history_complete": false,
+    "earliest_publication": "2026-10-01T11:29:00+00:00",
+    "latest_publication": "2026-10-06T17:00:00+00:00",
+    "descending_order_verified": true,
+    "source_recency": "UPDATED_HOURLY_NOT_EXHAUSTIVE_MARKET_COVERAGE"
+  },
+  "reads": [
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/search",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:44.334183+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/supported/chain",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:44.523185+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/platforms",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:44.771196+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/tokens",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:45.549345+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/underlying-profile",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:45.750909+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/underlying-profile",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:46.003953+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/price",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:46.271200+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/price",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:46.979074+00:00"
+    },
+    {
+      "endpoint_tested": "POST /api/v1/dex/market/price-info",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:28:51.672814+00:00"
+    },
+    {
+      "endpoint_tested": "GET /v2/snapshot/locale/us/markets/stocks/tickers/NVDA",
+      "http_business_response_status": {
+        "http": 403,
+        "business": null
+      },
+      "permission_result": "UNAVAILABLE",
+      "capability_result": "FORBIDDEN",
+      "timestamp_utc": "2026-10-06T17:28:51.422186+00:00"
+    },
+    {
+      "endpoint_tested": "GET /v2/reference/news",
+      "http_business_response_status": {
+        "http": 200,
+        "business": "OK"
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:29:01.420160+00:00"
+    },
+    {
+      "endpoint_tested": "GET /v2/last/nbbo/NVDA",
+      "http_business_response_status": {
+        "http": 403,
+        "business": null
+      },
+      "permission_result": "UNAVAILABLE",
+      "capability_result": "FORBIDDEN",
+      "timestamp_utc": "2026-10-06T17:29:13.953365+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/token/top-liquidity",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:29:02.036695+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/token/top-liquidity",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T17:29:02.281228+00:00"
+    },
+    {
+      "endpoint_tested": "GET /v2/last/trade/NVDA",
+      "http_business_response_status": {
+        "http": 403,
+        "business": null
+      },
+      "permission_result": "UNAVAILABLE",
+      "capability_result": "FORBIDDEN",
+      "timestamp_utc": "2026-10-06T17:29:14.821207+00:00"
+    }
+  ],
+  "history_inventory": [
+    {
+      "database": "data/parity-pulse.db",
+      "live_counts": {
+        "trust_samples": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "trust_episodes": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "token_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "equity_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        }
+      }
+    },
+    {
+      "database": "data/phase1-demo-verification.db",
+      "live_counts": {
+        "trust_samples": {
+          "status": "TABLE_ABSENT",
+          "count": 0
+        },
+        "trust_episodes": {
+          "status": "TABLE_ABSENT",
+          "count": 0
+        },
+        "token_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "equity_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        }
+      }
+    },
+    {
+      "database": "data/phase1-live-verification.db",
+      "live_counts": {
+        "trust_samples": {
+          "status": "TABLE_ABSENT",
+          "count": 0
+        },
+        "trust_episodes": {
+          "status": "TABLE_ABSENT",
+          "count": 0
+        },
+        "token_observations": {
+          "count": 2,
+          "by_ticker_regime_episode_or_observation_type": [
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE",
+              "count": 2
+            }
+          ]
+        },
+        "equity_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        }
+      }
+    },
+    {
+      "database": "data/phase2-trust-demo-verification.db",
+      "live_counts": {
+        "trust_samples": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "trust_episodes": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "token_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "equity_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        }
+      }
+    },
+    {
+      "database": "data/phase2-trust-live-verification.db",
+      "live_counts": {
+        "trust_samples": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "trust_episodes": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "token_observations": {
+          "count": 4,
+          "by_ticker_regime_episode_or_observation_type": [
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE",
+              "count": 2
+            },
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE_INFO",
+              "count": 2
+            }
+          ]
+        },
+        "equity_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        }
+      }
+    },
+    {
+      "database": "data/phase2-trust-remediation-verification.db",
+      "live_counts": {
+        "trust_samples": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "trust_episodes": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        },
+        "token_observations": {
+          "count": 8,
+          "by_ticker_regime_episode_or_observation_type": [
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE",
+              "count": 4
+            },
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE_INFO",
+              "count": 4
+            }
+          ]
+        },
+        "equity_observations": {
+          "count": 0,
+          "by_ticker_regime_episode_or_observation_type": []
+        }
+      }
+    },
+    {
+      "database": "data/phase2-verification.db",
+      "live_counts": {
+        "trust_samples": {
+          "status": "TABLE_ABSENT",
+          "count": 0
+        },
+        "trust_episodes": {
+          "status": "TABLE_ABSENT",
+          "count": 0
+        },
+        "token_observations": {
+          "count": 25,
+          "by_ticker_regime_episode_or_observation_type": [
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "CANDLE",
+              "count": 3
+            },
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE",
+              "count": 8
+            },
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "PRICE_INFO",
+              "count": 4
+            },
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "TRADE",
+              "count": 10
+            }
+          ]
+        },
+        "equity_observations": {
+          "count": 946,
+          "by_ticker_regime_episode_or_observation_type": [
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "BAR",
+              "count": 945
+            },
+            {
+              "ticker": "NVDA",
+              "regime": "NOT_A_TRUST_SAMPLE",
+              "type": "REGULAR_CLOSE",
+              "count": 1
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "persisted": "PASS",
+  "mode_isolation": "PASS",
+  "calls_to_execution_endpoints": 0,
+  "positive_real_classifications": "NOT_AVAILABLE_INSUFFICIENT_EVIDENCE"
+}

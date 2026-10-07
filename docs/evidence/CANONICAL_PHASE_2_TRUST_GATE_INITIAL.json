@@ -1,0 +1,320 @@
+{
+  "timestamp_utc": "2026-10-06T17:10:53.632209+00:00",
+  "phase": "Canonical Phase 2 \u2014 Trust Layer",
+  "gates": {
+    "CANONICAL_PHASE_1_GATE": "PASS",
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "TRUST_GATE": "BLOCKED",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+  },
+  "software_contract_verification": "PASS",
+  "actual_real_provider_trust_capability": "BLOCKED",
+  "criteria": [
+    {
+      "criterion": "independent_equity_comparison",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_shared_normalization_and_comparable_units",
+        "test_current_403_persists_insufficient_without_referenceprice_fallback",
+        "test_live_closed_reference_retains_historical_quality_and_actual_close"
+      ]
+    },
+    {
+      "criterion": "deterministic_market_regime",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_calendar_regimes_reuse_verified_schedule",
+        "test_actual_previous_close_holiday_and_early_close_not_friday_guess"
+      ]
+    },
+    {
+      "criterion": "deterministic_deviation",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_precision_and_positive_negative_deviation",
+        "test_repeating_decimal_features_preserve_precision_without_context_rounding",
+        "test_timestamp_skew_boundary_is_exact"
+      ]
+    },
+    {
+      "criterion": "leakage_safe_baseline",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_decimal_baseline_statistics_and_minimum_count",
+        "test_baseline_stock_regime_ratio_issuer_mode_and_future_leakage",
+        "test_episode_builder_completion_coverage_dedup_and_immutable_availability"
+      ]
+    },
+    {
+      "criterion": "verified_liquidity_handling",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_verified_liquidity_preserves_exact_units_and_activity",
+        "test_liquidity_excludes_unverified_units_and_malformed_values"
+      ]
+    },
+    {
+      "criterion": "time_aligned_news",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_news_temporal_direction_and_partial_coverage",
+        "test_news_future_publication_first_seen_old_wrong_stock_and_mode_excluded",
+        "test_speculation_negation_not_directional_news"
+      ]
+    },
+    {
+      "criterion": "leakage_safe_analogues",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_analogue_retrieval_deterministic_future_outcome_excluded"
+      ]
+    },
+    {
+      "criterion": "deterministic_trust_classification",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_all_three_deterministic_classifications",
+        "test_full_api_classifications_with_explicit_synthetic_completed_history"
+      ]
+    },
+    {
+      "criterion": "insufficient_evidence_fail_closed",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_reference_fail_closed",
+        "test_classifier_conflicts_and_mixed_evidence_never_force_a_classification",
+        "test_malformed_or_missing_ratio_has_no_positive_assessment"
+      ]
+    },
+    {
+      "criterion": "no_authoritative_llm",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_trust_endpoint_insufficient_demo_persisted_and_non_executable",
+        "test_news_temporal_direction_and_partial_coverage"
+      ]
+    },
+    {
+      "criterion": "no_live_execution",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_trust_input_cannot_enable_behavior_or_accept_unbounded_queries",
+        "test_readonly_missing_entitlement_never_uses_demo",
+        "test_trust_secret_input_not_persisted_or_logged"
+      ]
+    },
+    {
+      "criterion": "complete_tests_and_integration",
+      "automated_result": "PASS",
+      "linked_test_names": [
+        "test_trust_repository_mode_isolation_and_availability",
+        "test_trust_database_upgrade_preserves_existing_proposals"
+      ]
+    }
+  ],
+  "checks": {
+    "backend_tests": {
+      "passed": 282,
+      "failed": 0,
+      "pre_existing_preserved": 189,
+      "trust_added": 93,
+      "statement_coverage_percent": 94.61
+    },
+    "frontend_tests": {
+      "passed": 47,
+      "failed": 0,
+      "pre_existing_preserved": 33,
+      "trust_added": 14
+    },
+    "type_build": "PASS",
+    "ruff_lint_format": "PASS",
+    "local_integration": "PASS",
+    "direct_backend_http_statuses": [
+      200,
+      200,
+      200
+    ],
+    "desktop_mobile_trust_browser": "PASS",
+    "desktop_mobile_ask_regression": "PASS",
+    "configured_secret_scan_and_frontend_isolation": "PASS",
+    "existing_upstream_warning": "Starlette TestClient/httpx deprecation (unsuppressed)",
+    "docker": "NOT_RUN_EXISTING_ENVIRONMENT_LIMIT"
+  },
+  "actual_provider_summary": {
+    "ticker": "NVDA",
+    "representations": 2,
+    "current_snapshot_http_status": 403,
+    "current_equity_substitute": "NONE",
+    "volume_usd_available": true,
+    "mandatory_liquidity_usd_available": false,
+    "news_coverage": "PARTIAL",
+    "qualified_real_baseline_episodes": 0,
+    "eligible_real_analogues": 0,
+    "classification": "INSUFFICIENT_EVIDENCE",
+    "persisted": "PASS",
+    "mode_isolation": "PASS",
+    "broadcast": false,
+    "llm_authoritative": false,
+    "calls_to_trading_transaction_wallet_endpoints": 0
+  },
+  "remaining_blockers": [
+    "CURRENT_INDEPENDENT_EQUITY_403",
+    "MANDATORY_LIQUIDITY_ABSENT",
+    "NEWS_COVERAGE_PARTIAL",
+    "NO_QUALIFYING_30_EPISODE_REAL_BASELINE",
+    "NO_QUALIFYING_3_REAL_ANALOGUES"
+  ],
+  "additional_scope_limits": [
+    "RATIO_SOURCE_ASOF_UNAVAILABLE",
+    "EARNINGS_CONTEXT_UNAVAILABLE",
+    "UNVERIFIED_TRADE_CANDLE_UNITS_EXCLUDED",
+    "UNCALIBRATED_ENGINEERING_POLICY",
+    "CALENDAR_2026_2028_ONLY"
+  ],
+  "positive_classification_evidence": "SYNTHETIC_DEMO_ONLY_NOT_ACCOUNT_OR_STATISTICAL_CALIBRATION",
+  "research_coefficients_used": false,
+  "policy": "trust-engineering-v1",
+  "next_recommendation": "Canonical Phase 2 input/capability remediation and TRUST_GATE re-verification; do not begin Opportunity Mode",
+  "source_test_script_fingerprints": {
+    "backend/app/config.py": "34a9194cfb820325b9559295874661c0308b878b58203de8bea4580bd66a0e01",
+    "backend/app/database.py": "e3f257ae7a40dfe3427958f99d0c31dd85a7615939567b9c5cf4ef2761411fac",
+    "backend/app/__init__.py": "ce50ceed9e5a2749610ab6b6446a9a737898d848cd8b8b248871a0475aff2c33",
+    "backend/app/main.py": "7ab0e12972b124559bd7cdcd1a5377dc0e1a6ae83628705494e229c04c088bf8",
+    "backend/app/demo.py": "d45baf42c8999791c4508768900020d73e74db6e788f6490f2e9af33fa187513",
+    "backend/app/clients/massive.py": "a1fed1031322aab6ebfbf74925700cbbef42a7aa8703f3b16c412af207c27ff3",
+    "backend/app/clients/binance_web3.py": "e4c3afa570cf4424b51378e8331dd8c3c7923d050185988480d72029785b08ff",
+    "backend/app/clients/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/clients/common.py": "0501a0a0855fbe47d51ed1b1e115465b03d7ee56e2c9a88848aa2f2b07dc20ea",
+    "backend/app/providers/massive.py": "b216db88530cacaf0918162acce74dabc26c93770bded96654e56149ed0b8126",
+    "backend/app/providers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/providers/demo.py": "825a09284b431cc0c12b384d1b181514df4319d94f00ac1c0b9ac17712211603",
+    "backend/app/providers/base.py": "b46844dd2009f7dadc5a8ec41a31ea97f868a7a035463b1fb7d2c7e1e4ba4afc",
+    "backend/app/providers/binance.py": "5c7db4d165c6e0091dba6c731987bf77b52143b6e8464ee51b05b1536446c2de",
+    "backend/app/utils/logging.py": "2dfa1765bc8799a99ff1a91f7e76db33cf936ef537a17c33d2239c4588b1bcde",
+    "backend/app/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/repositories/exposure.py": "ffbdd0a936b101ff19a7e62e3f1c4f99fedb8df17ff8a88c79f6a94ad5b85689",
+    "backend/app/repositories/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/repositories/trust.py": "0763852104a9fae0612fef55b6184b57a12e7e6982152fc345cadec106b7dffb",
+    "backend/app/repositories/data.py": "83819d5cc026ae66cabc6c1cc58bf310e2e1186c7f17c66c44fe5a21a0c9aaca",
+    "backend/app/models/data_tables.py": "819e76d61876e2e21f9a9301f1cca23dbf673be968a26b873a57c74db7225375",
+    "backend/app/models/exposure.py": "77f794e318e23433d407b7193f1b7901108c9f1df31d8b4b2151f9b65a4e1546",
+    "backend/app/models/__init__.py": "5ff2b5c099ffcddde27c87d79fbd91f432f3e579f33eb12a2a0fb4b589babc92",
+    "backend/app/models/trust.py": "360f4282ad4ebcf1d9c862fa93b2fb26d69770838a945d190eff36c2e536ab0f",
+    "backend/app/models/base.py": "422e449e951daa94abbbc657d1a4bcd8ca41edfde5ad7aa4ef6469de118dd07e",
+    "backend/app/models/data.py": "367c606ba9c442c1f5a1d4e7f3ebf953182bc6990351b3bab907b53eb164f487",
+    "backend/app/api/system.py": "2c84ba6b81ca71a3f9df4af11050f4a36779ba00019f899bcfa0d2492ca5f59c",
+    "backend/app/api/exposure.py": "d348003430244bec2e419428a87160bd012c2394216964f6c4beca8edb0e0c4b",
+    "backend/app/api/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/api/schemas.py": "bcbbcf95793cf27a45dadbabab13a11e4972fbc853a6f0260e8fdc88c5d2fd1d",
+    "backend/app/api/trust.py": "e523494f98e5b7aa1eea85ea307caea53d44d8f64630d7eea50eb4952c54cd34",
+    "backend/app/api/assets.py": "a6378b0c6e66a5f18ed77f142e0b60333b3a7b6ffe399ece08adbc3196bc1034",
+    "backend/app/api/middleware.py": "3941d9dfe608da30199240338331f67a4a9302c03644868e506a26c18405de5a",
+    "backend/app/services/intent.py": "cfad3ea793d66360cfe2e474df00da90229a6c63b540f290141f6ad69b5d20ef",
+    "backend/app/services/ingestion.py": "4b91de105c8b1e3a2e8f99ef1e2933be1ebda488d5a5668fa8700f7e5cde7383",
+    "backend/app/services/trust_history.py": "94ca395c16de83942c62c8a4ef44067100e92644b29dba6567291278f409c84d",
+    "backend/app/services/exposure.py": "29ec6148ccce0af3967ce240c45006ac0e760e078715f37abb14de893c8b5753",
+    "backend/app/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/services/trust_evidence.py": "464726dad906b416abe3095e562b25dc4215c105e4c43838f91338326e40b997",
+    "backend/app/services/calendar.py": "7ab4b04a4a6f0edaae5a925bfc3d9bd5bc5add37c38a39daf6717aa2ec15ee4c",
+    "backend/app/services/trust.py": "a722e61d87f73898ea09872947b15e386fa4d43f51093cd9cc4de5c3776d2683",
+    "backend/app/services/data_layer.py": "114c18bf529a057cbe49dc1450da493773aaee302b0de59a8f490053e1a5c250",
+    "backend/app/services/asset_discovery.py": "423e8a9829f2f8ecd2af36d5e8da858bd18e981c2e610c8051dac53c7b756e3d",
+    "backend/app/services/normalization.py": "fac199961bf6ef9b93deb598c901cb0c72722ed0b20a987b04455b2744593a20",
+    "backend/app/services/trust_classifier.py": "2a39995848f500885973b57d6d120056690de3773bef1001aa0514d9592903b9",
+    "backend/tests/conftest.py": "4da2941c3b863d626a9078ffcf1afdb2341553db14df8fafbb8da773d0061d7a",
+    "backend/tests/unit/test_exposure.py": "c8b7fadad8e3e051fe8efa29bb3c43cde68066851f61f353948402bc715427db",
+    "backend/tests/unit/test_database_demo.py": "abd224eafae8e0093db1b32769cdee0a2d8df063f41585a683a0c578a475339f",
+    "backend/tests/unit/test_trust.py": "bc77c79e261d81f21df5dcd79bf4027a5e91e65820e6821591a29b8ac76a30e2",
+    "backend/tests/unit/test_provider_transport.py": "e6a12ebd329ca66e3a6f9586a9c2118770c3a327150cb9ef159532461c1c80b7",
+    "backend/tests/unit/test_config.py": "149de0771db905588e0d8eca6e0588de9c983baf7d3d50c7d7405980b051b0b3",
+    "backend/tests/security/test_boundaries.py": "75ab40680bec977c8b9c6c5bbc92bc3bc4512db4cd82ee5395fe21bc16c1c760",
+    "backend/tests/integration/test_trust_api.py": "55ceb838b82690f82ce7cc58b4ac7a9b54b51d1e97e24c20ef02f18ea06d844f",
+    "backend/tests/integration/test_data_providers.py": "ee503e977c069bb5457b44612ecf6e6947541e091ea0c49207a8f928ea0dd596",
+    "backend/tests/integration/test_ask_flow.py": "d45269dfeb0ca7bcc59ece598559f584ec503f2ab43d73941bef08f42e671c45",
+    "backend/tests/integration/test_equity_calendar_ingestion.py": "ea54b2d8361688e395fe3ec88ca753b3e333279955775df18994796b5900405b",
+    "backend/tests/integration/test_application.py": "7d0b4fb6edf41dc4c14409b32a46a5089524c8827f8640ab40dc9e96f7cdd977",
+    "frontend/src/App.tsx": "76dbb61e7b1e445cae7aeb035f486fd616b52ee36d9f0cd53ca276d566fa55ff",
+    "frontend/src/main.tsx": "5a476b6ad6344e7d555950a1c34c6254c06b63857f9d652abf2ffa823e8d67af",
+    "frontend/src/styles.css": "1dee6ec00ae07fa59f247cc06ed7f12e1e6699fc323317f6f49e984dadea066d",
+    "frontend/src/types/system.ts": "dc611db3113270bc84ac2316b59e42e7756041ec20533b4331a00a1bd1dcb388",
+    "frontend/src/test/fixtures.ts": "ca967c8ad43a06970966575201a04e2cddb9df70996656b161aa0ba1738068cb",
+    "frontend/src/test/TrustPanel.test.tsx": "41967755b03226ebcb00b91792fc236cab3c6c50d82b63cb8b1fd47ee5d19279",
+    "frontend/src/test/App.test.tsx": "994919f976b9f4668cb6ca32121252ce4553ffbe3b0b9bec3d84bd4c6dc264e9",
+    "frontend/src/test/AskFlow.test.tsx": "272733a5c8235af4ec393b7aa331b95f8d69a293911ab7f524b32788239c3479",
+    "frontend/src/test/setup.ts": "34b2367cbd953eee85339c0f4beb425798cccc9a436619b50702028f823080f7",
+    "frontend/src/components/TrustPanel.tsx": "8fe8990b968bc3d1db2380c731d2fc66ed243a02fb3e81716d23d3e94252702f",
+    "frontend/src/components/AskFlow.tsx": "c5ffa5d97a4432dcc907622bd46911b0ead55ca3b1cc9bc99e82687abb057294",
+    "frontend/src/components/StatusBadge.tsx": "0a87ed815fb14591100ff818d63004a39e8722347346b1ebcb689a35857a2d2f",
+    "frontend/src/hooks/useSystemStatus.ts": "a87d6ecc2c0df1755c930793d723b886e112f9d38c0533c2a2d9d5ab3c5f97c0",
+    "frontend/src/services/trust.ts": "5e5e11a22ff725619cc9f991ea47c8ff100c3f2dcaf7248b2f20042925180625",
+    "frontend/src/services/exposure.ts": "f7bddad2bc553757ab46aa3c8696cdc14ad09a562d7a72241b70b27894b2ee7f",
+    "frontend/src/services/system.ts": "ccb6c6ccfb7e40bec463c0c1a9185524649ce523cdf0e9e8406db4015bce5945",
+    "scripts/check-integration.mjs": "5e1702ffcd8b5848f0bd274bcd4a2daf439e09706515a0d900eb5fdc2eef7011",
+    "scripts/check-ask-browser.mjs": "9dcbb0e1dba684823750dc60f554e91c136bbbc50075ed57207929b4c6533cd3",
+    "scripts/verify-ask-flow.py": "9cdb76945f957e191e4ba65a1fbf35472b5458b32d09365a682e9bfceefdf3d6",
+    "scripts/check-security.py": "bd3aaecdedd3630f7ddf61d71d0dd1dc7d42077405f8f93807d6873441bfe099",
+    "scripts/verify-trust.py": "f29209100d6e019e484093f180c7fd6b68b7bbeca573008585a30b9c3a03f8bd",
+    "scripts/check-trust-browser.mjs": "e1ba906c4edc97753cd404a0be83aef00991ed8125c2f941e134bfbfb59a9678",
+    "scripts/verify-data-layer.py": "02d398589d4b9c079fb453d3154697729c54201e0a2580b103110567703c7859"
+  },
+  "evidence_fingerprints": {
+    "docs/evidence/CANONICAL_PHASE_2_ASK_REGRESSION.json": "6b825131423af420e7b3a2b4938af668cfab0fc94a9f62e42d7308920837d28e",
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_API.json": "46915a63d5e1360ea62aff1a514f9e0dc206ddcf94003a5c0701b2820e551526",
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_BROWSER.json": "e4b729edcf1a89c700be6fb50fc777d8e497c9af33f90f7c2187c7b971a3afc1",
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_DEMO.json": "520daf16672c89c71de5dc5435278882d6c820864dd0aebf63ea17eb95bbddeb",
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_LIVE.json": "906e8cc28967d6aa9308332c64800012e7c740f4d092350f949521110b35863e"
+  },
+  "backend_junit_sha256": "5a0406876e4306bb67f74b4ab36fcd72be1375bfe171bb855ed7403e9de45705",
+  "preserved_historical_fingerprints": {
+    "backend/tests/fixtures/README.md": "d1083191a9c9c9c1b94f6158cbded86e196bd6987ba3a81169d7af8abd793d68",
+    "backend/tests/fixtures/manifest.json": "11ba275d21dfcadb6f2369e79c8ae37d21105c7b43dc4021dba23298cd5c6a92",
+    "backend/tests/fixtures/massive/splits.json": "900aade5952b561cbf6b06566840151769d0800304aa976882d1376acb8df8e1",
+    "backend/tests/fixtures/massive/holidays.json": "aaa2f2914d9e67201e7808a50c427534c9bafe399c0c03dff7a0843aebc5d44c",
+    "backend/tests/fixtures/massive/minute_bars.json": "0fbb79e607939d643e9bef7512281da53ba1a82fbf9729f088e7c57b9e7cb757",
+    "backend/tests/fixtures/massive/day_bars.json": "14d008b96dfac07ed51d2de6d1be4b218415b50c90106e61c520ac733ac6dfd0",
+    "backend/tests/fixtures/massive/news.json": "0e7d3d078ec8008ad5f8125120b922016118b78e60539e8ea81841a4e3050555",
+    "backend/tests/fixtures/massive/dividends.json": "cd913f4fa9bf2e8ea0f6421574d6ad70e75eafe5fb316fbbe3d04abf5aee6d0f",
+    "backend/tests/fixtures/massive/status.json": "47a50878b4abfdf3b1e3bd088e5f4d86c57130e6052d3d989155a0b6b16baa65",
+    "backend/tests/fixtures/binance/trades.json": "babf91f245d1e6d39ee85ee7de2776b693dad41e242079523a647da8e1571f95",
+    "backend/tests/fixtures/binance/rwa_platforms.json": "f697c6e32cc020751b2f66ea9bbc26fdd861805188c8779dbfee4e84431ece6b",
+    "backend/tests/fixtures/binance/rwa_price.json": "e952e5e4f6b7db4b87374fff7e8e0c573572c15be3dbe471255b4b3e92c3ef8f",
+    "backend/tests/fixtures/binance/candles.json": "6e10f905bf42140b4f5f536d6ba38171c062ec24f3d3c80a4439fba62aed225e",
+    "backend/tests/fixtures/binance/price-info.json": "47091bae0da3cb81a7042e79eba2be49080d301afc4708be63fbbb8327a33692",
+    "backend/tests/fixtures/binance/rwa_tokens.json": "7ca778c0ab5c9c6bacae66a042f4aacf34a4a2e978eaab33219794694ca3c730",
+    "backend/tests/fixtures/binance/supported_chain.json": "cf3bbc09aad2448cdc36bd7bb9620e196ecc4c8d2f421f2ac92f9b584d0925b5",
+    "backend/tests/fixtures/binance/token_search.json": "bab888717ffb9576a87d1d597e5aea20c788cf1361321ae48fe0d06e8181f3e6",
+    "backend/tests/fixtures/binance/price.json": "1150b208cc0049b59e006bae4722a86194bd6e0d40b40c9df1135250a0547cf2",
+    "backend/tests/fixtures/binance/rwa_catalog.json": "f541ad948edd27c41619e8e4015f722422ab7a94a0a271221f26eaf980f4cf68",
+    "backend/tests/fixtures/binance/rwa_search.json": "a365343f74a4df88ecf34ad820299e648b831c8de47d994419bce85f331ea5ca",
+    "backend/tests/fixtures/binance/rwa_underlying-profile.json": "a96ec18f45500fc1d99db24ff0df9da860cd949763c7a5389f2736af64610490",
+    "backend/tests/fixtures/binance/candles_bounded.json": "121525f55c072754a239c92292595539148085c872ca28491e85993a6d025dab",
+    "backend/tests/fixtures/binance/candles_page.json": "486c3dae4bd4f7584ce549e5e69886d3c9da494c6d46b5addb720cef0b8988aa",
+    "backend/tests/fixtures/binance/rwa_underlying-market.json": "1072f79dfd337db95e81ba8e7673585c596a0dcfe8196ba1fe029e180b47474a",
+    "backend/tests/fixtures/binance/token_basic-info.json": "85a1f746cc078dcbaf76891e620d6182f696a6b65476a3056b51cfcb238cfc50",
+    "docs/PHASE_2_REPORT.md": "ee79f725fc44b28a2186536de1a1369f206c6aff2602aa5b9ed4d99257adbe0f",
+    "docs/PHASE_1_REPORT.md": "7e8084e3cfb1e48100949e578f8a82509039728ef470f85eace485a0a1638d1d",
+    "docs/MASTER_BUILD_PROMPT.md": "45ef4fbc1547c850308267cefb6041293351d0cc36d7be423348b18d3b17991f",
+    "docs/evidence/PHASE_2_MASSIVE_READS.json": "a207897431fa2be2aab3f68d319f02866d9ac7dbf8a64cfd066679a75e2f5f36",
+    "docs/evidence/PHASE_2_CANDLE_PAGE.json": "3d0abcc0383dc7b8c22908ed1b83b2944597bfafd6c0a84595b1f3dd4457afb1",
+    "docs/evidence/PHASE_2_PIPELINE_PRE_BOUNDARY_FIX.json": "13e1e1421d0e514544227e2cffbe726674732f2993e0606e249152e5bc9c5bd1",
+    "docs/evidence/PHASE_2_BROWSER.json": "cd715aa1ba5472b4bbf1950ca4c134fd72e691c566b42219e48b0e0b67ec4c36",
+    "docs/evidence/BINANCE_READONLY_STATUS.json": "de83d4fa0e07063de87a917ae936dbfc1481d3996fbfdec297c455536a117b54",
+    "docs/evidence/PHASE_2_CANDLE_BOUNDS.json": "3da91f96859cf9227164875895e199aa470859d6c82c579420e53cbc002c38f3",
+    "docs/evidence/CANONICAL_PHASE_1_BROWSER.json": "054e4826f907df132c0791550ab36eee0e6c5c5cf5b8da4f0ca1629acb9dfb41",
+    "docs/evidence/PHASE_2_BINANCE_READS.json": "d7e0984072684226c71da1f7b63d56878927f73dcd9d4baa7b1bc0ed06e9673e",
+    "docs/evidence/PHASE_2_PIPELINE.json": "921bc6fb11c61366752174258110cb4d9b63e1b5ea03d06e5bcb5cc47e0660c2",
+    "docs/evidence/CANONICAL_PHASE_1_GATE.json": "23d7615d551fdafa1d75a817a15b8b92029a15111c07ff76b5c98f33bbd88602",
+    "docs/evidence/CANONICAL_PHASE_1_LIVE.json": "c4c5cfffeffd8b4f317d99a8b206b23c2f2bb9dec6cffa3fdccd175c555ac5bb",
+    "docs/evidence/CANONICAL_PHASE_1_DEMO.json": "0cfd83472f78a2a33ef5e919195c9a6ecb85bbcec35195a9fd39a75f71096856",
+    "docs/evidence/CANONICAL_PHASE_1_BROWSER_REVERIFICATION.json": "15ab5a531ad50c4eeaf9e22b9172cdd20f4ccd58a95b4407bb17e5d0daa05a2e",
+    "docs/evidence/PHASE_2_LOCAL_READS.json": "9d6b2e3431612d1ffe591dd0097ae40c74753f8307890e165764c9601025e156",
+    "MASTER_BUILD_PROMPT.md": "45ef4fbc1547c850308267cefb6041293351d0cc36d7be423348b18d3b17991f",
+    "data/demo/data-layer.json": "26cb8aa246d6896b09e0f9a0ca734861a4c3c7949dd8ba99ff6eb0cacb9303e9"
+  },
+  "all_historical_fingerprints_unchanged": true,
+  "git_metadata": "ABSENT_PRE_POST_SHA256_AUDIT_USED"
+}

@@ -1,0 +1,40 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "platformId": "ondo",
+      "tickerCount": 459,
+      "chainDistribution": [
+        {
+          "binanceChainId": "1",
+          "tokenCount": 457
+        },
+        {
+          "binanceChainId": "56",
+          "tokenCount": 458
+        },
+        {
+          "binanceChainId": "CT_501",
+          "tokenCount": 451
+        }
+      ],
+      "website": "https://ondo.finance",
+      "logoUrl": "https://public.bnbstatic.com/images/w3w/openapi/ondo.png"
+    },
+    {
+      "platformId": "bstock",
+      "tickerCount": 87,
+      "chainDistribution": [
+        {
+          "binanceChainId": "56",
+          "tokenCount": 87
+        }
+      ],
+      "website": "https://www.binance.com/zh-CN/bstocks-landing",
+      "logoUrl": "https://public.bnbstatic.com/images/w3w/openapi/bstocks.png"
+    }
+  ],
+  "timestamp": 1791285433446,
+  "success": true
+}

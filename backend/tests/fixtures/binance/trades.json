@@ -1,0 +1,121 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": {
+    "cursor": "AVd6RTNPVEV5T0RVeE1EZ3dNREFzTVRJMk1EUTVPRGN6TERNekxERXlPQ3cxTVRVMU1UTXpOVFl4TWwwPQ==",
+    "trades": [
+      {
+        "binanceChainId": "56",
+        "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+        "txHash": "0x1382af7a0ca5ff27968c83effd07dc3ccca58d72ceb3fb75910e6538335da59a",
+        "dexName": "Uniswap v4 (BSC)",
+        "type": "sell",
+        "price": "1.0003961248",
+        "volume": "3.623811200668144536",
+        "time": 1791285301000,
+        "changedTokenInfo": [
+          {
+            "amount": "0.015036933995831068",
+            "tokenSymbol": "NVDAon",
+            "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75"
+          },
+          {
+            "amount": "0.015042890498236968",
+            "tokenSymbol": "NVDAB",
+            "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436"
+          }
+        ]
+      },
+      {
+        "binanceChainId": "56",
+        "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+        "txHash": "0x1f9dc9841482755ff0c37a9eeb0baf7a310b1a5ace70781e94b2114d0ca9e04f",
+        "dexName": "Uniswap v4 (BSC)",
+        "type": "sell",
+        "price": "1.0003983570",
+        "volume": "6.866339053813865212",
+        "time": 1791285283000,
+        "changedTokenInfo": [
+          {
+            "amount": "0.028454746727811072",
+            "tokenSymbol": "NVDAon",
+            "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75"
+          },
+          {
+            "amount": "0.028466081874812929",
+            "tokenSymbol": "NVDAB",
+            "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436"
+          }
+        ]
+      },
+      {
+        "binanceChainId": "56",
+        "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+        "txHash": "0x613fd3eaa2ea578f4da584120fa16d1a9073dfdef36518f83884d21324b3afa1",
+        "dexName": "Uniswap v4 (BSC)",
+        "type": "sell",
+        "price": "1.0004023186",
+        "volume": "11.759390494006694241",
+        "time": 1791285248000,
+        "changedTokenInfo": [
+          {
+            "amount": "0.048732341206652941",
+            "tokenSymbol": "NVDAon",
+            "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75"
+          },
+          {
+            "amount": "0.048751947133086449",
+            "tokenSymbol": "NVDAB",
+            "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436"
+          }
+        ]
+      },
+      {
+        "binanceChainId": "56",
+        "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+        "txHash": "0xbabd6f959939ca54fa62a92bb2c9b77d00f040a99f82de34085c7e3171145cac",
+        "dexName": "Uniswap v4 (BSC)",
+        "type": "buy",
+        "price": "1.0005948639",
+        "volume": "0.281283018496747937",
+        "time": 1791285201000,
+        "changedTokenInfo": [
+          {
+            "amount": "0.001165339361348786",
+            "tokenSymbol": "NVDAon",
+            "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75"
+          },
+          {
+            "amount": "0.001166032579713302",
+            "tokenSymbol": "NVDAB",
+            "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436"
+          }
+        ]
+      },
+      {
+        "binanceChainId": "56",
+        "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+        "txHash": "0x365e1a6a6366badd09e3bb4efd814e3bcced3130460e5edf5b71604112708e5a",
+        "dexName": "Uniswap v4 (BSC)",
+        "type": "sell",
+        "price": "1.0004047659",
+        "volume": "0.308785295490605584",
+        "time": 1791285108000,
+        "changedTokenInfo": [
+          {
+            "amount": "0.001281596607582031",
+            "tokenSymbol": "NVDAon",
+            "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75"
+          },
+          {
+            "amount": "0.001282115354196515",
+            "tokenSymbol": "NVDAB",
+            "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436"
+          }
+        ]
+      }
+    ]
+  },
+  "timestamp": 1791285437441,
+  "success": true
+}

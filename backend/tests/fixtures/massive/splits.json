@@ -1,0 +1,24 @@
+{
+  "status": "OK",
+  "request_id": "002ef0ef23654688aeee43dfa2ad8dfb",
+  "results": [
+    {
+      "id": "Ea86fa28faba275487714f7b3f199ee4a04d2c271b1471648fbd945397a6008ba",
+      "execution_date": "2024-06-10",
+      "split_from": "1.0",
+      "split_to": "10.0",
+      "ticker": "NVDA",
+      "adjustment_type": "forward_split",
+      "historical_adjustment_factor": "0.1"
+    },
+    {
+      "id": "E9b6d16a5a1f1ab1f5c8db9ab357419b4d1efb7585ba090809310fafcd827678e",
+      "execution_date": "2021-07-20",
+      "split_from": "1.0",
+      "split_to": "4.0",
+      "ticker": "NVDA",
+      "adjustment_type": "stock_dividend",
+      "historical_adjustment_factor": "0.025"
+    }
+  ]
+}

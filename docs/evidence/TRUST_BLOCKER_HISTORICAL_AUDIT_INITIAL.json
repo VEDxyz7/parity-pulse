@@ -1,0 +1,4642 @@
+{
+  "timestamp_utc": "2026-10-06T22:00:06.687576+00:00",
+  "evidence_kind": "REAL_DATA_AUDIT_NO_SYNTHETIC_COUNTS",
+  "production_writes": 0,
+  "gates_modified": false,
+  "execution_calls": 0,
+  "database_live_counts": {
+    "data/parity-pulse.db": {
+      "token_observations": 0,
+      "equity_observations": 0,
+      "token_metadata": 0,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 0
+    },
+    "data/phase1-demo-verification.db": {
+      "token_observations": 0,
+      "equity_observations": 0,
+      "token_metadata": 0,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 0
+    },
+    "data/phase1-live-verification.db": {
+      "token_observations": 2,
+      "equity_observations": 0,
+      "token_metadata": 2,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 0
+    },
+    "data/phase2-trust-demo-verification.db": {
+      "token_observations": 0,
+      "equity_observations": 0,
+      "token_metadata": 0,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 0
+    },
+    "data/phase2-trust-history-investigation.db": {
+      "token_observations": 83,
+      "equity_observations": 2083,
+      "token_metadata": 4,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 126
+    },
+    "data/phase2-trust-live-verification.db": {
+      "token_observations": 4,
+      "equity_observations": 0,
+      "token_metadata": 2,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 100
+    },
+    "data/phase2-trust-remediation-verification.db": {
+      "token_observations": 8,
+      "equity_observations": 0,
+      "token_metadata": 4,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 100
+    },
+    "data/phase2-verification.db": {
+      "token_observations": 25,
+      "equity_observations": 946,
+      "token_metadata": 4,
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "news_events": 100
+    }
+  },
+  "unique_existing_live_counts": {
+    "token_observations": 122,
+    "equity_observations": 2084,
+    "token_metadata": 16,
+    "trust_samples": 0,
+    "trust_episodes": 0,
+    "news_events": 126
+  },
+  "new_raw_binance_rows": 4437,
+  "new_raw_massive_rows": 52,
+  "equity_existing_massive": {
+    "1minute": {
+      "rows": 1892,
+      "unique_timestamps": 1891,
+      "earliest": "2026-10-02T08:00:00+00:00",
+      "latest": "2026-10-05T23:59:00+00:00",
+      "interval_seconds": 60,
+      "largest_gaps": [
+        {
+          "from": "2026-10-02T23:59:00+00:00",
+          "to": "2026-10-05T08:00:00+00:00",
+          "seconds": 201660
+        },
+        {
+          "from": "2026-10-05T10:41:00+00:00",
+          "to": "2026-10-05T10:45:00+00:00",
+          "seconds": 240
+        },
+        {
+          "from": "2026-10-05T10:16:00+00:00",
+          "to": "2026-10-05T10:19:00+00:00",
+          "seconds": 180
+        },
+        {
+          "from": "2026-10-02T08:24:00+00:00",
+          "to": "2026-10-02T08:26:00+00:00",
+          "seconds": 120
+        },
+        {
+          "from": "2026-10-02T08:27:00+00:00",
+          "to": "2026-10-02T08:29:00+00:00",
+          "seconds": 120
+        }
+      ],
+      "gaps_exceeding_interval": 27,
+      "synthetic_fill": false
+    },
+    "5minute": {
+      "rows": 192,
+      "unique_timestamps": 192,
+      "earliest": "2026-10-05T08:00:00+00:00",
+      "latest": "2026-10-05T23:55:00+00:00",
+      "interval_seconds": 300,
+      "largest_gaps": [
+        {
+          "from": "2026-10-05T08:00:00+00:00",
+          "to": "2026-10-05T08:05:00+00:00",
+          "seconds": 300
+        },
+        {
+          "from": "2026-10-05T08:05:00+00:00",
+          "to": "2026-10-05T08:10:00+00:00",
+          "seconds": 300
+        },
+        {
+          "from": "2026-10-05T08:10:00+00:00",
+          "to": "2026-10-05T08:15:00+00:00",
+          "seconds": 300
+        },
+        {
+          "from": "2026-10-05T08:15:00+00:00",
+          "to": "2026-10-05T08:20:00+00:00",
+          "seconds": 300
+        },
+        {
+          "from": "2026-10-05T08:20:00+00:00",
+          "to": "2026-10-05T08:25:00+00:00",
+          "seconds": 300
+        }
+      ],
+      "gaps_exceeding_interval": 0,
+      "synthetic_fill": false
+    }
+  },
+  "equity_combined_massive": {
+    "1minute": {
+      "rows": 1917,
+      "unique_timestamps": 1916,
+      "earliest": "2026-04-10T19:59:00+00:00",
+      "latest": "2026-10-05T23:59:00+00:00",
+      "interval_seconds": 60,
+      "largest_gaps": [
+        {
+          "from": "2026-06-18T19:59:00+00:00",
+          "to": "2026-06-26T19:59:00+00:00",
+          "seconds": 691200
+        },
+        {
+          "from": "2026-07-02T19:59:00+00:00",
+          "to": "2026-07-10T19:59:00+00:00",
+          "seconds": 691200
+        },
+        {
+          "from": "2026-04-10T19:59:00+00:00",
+          "to": "2026-04-17T19:59:00+00:00",
+          "seconds": 604800
+        },
+        {
+          "from": "2026-04-17T19:59:00+00:00",
+          "to": "2026-04-24T19:59:00+00:00",
+          "seconds": 604800
+        },
+        {
+          "from": "2026-04-24T19:59:00+00:00",
+          "to": "2026-05-01T19:59:00+00:00",
+          "seconds": 604800
+        }
+      ],
+      "gaps_exceeding_interval": 52,
+      "synthetic_fill": false
+    },
+    "5minute": {
+      "rows": 218,
+      "unique_timestamps": 217,
+      "earliest": "2026-04-13T13:30:00+00:00",
+      "latest": "2026-10-05T23:55:00+00:00",
+      "interval_seconds": 300,
+      "largest_gaps": [
+        {
+          "from": "2026-05-18T13:30:00+00:00",
+          "to": "2026-05-26T13:30:00+00:00",
+          "seconds": 691200
+        },
+        {
+          "from": "2026-08-31T13:30:00+00:00",
+          "to": "2026-09-08T13:30:00+00:00",
+          "seconds": 691200
+        },
+        {
+          "from": "2026-04-13T13:30:00+00:00",
+          "to": "2026-04-20T13:30:00+00:00",
+          "seconds": 604800
+        },
+        {
+          "from": "2026-04-20T13:30:00+00:00",
+          "to": "2026-04-27T13:30:00+00:00",
+          "seconds": 604800
+        },
+        {
+          "from": "2026-04-27T13:30:00+00:00",
+          "to": "2026-05-04T13:30:00+00:00",
+          "seconds": 604800
+        }
+      ],
+      "gaps_exceeding_interval": 25,
+      "synthetic_fill": false
+    }
+  },
+  "equity_twelve_diagnostic_only": {
+    "1minute": {
+      "rows": 1560,
+      "unique_timestamps": 1560,
+      "earliest": "2026-01-02T14:30:00+00:00",
+      "latest": "2026-10-05T19:59:00+00:00",
+      "interval_seconds": 60,
+      "largest_gaps": [
+        {
+          "from": "2026-01-05T20:59:00+00:00",
+          "to": "2026-10-02T13:30:00+00:00",
+          "seconds": 23301060
+        },
+        {
+          "from": "2026-01-02T20:59:00+00:00",
+          "to": "2026-01-05T14:30:00+00:00",
+          "seconds": 235860
+        },
+        {
+          "from": "2026-10-02T19:59:00+00:00",
+          "to": "2026-10-05T13:30:00+00:00",
+          "seconds": 235860
+        },
+        {
+          "from": "2026-01-02T14:30:00+00:00",
+          "to": "2026-01-02T14:31:00+00:00",
+          "seconds": 60
+        },
+        {
+          "from": "2026-01-02T14:31:00+00:00",
+          "to": "2026-01-02T14:32:00+00:00",
+          "seconds": 60
+        }
+      ],
+      "gaps_exceeding_interval": 3,
+      "synthetic_fill": false
+    },
+    "5minute": {
+      "rows": 312,
+      "unique_timestamps": 312,
+      "earliest": "2026-01-02T14:30:00+00:00",
+      "latest": "2026-10-05T19:55:00+00:00",
+      "interval_seconds": 300,
+      "largest_gaps": [
+        {
+          "from": "2026-01-05T20:55:00+00:00",
+          "to": "2026-10-02T13:30:00+00:00",
+          "seconds": 23301300
+        },
+        {
+          "from": "2026-01-02T20:55:00+00:00",
+          "to": "2026-01-05T14:30:00+00:00",
+          "seconds": 236100
+        },
+        {
+          "from": "2026-10-02T19:55:00+00:00",
+          "to": "2026-10-05T13:30:00+00:00",
+          "seconds": 236100
+        },
+        {
+          "from": "2026-01-02T14:30:00+00:00",
+          "to": "2026-01-02T14:35:00+00:00",
+          "seconds": 300
+        },
+        {
+          "from": "2026-01-02T14:35:00+00:00",
+          "to": "2026-01-02T14:40:00+00:00",
+          "seconds": 300
+        }
+      ],
+      "gaps_exceeding_interval": 3,
+      "synthetic_fill": false
+    }
+  },
+  "calendar": {
+    "version": "NYSE-2026-10-06",
+    "source": "https://www.nyse.com/trade/hours-calendars",
+    "verified_at": "2026-10-06T11:35:26.801853+00:00",
+    "timezone": "America/New_York",
+    "venue": "NYSE American equities",
+    "coverage_start": "2026-01-01",
+    "coverage_end": "2028-12-31",
+    "regular_open": "09:30",
+    "regular_close": "16:00",
+    "premarket_open": "07:00",
+    "postmarket_close": "20:00",
+    "early_postmarket_close": "17:00",
+    "holidays": [
+      "2026-01-01",
+      "2026-01-19",
+      "2026-02-16",
+      "2026-04-03",
+      "2026-05-25",
+      "2026-06-19",
+      "2026-07-03",
+      "2026-09-07",
+      "2026-11-26",
+      "2026-12-25",
+      "2027-01-01",
+      "2027-01-18",
+      "2027-02-15",
+      "2027-03-26",
+      "2027-05-31",
+      "2027-06-18",
+      "2027-07-05",
+      "2027-09-06",
+      "2027-11-25",
+      "2027-12-24",
+      "2028-01-17",
+      "2028-02-21",
+      "2028-04-14",
+      "2028-05-29",
+      "2028-06-19",
+      "2028-07-04",
+      "2028-09-04",
+      "2028-11-23",
+      "2028-12-25"
+    ],
+    "early_closes": [
+      "2026-11-27",
+      "2026-12-24",
+      "2027-11-26",
+      "2028-07-03",
+      "2028-11-24"
+    ]
+  },
+  "lookback_start": "2026-04-09T21:58:59.340859+00:00",
+  "calendar_reopenings_in_180_days": 26,
+  "representations": {
+    "bstock": {
+      "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+      "chain": "56",
+      "diagnostic_pool": "0x8fb4243b553ac29ba088acf00b9b7da24bd6690c",
+      "existing_observation_count": 23,
+      "existing_kind_counts": {
+        "PRICE": 9,
+        "PRICE_INFO": 6,
+        "CANDLE": 3,
+        "TRADE": 5
+      },
+      "existing_observation_coverage": {
+        "EVENT": {
+          "rows": 20,
+          "unique_timestamps": 16,
+          "earliest": "2026-10-06T11:43:41.632000+00:00",
+          "latest": "2026-10-06T17:56:28.632000+00:00",
+          "interval_seconds": null,
+          "largest_gaps": [
+            {
+              "from": "2026-10-06T12:26:47.631000+00:00",
+              "to": "2026-10-06T16:56:19.631000+00:00",
+              "seconds": 16172
+            },
+            {
+              "from": "2026-10-06T11:46:33+00:00",
+              "to": "2026-10-06T12:26:47.631000+00:00",
+              "seconds": 2414
+            },
+            {
+              "from": "2026-10-06T16:56:23.631000+00:00",
+              "to": "2026-10-06T17:25:28.632000+00:00",
+              "seconds": 1745
+            },
+            {
+              "from": "2026-10-06T17:28:50.630000+00:00",
+              "to": "2026-10-06T17:56:28.632000+00:00",
+              "seconds": 1658
+            },
+            {
+              "from": "2026-10-06T17:25:30.632000+00:00",
+              "to": "2026-10-06T17:28:43.631000+00:00",
+              "seconds": 192
+            }
+          ],
+          "gaps_exceeding_interval": null,
+          "synthetic_fill": false
+        },
+        "1h": {
+          "rows": 3,
+          "unique_timestamps": 3,
+          "earliest": "2026-10-06T08:00:00+00:00",
+          "latest": "2026-10-06T10:00:00+00:00",
+          "interval_seconds": 3600,
+          "largest_gaps": [
+            {
+              "from": "2026-10-06T08:00:00+00:00",
+              "to": "2026-10-06T09:00:00+00:00",
+              "seconds": 3600
+            },
+            {
+              "from": "2026-10-06T09:00:00+00:00",
+              "to": "2026-10-06T10:00:00+00:00",
+              "seconds": 3600
+            }
+          ],
+          "gaps_exceeding_interval": 0,
+          "synthetic_fill": false
+        }
+      },
+      "primary_candle_coverage": {
+        "1h": {
+          "rows": 1807,
+          "unique_timestamps": 1807,
+          "earliest": "2026-07-13T19:00:00+00:00",
+          "latest": "2026-10-06T10:00:00+00:00",
+          "interval_seconds": 3600,
+          "largest_gaps": [
+            {
+              "from": "2026-09-13T23:00:00+00:00",
+              "to": "2026-09-21T01:00:00+00:00",
+              "seconds": 612000
+            },
+            {
+              "from": "2026-10-05T23:00:00+00:00",
+              "to": "2026-10-06T08:00:00+00:00",
+              "seconds": 32400
+            },
+            {
+              "from": "2026-08-29T00:00:00+00:00",
+              "to": "2026-08-29T07:00:00+00:00",
+              "seconds": 25200
+            },
+            {
+              "from": "2026-07-27T19:00:00+00:00",
+              "to": "2026-07-28T00:00:00+00:00",
+              "seconds": 18000
+            },
+            {
+              "from": "2026-07-14T18:00:00+00:00",
+              "to": "2026-07-14T21:00:00+00:00",
+              "seconds": 10800
+            }
+          ],
+          "gaps_exceeding_interval": 34,
+          "synthetic_fill": false
+        },
+        "1d": {
+          "rows": 107,
+          "unique_timestamps": 107,
+          "earliest": "2026-06-12T00:00:00+00:00",
+          "latest": "2026-10-05T00:00:00+00:00",
+          "interval_seconds": 86400,
+          "largest_gaps": [
+            {
+              "from": "2026-09-13T00:00:00+00:00",
+              "to": "2026-09-21T00:00:00+00:00",
+              "seconds": 691200
+            },
+            {
+              "from": "2026-08-28T00:00:00+00:00",
+              "to": "2026-08-31T00:00:00+00:00",
+              "seconds": 259200
+            },
+            {
+              "from": "2026-06-12T00:00:00+00:00",
+              "to": "2026-06-13T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-06-13T00:00:00+00:00",
+              "to": "2026-06-14T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-06-14T00:00:00+00:00",
+              "to": "2026-06-15T00:00:00+00:00",
+              "seconds": 86400
+            }
+          ],
+          "gaps_exceeding_interval": 2,
+          "synthetic_fill": false
+        },
+        "1m": {
+          "rows": 310,
+          "unique_timestamps": 310,
+          "earliest": "2026-06-15T13:01:00+00:00",
+          "latest": "2026-10-05T13:29:00+00:00",
+          "interval_seconds": 60,
+          "largest_gaps": [
+            {
+              "from": "2026-07-13T13:27:00+00:00",
+              "to": "2026-08-03T13:00:00+00:00",
+              "seconds": 1812780
+            },
+            {
+              "from": "2026-06-22T13:29:00+00:00",
+              "to": "2026-07-06T13:00:00+00:00",
+              "seconds": 1207860
+            },
+            {
+              "from": "2026-09-08T13:29:00+00:00",
+              "to": "2026-09-21T13:00:00+00:00",
+              "seconds": 1121460
+            },
+            {
+              "from": "2026-08-31T13:29:00+00:00",
+              "to": "2026-09-08T13:00:00+00:00",
+              "seconds": 689460
+            },
+            {
+              "from": "2026-06-15T13:01:00+00:00",
+              "to": "2026-06-22T13:14:00+00:00",
+              "seconds": 605580
+            }
+          ],
+          "gaps_exceeding_interval": 20,
+          "synthetic_fill": false
+        }
+      },
+      "secondary_pool_coverage": {
+        "1d": {
+          "rows": 69,
+          "unique_timestamps": 69,
+          "earliest": "2026-07-29T00:00:00+00:00",
+          "latest": "2026-10-05T00:00:00+00:00",
+          "interval_seconds": 86400,
+          "largest_gaps": [
+            {
+              "from": "2026-07-29T00:00:00+00:00",
+              "to": "2026-07-30T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-07-30T00:00:00+00:00",
+              "to": "2026-07-31T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-07-31T00:00:00+00:00",
+              "to": "2026-08-01T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-08-01T00:00:00+00:00",
+              "to": "2026-08-02T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-08-02T00:00:00+00:00",
+              "to": "2026-08-03T00:00:00+00:00",
+              "seconds": 86400
+            }
+          ],
+          "gaps_exceeding_interval": 0,
+          "synthetic_fill": false
+        },
+        "1h": {
+          "rows": 1667,
+          "unique_timestamps": 1667,
+          "earliest": "2026-07-29T07:00:00+00:00",
+          "latest": "2026-10-06T17:00:00+00:00",
+          "interval_seconds": 3600,
+          "largest_gaps": [
+            {
+              "from": "2026-07-29T07:00:00+00:00",
+              "to": "2026-07-29T08:00:00+00:00",
+              "seconds": 3600
+            },
+            {
+              "from": "2026-07-29T08:00:00+00:00",
+              "to": "2026-07-29T09:00:00+00:00",
+              "seconds": 3600
+            },
+            {
+              "from": "2026-07-29T09:00:00+00:00",
+              "to": "2026-07-29T10:00:00+00:00",
+              "seconds": 3600
+            },
+            {
+              "from": "2026-07-29T10:00:00+00:00",
+              "to": "2026-07-29T11:00:00+00:00",
+              "seconds": 3600
+            },
+            {
+              "from": "2026-07-29T11:00:00+00:00",
+              "to": "2026-07-29T12:00:00+00:00",
+              "seconds": 3600
+            }
+          ],
+          "gaps_exceeding_interval": 0,
+          "synthetic_fill": false
+        },
+        "1m": {
+          "rows": 1998,
+          "unique_timestamps": 1998,
+          "earliest": "2026-10-04T19:26:00+00:00",
+          "latest": "2026-10-06T18:27:00+00:00",
+          "interval_seconds": 60,
+          "largest_gaps": [
+            {
+              "from": "2026-10-05T13:29:00+00:00",
+              "to": "2026-10-06T01:42:00+00:00",
+              "seconds": 43980
+            },
+            {
+              "from": "2026-10-04T21:56:00+00:00",
+              "to": "2026-10-04T22:00:00+00:00",
+              "seconds": 240
+            },
+            {
+              "from": "2026-10-04T19:46:00+00:00",
+              "to": "2026-10-04T19:49:00+00:00",
+              "seconds": 180
+            },
+            {
+              "from": "2026-10-04T20:20:00+00:00",
+              "to": "2026-10-04T20:23:00+00:00",
+              "seconds": 180
+            },
+            {
+              "from": "2026-10-04T21:37:00+00:00",
+              "to": "2026-10-04T21:40:00+00:00",
+              "seconds": 180
+            }
+          ],
+          "gaps_exceeding_interval": 77,
+          "synthetic_fill": false
+        }
+      },
+      "primary_unique_candles": 2224,
+      "secondary_unique_candles": 3734,
+      "primary_price_revision_conflicts": 0,
+      "historical_ratio_classification": "HISTORICAL_RATIO_UNAVAILABLE",
+      "existing_ratio_metadata_versions": [
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T12:26:47.994113Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T17:56:33.455938Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T16:56:19.419407Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T17:25:29.236505Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T17:28:45.750896Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T11:43:43.722628Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.000778223752807865",
+          "observed_at": "2026-10-06T11:46:05.559917Z",
+          "source_timestamp": null
+        }
+      ],
+      "historical_row_ratio_was_not_asof_ledger": true,
+      "candidate_windows_full_captured_span": 17,
+      "candidate_windows_180_days": 17,
+      "survivors_independent_by_stage": {
+        "token_intraday_primary": 16,
+        "token_intraday_any_captured_source": 16,
+        "exact_independent_close_and_opening_bar": 17,
+        "raw_token_bar_completing_at_previous_close": 12,
+        "primary_minute_density": 9,
+        "secondary_pool_minute_density": 1,
+        "historical_asof_economic_ratio": 0,
+        "historical_authoritative_liquidity": 0,
+        "verified_comparable_volume_units": 0,
+        "point_in_time_features_and_revisions": 0,
+        "decision_time_news_coverage": 0,
+        "complete_authoritative_trust_samples": 0
+      },
+      "survivors_cumulative_primary": {
+        "token_intraday_primary": 16,
+        "exact_independent_close_and_opening_bar": 16,
+        "primary_minute_density": 9,
+        "historical_asof_economic_ratio": 0,
+        "historical_authoritative_liquidity": 0,
+        "verified_comparable_volume_units": 0,
+        "point_in_time_features_and_revisions": 0,
+        "decision_time_news_coverage": 0,
+        "complete_authoritative_trust_samples": 0
+      },
+      "rejection_counts": {
+        "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN": 5,
+        "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT": 8,
+        "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED": 17,
+        "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT": 17,
+        "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN": 17,
+        "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN": 17,
+        "HISTORICAL_REVISION_LEDGER_UNVERIFIED": 17,
+        "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED": 17,
+        "NO_QUALIFYING_TRUST_FEATURE_SAMPLES": 17,
+        "NO_CAPTURED_OFF_HOURS_INTRADAY_TOKEN_ROWS": 1
+      },
+      "episodes": [
+        {
+          "previous_regular_close": "2026-06-12T20:00:00+00:00",
+          "decision_at": "2026-06-15T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 1,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 1,
+            "first_completed_at": "2026-06-15T13:02:00+00:00",
+            "last_completed_at": "2026-06-15T13:02:00+00:00",
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "205.14",
+            "first_5m_close": "210.215",
+            "opening_return": "0.02473920249585648825192551428292873159793311884566637418348444964414546163595593253387930194013844203958272399337038120308082285268597055669299015306619869357511943063273861752949205420688310422150726333235838939260992492931656429755289070878424490591790972",
+            "completed_at": "2026-06-15T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:51:49.944976+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-06-18T20:00:00+00:00",
+          "decision_at": "2026-06-22T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 2,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 2,
+            "first_completed_at": "2026-06-22T13:15:00+00:00",
+            "last_completed_at": "2026-06-22T13:30:00+00:00",
+            "max_internal_gap_seconds": 900.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "210.2",
+            "first_5m_close": "213.6366",
+            "opening_return": "0.01634919124643196955280685061845861084681255946717411988582302568981921979067554709800190294957183634633682207421503330161750713606089438629876308277830637488106565176022835394862036156041864890580399619410085632730732635585156993339676498572787821122740247",
+            "completed_at": "2026-06-22T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:52:14.286053+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-06-26T20:00:00+00:00",
+          "decision_at": "2026-06-29T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 0,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": false,
+            "token_intraday_any_captured_source": false,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "191.72",
+            "first_5m_close": "194.525",
+            "opening_return": "0.01463071145420404756937200083455038597955351554350093886918422699770498643855622783225537241810974337575631128729397037346129772585019820571667014395994158147298143125391195493427915710411016065094930106405174212393073231796369705820988942207385770915919049",
+            "completed_at": "2026-06-29T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:52:38.391013+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "NO_CAPTURED_OFF_HOURS_INTRADAY_TOKEN_ROWS",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-02T20:00:00+00:00",
+          "decision_at": "2026-07-06T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 26,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 26,
+            "first_completed_at": "2026-07-06T13:01:00+00:00",
+            "last_completed_at": "2026-07-06T13:30:00+00:00",
+            "max_internal_gap_seconds": 180.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "194.51",
+            "first_5m_close": "194.8514",
+            "opening_return": "0.001755179682278546090175312323273867667472109403115521052902164413140712559765564752454886638219114698473086216646959025242918101897074700529535756516374479461210220554213150994807464911829725978098812400390725412575188936301475502544856305588401624595136497",
+            "completed_at": "2026-07-06T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:53:02.508255+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-10T20:00:00+00:00",
+          "decision_at": "2026-07-13T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 11,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 11,
+            "first_completed_at": "2026-07-13T13:01:00+00:00",
+            "last_completed_at": "2026-07-13T13:28:00+00:00",
+            "max_internal_gap_seconds": 600.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "210.96",
+            "first_5m_close": "209.92",
+            "opening_return": "-0.004929844520288206295032233598786499810390595373530527114144861585134622677284793325748957148274554417899127796738718240424725066363291619264315510049298445202882062950322335987864998103905953735305271141448615851346226772847933257489571482745544178991277967",
+            "completed_at": "2026-07-13T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:53:26.792776+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-17T20:00:00+00:00",
+          "decision_at": "2026-07-20T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 54,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-07-17T19:00:00+00:00",
+              "raw_timestamp_ms": 1784314800000,
+              "first_seen": "2026-10-06T21:47:19.935630+00:00",
+              "open": "203.3119541133148",
+              "high": "203.46234410173255",
+              "low": "202.66435551652347",
+              "close": "203.46234410173255",
+              "volume": "3497.551269433727",
+              "trade_count": 1,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "202.64",
+            "first_5m_close": "206.75",
+            "opening_return": "0.02028227398341887090406632451638373470193446506119226213975523095144097907619423608369522305566521910777733912356889064350572443742597710225029609159099881563363600473746545598105013817607579944729569680221081721279115673114883537307540465850769838136596921",
+            "completed_at": "2026-07-20T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:53:50.925079+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-24T20:00:00+00:00",
+          "decision_at": "2026-07-27T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 53,
+          "secondary_off_hours_rows": 0,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-07-24T19:00:00+00:00",
+              "raw_timestamp_ms": 1784919600000,
+              "first_seen": "2026-10-06T21:47:19.063382+00:00",
+              "open": "209.09948607152958",
+              "high": "209.09948607152958",
+              "low": "204.85303564914383",
+              "close": "205.72082595340402",
+              "volume": "7428.4253418572525",
+              "trade_count": 4,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "206.96",
+            "first_5m_close": "205.73",
+            "opening_return": "-0.005943177425589485890993428681870892926169308078855817549284885968303053730189408581368380363355237727097023579435639737147274835717046772323154232701971395438732122149207576343254735214534209509083880943177425589485890993428681870892926169308078855817549285",
+            "completed_at": "2026-07-27T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:54:15.239088+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-31T20:00:00+00:00",
+          "decision_at": "2026-08-03T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 95,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-07-31T19:00:00+00:00",
+              "raw_timestamp_ms": 1785524400000,
+              "first_seen": "2026-10-06T21:47:18.373874+00:00",
+              "open": "198.8299303939492",
+              "high": "201.72225277619984",
+              "low": "196.3845095927409",
+              "close": "200.63141688751492",
+              "volume": "1265300.0933210305",
+              "trade_count": 1291,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-07-31T19:00:00+00:00",
+              "close": "200.207143657355",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-08-03T13:01:00+00:00",
+            "last_completed_at": "2026-08-03T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "200.81",
+            "first_5m_close": "199.475",
+            "opening_return": "-0.006648075295055027140082665205916040037846720780837607688860116528061351526318410437727204820477067875105821423235894626761615457397539963149245555500224092425676012150789303321547731686668990588118121607489666849260494995269159902395299038892485433992331059",
+            "completed_at": "2026-08-03T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:54:39.422364+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-07T20:00:00+00:00",
+          "decision_at": "2026-08-10T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 95,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-08-07T19:00:00+00:00",
+              "raw_timestamp_ms": 1786129200000,
+              "first_seen": "2026-10-06T21:47:17.367844+00:00",
+              "open": "221.50535576333147",
+              "high": "223.95276588229243",
+              "low": "219.8660473033234",
+              "close": "223.6529846862926",
+              "volume": "387767.694249015",
+              "trade_count": 339,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-08-07T19:00:00+00:00",
+              "close": "222.870304725316",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-08-10T13:01:00+00:00",
+            "last_completed_at": "2026-08-10T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "223.9",
+            "first_5m_close": "222.77",
+            "opening_return": "-0.005046895935685573916927199642697632871817775792764627065654309959803483698079499776686020544886109870477891916033943724877177311299687360428762840553818669048682447521214828048235819562304600267976775346136668155426529700759267530147387226440375167485484591",
+            "completed_at": "2026-08-10T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:55:03.756329+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-14T20:00:00+00:00",
+          "decision_at": "2026-08-17T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 95,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-08-14T19:00:00+00:00",
+              "raw_timestamp_ms": 1786734000000,
+              "first_seen": "2026-10-06T21:47:16.364726+00:00",
+              "open": "225.47421422564673",
+              "high": "228.78650529707642",
+              "low": "224.19532621994614",
+              "close": "224.5066173365742",
+              "volume": "475412.46955146553",
+              "trade_count": 1047,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-08-14T19:00:00+00:00",
+              "close": "224.899864613356",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-08-17T13:01:00+00:00",
+            "last_completed_at": "2026-08-17T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "225.12",
+            "first_5m_close": "225.7513",
+            "opening_return": "0.002804282160625444207533759772565742714996446339729921819474058280028429282160625444207533759772565742714996446339729921819474058280028429282160625444207533759772565742714996446339729921819474058280028429282160625444207533759772565742714996446339729921819474",
+            "completed_at": "2026-08-17T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:55:27.861419+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-21T20:00:00+00:00",
+          "decision_at": "2026-08-24T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 95,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-08-21T19:00:00+00:00",
+              "raw_timestamp_ms": 1787338800000,
+              "first_seen": "2026-10-06T21:47:15.491701+00:00",
+              "open": "215.43712243558252",
+              "high": "216.14516054017176",
+              "low": "214.7415318273495",
+              "close": "214.9181041275767",
+              "volume": "224573.03213007512",
+              "trade_count": 538,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-08-21T19:00:00+00:00",
+              "close": "213.777668876905",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-08-24T13:01:00+00:00",
+            "last_completed_at": "2026-08-24T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "214.76",
+            "first_5m_close": "213.19",
+            "opening_return": "-0.007310486124045446079344384429130191842056248835909852859005401378282734214937604768113242689513875954553920655615570869808157943751164090147140994598621717265785062395231886757310486124045446079344384429130191842056248835909852859005401378282734214937604768",
+            "completed_at": "2026-08-24T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:55:52.006398+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-28T20:00:00+00:00",
+          "decision_at": "2026-08-31T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 89,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-08-28T19:00:00+00:00",
+              "raw_timestamp_ms": 1787943600000,
+              "first_seen": "2026-10-06T21:47:14.841053+00:00",
+              "open": "217.63016544184688",
+              "high": "221.513807740036",
+              "low": "217.03078201397946",
+              "close": "218.31772858426527",
+              "volume": "106486.66030297644",
+              "trade_count": 392,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-08-28T19:00:00+00:00",
+              "close": "219.002271679878",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-08-31T13:01:00+00:00",
+            "last_completed_at": "2026-08-31T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "217.54",
+            "first_5m_close": "217.17",
+            "opening_return": "-0.001700836627746621311023260090098372713064264043394318286292176151512365541969293003585547485519904385400386135883055989703043118506941252183506481566608439827158223774937942447366001654868070239955870184793601176795072170635285464742116392387606876896202997",
+            "completed_at": "2026-08-31T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:56:16.488383+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-04T20:00:00+00:00",
+          "decision_at": "2026-09-08T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 119,
+          "secondary_off_hours_rows": 89,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-09-04T19:00:00+00:00",
+              "raw_timestamp_ms": 1788548400000,
+              "first_seen": "2026-10-06T21:47:13.843187+00:00",
+              "open": "231.22715123716463",
+              "high": "231.2328752446636",
+              "low": "229.6246284211236",
+              "close": "229.91251110786982",
+              "volume": "99194.07366585563",
+              "trade_count": 309,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-09-04T19:00:00+00:00",
+              "close": "230.28089504597",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-09-08T13:01:00+00:00",
+            "last_completed_at": "2026-09-08T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "230.345",
+            "first_5m_close": "231.84",
+            "opening_return": "0.006490264603095356964553170244633050424363454817773339990014977533699450823764353469795307039440838741887169246130803794308537194208686969545681477783325012481278082875686470294558162755866200698951572641038442336495257114328507239141288067898152770843734398",
+            "completed_at": "2026-09-08T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:56:40.486253+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-11T20:00:00+00:00",
+          "decision_at": "2026-09-14T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 52,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-09-11T19:00:00+00:00",
+              "raw_timestamp_ms": 1789153200000,
+              "first_seen": "2026-10-06T21:47:12.791320+00:00",
+              "open": "218.00829147076627",
+              "high": "222.43633504794406",
+              "low": "218.00196733902308",
+              "close": "218.45508632300408",
+              "volume": "94106.36443736572",
+              "trade_count": 141,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-09-11T19:00:00+00:00",
+              "close": "218.200281388135",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "218.19",
+            "first_5m_close": "209.68",
+            "opening_return": "-0.03900270406526421925844447499885420963380539896420550896008066364178009991291993216921032127961868096613043677528759338191484485998441725101975342591319492185709702552820935881571107750126036940281406113937394014391126999404189009578807461386864659241945094",
+            "completed_at": "2026-09-14T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:57:04.705144+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-18T20:00:00+00:00",
+          "decision_at": "2026-09-21T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 42,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-09-18T19:00:00+00:00",
+              "close": "221.558505893777",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-09-21T13:01:00+00:00",
+            "last_completed_at": "2026-09-21T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "222.08",
+            "first_5m_close": "223.0099",
+            "opening_return": "0.004187229827089337175792507204610951008645533141210374639769452449567723342939481268011527377521613832853025936599423631123919308357348703170028818443804034582132564841498559077809798270893371757925072046109510086455331412103746397694524495677233429394812680",
+            "completed_at": "2026-09-21T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:57:28.777737+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-25T20:00:00+00:00",
+          "decision_at": "2026-09-28T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 95,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-09-25T19:00:00+00:00",
+              "raw_timestamp_ms": 1790362800000,
+              "first_seen": "2026-10-06T21:47:11.289664+00:00",
+              "open": "224.26132335847694",
+              "high": "225.50473063267103",
+              "low": "223.83736682025673",
+              "close": "225.0113524185396",
+              "volume": "198351.75456919495",
+              "trade_count": 151,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-09-25T19:00:00+00:00",
+              "close": "224.802347605267",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-09-28T13:01:00+00:00",
+            "last_completed_at": "2026-09-28T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "225.08",
+            "first_5m_close": "232.03",
+            "opening_return": "0.03087791007641727385818375688644037675493157988270837035720632663941709614359338901723831526568331259996445708192642615958770215034654345121734494401990403412120135063088679580593566731828683134885374089212724364670339434867602630175937444464190510040874356",
+            "completed_at": "2026-09-28T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:57:53.310421+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-10-02T20:00:00+00:00",
+          "decision_at": "2026-10-05T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 95,
+          "secondary_off_hours_rows": 1064,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "bstock",
+              "chain": "56",
+              "contract": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+              "interval": "1h",
+              "start_utc": "2026-10-02T19:00:00+00:00",
+              "raw_timestamp_ms": 1790967600000,
+              "first_seen": "2026-10-06T21:47:10.301047+00:00",
+              "open": "235.44434492607806",
+              "high": "235.461024081915",
+              "low": "233.47333168084978",
+              "close": "233.8422463593815",
+              "volume": "110787.9175991004",
+              "trade_count": 363,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-10-02T19:00:00+00:00",
+              "close": "234.840292057755",
+              "first_seen": "2026-10-06T18:30:23.639632+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-10-05T13:01:00+00:00",
+            "last_completed_at": "2026-10-05T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 30,
+            "first_completed_at": "2026-10-05T13:01:00+00:00",
+            "last_completed_at": "2026-10-05T13:30:00+00:00",
+            "max_internal_gap_seconds": 60.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": true,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "234",
+            "first_5m_close": "237.376",
+            "opening_return": "0.01442735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735043",
+            "completed_at": "2026-10-05T13:35:00+00:00",
+            "first_seen": "2026-10-06T17:53:52.617087Z",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        }
+      ],
+      "qualifying_baseline_episodes": 0,
+      "qualifying_opening_model_episodes": 0,
+      "real_analogues": 0,
+      "liquidity_authority": "UNVERIFIED"
+    },
+    "ondo": {
+      "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "chain": "56",
+      "diagnostic_pool": "0xb90bdbfbdffd4af5a636b5805539edeafb969308",
+      "existing_observation_count": 99,
+      "existing_kind_counts": {
+        "PRICE": 9,
+        "PRICE_INFO": 8,
+        "CANDLE": 77,
+        "TRADE": 5
+      },
+      "existing_observation_coverage": {
+        "EVENT": {
+          "rows": 22,
+          "unique_timestamps": 19,
+          "earliest": "2026-10-06T11:33:43+00:00",
+          "latest": "2026-10-06T17:56:38.344000+00:00",
+          "interval_seconds": null,
+          "largest_gaps": [
+            {
+              "from": "2026-10-06T12:26:44.347000+00:00",
+              "to": "2026-10-06T16:56:14.244000+00:00",
+              "seconds": 16169
+            },
+            {
+              "from": "2026-10-06T11:46:32.394000+00:00",
+              "to": "2026-10-06T12:26:44.347000+00:00",
+              "seconds": 2411
+            },
+            {
+              "from": "2026-10-06T16:56:20.380000+00:00",
+              "to": "2026-10-06T17:25:26.278000+00:00",
+              "seconds": 1745
+            },
+            {
+              "from": "2026-10-06T17:28:50.263000+00:00",
+              "to": "2026-10-06T17:53:26.726000+00:00",
+              "seconds": 1476
+            },
+            {
+              "from": "2026-10-06T11:36:28+00:00",
+              "to": "2026-10-06T11:41:51+00:00",
+              "seconds": 323
+            }
+          ],
+          "gaps_exceeding_interval": null,
+          "synthetic_fill": false
+        },
+        "1h": {
+          "rows": 58,
+          "unique_timestamps": 58,
+          "earliest": "2026-10-02T21:00:00+00:00",
+          "latest": "2026-10-05T13:00:00+00:00",
+          "interval_seconds": 3600,
+          "largest_gaps": [
+            {
+              "from": "2026-10-04T18:00:00+00:00",
+              "to": "2026-10-04T22:00:00+00:00",
+              "seconds": 14400
+            },
+            {
+              "from": "2026-10-03T17:00:00+00:00",
+              "to": "2026-10-03T20:00:00+00:00",
+              "seconds": 10800
+            },
+            {
+              "from": "2026-10-02T21:00:00+00:00",
+              "to": "2026-10-02T23:00:00+00:00",
+              "seconds": 7200
+            },
+            {
+              "from": "2026-10-02T23:00:00+00:00",
+              "to": "2026-10-03T01:00:00+00:00",
+              "seconds": 7200
+            },
+            {
+              "from": "2026-10-03T01:00:00+00:00",
+              "to": "2026-10-03T02:00:00+00:00",
+              "seconds": 3600
+            }
+          ],
+          "gaps_exceeding_interval": 4,
+          "synthetic_fill": false
+        },
+        "1m": {
+          "rows": 19,
+          "unique_timestamps": 19,
+          "earliest": "2026-10-05T11:52:00+00:00",
+          "latest": "2026-10-05T13:27:00+00:00",
+          "interval_seconds": 60,
+          "largest_gaps": [
+            {
+              "from": "2026-10-05T12:39:00+00:00",
+              "to": "2026-10-05T12:59:00+00:00",
+              "seconds": 1200
+            },
+            {
+              "from": "2026-10-05T12:04:00+00:00",
+              "to": "2026-10-05T12:22:00+00:00",
+              "seconds": 1080
+            },
+            {
+              "from": "2026-10-05T12:23:00+00:00",
+              "to": "2026-10-05T12:36:00+00:00",
+              "seconds": 780
+            },
+            {
+              "from": "2026-10-05T12:59:00+00:00",
+              "to": "2026-10-05T13:08:00+00:00",
+              "seconds": 540
+            },
+            {
+              "from": "2026-10-05T13:15:00+00:00",
+              "to": "2026-10-05T13:24:00+00:00",
+              "seconds": 540
+            }
+          ],
+          "gaps_exceeding_interval": 10,
+          "synthetic_fill": false
+        }
+      },
+      "primary_candle_coverage": {
+        "1h": {
+          "rows": 1811,
+          "unique_timestamps": 1811,
+          "earliest": "2026-07-13T00:00:00+00:00",
+          "latest": "2026-10-05T23:00:00+00:00",
+          "interval_seconds": 3600,
+          "largest_gaps": [
+            {
+              "from": "2026-09-13T23:00:00+00:00",
+              "to": "2026-09-21T01:00:00+00:00",
+              "seconds": 612000
+            },
+            {
+              "from": "2026-08-29T00:00:00+00:00",
+              "to": "2026-08-29T06:00:00+00:00",
+              "seconds": 21600
+            },
+            {
+              "from": "2026-07-25T17:00:00+00:00",
+              "to": "2026-07-25T21:00:00+00:00",
+              "seconds": 14400
+            },
+            {
+              "from": "2026-10-04T18:00:00+00:00",
+              "to": "2026-10-04T22:00:00+00:00",
+              "seconds": 14400
+            },
+            {
+              "from": "2026-08-30T18:00:00+00:00",
+              "to": "2026-08-30T21:00:00+00:00",
+              "seconds": 10800
+            }
+          ],
+          "gaps_exceeding_interval": 46,
+          "synthetic_fill": false
+        },
+        "1m": {
+          "rows": 270,
+          "unique_timestamps": 270,
+          "earliest": "2026-04-13T13:05:00+00:00",
+          "latest": "2026-10-05T13:27:00+00:00",
+          "interval_seconds": 60,
+          "largest_gaps": [
+            {
+              "from": "2026-09-08T13:29:00+00:00",
+              "to": "2026-09-21T13:00:00+00:00",
+              "seconds": 1121460
+            },
+            {
+              "from": "2026-08-31T13:26:00+00:00",
+              "to": "2026-09-08T13:11:00+00:00",
+              "seconds": 690300
+            },
+            {
+              "from": "2026-05-18T13:28:00+00:00",
+              "to": "2026-05-26T13:00:00+00:00",
+              "seconds": 689520
+            },
+            {
+              "from": "2026-09-21T13:22:00+00:00",
+              "to": "2026-09-28T13:24:00+00:00",
+              "seconds": 604920
+            },
+            {
+              "from": "2026-06-29T13:16:00+00:00",
+              "to": "2026-07-06T13:05:00+00:00",
+              "seconds": 604140
+            }
+          ],
+          "gaps_exceeding_interval": 137,
+          "synthetic_fill": false
+        },
+        "1d": {
+          "rows": 147,
+          "unique_timestamps": 147,
+          "earliest": "2026-04-10T00:00:00+00:00",
+          "latest": "2026-10-05T00:00:00+00:00",
+          "interval_seconds": 86400,
+          "largest_gaps": [
+            {
+              "from": "2026-09-13T00:00:00+00:00",
+              "to": "2026-09-22T00:00:00+00:00",
+              "seconds": 777600
+            },
+            {
+              "from": "2026-05-22T00:00:00+00:00",
+              "to": "2026-05-26T00:00:00+00:00",
+              "seconds": 345600
+            },
+            {
+              "from": "2026-04-10T00:00:00+00:00",
+              "to": "2026-04-13T00:00:00+00:00",
+              "seconds": 259200
+            },
+            {
+              "from": "2026-04-17T00:00:00+00:00",
+              "to": "2026-04-20T00:00:00+00:00",
+              "seconds": 259200
+            },
+            {
+              "from": "2026-04-24T00:00:00+00:00",
+              "to": "2026-04-27T00:00:00+00:00",
+              "seconds": 259200
+            }
+          ],
+          "gaps_exceeding_interval": 13,
+          "synthetic_fill": false
+        }
+      },
+      "secondary_pool_coverage": {
+        "1d": {
+          "rows": 182,
+          "unique_timestamps": 182,
+          "earliest": "2026-04-06T00:00:00+00:00",
+          "latest": "2026-10-05T00:00:00+00:00",
+          "interval_seconds": 86400,
+          "largest_gaps": [
+            {
+              "from": "2026-05-16T00:00:00+00:00",
+              "to": "2026-05-18T00:00:00+00:00",
+              "seconds": 172800
+            },
+            {
+              "from": "2026-04-06T00:00:00+00:00",
+              "to": "2026-04-07T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-04-07T00:00:00+00:00",
+              "to": "2026-04-08T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-04-08T00:00:00+00:00",
+              "to": "2026-04-09T00:00:00+00:00",
+              "seconds": 86400
+            },
+            {
+              "from": "2026-04-09T00:00:00+00:00",
+              "to": "2026-04-10T00:00:00+00:00",
+              "seconds": 86400
+            }
+          ],
+          "gaps_exceeding_interval": 1,
+          "synthetic_fill": false
+        },
+        "1m": {
+          "rows": 684,
+          "unique_timestamps": 684,
+          "earliest": "2026-09-24T22:09:00+00:00",
+          "latest": "2026-10-06T18:26:00+00:00",
+          "interval_seconds": 60,
+          "largest_gaps": [
+            {
+              "from": "2026-10-05T03:39:00+00:00",
+              "to": "2026-10-05T09:52:00+00:00",
+              "seconds": 22380
+            },
+            {
+              "from": "2026-10-01T20:16:00+00:00",
+              "to": "2026-10-02T01:46:00+00:00",
+              "seconds": 19800
+            },
+            {
+              "from": "2026-09-25T20:51:00+00:00",
+              "to": "2026-09-26T01:53:00+00:00",
+              "seconds": 18120
+            },
+            {
+              "from": "2026-10-02T18:21:00+00:00",
+              "to": "2026-10-02T21:39:00+00:00",
+              "seconds": 11880
+            },
+            {
+              "from": "2026-09-25T03:14:00+00:00",
+              "to": "2026-09-25T06:29:00+00:00",
+              "seconds": 11700
+            }
+          ],
+          "gaps_exceeding_interval": 569,
+          "synthetic_fill": false
+        },
+        "1h": {
+          "rows": 3327,
+          "unique_timestamps": 3327,
+          "earliest": "2026-03-03T07:00:00+00:00",
+          "latest": "2026-10-06T17:00:00+00:00",
+          "interval_seconds": 3600,
+          "largest_gaps": [
+            {
+              "from": "2026-05-16T22:00:00+00:00",
+              "to": "2026-05-18T00:00:00+00:00",
+              "seconds": 93600
+            },
+            {
+              "from": "2026-05-04T21:00:00+00:00",
+              "to": "2026-05-05T22:00:00+00:00",
+              "seconds": 90000
+            },
+            {
+              "from": "2026-04-12T05:00:00+00:00",
+              "to": "2026-04-13T04:00:00+00:00",
+              "seconds": 82800
+            },
+            {
+              "from": "2026-05-09T08:00:00+00:00",
+              "to": "2026-05-10T03:00:00+00:00",
+              "seconds": 68400
+            },
+            {
+              "from": "2026-05-27T06:00:00+00:00",
+              "to": "2026-05-27T23:00:00+00:00",
+              "seconds": 61200
+            }
+          ],
+          "gaps_exceeding_interval": 717,
+          "synthetic_fill": false
+        }
+      },
+      "primary_unique_candles": 2228,
+      "secondary_unique_candles": 4193,
+      "primary_price_revision_conflicts": 0,
+      "historical_ratio_classification": "HISTORICAL_RATIO_UNAVAILABLE",
+      "existing_ratio_metadata_versions": [
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T12:26:47.329472Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T17:53:14.954456Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T17:55:39.800729Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T17:55:39.800729Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T16:56:19.750220Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T17:25:29.488015Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T17:28:46.003943Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T11:43:42.881822Z",
+          "source_timestamp": null
+        },
+        {
+          "ratio": "1.0017152487959898",
+          "observed_at": "2026-10-06T11:46:06.401335Z",
+          "source_timestamp": null
+        }
+      ],
+      "historical_row_ratio_was_not_asof_ledger": true,
+      "candidate_windows_full_captured_span": 31,
+      "candidate_windows_180_days": 26,
+      "survivors_independent_by_stage": {
+        "token_intraday_primary": 26,
+        "token_intraday_any_captured_source": 26,
+        "exact_independent_close_and_opening_bar": 26,
+        "raw_token_bar_completing_at_previous_close": 19,
+        "primary_minute_density": 2,
+        "secondary_pool_minute_density": 0,
+        "historical_asof_economic_ratio": 0,
+        "historical_authoritative_liquidity": 0,
+        "verified_comparable_volume_units": 0,
+        "point_in_time_features_and_revisions": 0,
+        "decision_time_news_coverage": 0,
+        "complete_authoritative_trust_samples": 0
+      },
+      "survivors_cumulative_primary": {
+        "token_intraday_primary": 26,
+        "exact_independent_close_and_opening_bar": 26,
+        "primary_minute_density": 2,
+        "historical_asof_economic_ratio": 0,
+        "historical_authoritative_liquidity": 0,
+        "verified_comparable_volume_units": 0,
+        "point_in_time_features_and_revisions": 0,
+        "decision_time_news_coverage": 0,
+        "complete_authoritative_trust_samples": 0
+      },
+      "rejection_counts": {
+        "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN": 7,
+        "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT": 24,
+        "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED": 26,
+        "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT": 26,
+        "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN": 26,
+        "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN": 26,
+        "HISTORICAL_REVISION_LEDGER_UNVERIFIED": 26,
+        "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED": 26,
+        "NO_QUALIFYING_TRUST_FEATURE_SAMPLES": 26
+      },
+      "episodes": [
+        {
+          "previous_regular_close": "2026-04-10T20:00:00+00:00",
+          "decision_at": "2026-04-13T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 6,
+          "secondary_off_hours_rows": 6,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 6,
+            "first_completed_at": "2026-04-13T13:06:00+00:00",
+            "last_completed_at": "2026-04-13T13:21:00+00:00",
+            "max_internal_gap_seconds": 540.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "188.64",
+            "first_5m_close": "186.45",
+            "opening_return": "-0.01160941475826972010178117048346055979643765903307888040712468193384223918575063613231552162849872773536895674300254452926208651399491094147582697201017811704834605597964376590330788804071246819338422391857506361323155216284987277353689567430025445292620865",
+            "completed_at": "2026-04-13T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:48:11.983217+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-04-17T20:00:00+00:00",
+          "decision_at": "2026-04-20T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 11,
+          "secondary_off_hours_rows": 14,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 11,
+            "first_completed_at": "2026-04-20T13:01:00+00:00",
+            "last_completed_at": "2026-04-20T13:26:00+00:00",
+            "max_internal_gap_seconds": 300.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "201.67",
+            "first_5m_close": "200.345",
+            "opening_return": "-0.006570139336539891902613179947438885307680864779094560420488917538553081767243516636088659691575345862051866911290722467397233103585064709674220260822135171319482322606237913422918629444141419150096692616650964446868646799226459066792284425050825606188327466",
+            "completed_at": "2026-04-20T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:48:36.254534+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-04-24T20:00:00+00:00",
+          "decision_at": "2026-04-27T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 7,
+          "secondary_off_hours_rows": 32,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 7,
+            "first_completed_at": "2026-04-27T13:01:00+00:00",
+            "last_completed_at": "2026-04-27T13:23:00+00:00",
+            "max_internal_gap_seconds": 540.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "208.19",
+            "first_5m_close": "210.8487",
+            "opening_return": "0.01277054613574139007637254431048561410250252173495364810989961093232143714875834574187040683990585522839713723041452519333301311302175897017147797684807147317354339785772611556751044718766511359815553100533166818771314664489168547960997166050242566886017580",
+            "completed_at": "2026-04-27T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:49:00.471119+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-05-01T20:00:00+00:00",
+          "decision_at": "2026-05-04T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 11,
+          "secondary_off_hours_rows": 22,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 11,
+            "first_completed_at": "2026-05-04T13:01:00+00:00",
+            "last_completed_at": "2026-05-04T13:27:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "198.39",
+            "first_5m_close": "200.05",
+            "opening_return": "0.008367357225666616260900246988255456424214930188013508745400473814204344977065376279046322899339684459902212813145823882252129643631231412873632743585866223095922173496648016533091385654518876959524169564998235798175311255607641514189223247139472755683250164",
+            "completed_at": "2026-05-04T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:49:24.763292+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-05-08T20:00:00+00:00",
+          "decision_at": "2026-05-11T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 11,
+          "secondary_off_hours_rows": 10,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 11,
+            "first_completed_at": "2026-05-11T13:03:00+00:00",
+            "last_completed_at": "2026-05-11T13:28:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "215.19",
+            "first_5m_close": "215.44",
+            "opening_return": "0.001161764022491751475440308564524373809191876945954737673683721362516845578326130396393884474185603420233282215716343696268413959756494260885728890747711324875691249593382592127886983595892002416469166782843068915841814210697523119104047585854361262140434035",
+            "completed_at": "2026-05-11T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:49:49.882124+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-05-15T20:00:00+00:00",
+          "decision_at": "2026-05-18T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 13,
+          "secondary_off_hours_rows": 12,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 13,
+            "first_completed_at": "2026-05-18T13:01:00+00:00",
+            "last_completed_at": "2026-05-18T13:29:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "225.3",
+            "first_5m_close": "227.6",
+            "opening_return": "0.01020861074123391034176653351087438970261873058144695960940967598757212605415002219263204616067465601420328450954283177984909010208610741233910341766533510874389702618730581446959609409675987572126054150022192632046160674656014203284509542831779849090102086",
+            "completed_at": "2026-05-18T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:50:13.102949+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-05-22T20:00:00+00:00",
+          "decision_at": "2026-05-26T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 17,
+          "secondary_off_hours_rows": 36,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-05-22T19:00:00+00:00",
+              "close": "217.631248036821",
+              "first_seen": "2026-10-06T21:58:50.208602+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 17,
+            "first_completed_at": "2026-05-26T13:01:00+00:00",
+            "last_completed_at": "2026-05-26T13:27:00+00:00",
+            "max_internal_gap_seconds": 240.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "215.25",
+            "first_5m_close": "216.2401",
+            "opening_return": "0.004599767711962833914053426248548199767711962833914053426248548199767711962833914053426248548199767711962833914053426248548199767711962833914053426248548199767711962833914053426248548199767711962833914053426248548199767711962833914053426248548199767711962834",
+            "completed_at": "2026-05-26T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:50:37.167104+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-05-29T20:00:00+00:00",
+          "decision_at": "2026-06-01T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 28,
+          "secondary_off_hours_rows": 19,
+          "raw_previous_close_token_bars": [],
+          "primary_density": {
+            "completed_minute_bars": 28,
+            "first_completed_at": "2026-06-01T13:01:00+00:00",
+            "last_completed_at": "2026-06-01T13:29:00+00:00",
+            "max_internal_gap_seconds": 120.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": false,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "211.15",
+            "first_5m_close": "217.98",
+            "opening_return": "0.03234667298129291972531375799194885152735022495856026521430262846317783566185176414870944825953113900071039545346909779777409424579682690030783802983660904570210750651195832346672981292919725313757991948851527350224958560265214302628463177835661851764148709",
+            "completed_at": "2026-06-01T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:51:01.709738+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "RAW_CLOSE_TIME_TOKEN_BAR_MISSING_FOR_WEEKEND_RETURN",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-06-05T20:00:00+00:00",
+          "decision_at": "2026-06-08T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 17,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-06-05T19:00:00+00:00",
+              "close": "204.175969657129",
+              "first_seen": "2026-10-06T21:58:50.208602+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 17,
+            "first_completed_at": "2026-06-08T13:04:00+00:00",
+            "last_completed_at": "2026-06-08T13:29:00+00:00",
+            "max_internal_gap_seconds": 180.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "205.11",
+            "first_5m_close": "208.37",
+            "opening_return": "0.01589391058456438008873287504266003607820194042221247135683291892155428794305494612646872409926380966310760079957096192287065477061089171663985178684608258982984739895665740334454682853103212910145775437570084344985617473550777631514796938228267758763590269",
+            "completed_at": "2026-06-08T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:51:25.826191+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-06-12T20:00:00+00:00",
+          "decision_at": "2026-06-15T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 10,
+          "secondary_off_hours_rows": 63,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-06-12T19:00:00+00:00",
+              "close": "201.827468578071",
+              "first_seen": "2026-10-06T21:58:50.208602+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 10,
+            "first_completed_at": "2026-06-15T13:02:00+00:00",
+            "last_completed_at": "2026-06-15T13:26:00+00:00",
+            "max_internal_gap_seconds": 240.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "205.14",
+            "first_5m_close": "210.215",
+            "opening_return": "0.02473920249585648825192551428292873159793311884566637418348444964414546163595593253387930194013844203958272399337038120308082285268597055669299015306619869357511943063273861752949205420688310422150726333235838939260992492931656429755289070878424490591790972",
+            "completed_at": "2026-06-15T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:51:49.944976+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-06-18T20:00:00+00:00",
+          "decision_at": "2026-06-22T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 8,
+          "secondary_off_hours_rows": 89,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-06-18T19:00:00+00:00",
+              "close": "212.390287006303",
+              "first_seen": "2026-10-06T21:58:50.208602+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 8,
+            "first_completed_at": "2026-06-22T13:03:00+00:00",
+            "last_completed_at": "2026-06-22T13:27:00+00:00",
+            "max_internal_gap_seconds": 660.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "210.2",
+            "first_5m_close": "213.6366",
+            "opening_return": "0.01634919124643196955280685061845861084681255946717411988582302568981921979067554709800190294957183634633682207421503330161750713606089438629876308277830637488106565176022835394862036156041864890580399619410085632730732635585156993339676498572787821122740247",
+            "completed_at": "2026-06-22T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:52:14.286053+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-06-26T20:00:00+00:00",
+          "decision_at": "2026-06-29T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 3,
+          "secondary_off_hours_rows": 65,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-06-26T19:00:00+00:00",
+              "close": "191.636149241268",
+              "first_seen": "2026-10-06T21:58:42.155397+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 3,
+            "first_completed_at": "2026-06-29T13:10:00+00:00",
+            "last_completed_at": "2026-06-29T13:17:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "191.72",
+            "first_5m_close": "194.525",
+            "opening_return": "0.01463071145420404756937200083455038597955351554350093886918422699770498643855622783225537241810974337575631128729397037346129772585019820571667014395994158147298143125391195493427915710411016065094930106405174212393073231796369705820988942207385770915919049",
+            "completed_at": "2026-06-29T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:52:38.391013+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-02T20:00:00+00:00",
+          "decision_at": "2026-07-06T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 4,
+          "secondary_off_hours_rows": 89,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-07-02T19:00:00+00:00",
+              "close": "192.150433788623",
+              "first_seen": "2026-10-06T21:58:42.155397+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 4,
+            "first_completed_at": "2026-07-06T13:06:00+00:00",
+            "last_completed_at": "2026-07-06T13:27:00+00:00",
+            "max_internal_gap_seconds": 720.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "194.51",
+            "first_5m_close": "194.8514",
+            "opening_return": "0.001755179682278546090175312323273867667472109403115521052902164413140712559765564752454886638219114698473086216646959025242918101897074700529535756516374479461210220554213150994807464911829725978098812400390725412575188936301475502544856305588401624595136497",
+            "completed_at": "2026-07-06T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:53:02.508255+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-10T20:00:00+00:00",
+          "decision_at": "2026-07-13T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 23,
+          "secondary_off_hours_rows": 42,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-07-10T19:00:00+00:00",
+              "close": "205.38545318922",
+              "first_seen": "2026-10-06T21:58:42.155397+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 11,
+            "first_completed_at": "2026-07-13T13:04:00+00:00",
+            "last_completed_at": "2026-07-13T13:29:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "210.96",
+            "first_5m_close": "209.92",
+            "opening_return": "-0.004929844520288206295032233598786499810390595373530527114144861585134622677284793325748957148274554417899127796738718240424725066363291619264315510049298445202882062950322335987864998103905953735305271141448615851346226772847933257489571482745544178991277967",
+            "completed_at": "2026-07-13T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:53:26.792776+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-17T20:00:00+00:00",
+          "decision_at": "2026-07-20T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 94,
+          "secondary_off_hours_rows": 37,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-07-17T19:00:00+00:00",
+              "raw_timestamp_ms": 1784314800000,
+              "first_seen": "2026-10-06T21:47:44.614738+00:00",
+              "open": "203.50279978033333",
+              "high": "203.50279978033333",
+              "low": "201.93427942748738",
+              "close": "203.50036911115544",
+              "volume": "428.3304236876207",
+              "trade_count": 3,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-07-17T19:00:00+00:00",
+              "close": "202.079976191175",
+              "first_seen": "2026-10-06T21:58:42.155397+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 29,
+            "first_completed_at": "2026-07-20T13:01:00+00:00",
+            "last_completed_at": "2026-07-20T13:30:00+00:00",
+            "max_internal_gap_seconds": 120.0,
+            "density_only_pass": true,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": true,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "202.64",
+            "first_5m_close": "206.75",
+            "opening_return": "0.02028227398341887090406632451638373470193446506119226213975523095144097907619423608369522305566521910777733912356889064350572443742597710225029609159099881563363600473746545598105013817607579944729569680221081721279115673114883537307540465850769838136596921",
+            "completed_at": "2026-07-20T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:53:50.925079+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-24T20:00:00+00:00",
+          "decision_at": "2026-07-27T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 74,
+          "secondary_off_hours_rows": 11,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-07-24T19:00:00+00:00",
+              "raw_timestamp_ms": 1784919600000,
+              "first_seen": "2026-10-06T21:47:44.165568+00:00",
+              "open": "206.3150908135187",
+              "high": "206.98271197615978",
+              "low": "204.9390810620768",
+              "close": "206.98271197615978",
+              "volume": "19671.003855954947",
+              "trade_count": 55,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-07-24T19:00:00+00:00",
+              "close": "204.486873210699",
+              "first_seen": "2026-10-06T21:58:42.155397+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 16,
+            "first_completed_at": "2026-07-27T13:01:00+00:00",
+            "last_completed_at": "2026-07-27T13:30:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "206.96",
+            "first_5m_close": "205.73",
+            "opening_return": "-0.005943177425589485890993428681870892926169308078855817549284885968303053730189408581368380363355237727097023579435639737147274835717046772323154232701971395438732122149207576343254735214534209509083880943177425589485890993428681870892926169308078855817549285",
+            "completed_at": "2026-07-27T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:54:15.239088+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-07-31T20:00:00+00:00",
+          "decision_at": "2026-08-03T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 66,
+          "secondary_off_hours_rows": 30,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-07-31T19:00:00+00:00",
+              "raw_timestamp_ms": 1785524400000,
+              "first_seen": "2026-10-06T21:47:43.175816+00:00",
+              "open": "199.1407651920903",
+              "high": "201.77762770269393",
+              "low": "198.3855110309566",
+              "close": "200.90442348290372",
+              "volume": "4833.830095749557",
+              "trade_count": 53,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-07-31T19:00:00+00:00",
+              "close": "202.231394943487",
+              "first_seen": "2026-10-06T21:58:42.155397+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 2,
+            "first_completed_at": "2026-08-03T13:05:00+00:00",
+            "last_completed_at": "2026-08-03T13:30:00+00:00",
+            "max_internal_gap_seconds": 1500.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "200.81",
+            "first_5m_close": "199.475",
+            "opening_return": "-0.006648075295055027140082665205916040037846720780837607688860116528061351526318410437727204820477067875105821423235894626761615457397539963149245555500224092425676012150789303321547731686668990588118121607489666849260494995269159902395299038892485433992331059",
+            "completed_at": "2026-08-03T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:54:39.422364+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-07T20:00:00+00:00",
+          "decision_at": "2026-08-10T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 83,
+          "secondary_off_hours_rows": 44,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-08-07T19:00:00+00:00",
+              "raw_timestamp_ms": 1786129200000,
+              "first_seen": "2026-10-06T21:47:42.147103+00:00",
+              "open": "222.2364577029951",
+              "high": "224.12255654974373",
+              "low": "222.2364577029951",
+              "close": "224.12255654974373",
+              "volume": "1183.0807298192744",
+              "trade_count": 12,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 18,
+            "first_completed_at": "2026-08-10T13:01:00+00:00",
+            "last_completed_at": "2026-08-10T13:30:00+00:00",
+            "max_internal_gap_seconds": 240.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "223.9",
+            "first_5m_close": "222.77",
+            "opening_return": "-0.005046895935685573916927199642697632871817775792764627065654309959803483698079499776686020544886109870477891916033943724877177311299687360428762840553818669048682447521214828048235819562304600267976775346136668155426529700759267530147387226440375167485484591",
+            "completed_at": "2026-08-10T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:55:03.756329+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-14T20:00:00+00:00",
+          "decision_at": "2026-08-17T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 72,
+          "secondary_off_hours_rows": 50,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-08-14T19:00:00+00:00",
+              "raw_timestamp_ms": 1786734000000,
+              "first_seen": "2026-10-06T21:47:41.680314+00:00",
+              "open": "224.79156800713045",
+              "high": "225.49282770447905",
+              "low": "224.72002443347617",
+              "close": "224.92910327380744",
+              "volume": "41653.54871976991",
+              "trade_count": 7,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 7,
+            "first_completed_at": "2026-08-17T13:01:00+00:00",
+            "last_completed_at": "2026-08-17T13:29:00+00:00",
+            "max_internal_gap_seconds": 660.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "225.12",
+            "first_5m_close": "225.7513",
+            "opening_return": "0.002804282160625444207533759772565742714996446339729921819474058280028429282160625444207533759772565742714996446339729921819474058280028429282160625444207533759772565742714996446339729921819474058280028429282160625444207533759772565742714996446339729921819474",
+            "completed_at": "2026-08-17T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:55:27.861419+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-21T20:00:00+00:00",
+          "decision_at": "2026-08-24T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 75,
+          "secondary_off_hours_rows": 60,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-08-21T19:00:00+00:00",
+              "raw_timestamp_ms": 1787338800000,
+              "first_seen": "2026-10-06T21:47:40.580607+00:00",
+              "open": "215.0468114596494",
+              "high": "215.0468114596494",
+              "low": "215.01542753882478",
+              "close": "215.01542753882478",
+              "volume": "200.0484442614914",
+              "trade_count": 2,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 10,
+            "first_completed_at": "2026-08-24T13:02:00+00:00",
+            "last_completed_at": "2026-08-24T13:29:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "214.76",
+            "first_5m_close": "213.19",
+            "opening_return": "-0.007310486124045446079344384429130191842056248835909852859005401378282734214937604768113242689513875954553920655615570869808157943751164090147140994598621717265785062395231886757310486124045446079344384429130191842056248835909852859005401378282734214937604768",
+            "completed_at": "2026-08-24T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:55:52.006398+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-08-28T20:00:00+00:00",
+          "decision_at": "2026-08-31T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 60,
+          "secondary_off_hours_rows": 59,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-08-28T19:00:00+00:00",
+              "raw_timestamp_ms": 1787943600000,
+              "first_seen": "2026-10-06T21:47:39.563752+00:00",
+              "open": "217.13109732426744",
+              "high": "217.83603708855225",
+              "low": "217.10020647048236",
+              "close": "217.8125168011172",
+              "volume": "50852.50164099974",
+              "trade_count": 8,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-08-28T19:00:00+00:00",
+              "close": "220.919346373549",
+              "first_seen": "2026-10-06T18:31:44.130893+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 4,
+            "first_completed_at": "2026-08-31T13:03:00+00:00",
+            "last_completed_at": "2026-08-31T13:27:00+00:00",
+            "max_internal_gap_seconds": 1020.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "217.54",
+            "first_5m_close": "217.17",
+            "opening_return": "-0.001700836627746621311023260090098372713064264043394318286292176151512365541969293003585547485519904385400386135883055989703043118506941252183506481566608439827158223774937942447366001654868070239955870184793601176795072170635285464742116392387606876896202997",
+            "completed_at": "2026-08-31T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:56:16.488383+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-04T20:00:00+00:00",
+          "decision_at": "2026-09-08T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 88,
+          "secondary_off_hours_rows": 77,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-09-04T19:00:00+00:00",
+              "raw_timestamp_ms": 1788548400000,
+              "first_seen": "2026-10-06T21:47:39.056244+00:00",
+              "open": "230.7557463119304",
+              "high": "231.05287228771587",
+              "low": "230.16015810980053",
+              "close": "231.05287228771587",
+              "volume": "314.84124370464144",
+              "trade_count": 2,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            },
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-09-04T19:00:00+00:00",
+              "close": "228.670728411173",
+              "first_seen": "2026-10-06T18:31:44.130893+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 2,
+            "first_completed_at": "2026-09-08T13:12:00+00:00",
+            "last_completed_at": "2026-09-08T13:30:00+00:00",
+            "max_internal_gap_seconds": 1080.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "230.345",
+            "first_5m_close": "231.84",
+            "opening_return": "0.006490264603095356964553170244633050424363454817773339990014977533699450823764353469795307039440838741887169246130803794308537194208686969545681477783325012481278082875686470294558162755866200698951572641038442336495257114328507239141288067898152770843734398",
+            "completed_at": "2026-09-08T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:56:40.486253+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-11T20:00:00+00:00",
+          "decision_at": "2026-09-14T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 45,
+          "secondary_off_hours_rows": 61,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-09-11T19:00:00+00:00",
+              "raw_timestamp_ms": 1789153200000,
+              "first_seen": "2026-10-06T21:47:38.054628+00:00",
+              "open": "219.69088111244025",
+              "high": "219.69088111244025",
+              "low": "219.5029857428287",
+              "close": "219.5029857428287",
+              "volume": "0.1898077418064958",
+              "trade_count": 1,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "218.19",
+            "first_5m_close": "209.68",
+            "opening_return": "-0.03900270406526421925844447499885420963380539896420550896008066364178009991291993216921032127961868096613043677528759338191484485998441725101975342591319492185709702552820935881571107750126036940281406113937394014391126999404189009578807461386864659241945094",
+            "completed_at": "2026-09-14T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:57:04.705144+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-18T20:00:00+00:00",
+          "decision_at": "2026-09-21T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 16,
+          "secondary_off_hours_rows": 61,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "GECKOTERMINAL_POOL",
+              "interval": "1h",
+              "start_utc": "2026-09-18T19:00:00+00:00",
+              "close": "223.721344618326",
+              "first_seen": "2026-10-06T18:31:44.130893+00:00"
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 4,
+            "first_completed_at": "2026-09-21T13:01:00+00:00",
+            "last_completed_at": "2026-09-21T13:23:00+00:00",
+            "max_internal_gap_seconds": 960.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 0,
+            "first_completed_at": null,
+            "last_completed_at": null,
+            "max_internal_gap_seconds": null,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "222.08",
+            "first_5m_close": "223.0099",
+            "opening_return": "0.004187229827089337175792507204610951008645533141210374639769452449567723342939481268011527377521613832853025936599423631123919308357348703170028818443804034582132564841498559077809798270893371757925072046109510086455331412103746397694524495677233429394812680",
+            "completed_at": "2026-09-21T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:57:28.777737+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-09-25T20:00:00+00:00",
+          "decision_at": "2026-09-28T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 62,
+          "secondary_off_hours_rows": 296,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-09-25T19:00:00+00:00",
+              "raw_timestamp_ms": 1790362800000,
+              "first_seen": "2026-10-06T21:47:36.751219+00:00",
+              "open": "225.2341110074837",
+              "high": "225.3876750646309",
+              "low": "224.44766178119158",
+              "close": "225.3876750646309",
+              "volume": "64942.6801479256",
+              "trade_count": 2,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 2,
+            "first_completed_at": "2026-09-28T13:25:00+00:00",
+            "last_completed_at": "2026-09-28T13:28:00+00:00",
+            "max_internal_gap_seconds": 180.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 4,
+            "first_completed_at": "2026-09-28T13:07:00+00:00",
+            "last_completed_at": "2026-09-28T13:17:00+00:00",
+            "max_internal_gap_seconds": 360.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "225.08",
+            "first_5m_close": "232.03",
+            "opening_return": "0.03087791007641727385818375688644037675493157988270837035720632663941709614359338901723831526568331259996445708192642615958770215034654345121734494401990403412120135063088679580593566731828683134885374089212724364670339434867602630175937444464190510040874356",
+            "completed_at": "2026-09-28T13:35:00+00:00",
+            "first_seen": "2026-10-06T21:57:53.310421+00:00",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        },
+        {
+          "previous_regular_close": "2026-10-02T20:00:00+00:00",
+          "decision_at": "2026-10-05T13:30:00+00:00",
+          "primary_off_hours_intraday_rows": 76,
+          "secondary_off_hours_rows": 140,
+          "raw_previous_close_token_bars": [
+            {
+              "source": "BINANCE_MARKET",
+              "authority_role": "PRIMARY_RAW_TOKEN_HISTORY",
+              "ticker": "NVDA",
+              "issuer": "ondo",
+              "chain": "56",
+              "contract": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+              "interval": "1h",
+              "start_utc": "2026-10-02T19:00:00+00:00",
+              "raw_timestamp_ms": 1790967600000,
+              "first_seen": "2026-10-06T21:47:35.665586+00:00",
+              "open": "235.12175838212744",
+              "high": "235.12175838212744",
+              "low": "234.7236403137858",
+              "close": "234.7675698349993",
+              "volume": "13.66401641947807",
+              "trade_count": 2,
+              "volume_unit": "UNKNOWN",
+              "historical_ratio": null,
+              "historical_ratio_verified": false,
+              "historical_liquidity": null,
+              "point_in_time_availability_verified": false,
+              "synthetic": false,
+              "capture_revision_conflict": false
+            }
+          ],
+          "primary_density": {
+            "completed_minute_bars": 7,
+            "first_completed_at": "2026-10-05T13:09:00+00:00",
+            "last_completed_at": "2026-10-05T13:28:00+00:00",
+            "max_internal_gap_seconds": 540.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "secondary_density": {
+            "completed_minute_bars": 3,
+            "first_completed_at": "2026-10-05T13:02:00+00:00",
+            "last_completed_at": "2026-10-05T13:29:00+00:00",
+            "max_internal_gap_seconds": 1560.0,
+            "density_only_pass": false,
+            "qualified_features": false
+          },
+          "stages": {
+            "token_intraday_primary": true,
+            "token_intraday_any_captured_source": true,
+            "exact_independent_close_and_opening_bar": true,
+            "raw_token_bar_completing_at_previous_close": true,
+            "primary_minute_density": false,
+            "secondary_pool_minute_density": false,
+            "historical_asof_economic_ratio": false,
+            "historical_authoritative_liquidity": false,
+            "verified_comparable_volume_units": false,
+            "point_in_time_features_and_revisions": false,
+            "decision_time_news_coverage": false,
+            "complete_authoritative_trust_samples": false
+          },
+          "outcome": {
+            "status": "POSTHOC_OUTCOME_ONLY",
+            "source": "MASSIVE",
+            "previous_close": "234",
+            "first_5m_close": "237.376",
+            "opening_return": "0.01442735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735042735043",
+            "completed_at": "2026-10-05T13:35:00+00:00",
+            "first_seen": "2026-10-06T17:53:52.617087Z",
+            "decision_feature": false,
+            "revision_history_asof_verified": false
+          },
+          "historical_ratio": null,
+          "effective_price_per_share": null,
+          "normalized_deviation": null,
+          "required_features": null,
+          "qualifies": false,
+          "rejection_reasons": [
+            "PRIMARY_END_WINDOW_DENSITY_INSUFFICIENT",
+            "ASOF_TOKEN_SHARE_RATIO_UNVERIFIED",
+            "HISTORICAL_AUTHORITATIVE_LIQUIDITY_ABSENT",
+            "PRIMARY_CANDLE_VOLUME_UNIT_UNKNOWN",
+            "HISTORICAL_FIRST_AVAILABILITY_UNPROVEN",
+            "HISTORICAL_REVISION_LEDGER_UNVERIFIED",
+            "DECISION_TIME_NEWS_COVERAGE_UNVERIFIED",
+            "NO_QUALIFYING_TRUST_FEATURE_SAMPLES"
+          ]
+        }
+      ],
+      "qualifying_baseline_episodes": 0,
+      "qualifying_opening_model_episodes": 0,
+      "real_analogues": 0,
+      "liquidity_authority": "UNVERIFIED"
+    }
+  },
+  "candidate_representation_windows": 43,
+  "distinct_candidate_opening_dates": 26,
+  "distinct_posthoc_opening_outcomes": 26,
+  "real_qualifying_baseline_episodes": 0,
+  "real_qualifying_opening_model_episodes": 0,
+  "real_eligible_analogues": 0,
+  "liquidity_authority": "UNVERIFIED",
+  "minimums_unchanged": {
+    "baseline": 30,
+    "opening_model": 30,
+    "analogues": 3
+  }
+}

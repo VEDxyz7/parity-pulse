@@ -1,0 +1,68 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "binanceChainId": "56",
+      "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "platformId": "ondo",
+      "assetType": 1,
+      "tokenName": "NVIDIA (Ondo)",
+      "tokenSymbol": "NVDAon",
+      "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/4357ecbcd49d4dea9bca1072cb0da0f6.png",
+      "decimals": "18",
+      "underlyingTicker": "NVDA",
+      "underlyingName": "Nvidia Corp",
+      "underlyingNameZh": "\u82f1\u4f1f\u8fbe",
+      "tokenToShareRatio": "1.0017152487959898",
+      "tags": [
+        "alpha"
+      ],
+      "statusInfo": {
+        "openState": true,
+        "marketStatus": "premarket",
+        "reasonCode": "TRADING",
+        "reasonMsg": null,
+        "nextOpenTime": 1791293460000,
+        "nextCloseTime": 1791293340000
+      },
+      "tokenPrice": "242.12347182527199307304479267083",
+      "referencePrice": "241.70888095822835",
+      "volume24H": "30678274601.936462",
+      "marketCap": "5762741917500",
+      "peRatioTTM": "29.29"
+    },
+    {
+      "binanceChainId": "56",
+      "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+      "platformId": "bstock",
+      "assetType": 1,
+      "tokenName": "NVIDIA (bStocks)",
+      "tokenSymbol": "NVDAB",
+      "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/9dc00cf6f4c44054b6be2d2e032b76c0.png",
+      "decimals": "18",
+      "underlyingTicker": "NVDA",
+      "underlyingName": "Nvidia Corp",
+      "underlyingNameZh": "\u82f1\u4f1f\u8fbe",
+      "tokenToShareRatio": "1.000778223752807865",
+      "tags": [
+        "alpha"
+      ],
+      "statusInfo": {
+        "openState": true,
+        "marketStatus": null,
+        "reasonCode": "TRADING",
+        "reasonMsg": null,
+        "nextOpenTime": null,
+        "nextCloseTime": null
+      },
+      "tokenPrice": "241.43774648036489743125",
+      "referencePrice": "241.25",
+      "volume24H": "229235291",
+      "marketCap": "5768718300000",
+      "peRatioTTM": "29.91"
+    }
+  ],
+  "timestamp": 1791285434195,
+  "success": true
+}

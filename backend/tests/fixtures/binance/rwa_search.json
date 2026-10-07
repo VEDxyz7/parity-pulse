@@ -1,0 +1,42 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "ticker": "NVDA",
+      "companyName": "Nvidia Corp",
+      "assets": [
+        {
+          "platformId": "ondo",
+          "binanceChainId": "56",
+          "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+          "tokenSymbol": "NVDAon",
+          "assetType": 1
+        },
+        {
+          "platformId": "ondo",
+          "binanceChainId": "CT_501",
+          "tokenContractAddress": "gEGtLTPNQ7jcg25zTetkbmF7teoDLcrfTnQfmn2ondo",
+          "tokenSymbol": "NVDAon",
+          "assetType": 1
+        },
+        {
+          "platformId": "ondo",
+          "binanceChainId": "1",
+          "tokenContractAddress": "0x2d1f7226bd1f780af6b9a49dcc0ae00e8df4bdee",
+          "tokenSymbol": "NVDAon",
+          "assetType": 1
+        },
+        {
+          "platformId": "bstock",
+          "binanceChainId": "56",
+          "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+          "tokenSymbol": "NVDAB",
+          "assetType": 1
+        }
+      ]
+    }
+  ],
+  "timestamp": 1791285433986,
+  "success": true
+}

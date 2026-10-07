@@ -1,0 +1,152 @@
+{
+  "results": [
+    {
+      "id": "aec93ac996189f6eca3504d2bc0a72aa2ac267185a2ec405105e22d4a3f7b011",
+      "publisher": {
+        "name": "The Motley Fool",
+        "homepage_url": "https://www.fool.com/",
+        "logo_url": "https://s3.massive.com/public/assets/news/logos/themotleyfool.svg",
+        "favicon_url": "https://s3.massive.com/public/assets/news/favicons/themotleyfool.ico"
+      },
+      "title": "Warren Buffett Says Buy This Vanguard Index Fund -- It Could Turn $400 Per Month Into $820,000",
+      "author": "Trevor Jennewine",
+      "published_utc": "2026-10-06T09:12:01Z",
+      "article_url": "https://www.fool.com/investing/2026/10/06/warren-buffett-says-buy-vanguard-index-fund-turn-400-to-820000/?source=iedfolrf0000001",
+      "tickers": [
+        "VOO",
+        "NVDA",
+        "AAPL",
+        "MSFT",
+        "GOOG",
+        "GOOGL",
+        "GOOGM",
+        "GOOGN",
+        "AMZN"
+      ],
+      "image_url": "https://g.foolcdn.com/image/?url=https%3A%2F%2Fcdn.content.foolcdn.com%2Fimages%2F1umn9qeh%2Fproduction%2F2251b185a603aa8b01e8bd5c54ceb96c0e6e1611-1280x853.jpg%3Fw%3D800%26q%3D75%26fit%3Dmax%26auto%3Dformat&w=1200&op=resize",
+      "description": "Warren Buffett recommends the Vanguard S&P 500 ETF as the best investment option for most investors seeking stock market exposure. Historical data shows the S&P 500 returned 10.2% annually over the past 30 years. Investing $400 monthly in this fund could grow to approximately $820,000 over three decades, demonstrating the power of long-term, consistent investing in a diversified index fund with low fees.",
+      "keywords": [
+        "S&P 500 index fund",
+        "Vanguard S&P 500 ETF",
+        "Warren Buffett",
+        "long-term investing",
+        "passive investing",
+        "low expense ratio",
+        "wealth accumulation"
+      ],
+      "insights": [
+        {
+          "ticker": "VOO",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Strongly recommended by Warren Buffett as the best investment vehicle for average investors. Highlighted for its very low expense ratio (0.03%), diversified exposure to 500 large U.S. companies, and historical strong performance (10.2% annual returns over 30 years)."
+        },
+        {
+          "ticker": "NVDA",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Listed as the largest holding (8.1%) in the Vanguard S&P 500 ETF, indicating significant representation in the recommended index fund."
+        },
+        {
+          "ticker": "AAPL",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Second-largest holding (7%) in the Vanguard S&P 500 ETF, representing one of the world's most influential companies included in the recommended fund."
+        },
+        {
+          "ticker": "MSFT",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Third-largest holding (5.7%) in the Vanguard S&P 500 ETF, demonstrating significant exposure to this major technology company."
+        },
+        {
+          "ticker": "GOOG",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Fourth-largest holding (5.4%) in the Vanguard S&P 500 ETF, representing one of the world's most influential companies."
+        },
+        {
+          "ticker": "GOOGL",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Fourth-largest holding (5.4%) in the Vanguard S&P 500 ETF, representing one of the world's most influential companies."
+        },
+        {
+          "ticker": "GOOGM",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Fourth-largest holding (5.4%) in the Vanguard S&P 500 ETF, representing one of the world's most influential companies."
+        },
+        {
+          "ticker": "GOOGN",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Fourth-largest holding (5.4%) in the Vanguard S&P 500 ETF, representing one of the world's most influential companies."
+        },
+        {
+          "ticker": "AMZN",
+          "sentiment": "positive",
+          "sentiment_reasoning": "Fifth-largest holding (3.8%) in the Vanguard S&P 500 ETF, included as a major influential company in the recommended index."
+        }
+      ]
+    },
+    {
+      "id": "c6af9642833f79340e90e250f76537a32d4d5d13cbfe34ab3975be9e086dbc73",
+      "publisher": {
+        "name": "The Motley Fool",
+        "homepage_url": "https://www.fool.com/",
+        "logo_url": "https://s3.massive.com/public/assets/news/logos/themotleyfool.svg",
+        "favicon_url": "https://s3.massive.com/public/assets/news/favicons/themotleyfool.ico"
+      },
+      "title": "Nvidia, Palantir, and Alphabet Are Sending Shockwaves Through Wall Street With This $17.5 Billion Warning",
+      "author": "Sean Williams",
+      "published_utc": "2026-10-06T09:06:01Z",
+      "article_url": "https://www.fool.com/investing/2026/10/06/nvidia-palantir-alphabet-send-shockwaves-through-wall-street-with-17-billion-warning/?source=iedfolrf0000001",
+      "tickers": [
+        "NVDA",
+        "PLTR",
+        "GOOG",
+        "GOOGL",
+        "GOOGM",
+        "GOOGN"
+      ],
+      "image_url": "https://g.foolcdn.com/image/?url=https%3A%2F%2Fcdn.content.foolcdn.com%2Fimages%2F1umn9qeh%2Fproduction%2Fcdca4f408124647cbd0ff15bd9ba984d823153a8-2000x1500.jpg%3Fw%3D800%26q%3D75%26fit%3Dmax%26auto%3Dformat&w=1200&op=resize",
+      "description": "Insiders at three major AI powerhouses\u2014Nvidia, Palantir, and Alphabet\u2014have sold approximately $17.5 billion more stock than they've purchased over the past five years, raising concerns about valuation and a potential AI bubble. While insider stock sales can be attributed to tax obligations, the minimal insider buying activity suggests limited confidence in near-term share price appreciation.",
+      "keywords": [
+        "insider selling",
+        "artificial intelligence",
+        "valuation concerns",
+        "AI bubble",
+        "stock market",
+        "tech stocks"
+      ],
+      "insights": [
+        {
+          "ticker": "NVDA",
+          "sentiment": "negative",
+          "sentiment_reasoning": "Insiders have engaged in $6.86 billion in net-selling activity over five years with only $250,000 in purchases, indicating minimal confidence in future stock appreciation despite the company's AI infrastructure dominance."
+        },
+        {
+          "ticker": "PLTR",
+          "sentiment": "negative",
+          "sentiment_reasoning": "Insiders have sold $6.51 billion net while purchasing only $7.84 million in stock. Additionally, the company trades at an unsustainable P/S ratio of nearly 80, well above the historical 30 threshold, raising valuation concerns."
+        },
+        {
+          "ticker": "GOOG",
+          "sentiment": "negative",
+          "sentiment_reasoning": "Insiders have sold $4.15 billion net while purchasing $95 million in stock. The significant net-selling activity suggests insider skepticism about near-term growth prospects despite Google Cloud's strong AI-driven performance."
+        },
+        {
+          "ticker": "GOOGL",
+          "sentiment": "negative",
+          "sentiment_reasoning": "Insiders have sold $4.15 billion net while purchasing $95 million in stock. The significant net-selling activity suggests insider skepticism about near-term growth prospects despite Google Cloud's strong AI-driven performance."
+        },
+        {
+          "ticker": "GOOGM",
+          "sentiment": "negative",
+          "sentiment_reasoning": "Insiders have sold $4.15 billion net while purchasing $95 million in stock. The significant net-selling activity suggests insider skepticism about near-term growth prospects despite Google Cloud's strong AI-driven performance."
+        },
+        {
+          "ticker": "GOOGN",
+          "sentiment": "negative",
+          "sentiment_reasoning": "Insiders have sold $4.15 billion net while purchasing $95 million in stock. The significant net-selling activity suggests insider skepticism about near-term growth prospects despite Google Cloud's strong AI-driven performance."
+        }
+      ]
+    }
+  ],
+  "status": "OK",
+  "request_id": "e5cee6d1-3a07-4acc-bd3e-4abbd9ac5c34",
+  "count": 2
+}

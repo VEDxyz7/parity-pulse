@@ -1,0 +1,143 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "binanceChainId": "1",
+      "name": "Ethereum",
+      "shortName": "ETH",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250228/b549e557-76ca-4873-88ef-3a107cf2c9fe.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "56",
+      "name": "BNB Smart Chain",
+      "shortName": "BSC",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250228/d0216ce4-a3e9-4bda-8937-4a6aa943ccf2.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "BNB",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "CT_501",
+      "name": "Solana",
+      "shortName": "SOL",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/42065e0a-3808-400e-b589-61c2dbfc0eac.png",
+      "caseSensitive": true,
+      "nativeTokenSymbol": "SOL",
+      "nativeTokenDecimals": 9
+    },
+    {
+      "binanceChainId": "8453",
+      "name": "Base",
+      "shortName": "BASE",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250227/f9f5b212-4e34-44da-8230-65608cee4b22.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "146",
+      "name": "Sonic",
+      "shortName": "S",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250603/a7f81078-518e-4e10-bcf3-aa2badc65ea0.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "S",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "9745",
+      "name": "Plasma",
+      "shortName": "ETH",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250925/44d9b1f0-a420-4ba8-9ed8-ae074b0f1c6a.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "43114",
+      "name": "Avalanche C-Chain",
+      "shortName": "AVAX",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/3f8c1ad5-becf-491f-9c8d-347e1054092e.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "AVAX",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "42161",
+      "name": "Arbitrum One",
+      "shortName": "ARB",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/63991f72-1c93-4982-94f6-a6a30df4882e.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "143",
+      "name": "Monad",
+      "shortName": "MON",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20251124/5980bea1-0bc6-40cc-9ca6-0609b681882b.jpg",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "MON",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "137",
+      "name": "Polygon",
+      "shortName": "POL",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/190dae60-2b1b-41ea-9122-ae4e6f8fdf20.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "POL",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "59144",
+      "name": "Linea",
+      "shortName": "ETH",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/763d876d-3568-4182-b5f3-7527a84a4a49.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "10",
+      "name": "Optimism",
+      "shortName": "OP",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/eb2bfa52-6762-4177-8699-97ab3014312d.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "324",
+      "name": "zkSync Era",
+      "shortName": "ETH",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250303/d100ab76-5c2d-4508-bb4e-8117a639ddf0.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "204",
+      "name": "opBNB",
+      "shortName": "BNB",
+      "logoUrl": "https://onchainos.bnbstatic.com/image/admin_mgs_image_upload/20250417/7a125fa0-41e9-437b-be46-4c0bac1ea69c.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "BNB",
+      "nativeTokenDecimals": 18
+    },
+    {
+      "binanceChainId": "4663",
+      "name": "Robinhood",
+      "shortName": "Robinhood",
+      "logoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/87692CAC980EAAADE7D302060A5A869B.png",
+      "caseSensitive": false,
+      "nativeTokenSymbol": "ETH",
+      "nativeTokenDecimals": 18
+    }
+  ],
+  "timestamp": 1791285433259,
+  "success": true
+}

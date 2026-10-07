@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-10-06T17:33:37.664Z",
+  "url": "http://127.0.0.1:5173/",
+  "result": "PASS",
+  "browser": "Google Chrome headless, disposable profile",
+  "data_mode": "DEMO",
+  "trust_display": "PASS",
+  "unsupported_asset_fail_closed": "PASS",
+  "mobile_no_horizontal_overflow": "PASS",
+  "backend_evidence_displayed": "PASS",
+  "no_automatic_trust_fetch": "PASS",
+  "later_phase_navigation": "DISABLED",
+  "execution_ready": false,
+  "transaction_broadcast": false,
+  "api_requests": [
+    {
+      "method": "GET",
+      "path": "/api/health"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system-status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/health"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system-status"
+    },
+    {
+      "method": "GET",
+      "path": "/api/assets/NVDA/trust"
+    },
+    {
+      "method": "GET",
+      "path": "/api/assets/ZZZZ/trust"
+    }
+  ],
+  "runtime_exceptions": 0
+}

@@ -1,0 +1,8 @@
+{
+  "fixture_id": "parity-pulse-foundation-v1",
+  "data_mode": "DEMO",
+  "execution_allowed": false,
+  "service_name": "Parity Pulse",
+  "phase": 1,
+  "observed_at": "2026-01-01T00:00:00Z"
+}

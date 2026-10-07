@@ -1,0 +1,21 @@
+{
+  "name": "parity-pulse-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "test": "npm run test --workspace frontend",
+    "test:integration": "node scripts/check-integration.mjs",
+    "preview": "npm run preview --workspace frontend"
+  },
+  "devDependencies": {
+    "jsdom": "27.4.0"
+  }
+}

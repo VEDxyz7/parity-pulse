@@ -1,0 +1,17 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": {
+    "binanceChainId": "56",
+    "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+    "tokenName": "NVIDIA (Ondo)",
+    "tokenSymbol": "NVDAon",
+    "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/4357ecbcd49d4dea9bca1072cb0da0f6.png",
+    "decimals": 18,
+    "creatorAddress": "0x1dd6bcf6d188f11d8de64b5c8575fb86c4b3d9ff",
+    "createTime": 1760031243000,
+    "tagList": null
+  },
+  "timestamp": 1791285436260,
+  "success": true
+}

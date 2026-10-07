@@ -1,0 +1,28 @@
+{
+  "capture_date": "2026-10-06",
+  "sha256": {
+    "binance/candles.json": "6e10f905bf42140b4f5f536d6ba38171c062ec24f3d3c80a4439fba62aed225e",
+    "binance/candles_bounded.json": "121525f55c072754a239c92292595539148085c872ca28491e85993a6d025dab",
+    "binance/candles_page.json": "486c3dae4bd4f7584ce549e5e69886d3c9da494c6d46b5addb720cef0b8988aa",
+    "binance/price-info.json": "47091bae0da3cb81a7042e79eba2be49080d301afc4708be63fbbb8327a33692",
+    "binance/price.json": "1150b208cc0049b59e006bae4722a86194bd6e0d40b40c9df1135250a0547cf2",
+    "binance/rwa_catalog.json": "f541ad948edd27c41619e8e4015f722422ab7a94a0a271221f26eaf980f4cf68",
+    "binance/rwa_platforms.json": "f697c6e32cc020751b2f66ea9bbc26fdd861805188c8779dbfee4e84431ece6b",
+    "binance/rwa_price.json": "e952e5e4f6b7db4b87374fff7e8e0c573572c15be3dbe471255b4b3e92c3ef8f",
+    "binance/rwa_search.json": "a365343f74a4df88ecf34ad820299e648b831c8de47d994419bce85f331ea5ca",
+    "binance/rwa_tokens.json": "7ca778c0ab5c9c6bacae66a042f4aacf34a4a2e978eaab33219794694ca3c730",
+    "binance/rwa_underlying-market.json": "1072f79dfd337db95e81ba8e7673585c596a0dcfe8196ba1fe029e180b47474a",
+    "binance/rwa_underlying-profile.json": "a96ec18f45500fc1d99db24ff0df9da860cd949763c7a5389f2736af64610490",
+    "binance/supported_chain.json": "cf3bbc09aad2448cdc36bd7bb9620e196ecc4c8d2f421f2ac92f9b584d0925b5",
+    "binance/token_basic-info.json": "85a1f746cc078dcbaf76891e620d6182f696a6b65476a3056b51cfcb238cfc50",
+    "binance/token_search.json": "bab888717ffb9576a87d1d597e5aea20c788cf1361321ae48fe0d06e8181f3e6",
+    "binance/trades.json": "babf91f245d1e6d39ee85ee7de2776b693dad41e242079523a647da8e1571f95",
+    "massive/day_bars.json": "14d008b96dfac07ed51d2de6d1be4b218415b50c90106e61c520ac733ac6dfd0",
+    "massive/dividends.json": "cd913f4fa9bf2e8ea0f6421574d6ad70e75eafe5fb316fbbe3d04abf5aee6d0f",
+    "massive/holidays.json": "aaa2f2914d9e67201e7808a50c427534c9bafe399c0c03dff7a0843aebc5d44c",
+    "massive/minute_bars.json": "0fbb79e607939d643e9bef7512281da53ba1a82fbf9729f088e7c57b9e7cb757",
+    "massive/news.json": "0e7d3d078ec8008ad5f8125120b922016118b78e60539e8ea81841a4e3050555",
+    "massive/splits.json": "900aade5952b561cbf6b06566840151769d0800304aa976882d1376acb8df8e1",
+    "massive/status.json": "47a50878b4abfdf3b1e3bd088e5f4d86c57130e6052d3d989155a0b6b16baa65"
+  }
+}

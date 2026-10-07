@@ -1,0 +1,199 @@
+{
+  "data_mode": "DEMO",
+  "execution_allowed": false,
+  "assets": [
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "AAPL",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "AAPL",
+      "company_name": "Apple (DEMO)",
+      "supported": true,
+      "status": "DEMO"
+    },
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "NVDA",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "NVDA",
+      "company_name": "Nvidia (DEMO)",
+      "supported": true,
+      "status": "DEMO"
+    }
+  ],
+  "issuers": [
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "demo-issuer",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "platform_id": "demo-issuer",
+      "website": null,
+      "chains": [
+        "DEMO"
+      ]
+    }
+  ],
+  "metadata": [
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "DEMO:AAPL",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "AAPL",
+      "company_name": "Apple (DEMO)",
+      "platform_id": "demo-issuer",
+      "chain_id": "DEMO",
+      "contract": "demo:AAPL",
+      "token_symbol": "AAPLDEMO",
+      "asset_type": 1,
+      "token_to_share_ratio": "1.000000000000000001",
+      "decimals": 18,
+      "market_state": "regular",
+      "open_state": true
+    },
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "DEMO:NVDA",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "NVDA",
+      "company_name": "Nvidia (DEMO)",
+      "platform_id": "demo-issuer",
+      "chain_id": "DEMO",
+      "contract": "demo:NVDA",
+      "token_symbol": "NVDADEMO",
+      "asset_type": 1,
+      "token_to_share_ratio": "1.000000000000000001",
+      "decimals": 18,
+      "market_state": "regular",
+      "open_state": true
+    }
+  ],
+  "tokens": [
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "DEMO:AAPL",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "AAPL",
+      "issuer": "demo-issuer",
+      "chain_id": "DEMO",
+      "contract": "demo:AAPL",
+      "token_symbol": "AAPLDEMO",
+      "token_to_share_ratio": "1.000000000000000001",
+      "token_price": "200.1234567890123456789",
+      "volume": "1000.1",
+      "volume_unit": "USD",
+      "trade_count": 3,
+      "market_state": "regular"
+    },
+    {
+      "source": "DEMO_DATA",
+      "provider_identifier": "DEMO:NVDA",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "NVDA",
+      "issuer": "demo-issuer",
+      "chain_id": "DEMO",
+      "contract": "demo:NVDA",
+      "token_symbol": "NVDADEMO",
+      "token_to_share_ratio": "1.000000000000000001",
+      "token_price": "150.9876543210987654321",
+      "volume": "1000.1",
+      "volume_unit": "USD",
+      "trade_count": 3,
+      "market_state": "regular"
+    }
+  ],
+  "equities": [
+    {
+      "source": "DEMO_EQUITY",
+      "provider_identifier": "AAPL:SNAPSHOT",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "AAPL",
+      "price": "199.1234567890123456789",
+      "kind": "SNAPSHOT"
+    },
+    {
+      "source": "DEMO_EQUITY",
+      "provider_identifier": "NVDA:SNAPSHOT",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T11:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "NVDA",
+      "price": "149.9876543210987654321",
+      "kind": "SNAPSHOT"
+    }
+  ],
+  "news": [
+    {
+      "source": "DEMO_NEWS",
+      "provider_identifier": "AAPL:news",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T10:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "AAPL",
+      "headline": "AAPL synthetic DEMO bulletin",
+      "publisher": "DEMO publisher",
+      "url": "https://example.invalid/demo/AAPL",
+      "published_timestamp": "2026-10-06T10:00:00Z"
+    },
+    {
+      "source": "DEMO_NEWS",
+      "provider_identifier": "NVDA:news",
+      "ingestion_timestamp": "2026-10-06T11:00:00Z",
+      "source_timestamp": "2026-10-06T10:00:00Z",
+      "raw_source_timestamp": "2026-10-06T11:00:00Z",
+      "timestamp_unit": "RFC3339",
+      "data_mode": "DEMO",
+      "data_quality": "DEMO",
+      "ticker": "NVDA",
+      "headline": "NVDA synthetic DEMO bulletin",
+      "publisher": "DEMO publisher",
+      "url": "https://example.invalid/demo/NVDA",
+      "published_timestamp": "2026-10-06T10:00:00Z"
+    }
+  ]
+}

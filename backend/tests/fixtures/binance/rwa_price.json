@@ -1,0 +1,16 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "binanceChainId": "56",
+      "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "platformId": "ondo",
+      "tokenPrice": "241.728915263204278587",
+      "referencePrice": "241.315",
+      "tokenPriceUpdatedAt": 1791285434825
+    }
+  ],
+  "timestamp": 1791285435589,
+  "success": true
+}

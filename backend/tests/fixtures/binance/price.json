@@ -1,0 +1,14 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "binanceChainId": "56",
+      "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "price": "241.728915263204278587",
+      "time": 1791285434825
+    }
+  ],
+  "timestamp": 1791285436578,
+  "success": true
+}

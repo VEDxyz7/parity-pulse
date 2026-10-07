@@ -1,0 +1,93 @@
+{
+  "code": 0,
+  "msg": "success",
+  "data": [
+    {
+      "binanceChainId": "56",
+      "tokenName": "NVIDIA (bStocks)",
+      "tokenSymbol": "NVDAB",
+      "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/9dc00cf6f4c44054b6be2d2e032b76c0.png",
+      "tokenContractAddress": "0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+      "decimals": "18",
+      "explorerUrl": "https://bscscan.com/token/0x02fca66c1d1afb4e2a7884261eb00f63598a7436",
+      "change": "2.655",
+      "holders": "139636",
+      "liquidity": "6371371.017643013830142597",
+      "marketCap": "5768718300000.00",
+      "price": "241.4377464803649",
+      "tagList": {
+        "isRecognized": true
+      }
+    },
+    {
+      "binanceChainId": "56",
+      "tokenName": "NVIDIA (Ondo)",
+      "tokenSymbol": "NVDAon",
+      "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/4357ecbcd49d4dea9bca1072cb0da0f6.png",
+      "tokenContractAddress": "0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "decimals": "18",
+      "explorerUrl": "https://bscscan.com/token/0xa9ee28c80f960b889dfbd1902055218cba016f75",
+      "change": "2.7065892085518692",
+      "holders": null,
+      "liquidity": "0",
+      "marketCap": "5762741917500",
+      "price": "241.72891526320427",
+      "tagList": {
+        "isRecognized": true
+      }
+    },
+    {
+      "binanceChainId": "56",
+      "tokenName": "NVIDIA xStock",
+      "tokenSymbol": "NVDAx",
+      "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/15839EA7A056E656FB7DE7A53557C5BF.png",
+      "tokenContractAddress": "0xc845b2894dbddd03858fd2d643b4ef725fe0849d",
+      "decimals": "18",
+      "explorerUrl": "https://bscscan.com/token/0xc845b2894dbddd03858fd2d643b4ef725fe0849d",
+      "change": "0.94",
+      "holders": "619",
+      "liquidity": "0",
+      "marketCap": "5768718300000.00",
+      "price": "235.41197504439774",
+      "tagList": {
+        "isRecognized": true
+      }
+    },
+    {
+      "binanceChainId": "56",
+      "tokenName": "Flap NVDAB Vault",
+      "tokenSymbol": "FNVDAB",
+      "tokenLogoUrl": "https://onchainos.bnbstatic.com/images/web3-data/public/token/logos/90361728569ECB373BFE9DA01395634C.jpg",
+      "tokenContractAddress": "0x23db0a080f3a59b09a5dd6570a373ee09f4dcf37",
+      "decimals": "18",
+      "explorerUrl": "https://bscscan.com/token/0x23db0a080f3a59b09a5dd6570a373ee09f4dcf37",
+      "change": "2.55",
+      "holders": "7283",
+      "liquidity": "132655.072812464137024455852253384942",
+      "marketCap": "77430.082850060760201305576936465609291077484271894882159798",
+      "price": "238.73059901349706",
+      "tagList": {
+        "isRecognized": false
+      }
+    },
+    {
+      "binanceChainId": "56",
+      "tokenName": "ParalUni pToken",
+      "tokenSymbol": "PNVDA",
+      "tokenLogoUrl": null,
+      "tokenContractAddress": "0x4b49704c79a2199b215bc22fef0b7815af0af61a",
+      "decimals": "18",
+      "explorerUrl": "https://bscscan.com/token/0x4b49704c79a2199b215bc22fef0b7815af0af61a",
+      "change": "0.0",
+      "holders": "119",
+      "liquidity": "36325.04247146752731044080565283691",
+      "marketCap": null,
+      "price": "0.0",
+      "tagList": {
+        "isRecognized": false
+      }
+    }
+  ],
+  "timestamp": 1791285436065,
+  "success": true
+}

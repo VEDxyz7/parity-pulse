@@ -1,0 +1,166 @@
+{
+  "session_tested": "closed",
+  "request_parameters": {
+    "symbol": "NVDA",
+    "interval": "1min",
+    "timezone": "UTC",
+    "dp": 11,
+    "prepost": "false"
+  },
+  "planned_count": 3,
+  "spacing_seconds": 65,
+  "samples": [
+    {
+      "returned": {
+        "symbol": "NVDA",
+        "currency": "USD",
+        "exchange": "NASDAQ",
+        "mic_code": "XNGS",
+        "close": "239.17500000000",
+        "timestamp": 1791316740,
+        "datetime": "2026-10-06 19:59:00",
+        "last_quote_at": 1791316740,
+        "is_market_open": false
+      },
+      "received_at_utc": "2026-10-06T20:02:00.698803+00:00",
+      "ages": {
+        "timestamp": {
+          "utc": "2026-10-06T19:59:00+00:00",
+          "receipt_minus_field_seconds": "180.698803",
+          "within_unchanged_120s": false
+        },
+        "last_quote_at": {
+          "utc": "2026-10-06T19:59:00+00:00",
+          "receipt_minus_field_seconds": "180.698803",
+          "within_unchanged_120s": false
+        }
+      },
+      "valid": true,
+      "datetime_matches_candle_timestamp": true,
+      "receipt_in_regular_clock_window": false
+    },
+    {
+      "returned": {
+        "symbol": "NVDA",
+        "currency": "USD",
+        "exchange": "NASDAQ",
+        "mic_code": "XNGS",
+        "close": "239.17500000000",
+        "timestamp": 1791316740,
+        "datetime": "2026-10-06 19:59:00",
+        "last_quote_at": 1791316740,
+        "is_market_open": false
+      },
+      "received_at_utc": "2026-10-06T20:03:05.810036+00:00",
+      "ages": {
+        "timestamp": {
+          "utc": "2026-10-06T19:59:00+00:00",
+          "receipt_minus_field_seconds": "245.810036",
+          "within_unchanged_120s": false
+        },
+        "last_quote_at": {
+          "utc": "2026-10-06T19:59:00+00:00",
+          "receipt_minus_field_seconds": "245.810036",
+          "within_unchanged_120s": false
+        }
+      },
+      "valid": true,
+      "datetime_matches_candle_timestamp": true,
+      "receipt_in_regular_clock_window": false
+    },
+    {
+      "returned": {
+        "symbol": "NVDA",
+        "currency": "USD",
+        "exchange": "NASDAQ",
+        "mic_code": "XNGS",
+        "close": "239.17500000000",
+        "timestamp": 1791316740,
+        "datetime": "2026-10-06 19:59:00",
+        "last_quote_at": 1791316740,
+        "is_market_open": false
+      },
+      "received_at_utc": "2026-10-06T20:04:10.864352+00:00",
+      "ages": {
+        "timestamp": {
+          "utc": "2026-10-06T19:59:00+00:00",
+          "receipt_minus_field_seconds": "310.864352",
+          "within_unchanged_120s": false
+        },
+        "last_quote_at": {
+          "utc": "2026-10-06T19:59:00+00:00",
+          "receipt_minus_field_seconds": "310.864352",
+          "within_unchanged_120s": false
+        }
+      },
+      "valid": true,
+      "datetime_matches_candle_timestamp": true,
+      "receipt_in_regular_clock_window": false
+    }
+  ],
+  "reads": [
+    {
+      "provider": "twelve",
+      "endpoint": "GET /quote",
+      "parameters": {
+        "symbol": "NVDA",
+        "interval": "1min",
+        "timezone": "UTC",
+        "dp": 11,
+        "prepost": "false"
+      },
+      "requested_at": "2026-10-06T20:02:00.185372+00:00",
+      "http_status": 200,
+      "received_at": "2026-10-06T20:02:00.698803+00:00",
+      "rate_limit_headers": {
+        "api-credits-left": "7",
+        "api-credits-used": "1"
+      },
+      "result": "RESPONSE_RECEIVED_NOT_AUTOMATIC_TRUST_ELIGIBILITY"
+    },
+    {
+      "provider": "twelve",
+      "endpoint": "GET /quote",
+      "parameters": {
+        "symbol": "NVDA",
+        "interval": "1min",
+        "timezone": "UTC",
+        "dp": 11,
+        "prepost": "false"
+      },
+      "requested_at": "2026-10-06T20:03:05.190276+00:00",
+      "http_status": 200,
+      "received_at": "2026-10-06T20:03:05.810036+00:00",
+      "rate_limit_headers": {
+        "api-credits-left": "7",
+        "api-credits-used": "1"
+      },
+      "result": "RESPONSE_RECEIVED_NOT_AUTOMATIC_TRUST_ELIGIBILITY"
+    },
+    {
+      "provider": "twelve",
+      "endpoint": "GET /quote",
+      "parameters": {
+        "symbol": "NVDA",
+        "interval": "1min",
+        "timezone": "UTC",
+        "dp": 11,
+        "prepost": "false"
+      },
+      "requested_at": "2026-10-06T20:04:10.195124+00:00",
+      "http_status": 200,
+      "received_at": "2026-10-06T20:04:10.864352+00:00",
+      "rate_limit_headers": {
+        "api-credits-left": "7",
+        "api-credits-used": "1"
+      },
+      "result": "RESPONSE_RECEIVED_NOT_AUTOMATIC_TRUST_ELIGIBILITY"
+    }
+  ],
+  "complete": true,
+  "production_writes": 0,
+  "execution_calls": 0,
+  "trust_gate_modified": false,
+  "freshness_threshold_seconds": 120,
+  "exact_last_trade_timestamp_claimed": false
+}

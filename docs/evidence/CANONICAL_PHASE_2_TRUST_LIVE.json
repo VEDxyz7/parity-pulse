@@ -1,0 +1,202 @@
+{
+  "timestamp": "2026-10-06T16:56:36.219271+00:00",
+  "data_mode": "LIVE",
+  "verification": "ACTUAL_READ_ONLY_PROVIDERS",
+  "ticker": "NVDA",
+  "status": "ASSESSED",
+  "market_regime": "REGULAR",
+  "representations": [
+    {
+      "issuer": "bstock",
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "reference_status": "UNAVAILABLE",
+      "reference_quality": "MISSING",
+      "liquidity_status": "UNAVAILABLE",
+      "news_state": "PARTIAL",
+      "news_coverage": "PARTIAL",
+      "baseline_episodes": 0,
+      "analogues": 0,
+      "economic_comparison_available": false,
+      "reason_codes": [
+        "ANALOGUES_INSUFFICIENT",
+        "BASELINE_INSUFFICIENT",
+        "FEATURES_UNAVAILABLE",
+        "INDEPENDENT_COMPARISON_UNAVAILABLE",
+        "INDEPENDENT_REFERENCE_UNAVAILABLE",
+        "LIQUIDITY_UNAVAILABLE",
+        "NEWS_COVERAGE_PARTIAL",
+        "RATIO_SOURCE_ASOF_UNAVAILABLE_OBSERVED_AT_RECEIPT",
+        "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+      ],
+      "missing_evidence": [
+        "ANALOGUES_INSUFFICIENT",
+        "BASELINE_INSUFFICIENT",
+        "FEATURES_UNAVAILABLE",
+        "INDEPENDENT_COMPARISON_UNAVAILABLE",
+        "INDEPENDENT_REFERENCE_UNAVAILABLE",
+        "LIQUIDITY_UNAVAILABLE",
+        "NEWS_COVERAGE_PARTIAL",
+        "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+      ]
+    },
+    {
+      "issuer": "ondo",
+      "classification": "INSUFFICIENT_EVIDENCE",
+      "reference_status": "UNAVAILABLE",
+      "reference_quality": "MISSING",
+      "liquidity_status": "UNAVAILABLE",
+      "news_state": "PARTIAL",
+      "news_coverage": "PARTIAL",
+      "baseline_episodes": 0,
+      "analogues": 0,
+      "economic_comparison_available": false,
+      "reason_codes": [
+        "ANALOGUES_INSUFFICIENT",
+        "BASELINE_INSUFFICIENT",
+        "FEATURES_UNAVAILABLE",
+        "INDEPENDENT_COMPARISON_UNAVAILABLE",
+        "INDEPENDENT_REFERENCE_UNAVAILABLE",
+        "LIQUIDITY_UNAVAILABLE",
+        "NEWS_COVERAGE_PARTIAL",
+        "RATIO_SOURCE_ASOF_UNAVAILABLE_OBSERVED_AT_RECEIPT",
+        "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+      ],
+      "missing_evidence": [
+        "ANALOGUES_INSUFFICIENT",
+        "BASELINE_INSUFFICIENT",
+        "FEATURES_UNAVAILABLE",
+        "INDEPENDENT_COMPARISON_UNAVAILABLE",
+        "INDEPENDENT_REFERENCE_UNAVAILABLE",
+        "LIQUIDITY_UNAVAILABLE",
+        "NEWS_COVERAGE_PARTIAL",
+        "VOLUME_OR_LIQUIDITY_UNAVAILABLE"
+      ]
+    }
+  ],
+  "limitations": [
+    "EARNINGS_CALENDAR_UNAVAILABLE",
+    "INDEPENDENT_EQUITY_FORBIDDEN",
+    "NO_EXECUTION_AUTHORITY",
+    "PARTIAL: 3 invalid representations excluded",
+    "TRADE_AND_CANDLE_UNITS_EXCLUDED",
+    "TRUST_GATE_BLOCKED_PENDING_ACCOUNT_AND_HISTORY_EVIDENCE",
+    "UNCALIBRATED_ENGINEERING_RULES"
+  ],
+  "persisted": "PASS",
+  "mode_isolation": "PASS",
+  "no_broadcast": "PASS",
+  "llm_authoritative": false,
+  "trust_gate": "BLOCKED",
+  "reads": [
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/search",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:18.131411+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/supported/chain",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:18.324008+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/platforms",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:18.571168+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/tokens",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:19.217383+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/underlying-profile",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:19.419420+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/underlying-profile",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:19.750233+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/price",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:19.950592+00:00"
+    },
+    {
+      "endpoint_tested": "GET /api/v1/dex/market/rwa/price",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:20.205459+00:00"
+    },
+    {
+      "endpoint_tested": "POST /api/v1/dex/market/price-info",
+      "http_business_response_status": {
+        "http": 200,
+        "business": 0
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:24.383152+00:00"
+    },
+    {
+      "endpoint_tested": "GET /v2/snapshot/locale/us/markets/stocks/tickers/NVDA",
+      "http_business_response_status": {
+        "http": 403,
+        "business": null
+      },
+      "permission_result": "UNAVAILABLE",
+      "capability_result": "FORBIDDEN",
+      "timestamp_utc": "2026-10-06T16:56:24.188673+00:00"
+    },
+    {
+      "endpoint_tested": "GET /v2/reference/news",
+      "http_business_response_status": {
+        "http": 200,
+        "business": "OK"
+      },
+      "permission_result": "VERIFIED_FOR_THIS_READ",
+      "capability_result": "PASS",
+      "timestamp_utc": "2026-10-06T16:56:36.176939+00:00"
+    }
+  ]
+}
