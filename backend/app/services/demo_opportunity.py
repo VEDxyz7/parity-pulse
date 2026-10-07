@@ -30,6 +30,7 @@ class DemoOpportunityFlow:
         self.risk_engine = RiskEngine()
         self.trust_results = OrderedDict()
         self.opportunities = OrderedDict()
+        self.risks = OrderedDict()
         self.lock = Lock()
 
     def _save(self, cache, key, value):
@@ -83,9 +84,11 @@ class DemoOpportunityFlow:
             self.fixture.risk_policy,
             now=result.opportunity.evaluated_at + elapsed,
         )
-        return DemoRiskResult(
+        result = DemoRiskResult(
             **MARKER,
             scenario_id=result.scenario_id,
             inputs_fixture_sha256=self.fixture_hash,
             risk=decision,
         )
+        self._save(self.risks, decision.risk_id, result)
+        return result

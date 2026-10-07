@@ -39,14 +39,14 @@ interface Envelope {
 export interface OpportunityResult extends Envelope { trust_fixture_sha256: string; opportunity: Opportunity }
 export interface RiskResult extends Envelope { risk: Risk }
 
-function object(v: unknown): v is Record<string, unknown> { return v !== null && typeof v === 'object' && !Array.isArray(v) }
-function marked(v: unknown): v is Record<string, unknown> {
+export function object(v: unknown): v is Record<string, unknown> { return v !== null && typeof v === 'object' && !Array.isArray(v) }
+export function marked(v: unknown): v is Record<string, unknown> {
   return object(v) && v.dataset_type === 'DEMO_FIXTURE' && v.synthetic === true && v.production_eligible === false
 }
 function invalid(): never { throw new Error('Demo analysis unavailable or invalid. No action was approved.') }
-function uuid(v: unknown): boolean { return typeof v === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(v) }
-function date(v: unknown): boolean { return typeof v === 'string' && /(?:Z|[+-]\d{2}:\d{2})$/.test(v) && Number.isFinite(Date.parse(v)) }
-function decimal(v: unknown): boolean {
+export function uuid(v: unknown): boolean { return typeof v === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(v) }
+export function date(v: unknown): boolean { return typeof v === 'string' && /(?:Z|[+-]\d{2}:\d{2})$/.test(v) && Number.isFinite(Date.parse(v)) }
+export function decimal(v: unknown): boolean {
   if (typeof v !== 'string' || v.length > 140 || !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(v)) return false
   const [mantissa, exponent = '0'] = v.toLowerCase().split('e')
   return mantissa.replace(/[^0-9]/g, '').length <= 96 && Math.abs(Number(exponent)) <= 36
@@ -56,7 +56,7 @@ function parts(v: string): [bigint, number] {
   const [mantissa, exponent = '0'] = v.toLowerCase().split('e')
   return [BigInt(mantissa.replace('.', '')), Number(exponent) - (mantissa.split('.')[1]?.length ?? 0)]
 }
-function compare(a: string, b: string): number {
+export function compare(a: string, b: string): number {
   const [av, ae] = parts(a), [bv, be] = parts(b)
   const exponent = Math.min(ae, be)
   const left = av * 10n ** BigInt(ae - exponent), right = bv * 10n ** BigInt(be - exponent)
@@ -66,14 +66,14 @@ const requiredChecks = ['OPPORTUNITY_ACTIONABLE', 'TRUST_REQUIRED', 'CONFIDENCE_
   'TIMESTAMP_ALIGNMENT', 'RISK_BUDGET_LIMIT', 'DAILY_LOSS_LIMIT', 'TRADE_COUNT_LIMIT', 'COOLDOWN', 'SLIPPAGE_LIMIT',
   'LIQUIDITY_MINIMUM', 'LIQUIDITY_PERCENTILE', 'NET_EDGE_MINIMUM', 'TOKEN_SIZE_METADATA', 'POSITION_CAP', 'BUDGET_CAP',
   'WALLET_LIMIT', 'PORTFOLIO_CAP', 'STRESS_RISK_BUDGET', 'STRESS_DAILY_LOSS', 'LIQUIDITY_POSITION_CAP']
-function strings(v: unknown): v is string[] { return Array.isArray(v) && v.length > 0 && v.length <= 40 && v.every(s => typeof s === 'string' && s.length > 0 && s.length <= 300) }
+export function strings(v: unknown): v is string[] { return Array.isArray(v) && v.length > 0 && v.length <= 40 && v.every(s => typeof s === 'string' && s.length > 0 && s.length <= 300) }
 function safety(v: unknown): v is Record<string, unknown> {
   return marked(v) && v.data_mode === 'DEMO' && v.execution_mode === 'DRY_RUN' && v.approval_mode === 'PROPOSE_ONLY' &&
     v.live_trading_enabled === false && v.require_simulation === true && v.execution_ready === false && v.transaction_broadcast === false &&
     v.no_broadcast_statement === 'No real transaction was broadcast.' && v.quote_status === 'UNAVAILABLE' &&
     v.preparation_status === 'UNAVAILABLE' && v.simulation_status === 'UNAVAILABLE'
 }
-function envelope(v: unknown, scenario: ScenarioId): v is Record<string, unknown> {
+export function envelope(v: unknown, scenario: ScenarioId): v is Record<string, unknown> {
   if (!marked(v) || v.runtime_mode !== 'DEMO' || v.scenario_id !== scenario || typeof v.inputs_fixture_sha256 !== 'string' ||
     !/^[0-9a-f]{64}$/.test(v.inputs_fixture_sha256) || !object(v.production_gates)) return false
   return ['DATA_GATE', 'DRY_RUN_GATE'].every(k => (v.production_gates as Record<string, unknown>)[k] === 'PASS') &&

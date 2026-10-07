@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
 import { fetchOpportunity, fetchRisk, type OpportunityResult, type RiskResult } from '../services/demoOpportunity'
+import { DemoPreparationFlow } from './DemoPreparationFlow'
 
 export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
   const [opportunity, setOpportunity] = useState<OpportunityResult | null>(null)
@@ -44,7 +45,7 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
   return <section className="demo-opportunity-flow" aria-label="Demo Opportunity and Risk">
     <h3>Trust → Opportunity → Risk</h3>
     <p>DEMO SANDBOX · SIMULATED DATA — NOT LIVE MARKET DATA</p>
-    <p>Economic targets, costs and risk limits are explicitly synthetic assumptions. Trust confidence remains uncalibrated. No quote, transaction preparation or simulation is available in this stage.</p>
+    <p>Economic targets, costs and risk limits are explicitly synthetic assumptions. Trust confidence remains uncalibrated. DEMO quotes, unsigned requests and local constraint checks grant no execution authority.</p>
     <button className="refresh-button" disabled={busy !== null} onClick={() => { void analyze('opportunity') }}>
       {busy === 'opportunity' ? 'Analyzing opportunity…' : 'Analyze Opportunity'}
     </button>
@@ -91,6 +92,9 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
       </dl>
       <p>Stress loss is a scenario estimate, not a guaranteed maximum loss.</p>
       <ul>{risk.risk.checks.map(check => <li key={check.code}>{check.passed ? 'PASS' : 'FAIL'} · {check.code}: {check.detail}</li>)}</ul>
+      {opportunity && risk.risk.status === 'PASS' && opportunity.opportunity.status === 'ACTIONABLE' ?
+        <DemoPreparationFlow key={risk.risk.risk_id} trust={trust} opportunity={opportunity} risk={risk} opportunityExpired={expired} /> :
+        <p>Quote, transaction and simulation not run: no actionable Opportunity with Risk PASS.</p>}
     </>}
     {opportunity && <details><summary>Opportunity / Risk audit contracts</summary><pre>{JSON.stringify({ opportunity, risk }, null, 2)}</pre></details>}
   </section>

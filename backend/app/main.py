@@ -11,6 +11,7 @@ from starlette.exceptions import HTTPException
 from app import __version__
 from app.api.assets import router as assets_router
 from app.api.demo_opportunity import router as demo_opportunity_router
+from app.api.demo_preparation import router as demo_preparation_router
 from app.api.demo_sandbox import router as demo_sandbox_router
 from app.api.exposure import router as exposure_router
 from app.api.middleware import RequestContextMiddleware
@@ -22,6 +23,7 @@ from app.database import Database
 from app.demo import load_demo_fixture
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
+from app.services.demo_preparation import DemoPreparationFlow
 from app.services.demo_sandbox import DemoTrustSandbox
 from app.services.exposure import ExposureService
 from app.services.trust import TrustService
@@ -84,6 +86,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 if configured.runtime_mode == "DEMO"
                 else None
             )
+            app.state.demo_preparation = (
+                DemoPreparationFlow(app.state.demo_opportunity)
+                if configured.runtime_mode == "DEMO"
+                else None
+            )
             for client in app.state.data_layer.clients:
                 client.run_id = app.state.run_id
             app.state.demo_fixture = load_demo_fixture() if configured.data_mode == "DEMO" else None
@@ -120,6 +127,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             app.state.trust = None
             app.state.demo_sandbox = None
             app.state.demo_opportunity = None
+            app.state.demo_preparation = None
             if database is not None:
                 database.close()
             app.state.database = None
@@ -172,4 +180,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)
+        app.include_router(demo_preparation_router)
     return app
