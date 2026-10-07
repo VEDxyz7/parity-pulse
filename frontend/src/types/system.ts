@@ -4,6 +4,7 @@ export type GateName =
   | 'RFQ_LIVE_GATE' | 'AGENTIC_WALLET_LIVE_GATE'
 
 export interface SystemStatus {
+  runtime_mode?: 'DEMO'
   environment: 'development' | 'test' | 'production'
   data_mode: 'DEMO' | 'LIVE_READ_ONLY'
   execution_mode: 'DRY_RUN'

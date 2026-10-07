@@ -1,4 +1,4 @@
-"""Typed startup configuration; LIVE is deliberately unavailable in Phase 1."""
+"""Typed startup configuration; live execution remains unavailable in every runtime."""
 
 from pathlib import Path
 from typing import Literal
@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     )
 
     app_env: Literal["development", "test", "production"] = "development"
+    runtime_mode: Literal["LIVE", "DEMO"] = "LIVE"
     data_mode: Literal["DEMO", "LIVE_READ_ONLY"] = "DEMO"
     execution_mode: Literal["DRY_RUN", "LIVE"] = "DRY_RUN"
     approval_mode: Literal["PROPOSE_ONLY", "AUTONOMOUS"] = "PROPOSE_ONLY"
@@ -74,6 +75,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def non_live_only(self) -> "Settings":
+        if self.runtime_mode == "DEMO" and self.data_mode != "DEMO":
+            raise ValueError("DEMO sandbox requires explicit DEMO data mode")
         if self.execution_mode != "DRY_RUN" or self.live_trading_enabled:
             raise ValueError("LIVE execution is blocked in Phase 1")
         if self.approval_mode != "PROPOSE_ONLY":

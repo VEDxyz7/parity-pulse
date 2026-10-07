@@ -22,7 +22,8 @@ export function parseSystemStatus(value: unknown): SystemStatus {
     throw new Error('Backend status could not be verified. Live execution remains unavailable.')
   }
   if ((value.data_mode === 'DEMO' && value.demo_fixture === null) ||
-      (value.data_mode === 'LIVE_READ_ONLY' && value.demo_fixture !== null)) {
+      (value.data_mode === 'LIVE_READ_ONLY' && value.demo_fixture !== null) ||
+      (value.runtime_mode !== undefined && (value.runtime_mode !== 'DEMO' || value.data_mode !== 'DEMO'))) {
     throw new Error('Backend status could not be verified. Demo data must remain isolated.')
   }
   return value as unknown as SystemStatus

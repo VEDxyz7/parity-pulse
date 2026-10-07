@@ -110,4 +110,9 @@ h1 { font-weight: 500; letter-spacing: -1.1px; font-size: clamp(24px, 2.4vw, 33p
 .trust-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .trust-facts dt { font-size: 12px; color: #657369; }
 .trust-facts dd { font-size: 13px; margin: 4px 0; overflow-wrap: anywhere; }
+.demo-sandbox > p, .demo-sandbox > details, .demo-feature-evidence { margin: 16px 24px; }
+.demo-sandbox select { background: var(--surface); color: inherit; border: 1px solid #d5dcd7; border-radius: 8px; padding: 10px 12px; min-width: 0; max-width: 100%; }
+.demo-feature-evidence h3 { font-size: 14px; }
+.demo-feature-evidence pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+@media (max-width: 600px) { .demo-sandbox > p, .demo-sandbox > details, .demo-feature-evidence { margin-left: 16px; margin-right: 16px; } }
 @media (max-width: 600px) { .trust-facts { grid-template-columns: 1fr; } .trust-form, .trust-note, .trust-results { margin-left: 16px; margin-right: 16px; } }

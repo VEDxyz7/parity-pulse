@@ -5,6 +5,7 @@ import {
 import { useSystemStatus } from './hooks/useSystemStatus'
 import { AskFlow } from './components/AskFlow'
 import { TrustPanel } from './components/TrustPanel'
+import { DemoTrustSandbox } from './components/DemoTrustSandbox'
 import { StatusBadge } from './components/StatusBadge'
 import type { GateName } from './types/system'
 
@@ -50,6 +51,7 @@ export function App() {
     <div className="workspace">
       <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>Overview</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
       <main id="main-content">
+        {system?.runtime_mode === 'DEMO' && <section className="connection-alert" aria-label="Synthetic sandbox mode"><ShieldCheck size={19} /><div><strong>DEMO SANDBOX</strong><p>SIMULATED DATA — NOT LIVE MARKET DATA</p></div></section>}
         <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / FOUNDATION</div><h1>Your workspace, ready to grow.</h1><p>A clear view of your environment and the capabilities available today.</p></div><button className="refresh-button" onClick={() => { void query.refetch() }} disabled={query.isFetching}><RefreshCw size={15} className={query.isFetching ? 'spinning' : ''} />{query.isFetching ? 'Checking' : 'Refresh status'}</button></div>
         <section className="foundation-banner" aria-label="Development scope"><div className="banner-icon"><Layers3 size={26} /></div><div><span className="banner-kicker">{askReady ? 'CANONICAL PHASE 01' : `ENGINEERING STAGE ${system?.phase === 2 ? '02' : '01'}`}</span><h2>A safe starting point.</h2><p>{askReady ? 'Working Ask Flow: deterministic exposure estimates with persisted proposals. Trust assessments are available separately; the Trust gate remains blocked.' : system?.phase === 2 ? 'Read-only data is available through the backend. Intelligence and execution workflows will follow in later phases.' : 'The application foundation is here. Intelligence and execution workflows will follow in later phases.'}</p></div><span className="banner-tag"><LockKeyhole size={14} />Live execution unavailable</span></section>
         {query.isError && <div role="alert" className="connection-alert"><Radio size={19} /><div><strong>We couldn’t reach a healthy backend.</strong><p>Check that the local backend is running, then refresh. Service values remain unknown until verified.</p></div></div>}
@@ -59,7 +61,7 @@ export function App() {
           <article className="metric"><span>Execution mode<ShieldCheck size={17} /></span><strong>{system?.execution_mode.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>Proposal only · no live execution</small></article>
         </section>
         {askReady && system && <AskFlow key={`${system.run_id}:${system.data_mode}`} mode={system.data_mode} />}
-        {askReady && system && <TrustPanel key={`trust:${system.run_id}:${system.data_mode}`} mode={system.data_mode} />}
+        {askReady && system && (system.runtime_mode === 'DEMO' ? <DemoTrustSandbox key={`sandbox:${system.run_id}`} /> : <TrustPanel key={`trust:${system.run_id}:${system.data_mode}`} mode={system.data_mode} />)}
         <div className="panels">
           <section className="panel" id="system"><div className="panel-heading"><div><h2>System health</h2><p>The essentials behind your workspace.</p></div><Activity size={19} /></div>
             <div className="health-row"><div className="row-icon"><Radio size={17} /></div><div><strong>Backend service</strong><small>FastAPI application</small></div><StatusBadge tone={available ? 'green' : 'amber'}>{query.isPending ? 'Checking' : available ? 'Healthy' : 'Unavailable'}</StatusBadge></div>

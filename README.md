@@ -1,5 +1,7 @@
 # Parity Pulse
 
+Hackathon Demo Stage 1 now provides an explicit **DEMO SANDBOX** with three synthetic Trust scenarios derived through the existing engine. Opt in with `RUNTIME_MODE=DEMO DATA_MODE=DEMO`; all sandbox databases are disposable memory and production Trust remains BLOCKED. The default `RUNTIME_MODE=LIVE` preserves the existing application path and does not enable live trading. See [sandbox runbook, isolation and verification](docs/DEMO_TRUST_SANDBOX.md).
+
 Canonical Phase 1 — Working Ask Flow is PASS for deterministic, non-executable exposure estimates and persisted DRY_RUN proposals. Engineering Stages 1/2 remain PASS. The backend implements dynamic Binance RWA discovery, market data, independent Massive equity/news adapters, a versioned U.S. calendar, exact Decimal normalization and isolated SQLite persistence. The frontend accepts stock budget requests and displays backend-authoritative estimates, issuer comparison, unknown costs and execution blockers. Canonical Phase 2 adds a separate deterministic analytical Trust endpoint/panel; its gate remains BLOCKED by unavailable real evidence. Opportunity, agents and live execution remain deferred.
 
 **All LIVE execution is blocked.** The application rejects LIVE configuration even if a flag is set to true. It has no order, broadcast, wallet mutation, portfolio or trading endpoints.

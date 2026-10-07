@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException
 
 from app import __version__
 from app.api.assets import router as assets_router
+from app.api.demo_sandbox import router as demo_sandbox_router
 from app.api.exposure import router as exposure_router
 from app.api.middleware import RequestContextMiddleware
 from app.api.system import router
@@ -19,6 +20,7 @@ from app.config import Settings
 from app.database import Database
 from app.demo import load_demo_fixture
 from app.services.data_layer import DataLayer
+from app.services.demo_sandbox import DemoTrustSandbox
 from app.services.exposure import ExposureService
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
@@ -62,12 +64,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         configure_logging(configured.log_level, configured.redaction_values())
         database = None
         try:
-            database = Database(configured.database_url)
+            database = Database(
+                "sqlite:///:memory:"
+                if configured.runtime_mode == "DEMO"
+                else configured.database_url
+            )
             database.initialize()
             app.state.database = database
             app.state.data_layer = DataLayer(configured, database)
             app.state.exposure = ExposureService(app.state.data_layer, database)
             app.state.trust = TrustService(app.state.data_layer, database)
+            app.state.demo_sandbox = (
+                DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
+            )
             for client in app.state.data_layer.clients:
                 client.run_id = app.state.run_id
             app.state.demo_fixture = load_demo_fixture() if configured.data_mode == "DEMO" else None
@@ -102,6 +111,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             app.state.data_layer = None
             app.state.exposure = None
             app.state.trust = None
+            app.state.demo_sandbox = None
             if database is not None:
                 database.close()
             app.state.database = None
@@ -151,4 +161,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(assets_router)
     app.include_router(exposure_router)
     app.include_router(trust_router)
+    if configured.runtime_mode == "DEMO":
+        app.include_router(demo_sandbox_router)
     return app

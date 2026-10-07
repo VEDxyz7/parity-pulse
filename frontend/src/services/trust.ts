@@ -26,6 +26,11 @@ export interface TrustRepresentation {
   news: { state: string; coverage: string; article_ids: string[]; provider_llm_sentiment_used: false }
   analogues: { status: string; retrieved_sample_count: number; eligible_sample_count: number }
   reason_codes: string[]; missing_evidence: string[]
+  features?: {
+    volume_24h_usd: string; liquidity_usd: string; persistence_seconds: string;
+    time_to_open_seconds: string; starting_deviation: string; ending_deviation: string;
+    absolute_deviation: string; asof: string; available_at: string; news_state: string
+  } | null
 }
 function object(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)

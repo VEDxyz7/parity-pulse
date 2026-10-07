@@ -41,3 +41,7 @@ class SystemStatus(PublicModel):
     run_id: str
     gates: GateStatus
     demo_fixture: FixtureStatus | None
+
+
+class DemoSystemStatus(SystemStatus):
+    runtime_mode: Literal["DEMO"] = "DEMO"

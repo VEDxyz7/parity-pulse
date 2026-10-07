@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Response
 
 from app import __version__
-from app.api.schemas import FixtureStatus, GateStatus, HealthStatus, SystemStatus
+from app.api.schemas import DemoSystemStatus, FixtureStatus, GateStatus, HealthStatus, SystemStatus
 
 router = APIRouter(prefix="/api", tags=["foundation"])
 
@@ -23,13 +23,14 @@ def health(request: Request, response: Response):
     )
 
 
-@router.get("/system-status", response_model=SystemStatus)
+@router.get("/system-status", response_model=DemoSystemStatus | SystemStatus)
 def system_status(request: Request, response: Response):
     settings, state = request.app.state.settings, request.app.state
     status = database_status(request)
     response.status_code = 200 if status == "connected" else 503
     fixture = state.demo_fixture
-    return SystemStatus(
+    model = DemoSystemStatus if settings.runtime_mode == "DEMO" else SystemStatus
+    return model(
         environment=settings.app_env,
         data_mode=settings.data_mode,
         execution_mode=settings.execution_mode,

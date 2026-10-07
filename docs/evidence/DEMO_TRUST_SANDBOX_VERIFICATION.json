@@ -1,0 +1,565 @@
+{
+  "verified_at_utc": "2026-10-07T04:03:58.057189+00:00",
+  "stage": "HACKATHON_DEMO_STAGE_1",
+  "stage_status": "PASS_SYNTHETIC_SANDBOX_ONLY",
+  "dataset_type": "DEMO_FIXTURE",
+  "synthetic": true,
+  "production_eligible": false,
+  "production_gates": {
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "TRUST_GATE": "BLOCKED",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+  },
+  "production_database_counts_before": {
+    "phase2-trust-live-verification.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 1,
+      "token_observations": 4,
+      "equity_observations": 0
+    },
+    "phase1-live-verification.db": {
+      "token_observations": 2,
+      "equity_observations": 0
+    },
+    "phase2-trust-demo-verification.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 0,
+      "token_observations": 0,
+      "equity_observations": 0
+    },
+    "phase1-demo-verification.db": {
+      "token_observations": 0,
+      "equity_observations": 0
+    },
+    "phase2-trust-history-investigation.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 1,
+      "token_observations": 83,
+      "equity_observations": 2083
+    },
+    "phase2-verification.db": {
+      "token_observations": 25,
+      "equity_observations": 946
+    },
+    "parity-pulse.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 0,
+      "token_observations": 0,
+      "equity_observations": 0
+    },
+    "phase2-trust-remediation-verification.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 2,
+      "token_observations": 8,
+      "equity_observations": 0
+    }
+  },
+  "production_database_counts_after": {
+    "parity-pulse.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 0,
+      "token_observations": 0,
+      "equity_observations": 0
+    },
+    "phase1-demo-verification.db": {
+      "token_observations": 0,
+      "equity_observations": 0
+    },
+    "phase1-live-verification.db": {
+      "token_observations": 2,
+      "equity_observations": 0
+    },
+    "phase2-trust-demo-verification.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 0,
+      "token_observations": 0,
+      "equity_observations": 0
+    },
+    "phase2-trust-history-investigation.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 1,
+      "token_observations": 83,
+      "equity_observations": 2083
+    },
+    "phase2-trust-live-verification.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 1,
+      "token_observations": 4,
+      "equity_observations": 0
+    },
+    "phase2-trust-remediation-verification.db": {
+      "trust_samples": 0,
+      "trust_episodes": 0,
+      "trust_assessments": 2,
+      "token_observations": 8,
+      "equity_observations": 0
+    },
+    "phase2-verification.db": {
+      "token_observations": 25,
+      "equity_observations": 946
+    }
+  },
+  "all_8_existing_databases_byte_identical": true,
+  "real_qualifying_baseline_episodes": 0,
+  "real_qualifying_opening_model_episodes": 0,
+  "real_eligible_analogues": 0,
+  "protected_artifacts": {
+    "MASTER_BUILD_PROMPT.md": {
+      "sha256": "45ef4fbc1547c850308267cefb6041293351d0cc36d7be423348b18d3b17991f",
+      "unchanged": true
+    },
+    "backend/app/models/trust.py": {
+      "sha256": "360f4282ad4ebcf1d9c862fa93b2fb26d69770838a945d190eff36c2e536ab0f",
+      "unchanged": true
+    },
+    "backend/app/services/trust.py": {
+      "sha256": "838867cff620ff5ded33c0c19cbc4fd69905ad595eb32620751bd5f42a011bc2",
+      "unchanged": true
+    },
+    "backend/app/services/trust_classifier.py": {
+      "sha256": "2a39995848f500885973b57d6d120056690de3773bef1001aa0514d9592903b9",
+      "unchanged": true
+    },
+    "backend/app/services/trust_evidence.py": {
+      "sha256": "e465fd330b63ad535213bd5a47b56d205d7bd6b179871fee759cb61551f33d7d",
+      "unchanged": true
+    },
+    "backend/app/services/trust_history.py": {
+      "sha256": "94ca395c16de83942c62c8a4ef44067100e92644b29dba6567291278f409c84d",
+      "unchanged": true
+    },
+    "data/parity-pulse.db": {
+      "sha256": "0a90f5d28093407fbe47242e79e525ba3d0345f1f1cac063b9d145c700b426e3",
+      "unchanged": true
+    },
+    "data/phase1-demo-verification.db": {
+      "sha256": "b789b4b4dedcac9ba7de8d5335e713426c0369064ba0f4f51b0d5fb4b912edf2",
+      "unchanged": true
+    },
+    "data/phase1-live-verification.db": {
+      "sha256": "f2b7e86848f7b62f1668d7eb407da925e4dee2eecd93a1410ea832a60374a4d0",
+      "unchanged": true
+    },
+    "data/phase2-trust-demo-verification.db": {
+      "sha256": "9580f74ed8d5993bfa98265f3fa2259f8549d4707aae8bf99fb1df70454c2835",
+      "unchanged": true
+    },
+    "data/phase2-trust-history-investigation.db": {
+      "sha256": "8d90dafeaad215787fe94ec8cac54141afa324a82e49a5314cf50aef6e07ea24",
+      "unchanged": true
+    },
+    "data/phase2-trust-live-verification.db": {
+      "sha256": "67b702ee4419223f27e94f214005f9972bec2abecc68db9986683c65a3d3647c",
+      "unchanged": true
+    },
+    "data/phase2-trust-remediation-verification.db": {
+      "sha256": "d0333f1344b4a871f3f89d4eb522f8b047cc1c566bee020533be10cde3496131",
+      "unchanged": true
+    },
+    "data/phase2-verification.db": {
+      "sha256": "f4366e5f09058e882ad8fef121afd3c7640adddc6f82be25751be5abca1ac4ac",
+      "unchanged": true
+    },
+    "docs/API_MATRIX.md": {
+      "sha256": "a37ad95a40a3b51ae4e2a73cc764ab6955998db2758fd16fc2527c72a4f0d4a0",
+      "unchanged": true
+    },
+    "docs/ARCHITECTURE.md": {
+      "sha256": "e9b010fc1d569ca1fc2d26e90ba4bb7ebbd84631e8bbcaf40370b53f2099adf6",
+      "unchanged": true
+    },
+    "docs/CANONICAL_PHASE_1_AUDIT.md": {
+      "sha256": "f8e73bbc1b539587bedbb1628fa7cdeb9167f2888ceaca00a1959268137e7604",
+      "unchanged": true
+    },
+    "docs/CANONICAL_PHASE_2_TRUST_AUDIT.md": {
+      "sha256": "9c741921b309ab9f9facfa65179b5c61ec2f14f58b1e66e6d61f9cbb1fb9e114",
+      "unchanged": true
+    },
+    "docs/CAPABILITY_GAPS.md": {
+      "sha256": "ee079efea480e4b3ae65009f4d9d86499b6e23edbc22a5dd81e6095bb603b463",
+      "unchanged": true
+    },
+    "docs/DATA_CONTRACTS.md": {
+      "sha256": "aeaacd2ffdefbb18851e83ea49a8df547e037b15e2d4dd83c4d9c169c40afbfa",
+      "unchanged": true
+    },
+    "docs/DEPENDENCIES.md": {
+      "sha256": "f921f3c2dd00aea8fc79bd569700ddff9c5b88f51ed47cc3bbcdf8832880394d",
+      "unchanged": true
+    },
+    "docs/DEVELOPER_EXPERIENCE.md": {
+      "sha256": "29d97cd4b017561cd142ba4bc24d2f20faecfdd4b27c67e30615bacfd1318491",
+      "unchanged": true
+    },
+    "docs/DISCREPANCIES.md": {
+      "sha256": "c46dbcab56768b62a7b08e5b2ca56fdb8285e938672c4e0c86baad0f1012377d",
+      "unchanged": true
+    },
+    "docs/EXECUTION_GATES.md": {
+      "sha256": "4315228ac4027adeb508f83435288d579db738db7bd6162ad205962248def4d9",
+      "unchanged": true
+    },
+    "docs/FREE_PROVIDER_FEASIBILITY.md": {
+      "sha256": "40f50665afe72271932ec94051a52191c019c802b09aa9a06acf5041bbd910c0",
+      "unchanged": true
+    },
+    "docs/MASTER_BUILD_PROMPT.md": {
+      "sha256": "45ef4fbc1547c850308267cefb6041293351d0cc36d7be423348b18d3b17991f",
+      "unchanged": true
+    },
+    "docs/PHASE_0_GATE.md": {
+      "sha256": "c355a54977ee21291fda6de335d470ba8c46c354fad6c7fb79ab554d59b8c844",
+      "unchanged": true
+    },
+    "docs/PHASE_0_REMEDIATION.md": {
+      "sha256": "56762ecff9df7186023a5e263432fb2d8724475307459416038f7cfa331f744d",
+      "unchanged": true
+    },
+    "docs/PHASE_0_REPORT.md": {
+      "sha256": "df4436dc3a657e6c1a8a18e233b8ddf15e6f2c4bfa94ec4c1628d15b5f5f3287",
+      "unchanged": true
+    },
+    "docs/PHASE_1_DEPENDENCIES.md": {
+      "sha256": "2abab1700c13e13e1b3e385e7f46b3656b02f195ff5094a3926ce9ab018bd185",
+      "unchanged": true
+    },
+    "docs/PHASE_1_POST_GATE_DEBUG.md": {
+      "sha256": "69a1de3e57a314460f01dc16387a6b75030378bce3b580e4e4aed400eecf3dc4",
+      "unchanged": true
+    },
+    "docs/PHASE_1_REPORT.md": {
+      "sha256": "7e8084e3cfb1e48100949e578f8a82509039728ef470f85eace485a0a1638d1d",
+      "unchanged": true
+    },
+    "docs/PHASE_2_REPORT.md": {
+      "sha256": "ee79f725fc44b28a2186536de1a1369f206c6aff2602aa5b9ed4d99257adbe0f",
+      "unchanged": true
+    },
+    "docs/PHASE_2_TRUST_REMEDIATION.md": {
+      "sha256": "f1449c16220b8b07bc12629ec87b140edcb4c41643368726b810931a1ec15024",
+      "unchanged": true
+    },
+    "docs/PHASE_2_TRUST_REPORT.md": {
+      "sha256": "f9931d7a0cfd9f2d8227eae650d51c5f81ec5be34e981cc8120069d0dd813af5",
+      "unchanged": true
+    },
+    "docs/PHASE_MAP.md": {
+      "sha256": "60c01d5eb8858e2128b8e244d592a5e6f9adcdff10ef90e6b550353db26833ab",
+      "unchanged": true
+    },
+    "docs/REPLAY_STAGE_1_AUDIT.md": {
+      "sha256": "5edee18a96f40d390a93ca21ccea931e7f6c7e8fbca16c1177eb48fd139ae73b",
+      "unchanged": true
+    },
+    "docs/RESEARCH_NOTES.md": {
+      "sha256": "6529a2b052dc85c996cec7ebe333a6e86984a3911e4ca188d319d14eaace6c33",
+      "unchanged": true
+    },
+    "docs/RESEARCH_TO_IMPLEMENTATION.md": {
+      "sha256": "2d3bc01f34a7f949a2c65ef9d374f1a95ad7c41e20eab0ca6da07f32d85071be",
+      "unchanged": true
+    },
+    "docs/SOURCES.md": {
+      "sha256": "a0fc15901b71b66c5537988b0bdb3b0fffc853c193cd6fb528a667225e8eeb6c",
+      "unchanged": true
+    },
+    "docs/TEST_MATRIX.md": {
+      "sha256": "5e309ca33e5860711a1417fee833314193baf314f997b262594c65b6f672e317",
+      "unchanged": true
+    },
+    "docs/TRUST_BLOCKER_HISTORICAL_REPORT.md": {
+      "sha256": "6f7a616df24e07bddf04640916884ebccc372a13388c0499bac048109d38da90",
+      "unchanged": true
+    },
+    "docs/TWELVE_BINANCE_ALIGNMENT_PENDING.md": {
+      "sha256": "56b185acbe48fed2a0a0ccaaa1a90d99909105a9e6757df5bb45bb1b48e02dd0",
+      "unchanged": true
+    },
+    "docs/TWELVE_BINANCE_ALIGNMENT_RUNBOOK.md": {
+      "sha256": "e177e72f7e1f6012b9268dd4feca9392424afe26446035d413ee262ece3b8fb8",
+      "unchanged": true
+    },
+    "docs/TWELVE_DATA_FEASIBILITY.md": {
+      "sha256": "88e5d48cfeacd90e3e584396b932aeb89848c335a78f0932b6fac8dd6805f93a",
+      "unchanged": true
+    },
+    "docs/TWELVE_DATA_TIMESTAMP_SEMANTICS.md": {
+      "sha256": "e5f9beebfff1abd5c04c695702c786b1a4dcc7f983de1a55096d2bda4b196c78",
+      "unchanged": true
+    },
+    "docs/evidence/BINANCE_READONLY_STATUS.json": {
+      "sha256": "de83d4fa0e07063de87a917ae936dbfc1481d3996fbfdec297c455536a117b54",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_1_BROWSER.json": {
+      "sha256": "054e4826f907df132c0791550ab36eee0e6c5c5cf5b8da4f0ca1629acb9dfb41",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_1_BROWSER_REVERIFICATION.json": {
+      "sha256": "15ab5a531ad50c4eeaf9e22b9172cdd20f4ccd58a95b4407bb17e5d0daa05a2e",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_1_DEMO.json": {
+      "sha256": "0cfd83472f78a2a33ef5e919195c9a6ecb85bbcec35195a9fd39a75f71096856",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_1_GATE.json": {
+      "sha256": "23d7615d551fdafa1d75a817a15b8b92029a15111c07ff76b5c98f33bbd88602",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_1_LIVE.json": {
+      "sha256": "c4c5cfffeffd8b4f317d99a8b206b23c2f2bb9dec6cffa3fdccd175c555ac5bb",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_ASK_REGRESSION.json": {
+      "sha256": "6b825131423af420e7b3a2b4938af668cfab0fc94a9f62e42d7308920837d28e",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_API.json": {
+      "sha256": "46915a63d5e1360ea62aff1a514f9e0dc206ddcf94003a5c0701b2820e551526",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_BROWSER.json": {
+      "sha256": "e4b729edcf1a89c700be6fb50fc777d8e497c9af33f90f7c2187c7b971a3afc1",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_DATA_INVESTIGATION.json": {
+      "sha256": "27a7a1d94b2db872f7295ac11841ba6f116f6987577848761dd5e04f61b33b0b",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_DEMO.json": {
+      "sha256": "520daf16672c89c71de5dc5435278882d6c820864dd0aebf63ea17eb95bbddeb",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_GATE.json": {
+      "sha256": "f84e8489a756df2924b9a21f5486d84d563c9270362f076e0463f6c79c8aabdd",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_GATE_INITIAL.json": {
+      "sha256": "aa2899720fdb9620717aebc64b7529c82eb01fc4405d3df885350b66c19985c7",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_GATE_PRE_DATA_INVESTIGATION.json": {
+      "sha256": "626b3b4e9099b2a054f5b9e24c3f3f29960670d0ce8a06019301c6e90db6bae0",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_LIVE.json": {
+      "sha256": "906e8cc28967d6aa9308332c64800012e7c740f4d092350f949521110b35863e",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_API.json": {
+      "sha256": "30e7d80a6fcdaddd4c6e08c47daa719920f3be2afbe80b1df85ebc0acd800152",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_ASK_BROWSER.json": {
+      "sha256": "4b33e4b6bac4f34a87f9b20302987b0245f93b0aeb15ffe564bd56cfac00cfd5",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_BROWSER.json": {
+      "sha256": "e5d895433ce5d600bb6920468d6c64bacf5bfa8ae6562d516293f562b84d737f",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_LIVE.json": {
+      "sha256": "3a95f1dfccf7decbf4dac28d8c455c30ce64ac0f8dc72cb5ccb3dec9b48173b4",
+      "unchanged": true
+    },
+    "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_REVERIFIED.json": {
+      "sha256": "1f65e242f3ac76ad867252cb2526989bf228064746ae54435d13b3575132eea5",
+      "unchanged": true
+    },
+    "docs/evidence/FREE_PROVIDER_EQUITY_FEASIBILITY.json": {
+      "sha256": "544984855de372fd8e7d9ad540423a92d3d088212e364795575689004ffdc400",
+      "unchanged": true
+    },
+    "docs/evidence/FREE_PROVIDER_FEASIBILITY_PAIRING.json": {
+      "sha256": "73da445f37db2557d5b10eab4401a6d8ff655ef1218b4b4f4bd137926c00434a",
+      "unchanged": true
+    },
+    "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_FEASIBILITY.json": {
+      "sha256": "24c1cc261096f2aee0c01b4a32a19f6d969524cec19124e63f3ae08f94f7a5e6",
+      "unchanged": true
+    },
+    "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_HOURLY_RECOVERY.json": {
+      "sha256": "67095ea5369f997198b4d39a9220cde9f359a4fce6af3e7ce98984de503764fc",
+      "unchanged": true
+    },
+    "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_REVERIFIED.json": {
+      "sha256": "8abfabf919250db4a47800d2fb55c334da8f2553f8fb549f0f4e25b2122a5e46",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_BINANCE_READS.json": {
+      "sha256": "d7e0984072684226c71da1f7b63d56878927f73dcd9d4baa7b1bc0ed06e9673e",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_BROWSER.json": {
+      "sha256": "cd715aa1ba5472b4bbf1950ca4c134fd72e691c566b42219e48b0e0b67ec4c36",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_CANDLE_BOUNDS.json": {
+      "sha256": "3da91f96859cf9227164875895e199aa470859d6c82c579420e53cbc002c38f3",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_CANDLE_PAGE.json": {
+      "sha256": "3d0abcc0383dc7b8c22908ed1b83b2944597bfafd6c0a84595b1f3dd4457afb1",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_LOCAL_READS.json": {
+      "sha256": "9d6b2e3431612d1ffe591dd0097ae40c74753f8307890e165764c9601025e156",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_MASSIVE_READS.json": {
+      "sha256": "a207897431fa2be2aab3f68d319f02866d9ac7dbf8a64cfd066679a75e2f5f36",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_PIPELINE.json": {
+      "sha256": "921bc6fb11c61366752174258110cb4d9b63e1b5ea03d06e5bcb5cc47e0660c2",
+      "unchanged": true
+    },
+    "docs/evidence/PHASE_2_PIPELINE_PRE_BOUNDARY_FIX.json": {
+      "sha256": "13e1e1421d0e514544227e2cffbe726674732f2993e0606e249152e5bc9c5bd1",
+      "unchanged": true
+    },
+    "docs/evidence/REPLAY_STAGE_1_AUDIT.json": {
+      "sha256": "f6aac4180de906a316ddb780fce2e49d46766f07a281445323b079c22913f012",
+      "unchanged": true
+    },
+    "docs/evidence/TRUST_BLOCKER_HISTORICAL_AUDIT.json": {
+      "sha256": "c6030d043ec7ce52d7b6a9547ac2deb57ba7cc8a08927c92d1a91349482e0957",
+      "unchanged": true
+    },
+    "docs/evidence/TRUST_BLOCKER_HISTORICAL_AUDIT_INITIAL.json": {
+      "sha256": "25119e91200364da2d3837ae01d1ca40b9351f7f90881a20d467d014fb402761",
+      "unchanged": true
+    },
+    "docs/evidence/TRUST_BLOCKER_HISTORICAL_BACKFILL.json": {
+      "sha256": "6d1d1b11431f3afb3e685c166109f26f7bf497c1c32324a6a32030789e154ee5",
+      "unchanged": true
+    },
+    "docs/evidence/TRUST_BLOCKER_RATIO_ATTESTATIONS.json": {
+      "sha256": "65365025ff3678a96b00b632c807a2f382cf9915b58964ee6fbe8fca719b9dba",
+      "unchanged": true
+    },
+    "docs/evidence/TRUST_BLOCKER_VERIFICATION.json": {
+      "sha256": "59240f37897b4ba95709df4b20124ed03d9af68ed183dedb14b771d3c5702ac5",
+      "unchanged": true
+    },
+    "docs/evidence/TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY.json": {
+      "sha256": "101516a3d547984564938bb3a8c03e92d3aa57c2e26e342d16606f64dc110b03",
+      "unchanged": true
+    },
+    "docs/evidence/TWELVE_DATA_NVDA_HISTORICAL_DEPTH.json": {
+      "sha256": "1b9f63cb3b2bf847d9a4c5dae9743393789ba64213fd1900ef53860e51fa4fbe",
+      "unchanged": true
+    },
+    "docs/evidence/TWELVE_DATA_TIMESTAMP_ACTIVE.json": {
+      "sha256": "ef4fe9ad181212246282883f88cf3941b9789bd5b4243432a52ac8b65f4c1b6b",
+      "unchanged": true
+    },
+    "docs/evidence/TWELVE_DATA_TIMESTAMP_CLOSED.json": {
+      "sha256": "144935af6f71ffe4a74d5e1521575370fb7d815fc6affdde4234c5cbee12ecd1",
+      "unchanged": true
+    },
+    "scripts/diagnose-twelve-binance-alignment.py": {
+      "sha256": "aba2daa1d27ab0bef33b4179c7804738a712ccbb427f60e0f97b181350ae88c3",
+      "unchanged": true
+    }
+  },
+  "fixtures": {
+    "data/demo/trust-sandbox/steady.json": "366b217279ce80a83ac5072637c60c08bd2c5308b79f09db28430583f47a18a8",
+    "data/demo/trust-sandbox/supported-move.json": "701c446d6cda833f6ae488be896a7720ee18683fddb86c2c1a296f3632ee0606",
+    "data/demo/trust-sandbox/thin-move.json": "0b6886f85a75eb45016c3e6be2ffffe42f96cd8383c13b2f5d3b0d8918fb7b06"
+  },
+  "scenario_results": [
+    {
+      "id": "steady",
+      "classification": "NORMAL",
+      "baseline_count": 30,
+      "analogue_count": 3
+    },
+    {
+      "id": "thin-move",
+      "classification": "LIKELY_NOISE",
+      "baseline_count": 30,
+      "analogue_count": 3
+    },
+    {
+      "id": "supported-move",
+      "classification": "LIKELY_INFORMATION",
+      "baseline_count": 30,
+      "analogue_count": 3
+    }
+  ],
+  "verification": {
+    "backend_tests": {
+      "passed": 345,
+      "existing_retained": 326,
+      "added": 19
+    },
+    "frontend_tests": {
+      "passed": 66,
+      "existing_retained": 47,
+      "added": 19
+    },
+    "typecheck_build": "PASS",
+    "ruff_lint": "PASS",
+    "ruff_format": "PASS_78_FILES",
+    "security": "PASS",
+    "extended_secret_check": "PASS",
+    "git_diff_check": "PASS",
+    "desktop_mobile_browser": "PASS"
+  },
+  "browser_evidence": "docs/evidence/DEMO_TRUST_SANDBOX_BROWSER.json",
+  "network_provider_calls": 0,
+  "wallet_trading_execution_calls": 0,
+  "temporary_verification_services_stopped": true,
+  "modified_files": [
+    ".env.example",
+    "README.md",
+    "backend/app/api/schemas.py",
+    "backend/app/api/system.py",
+    "backend/app/config.py",
+    "backend/app/main.py",
+    "frontend/src/App.tsx",
+    "frontend/src/components/TrustPanel.tsx",
+    "frontend/src/services/system.ts",
+    "frontend/src/services/trust.ts",
+    "frontend/src/styles.css",
+    "frontend/src/types/system.ts"
+  ],
+  "added_files": [
+    "backend/app/api/demo_sandbox.py",
+    "backend/app/models/demo_sandbox.py",
+    "backend/app/services/demo_sandbox.py",
+    "backend/tests/integration/test_demo_sandbox.py",
+    "data/demo/trust-sandbox/steady.json",
+    "data/demo/trust-sandbox/supported-move.json",
+    "data/demo/trust-sandbox/thin-move.json",
+    "docs/DEMO_TRUST_SANDBOX.md",
+    "docs/evidence/DEMO_TRUST_SANDBOX_BROWSER.json",
+    "docs/evidence/DEMO_TRUST_SANDBOX_VERIFICATION.json",
+    "frontend/src/components/DemoTrustSandbox.tsx",
+    "frontend/src/components/TrustEvidence.tsx",
+    "frontend/src/services/demoSandbox.ts",
+    "frontend/src/test/DemoTrustSandbox.test.tsx"
+  ],
+  "automatically_committed": false,
+  "known_limitations": [
+    "Synthetic classifications are not real-stock calibration or production Trust coverage",
+    "Opening prediction, Opportunity and Paper Execution remain unimplemented",
+    "Existing upstream Starlette/httpx deprecation warning"
+  ]
+}
