@@ -20,9 +20,10 @@ def catalog(request: Request):
 
 @router.get("/scenarios/{identifier}", response_model=DemoTrustResult)
 def assess(identifier: ScenarioId, request: Request):
-    return sandbox(request).assess(
+    result = sandbox(request).assess(
         identifier,
         run_id=request.state.run_id,
         request_id=request.state.request_id,
         correlation_id=request.state.correlation_id,
     )
+    return request.app.state.demo_opportunity.remember(result)

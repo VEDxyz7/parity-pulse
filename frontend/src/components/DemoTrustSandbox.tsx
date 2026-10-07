@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchDemoCatalog, fetchDemoScenario, type DemoResult, type DemoScenario, type ScenarioId } from '../services/demoSandbox'
 import { TrustEvidence } from './TrustEvidence'
+import { DemoOpportunityFlow } from './DemoOpportunityFlow'
 
 export function DemoTrustSandbox() {
   const [scenarios, setScenarios] = useState<DemoScenario[]>([])
@@ -67,6 +68,7 @@ export function DemoTrustSandbox() {
         <details><summary>Baseline, analogue and news evidence</summary><pre>{JSON.stringify({ baseline: row.baseline, analogues: row.analogues, news: row.news }, null, 2)}</pre></details>
       </div>)}
       <TrustEvidence result={result.assessment} />
+      <DemoOpportunityFlow key={result.assessment.assessment_id} trust={result} />
       <p>Production TRUST_GATE: BLOCKED · OPPORTUNITY_GATE: BLOCKED_BY_TRUST · All LIVE gates: BLOCKED</p>
     </>}
   </section>

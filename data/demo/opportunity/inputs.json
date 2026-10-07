@@ -1,0 +1,33 @@
+{
+  "dataset_type": "DEMO_FIXTURE",
+  "synthetic": true,
+  "production_eligible": false,
+  "economics": {
+    "dataset_type": "DEMO_FIXTURE", "synthetic": true, "production_eligible": false,
+    "version": "demo-economics-1",
+    "ticker": "NVDA", "issuer": "demo-issuer", "chain_id": "DEMO", "contract": "demo:NVDA",
+    "observed_at": "2026-10-06T16:00:00Z",
+    "target_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+    "target_share_price_usd": "106",
+    "requested_notional_usd": "50",
+    "fees_usd": "0.10", "gas_usd": "0.05", "slippage_bps": "20",
+    "execution_buffer_usd": "0.10", "minimum_net_edge_usd": "0.25",
+    "validity_seconds": 60
+  },
+  "risk_inputs": {
+    "dataset_type": "DEMO_FIXTURE", "synthetic": true, "production_eligible": false,
+    "version": "demo-risk-1",
+    "budget_usd": "60", "risk_budget_usd": "2", "adverse_move_fraction": "0.02",
+    "wallet_available_usd": "100", "existing_exposure_usd": "0", "daily_loss_usd": "0",
+    "trades_today": 0, "last_trade_at": null
+  },
+  "risk_policy": {
+    "dataset_type": "DEMO_FIXTURE", "synthetic": true, "production_eligible": false,
+    "version": "demo-risk-policy-1", "policy_scope": "SYNTHETIC_DEMO_ONLY",
+    "max_position_usd": "75", "max_portfolio_exposure_usd": "100",
+    "max_daily_loss_usd": "20", "max_risk_budget_usd": "5", "max_trades_per_day": 5,
+    "min_confidence": "LOW", "min_liquidity_usd": "1000", "min_liquidity_percentile": 50,
+    "max_liquidity_fraction": "0.01", "max_slippage_bps": "50", "min_net_edge_usd": "0.25",
+    "max_data_staleness_seconds": 120, "max_timestamp_skew_seconds": 30, "cooldown_seconds": 60
+  }
+}

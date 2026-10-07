@@ -1,0 +1,1413 @@
+{
+  "verified_at_utc": "2026-10-07T05:07:38.077974+00:00",
+  "stage": "HACKATHON DEMO STAGE 3A",
+  "status": "PASS_SYNTHETIC_ANALYTICAL_ONLY",
+  "dataset_type": "DEMO_FIXTURE",
+  "synthetic": true,
+  "production_eligible": false,
+  "architecture": "Unchanged TrustService -> one OpportunityEngine -> one RiskEngine, exact server result references through bounded memory-only DEMO adapter",
+  "source_head": "c40343a1eec17f5d755c79605557a5a81bb60165",
+  "git_head_unchanged": true,
+  "commits_made": 0,
+  "scenario_results": [
+    {
+      "scenario_id": "steady",
+      "trust_classification": "NORMAL",
+      "opportunity": {
+        "dataset_type": "DEMO_FIXTURE",
+        "synthetic": true,
+        "production_eligible": false,
+        "runtime_mode": "DEMO",
+        "scenario_id": "steady",
+        "trust_fixture_sha256": "366b217279ce80a83ac5072637c60c08bd2c5308b79f09db28430583f47a18a8",
+        "inputs_fixture_sha256": "e623b28453df719ccdee86044f84e2dfbaef4861d0976ee9fc7c42e7561f3fae",
+        "opportunity": {
+          "dataset_type": "DEMO_FIXTURE",
+          "synthetic": true,
+          "production_eligible": false,
+          "data_mode": "DEMO",
+          "execution_mode": "DRY_RUN",
+          "approval_mode": "PROPOSE_ONLY",
+          "live_trading_enabled": false,
+          "require_simulation": true,
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "no_broadcast_statement": "No real transaction was broadcast.",
+          "quote_status": "UNAVAILABLE",
+          "preparation_status": "UNAVAILABLE",
+          "simulation_status": "UNAVAILABLE",
+          "opportunity_id": "1db1f196-fdd4-4593-8a2a-83e19cf13221",
+          "trust_assessment_id": "02befddc-25bd-4e72-8d02-1d6de6cb745f",
+          "evaluated_at": "2026-10-06T16:00:00Z",
+          "valid_until": "2026-10-06T16:01:00Z",
+          "ticker": "NVDA",
+          "issuer": "demo-issuer",
+          "chain_id": "DEMO",
+          "contract": "demo:NVDA",
+          "symbol": "NVDADEMO",
+          "source_trust_classification": "NORMAL",
+          "confidence": "LOW",
+          "evidence_quality": "SYNTHETIC_DEMO",
+          "status": "NO_OPPORTUNITY",
+          "action": "NONE",
+          "reason_codes": [
+            "NORMAL_TRUST_NO_INFORMATION_SIGNAL"
+          ],
+          "inputs": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-economics-1",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "target_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+            "target_share_price_usd": "106",
+            "requested_notional_usd": "50",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "slippage_bps": "20",
+            "execution_buffer_usd": "0.10",
+            "minimum_net_edge_usd": "0.25",
+            "validity_seconds": 60
+          },
+          "economics": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "token_price_usd": "50.350",
+            "token_to_share_ratio": "0.5",
+            "independent_share_price_usd": "100",
+            "effective_price_per_share_usd": "100.700000000000000000",
+            "reference_deviation": "0.007000000000000000",
+            "hypothetical_target_share_price_usd": "106",
+            "hypothetical_adjustment_per_share_usd": "5.300000000000000000",
+            "hypothetical_return_fraction": "0.052631578947368421",
+            "requested_notional_usd": "50",
+            "gross_hypothetical_edge_usd": "2.631578947368421052",
+            "estimated_slippage_usd": "0.1",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "net_hypothetical_edge_usd": "2.281578947368421052",
+            "metric_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+            "calibrated_prediction": false
+          },
+          "token_observed_at": "2026-10-06T16:00:00Z",
+          "equity_observed_at": "2026-10-06T16:00:00Z",
+          "liquidity_observed_at": "2026-10-06T16:00:00Z",
+          "liquidity_usd": "5000",
+          "liquidity_p50_usd": "1725.0",
+          "decimals": 18,
+          "limitations": [
+            "SYNTHETIC_ANALYSIS_ONLY_NOT_EXECUTION_AUTHORITY",
+            "HYPOTHETICAL_TARGET_AND_COSTS_NOT_PROVIDER_QUOTE_OR_CALIBRATED_FORECAST",
+            "SINGLE_REPRESENTATION_DEMO_NOT_FULL_UNIVERSE_OPPORTUNITY_MODE",
+            "PRODUCTION_OPPORTUNITY_GATE_BLOCKED_BY_TRUST"
+          ]
+        },
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        }
+      },
+      "risk": {
+        "dataset_type": "DEMO_FIXTURE",
+        "synthetic": true,
+        "production_eligible": false,
+        "runtime_mode": "DEMO",
+        "scenario_id": "steady",
+        "inputs_fixture_sha256": "e623b28453df719ccdee86044f84e2dfbaef4861d0976ee9fc7c42e7561f3fae",
+        "risk": {
+          "dataset_type": "DEMO_FIXTURE",
+          "synthetic": true,
+          "production_eligible": false,
+          "data_mode": "DEMO",
+          "execution_mode": "DRY_RUN",
+          "approval_mode": "PROPOSE_ONLY",
+          "live_trading_enabled": false,
+          "require_simulation": true,
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "no_broadcast_statement": "No real transaction was broadcast.",
+          "quote_status": "UNAVAILABLE",
+          "preparation_status": "UNAVAILABLE",
+          "simulation_status": "UNAVAILABLE",
+          "risk_id": "d7d5afcd-8992-473d-8afc-e540c035645d",
+          "opportunity_id": "1db1f196-fdd4-4593-8a2a-83e19cf13221",
+          "evaluated_at": "2026-10-06T16:00:00Z",
+          "status": "FAIL",
+          "approved_for_demo_analysis": false,
+          "reason_codes": [
+            "OPPORTUNITY_ACTIONABLE",
+            "TRUST_REQUIRED"
+          ],
+          "checks": [
+            {
+              "code": "OPPORTUNITY_ACTIONABLE",
+              "passed": false,
+              "detail": "Only an actionable calculated decision qualifies."
+            },
+            {
+              "code": "TRUST_REQUIRED",
+              "passed": false,
+              "detail": "Synthetic Information evidence is required; no production eligibility is granted."
+            },
+            {
+              "code": "CONFIDENCE_MINIMUM",
+              "passed": true,
+              "detail": "Minimum LOW for DEMO; confidence remains uncalibrated."
+            },
+            {
+              "code": "DECISION_VALID",
+              "passed": true,
+              "detail": "Expired or future decisions cannot pass."
+            },
+            {
+              "code": "DATA_FRESHNESS",
+              "passed": true,
+              "detail": "Required synthetic observations must be within 120 seconds of the synthetic clock."
+            },
+            {
+              "code": "TIMESTAMP_ALIGNMENT",
+              "passed": true,
+              "detail": "Token/equity observations must align within 30 seconds."
+            },
+            {
+              "code": "RISK_BUDGET_LIMIT",
+              "passed": true,
+              "detail": "The supplied risk budget cannot exceed the policy maximum."
+            },
+            {
+              "code": "DAILY_LOSS_LIMIT",
+              "passed": true,
+              "detail": "No approval at or above the daily loss limit."
+            },
+            {
+              "code": "TRADE_COUNT_LIMIT",
+              "passed": true,
+              "detail": "Trade count must remain below the configured daily limit."
+            },
+            {
+              "code": "COOLDOWN",
+              "passed": true,
+              "detail": "No future last trade and no approval within cooldown."
+            },
+            {
+              "code": "SLIPPAGE_LIMIT",
+              "passed": true,
+              "detail": "Supplied synthetic slippage must not exceed tolerance."
+            },
+            {
+              "code": "LIQUIDITY_MINIMUM",
+              "passed": true,
+              "detail": "Required synthetic USD liquidity must be available and above the absolute floor."
+            },
+            {
+              "code": "LIQUIDITY_PERCENTILE",
+              "passed": true,
+              "detail": "Liquidity must meet the same-scope Trust baseline p50; unavailable floor fails."
+            },
+            {
+              "code": "NET_EDGE_MINIMUM",
+              "passed": true,
+              "detail": "Cost-adjusted hypothetical USD edge must meet both economic and risk thresholds."
+            },
+            {
+              "code": "TOKEN_SIZE_METADATA",
+              "passed": true,
+              "detail": "Token decimals must be known for conservative analytical sizing."
+            },
+            {
+              "code": "POSITION_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 75.000000000000000000."
+            },
+            {
+              "code": "BUDGET_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 59.630738522954091816."
+            },
+            {
+              "code": "WALLET_LIMIT",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 99.550898203592814371."
+            },
+            {
+              "code": "PORTFOLIO_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 100.000000000000000000."
+            },
+            {
+              "code": "STRESS_RISK_BUDGET",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 79.545454545454545454."
+            },
+            {
+              "code": "STRESS_DAILY_LOSS",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 897.727272727272727272."
+            },
+            {
+              "code": "LIQUIDITY_POSITION_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 50.000000000000000000."
+            }
+          ],
+          "inputs": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-risk-1",
+            "budget_usd": "60",
+            "risk_budget_usd": "2",
+            "adverse_move_fraction": "0.02",
+            "wallet_available_usd": "100",
+            "existing_exposure_usd": "0",
+            "daily_loss_usd": "0",
+            "trades_today": 0,
+            "last_trade_at": null
+          },
+          "policy": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-risk-policy-1",
+            "max_position_usd": "75",
+            "max_portfolio_exposure_usd": "100",
+            "max_daily_loss_usd": "20",
+            "max_risk_budget_usd": "5",
+            "max_trades_per_day": 5,
+            "min_confidence": "LOW",
+            "min_liquidity_usd": "1000",
+            "min_liquidity_percentile": 50,
+            "max_liquidity_fraction": "0.01",
+            "max_slippage_bps": "50",
+            "min_net_edge_usd": "0.25",
+            "max_data_staleness_seconds": 120,
+            "max_timestamp_skew_seconds": 30,
+            "cooldown_seconds": 60,
+            "policy_scope": "SYNTHETIC_DEMO_ONLY"
+          },
+          "maximum_allowed_notional_usd": "50.000000000000000000",
+          "proposed_notional_usd": null,
+          "proposed_token_quantity": null,
+          "proposed_share_exposure": null,
+          "stress_loss_usd": null,
+          "slippage_tolerance_bps": "50",
+          "liquidity_notional_cap_usd": "50.000000000000000000",
+          "limitations": [
+            "PASS_APPROVES_SYNTHETIC_ANALYSIS_ONLY_NOT_TRADING",
+            "STRESS_LOSS_IS_A_SCENARIO_ESTIMATE_NOT_A_GUARANTEED_MAXIMUM_LOSS",
+            "PRODUCTION_GATES_REMAIN_BLOCKED"
+          ]
+        },
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        }
+      }
+    },
+    {
+      "scenario_id": "thin-move",
+      "trust_classification": "LIKELY_NOISE",
+      "opportunity": {
+        "dataset_type": "DEMO_FIXTURE",
+        "synthetic": true,
+        "production_eligible": false,
+        "runtime_mode": "DEMO",
+        "scenario_id": "thin-move",
+        "trust_fixture_sha256": "0b6886f85a75eb45016c3e6be2ffffe42f96cd8383c13b2f5d3b0d8918fb7b06",
+        "inputs_fixture_sha256": "e623b28453df719ccdee86044f84e2dfbaef4861d0976ee9fc7c42e7561f3fae",
+        "opportunity": {
+          "dataset_type": "DEMO_FIXTURE",
+          "synthetic": true,
+          "production_eligible": false,
+          "data_mode": "DEMO",
+          "execution_mode": "DRY_RUN",
+          "approval_mode": "PROPOSE_ONLY",
+          "live_trading_enabled": false,
+          "require_simulation": true,
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "no_broadcast_statement": "No real transaction was broadcast.",
+          "quote_status": "UNAVAILABLE",
+          "preparation_status": "UNAVAILABLE",
+          "simulation_status": "UNAVAILABLE",
+          "opportunity_id": "a2f1ebdf-1dfd-49a8-a8e7-d534c0911cb0",
+          "trust_assessment_id": "ff9f4863-0025-4c3c-a891-adf53b4440d9",
+          "evaluated_at": "2026-10-06T16:00:00Z",
+          "valid_until": "2026-10-06T16:01:00Z",
+          "ticker": "NVDA",
+          "issuer": "demo-issuer",
+          "chain_id": "DEMO",
+          "contract": "demo:NVDA",
+          "symbol": "NVDADEMO",
+          "source_trust_classification": "LIKELY_NOISE",
+          "confidence": "LOW",
+          "evidence_quality": "SYNTHETIC_DEMO",
+          "status": "REJECTED_BY_TRUST",
+          "action": "NONE",
+          "reason_codes": [
+            "TRUST_NOT_LIKELY_INFORMATION"
+          ],
+          "inputs": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-economics-1",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "target_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+            "target_share_price_usd": "106",
+            "requested_notional_usd": "50",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "slippage_bps": "20",
+            "execution_buffer_usd": "0.10",
+            "minimum_net_edge_usd": "0.25",
+            "validity_seconds": 60
+          },
+          "economics": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "token_price_usd": "51.00",
+            "token_to_share_ratio": "0.5",
+            "independent_share_price_usd": "100",
+            "effective_price_per_share_usd": "102.000000000000000000",
+            "reference_deviation": "0.020000000000000000",
+            "hypothetical_target_share_price_usd": "106",
+            "hypothetical_adjustment_per_share_usd": "4.000000000000000000",
+            "hypothetical_return_fraction": "0.039215686274509803",
+            "requested_notional_usd": "50",
+            "gross_hypothetical_edge_usd": "1.960784313725490196",
+            "estimated_slippage_usd": "0.1",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "net_hypothetical_edge_usd": "1.610784313725490196",
+            "metric_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+            "calibrated_prediction": false
+          },
+          "token_observed_at": "2026-10-06T16:00:00Z",
+          "equity_observed_at": "2026-10-06T16:00:00Z",
+          "liquidity_observed_at": "2026-10-06T16:00:00Z",
+          "liquidity_usd": "10",
+          "liquidity_p50_usd": "1725.0",
+          "decimals": 18,
+          "limitations": [
+            "SYNTHETIC_ANALYSIS_ONLY_NOT_EXECUTION_AUTHORITY",
+            "HYPOTHETICAL_TARGET_AND_COSTS_NOT_PROVIDER_QUOTE_OR_CALIBRATED_FORECAST",
+            "SINGLE_REPRESENTATION_DEMO_NOT_FULL_UNIVERSE_OPPORTUNITY_MODE",
+            "PRODUCTION_OPPORTUNITY_GATE_BLOCKED_BY_TRUST"
+          ]
+        },
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        }
+      },
+      "risk": {
+        "dataset_type": "DEMO_FIXTURE",
+        "synthetic": true,
+        "production_eligible": false,
+        "runtime_mode": "DEMO",
+        "scenario_id": "thin-move",
+        "inputs_fixture_sha256": "e623b28453df719ccdee86044f84e2dfbaef4861d0976ee9fc7c42e7561f3fae",
+        "risk": {
+          "dataset_type": "DEMO_FIXTURE",
+          "synthetic": true,
+          "production_eligible": false,
+          "data_mode": "DEMO",
+          "execution_mode": "DRY_RUN",
+          "approval_mode": "PROPOSE_ONLY",
+          "live_trading_enabled": false,
+          "require_simulation": true,
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "no_broadcast_statement": "No real transaction was broadcast.",
+          "quote_status": "UNAVAILABLE",
+          "preparation_status": "UNAVAILABLE",
+          "simulation_status": "UNAVAILABLE",
+          "risk_id": "3dbd195e-d0d8-4596-8a28-288cf5e037a2",
+          "opportunity_id": "a2f1ebdf-1dfd-49a8-a8e7-d534c0911cb0",
+          "evaluated_at": "2026-10-06T16:00:00Z",
+          "status": "FAIL",
+          "approved_for_demo_analysis": false,
+          "reason_codes": [
+            "OPPORTUNITY_ACTIONABLE",
+            "TRUST_REQUIRED",
+            "LIQUIDITY_MINIMUM",
+            "LIQUIDITY_PERCENTILE",
+            "LIQUIDITY_POSITION_CAP"
+          ],
+          "checks": [
+            {
+              "code": "OPPORTUNITY_ACTIONABLE",
+              "passed": false,
+              "detail": "Only an actionable calculated decision qualifies."
+            },
+            {
+              "code": "TRUST_REQUIRED",
+              "passed": false,
+              "detail": "Synthetic Information evidence is required; no production eligibility is granted."
+            },
+            {
+              "code": "CONFIDENCE_MINIMUM",
+              "passed": true,
+              "detail": "Minimum LOW for DEMO; confidence remains uncalibrated."
+            },
+            {
+              "code": "DECISION_VALID",
+              "passed": true,
+              "detail": "Expired or future decisions cannot pass."
+            },
+            {
+              "code": "DATA_FRESHNESS",
+              "passed": true,
+              "detail": "Required synthetic observations must be within 120 seconds of the synthetic clock."
+            },
+            {
+              "code": "TIMESTAMP_ALIGNMENT",
+              "passed": true,
+              "detail": "Token/equity observations must align within 30 seconds."
+            },
+            {
+              "code": "RISK_BUDGET_LIMIT",
+              "passed": true,
+              "detail": "The supplied risk budget cannot exceed the policy maximum."
+            },
+            {
+              "code": "DAILY_LOSS_LIMIT",
+              "passed": true,
+              "detail": "No approval at or above the daily loss limit."
+            },
+            {
+              "code": "TRADE_COUNT_LIMIT",
+              "passed": true,
+              "detail": "Trade count must remain below the configured daily limit."
+            },
+            {
+              "code": "COOLDOWN",
+              "passed": true,
+              "detail": "No future last trade and no approval within cooldown."
+            },
+            {
+              "code": "SLIPPAGE_LIMIT",
+              "passed": true,
+              "detail": "Supplied synthetic slippage must not exceed tolerance."
+            },
+            {
+              "code": "LIQUIDITY_MINIMUM",
+              "passed": false,
+              "detail": "Required synthetic USD liquidity must be available and above the absolute floor."
+            },
+            {
+              "code": "LIQUIDITY_PERCENTILE",
+              "passed": false,
+              "detail": "Liquidity must meet the same-scope Trust baseline p50; unavailable floor fails."
+            },
+            {
+              "code": "NET_EDGE_MINIMUM",
+              "passed": true,
+              "detail": "Cost-adjusted hypothetical USD edge must meet both economic and risk thresholds."
+            },
+            {
+              "code": "TOKEN_SIZE_METADATA",
+              "passed": true,
+              "detail": "Token decimals must be known for conservative analytical sizing."
+            },
+            {
+              "code": "POSITION_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 75.000000000000000000."
+            },
+            {
+              "code": "BUDGET_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 59.630738522954091816."
+            },
+            {
+              "code": "WALLET_LIMIT",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 99.550898203592814371."
+            },
+            {
+              "code": "PORTFOLIO_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 100.000000000000000000."
+            },
+            {
+              "code": "STRESS_RISK_BUDGET",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 79.545454545454545454."
+            },
+            {
+              "code": "STRESS_DAILY_LOSS",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 897.727272727272727272."
+            },
+            {
+              "code": "LIQUIDITY_POSITION_CAP",
+              "passed": false,
+              "detail": "Requested USD 50 must not exceed USD 0.100000000000000000."
+            }
+          ],
+          "inputs": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-risk-1",
+            "budget_usd": "60",
+            "risk_budget_usd": "2",
+            "adverse_move_fraction": "0.02",
+            "wallet_available_usd": "100",
+            "existing_exposure_usd": "0",
+            "daily_loss_usd": "0",
+            "trades_today": 0,
+            "last_trade_at": null
+          },
+          "policy": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-risk-policy-1",
+            "max_position_usd": "75",
+            "max_portfolio_exposure_usd": "100",
+            "max_daily_loss_usd": "20",
+            "max_risk_budget_usd": "5",
+            "max_trades_per_day": 5,
+            "min_confidence": "LOW",
+            "min_liquidity_usd": "1000",
+            "min_liquidity_percentile": 50,
+            "max_liquidity_fraction": "0.01",
+            "max_slippage_bps": "50",
+            "min_net_edge_usd": "0.25",
+            "max_data_staleness_seconds": 120,
+            "max_timestamp_skew_seconds": 30,
+            "cooldown_seconds": 60,
+            "policy_scope": "SYNTHETIC_DEMO_ONLY"
+          },
+          "maximum_allowed_notional_usd": "0.100000000000000000",
+          "proposed_notional_usd": null,
+          "proposed_token_quantity": null,
+          "proposed_share_exposure": null,
+          "stress_loss_usd": null,
+          "slippage_tolerance_bps": "50",
+          "liquidity_notional_cap_usd": "0.100000000000000000",
+          "limitations": [
+            "PASS_APPROVES_SYNTHETIC_ANALYSIS_ONLY_NOT_TRADING",
+            "STRESS_LOSS_IS_A_SCENARIO_ESTIMATE_NOT_A_GUARANTEED_MAXIMUM_LOSS",
+            "PRODUCTION_GATES_REMAIN_BLOCKED"
+          ]
+        },
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        }
+      }
+    },
+    {
+      "scenario_id": "supported-move",
+      "trust_classification": "LIKELY_INFORMATION",
+      "opportunity": {
+        "dataset_type": "DEMO_FIXTURE",
+        "synthetic": true,
+        "production_eligible": false,
+        "runtime_mode": "DEMO",
+        "scenario_id": "supported-move",
+        "trust_fixture_sha256": "701c446d6cda833f6ae488be896a7720ee18683fddb86c2c1a296f3632ee0606",
+        "inputs_fixture_sha256": "e623b28453df719ccdee86044f84e2dfbaef4861d0976ee9fc7c42e7561f3fae",
+        "opportunity": {
+          "dataset_type": "DEMO_FIXTURE",
+          "synthetic": true,
+          "production_eligible": false,
+          "data_mode": "DEMO",
+          "execution_mode": "DRY_RUN",
+          "approval_mode": "PROPOSE_ONLY",
+          "live_trading_enabled": false,
+          "require_simulation": true,
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "no_broadcast_statement": "No real transaction was broadcast.",
+          "quote_status": "UNAVAILABLE",
+          "preparation_status": "UNAVAILABLE",
+          "simulation_status": "UNAVAILABLE",
+          "opportunity_id": "265a06b8-f6b7-4f90-aac6-2f7e3e579cab",
+          "trust_assessment_id": "691268e8-4885-464d-96c0-a8bd70397335",
+          "evaluated_at": "2026-10-06T16:00:00Z",
+          "valid_until": "2026-10-06T16:01:00Z",
+          "ticker": "NVDA",
+          "issuer": "demo-issuer",
+          "chain_id": "DEMO",
+          "contract": "demo:NVDA",
+          "symbol": "NVDADEMO",
+          "source_trust_classification": "LIKELY_INFORMATION",
+          "confidence": "LOW",
+          "evidence_quality": "SYNTHETIC_DEMO",
+          "status": "ACTIONABLE",
+          "action": "BUY",
+          "reason_codes": [
+            "POSITIVE_COST_ADJUSTED_SYNTHETIC_ECONOMICS"
+          ],
+          "inputs": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-economics-1",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "target_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+            "target_share_price_usd": "106",
+            "requested_notional_usd": "50",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "slippage_bps": "20",
+            "execution_buffer_usd": "0.10",
+            "minimum_net_edge_usd": "0.25",
+            "validity_seconds": 60
+          },
+          "economics": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "token_price_usd": "51.00",
+            "token_to_share_ratio": "0.5",
+            "independent_share_price_usd": "100",
+            "effective_price_per_share_usd": "102.000000000000000000",
+            "reference_deviation": "0.020000000000000000",
+            "hypothetical_target_share_price_usd": "106",
+            "hypothetical_adjustment_per_share_usd": "4.000000000000000000",
+            "hypothetical_return_fraction": "0.039215686274509803",
+            "requested_notional_usd": "50",
+            "gross_hypothetical_edge_usd": "1.960784313725490196",
+            "estimated_slippage_usd": "0.1",
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "net_hypothetical_edge_usd": "1.610784313725490196",
+            "metric_basis": "HYPOTHETICAL_SCENARIO_ASSUMPTION",
+            "calibrated_prediction": false
+          },
+          "token_observed_at": "2026-10-06T16:00:00Z",
+          "equity_observed_at": "2026-10-06T16:00:00Z",
+          "liquidity_observed_at": "2026-10-06T16:00:00Z",
+          "liquidity_usd": "5000",
+          "liquidity_p50_usd": "1725.0",
+          "decimals": 18,
+          "limitations": [
+            "SYNTHETIC_ANALYSIS_ONLY_NOT_EXECUTION_AUTHORITY",
+            "HYPOTHETICAL_TARGET_AND_COSTS_NOT_PROVIDER_QUOTE_OR_CALIBRATED_FORECAST",
+            "SINGLE_REPRESENTATION_DEMO_NOT_FULL_UNIVERSE_OPPORTUNITY_MODE",
+            "PRODUCTION_OPPORTUNITY_GATE_BLOCKED_BY_TRUST"
+          ]
+        },
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        }
+      },
+      "risk": {
+        "dataset_type": "DEMO_FIXTURE",
+        "synthetic": true,
+        "production_eligible": false,
+        "runtime_mode": "DEMO",
+        "scenario_id": "supported-move",
+        "inputs_fixture_sha256": "e623b28453df719ccdee86044f84e2dfbaef4861d0976ee9fc7c42e7561f3fae",
+        "risk": {
+          "dataset_type": "DEMO_FIXTURE",
+          "synthetic": true,
+          "production_eligible": false,
+          "data_mode": "DEMO",
+          "execution_mode": "DRY_RUN",
+          "approval_mode": "PROPOSE_ONLY",
+          "live_trading_enabled": false,
+          "require_simulation": true,
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "no_broadcast_statement": "No real transaction was broadcast.",
+          "quote_status": "UNAVAILABLE",
+          "preparation_status": "UNAVAILABLE",
+          "simulation_status": "UNAVAILABLE",
+          "risk_id": "4a1274c1-1bc0-401c-8a96-0b75443f78c4",
+          "opportunity_id": "265a06b8-f6b7-4f90-aac6-2f7e3e579cab",
+          "evaluated_at": "2026-10-06T16:00:00Z",
+          "status": "PASS",
+          "approved_for_demo_analysis": true,
+          "reason_codes": [
+            "ALL_DEMO_ANALYTICAL_CHECKS_PASSED"
+          ],
+          "checks": [
+            {
+              "code": "OPPORTUNITY_ACTIONABLE",
+              "passed": true,
+              "detail": "Only an actionable calculated decision qualifies."
+            },
+            {
+              "code": "TRUST_REQUIRED",
+              "passed": true,
+              "detail": "Synthetic Information evidence is required; no production eligibility is granted."
+            },
+            {
+              "code": "CONFIDENCE_MINIMUM",
+              "passed": true,
+              "detail": "Minimum LOW for DEMO; confidence remains uncalibrated."
+            },
+            {
+              "code": "DECISION_VALID",
+              "passed": true,
+              "detail": "Expired or future decisions cannot pass."
+            },
+            {
+              "code": "DATA_FRESHNESS",
+              "passed": true,
+              "detail": "Required synthetic observations must be within 120 seconds of the synthetic clock."
+            },
+            {
+              "code": "TIMESTAMP_ALIGNMENT",
+              "passed": true,
+              "detail": "Token/equity observations must align within 30 seconds."
+            },
+            {
+              "code": "RISK_BUDGET_LIMIT",
+              "passed": true,
+              "detail": "The supplied risk budget cannot exceed the policy maximum."
+            },
+            {
+              "code": "DAILY_LOSS_LIMIT",
+              "passed": true,
+              "detail": "No approval at or above the daily loss limit."
+            },
+            {
+              "code": "TRADE_COUNT_LIMIT",
+              "passed": true,
+              "detail": "Trade count must remain below the configured daily limit."
+            },
+            {
+              "code": "COOLDOWN",
+              "passed": true,
+              "detail": "No future last trade and no approval within cooldown."
+            },
+            {
+              "code": "SLIPPAGE_LIMIT",
+              "passed": true,
+              "detail": "Supplied synthetic slippage must not exceed tolerance."
+            },
+            {
+              "code": "LIQUIDITY_MINIMUM",
+              "passed": true,
+              "detail": "Required synthetic USD liquidity must be available and above the absolute floor."
+            },
+            {
+              "code": "LIQUIDITY_PERCENTILE",
+              "passed": true,
+              "detail": "Liquidity must meet the same-scope Trust baseline p50; unavailable floor fails."
+            },
+            {
+              "code": "NET_EDGE_MINIMUM",
+              "passed": true,
+              "detail": "Cost-adjusted hypothetical USD edge must meet both economic and risk thresholds."
+            },
+            {
+              "code": "TOKEN_SIZE_METADATA",
+              "passed": true,
+              "detail": "Token decimals must be known for conservative analytical sizing."
+            },
+            {
+              "code": "POSITION_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 75.000000000000000000."
+            },
+            {
+              "code": "BUDGET_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 59.630738522954091816."
+            },
+            {
+              "code": "WALLET_LIMIT",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 99.550898203592814371."
+            },
+            {
+              "code": "PORTFOLIO_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 100.000000000000000000."
+            },
+            {
+              "code": "STRESS_RISK_BUDGET",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 79.545454545454545454."
+            },
+            {
+              "code": "STRESS_DAILY_LOSS",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 897.727272727272727272."
+            },
+            {
+              "code": "LIQUIDITY_POSITION_CAP",
+              "passed": true,
+              "detail": "Requested USD 50 must not exceed USD 50.000000000000000000."
+            },
+            {
+              "code": "NONZERO_SIZE",
+              "passed": true,
+              "detail": "Rounded-down synthetic token quantity must be positive."
+            }
+          ],
+          "inputs": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-risk-1",
+            "budget_usd": "60",
+            "risk_budget_usd": "2",
+            "adverse_move_fraction": "0.02",
+            "wallet_available_usd": "100",
+            "existing_exposure_usd": "0",
+            "daily_loss_usd": "0",
+            "trades_today": 0,
+            "last_trade_at": null
+          },
+          "policy": {
+            "dataset_type": "DEMO_FIXTURE",
+            "synthetic": true,
+            "production_eligible": false,
+            "version": "demo-risk-policy-1",
+            "max_position_usd": "75",
+            "max_portfolio_exposure_usd": "100",
+            "max_daily_loss_usd": "20",
+            "max_risk_budget_usd": "5",
+            "max_trades_per_day": 5,
+            "min_confidence": "LOW",
+            "min_liquidity_usd": "1000",
+            "min_liquidity_percentile": 50,
+            "max_liquidity_fraction": "0.01",
+            "max_slippage_bps": "50",
+            "min_net_edge_usd": "0.25",
+            "max_data_staleness_seconds": 120,
+            "max_timestamp_skew_seconds": 30,
+            "cooldown_seconds": 60,
+            "policy_scope": "SYNTHETIC_DEMO_ONLY"
+          },
+          "maximum_allowed_notional_usd": "50.000000000000000000",
+          "proposed_notional_usd": "50",
+          "proposed_token_quantity": "0.980392156862745098",
+          "proposed_share_exposure": "0.490196078431372549",
+          "stress_loss_usd": "1.350000000000000000",
+          "slippage_tolerance_bps": "50",
+          "liquidity_notional_cap_usd": "50.000000000000000000",
+          "limitations": [
+            "PASS_APPROVES_SYNTHETIC_ANALYSIS_ONLY_NOT_TRADING",
+            "STRESS_LOSS_IS_A_SCENARIO_ESTIMATE_NOT_A_GUARANTEED_MAXIMUM_LOSS",
+            "PRODUCTION_GATES_REMAIN_BLOCKED"
+          ]
+        },
+        "production_gates": {
+          "DATA_GATE": "PASS",
+          "DRY_RUN_GATE": "PASS",
+          "TRUST_GATE": "BLOCKED",
+          "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+          "SWAP_LIVE_GATE": "BLOCKED",
+          "RFQ_LIVE_GATE": "BLOCKED",
+          "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+        }
+      }
+    }
+  ],
+  "evidence_driven_mutations": [
+    {
+      "unchanged_trust_classification": "LIKELY_INFORMATION",
+      "changed_inputs": {
+        "target_share_price_usd": "100"
+      },
+      "status": "REJECTED",
+      "reasons": [
+        "NO_POSITIVE_HYPOTHETICAL_ADJUSTMENT",
+        "NET_EDGE_BELOW_MINIMUM"
+      ]
+    },
+    {
+      "unchanged_trust_classification": "LIKELY_INFORMATION",
+      "changed_inputs": {
+        "fees_usd": "2"
+      },
+      "status": "REJECTED",
+      "reasons": [
+        "NET_EDGE_BELOW_MINIMUM"
+      ]
+    },
+    {
+      "changed_inputs": {
+        "wallet_available_usd": "40"
+      },
+      "status": "FAIL",
+      "reasons": [
+        "WALLET_LIMIT"
+      ]
+    }
+  ],
+  "production_gates": {
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "TRUST_GATE": "BLOCKED",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+  },
+  "real_qualifying_coverage": {
+    "baseline": 0,
+    "opening_model": 0,
+    "analogues": 0,
+    "requirements": [
+      30,
+      30,
+      3
+    ]
+  },
+  "preservation": {
+    "protected_existing_artifact_count": 233,
+    "all_protected_byte_identical": true,
+    "sha256": {
+      ".dockerignore": "5978e1b17a3630d16ba941662a5e79e5f10f2be70c73ade6ac703b5837638c3d",
+      ".env.example": "e4452ff2ea48f66b8e3ee8d9c052c0c09f65b39e38841f968c6ff0b1f39f3ce5",
+      ".gitignore": "5ca0ae7d5afea183598ee32ada8da2b0444267dad4483a9fa1b67c83454ccbb8",
+      "Dockerfile": "28e6999349f09efc81a0f6cf93fcdeda16a62013ad42cc204e262813e0f262be",
+      "MASTER_BUILD_PROMPT.md": "45ef4fbc1547c850308267cefb6041293351d0cc36d7be423348b18d3b17991f",
+      "backend/app/__init__.py": "ce50ceed9e5a2749610ab6b6446a9a737898d848cd8b8b248871a0475aff2c33",
+      "backend/app/api/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "backend/app/api/assets.py": "a6378b0c6e66a5f18ed77f142e0b60333b3a7b6ffe399ece08adbc3196bc1034",
+      "backend/app/api/exposure.py": "d348003430244bec2e419428a87160bd012c2394216964f6c4beca8edb0e0c4b",
+      "backend/app/api/middleware.py": "3941d9dfe608da30199240338331f67a4a9302c03644868e506a26c18405de5a",
+      "backend/app/api/schemas.py": "0752f91ca154c9658c59b06bebdf9b4f5c322651d4bbe60b04b0773f3787aa7e",
+      "backend/app/api/system.py": "1f0ccc2a7b42125e205cbb66e3947335d961020d5bf10a9910973502bfdd1f5c",
+      "backend/app/api/trust.py": "e523494f98e5b7aa1eea85ea307caea53d44d8f64630d7eea50eb4952c54cd34",
+      "backend/app/clients/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "backend/app/clients/binance_web3.py": "e4c3afa570cf4424b51378e8331dd8c3c7923d050185988480d72029785b08ff",
+      "backend/app/clients/common.py": "0501a0a0855fbe47d51ed1b1e115465b03d7ee56e2c9a88848aa2f2b07dc20ea",
+      "backend/app/clients/massive.py": "a1fed1031322aab6ebfbf74925700cbbef42a7aa8703f3b16c412af207c27ff3",
+      "backend/app/config.py": "a71b37b154e6e4485d64e35b91fc61a2eef555402347baa3f132d285500fadfd",
+      "backend/app/database.py": "e3f257ae7a40dfe3427958f99d0c31dd85a7615939567b9c5cf4ef2761411fac",
+      "backend/app/demo.py": "d45baf42c8999791c4508768900020d73e74db6e788f6490f2e9af33fa187513",
+      "backend/app/models/__init__.py": "5ff2b5c099ffcddde27c87d79fbd91f432f3e579f33eb12a2a0fb4b589babc92",
+      "backend/app/models/base.py": "422e449e951daa94abbbc657d1a4bcd8ca41edfde5ad7aa4ef6469de118dd07e",
+      "backend/app/models/data.py": "367c606ba9c442c1f5a1d4e7f3ebf953182bc6990351b3bab907b53eb164f487",
+      "backend/app/models/data_tables.py": "819e76d61876e2e21f9a9301f1cca23dbf673be968a26b873a57c74db7225375",
+      "backend/app/models/demo_sandbox.py": "33e24b227637fcdc1f219a2eac0d068f955972932fc4e7d330840cdc648d58c5",
+      "backend/app/models/exposure.py": "77f794e318e23433d407b7193f1b7901108c9f1df31d8b4b2151f9b65a4e1546",
+      "backend/app/models/trust.py": "360f4282ad4ebcf1d9c862fa93b2fb26d69770838a945d190eff36c2e536ab0f",
+      "backend/app/providers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "backend/app/providers/base.py": "b46844dd2009f7dadc5a8ec41a31ea97f868a7a035463b1fb7d2c7e1e4ba4afc",
+      "backend/app/providers/binance.py": "5c7db4d165c6e0091dba6c731987bf77b52143b6e8464ee51b05b1536446c2de",
+      "backend/app/providers/demo.py": "825a09284b431cc0c12b384d1b181514df4319d94f00ac1c0b9ac17712211603",
+      "backend/app/providers/massive.py": "c416cbcd270d3f2050758ebb7c5722b39eecfdeb0878dfeb39beff5264a9ba57",
+      "backend/app/repositories/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "backend/app/repositories/data.py": "83819d5cc026ae66cabc6c1cc58bf310e2e1186c7f17c66c44fe5a21a0c9aaca",
+      "backend/app/repositories/exposure.py": "ffbdd0a936b101ff19a7e62e3f1c4f99fedb8df17ff8a88c79f6a94ad5b85689",
+      "backend/app/repositories/trust.py": "0763852104a9fae0612fef55b6184b57a12e7e6982152fc345cadec106b7dffb",
+      "backend/app/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "backend/app/services/asset_discovery.py": "423e8a9829f2f8ecd2af36d5e8da858bd18e981c2e610c8051dac53c7b756e3d",
+      "backend/app/services/calendar.py": "7ab4b04a4a6f0edaae5a925bfc3d9bd5bc5add37c38a39daf6717aa2ec15ee4c",
+      "backend/app/services/data_layer.py": "114c18bf529a057cbe49dc1450da493773aaee302b0de59a8f490053e1a5c250",
+      "backend/app/services/demo_sandbox.py": "152c9f4e4482788892388be4eb28b253a9e9f07b8c2c0711f8fecc4146fb1be6",
+      "backend/app/services/exposure.py": "29ec6148ccce0af3967ce240c45006ac0e760e078715f37abb14de893c8b5753",
+      "backend/app/services/ingestion.py": "4b91de105c8b1e3a2e8f99ef1e2933be1ebda488d5a5668fa8700f7e5cde7383",
+      "backend/app/services/intent.py": "cfad3ea793d66360cfe2e474df00da90229a6c63b540f290141f6ad69b5d20ef",
+      "backend/app/services/normalization.py": "fac199961bf6ef9b93deb598c901cb0c72722ed0b20a987b04455b2744593a20",
+      "backend/app/services/trust.py": "838867cff620ff5ded33c0c19cbc4fd69905ad595eb32620751bd5f42a011bc2",
+      "backend/app/services/trust_classifier.py": "2a39995848f500885973b57d6d120056690de3773bef1001aa0514d9592903b9",
+      "backend/app/services/trust_evidence.py": "e465fd330b63ad535213bd5a47b56d205d7bd6b179871fee759cb61551f33d7d",
+      "backend/app/services/trust_history.py": "94ca395c16de83942c62c8a4ef44067100e92644b29dba6567291278f409c84d",
+      "backend/app/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "backend/app/utils/logging.py": "2dfa1765bc8799a99ff1a91f7e76db33cf936ef537a17c33d2239c4588b1bcde",
+      "backend/tests/conftest.py": "4da2941c3b863d626a9078ffcf1afdb2341553db14df8fafbb8da773d0061d7a",
+      "backend/tests/fixtures/README.md": "d1083191a9c9c9c1b94f6158cbded86e196bd6987ba3a81169d7af8abd793d68",
+      "backend/tests/fixtures/binance/candles.json": "6e10f905bf42140b4f5f536d6ba38171c062ec24f3d3c80a4439fba62aed225e",
+      "backend/tests/fixtures/binance/candles_bounded.json": "121525f55c072754a239c92292595539148085c872ca28491e85993a6d025dab",
+      "backend/tests/fixtures/binance/candles_page.json": "486c3dae4bd4f7584ce549e5e69886d3c9da494c6d46b5addb720cef0b8988aa",
+      "backend/tests/fixtures/binance/price-info.json": "47091bae0da3cb81a7042e79eba2be49080d301afc4708be63fbbb8327a33692",
+      "backend/tests/fixtures/binance/price.json": "1150b208cc0049b59e006bae4722a86194bd6e0d40b40c9df1135250a0547cf2",
+      "backend/tests/fixtures/binance/rwa_catalog.json": "f541ad948edd27c41619e8e4015f722422ab7a94a0a271221f26eaf980f4cf68",
+      "backend/tests/fixtures/binance/rwa_platforms.json": "f697c6e32cc020751b2f66ea9bbc26fdd861805188c8779dbfee4e84431ece6b",
+      "backend/tests/fixtures/binance/rwa_price.json": "e952e5e4f6b7db4b87374fff7e8e0c573572c15be3dbe471255b4b3e92c3ef8f",
+      "backend/tests/fixtures/binance/rwa_search.json": "a365343f74a4df88ecf34ad820299e648b831c8de47d994419bce85f331ea5ca",
+      "backend/tests/fixtures/binance/rwa_tokens.json": "7ca778c0ab5c9c6bacae66a042f4aacf34a4a2e978eaab33219794694ca3c730",
+      "backend/tests/fixtures/binance/rwa_underlying-market.json": "1072f79dfd337db95e81ba8e7673585c596a0dcfe8196ba1fe029e180b47474a",
+      "backend/tests/fixtures/binance/rwa_underlying-profile.json": "a96ec18f45500fc1d99db24ff0df9da860cd949763c7a5389f2736af64610490",
+      "backend/tests/fixtures/binance/supported_chain.json": "cf3bbc09aad2448cdc36bd7bb9620e196ecc4c8d2f421f2ac92f9b584d0925b5",
+      "backend/tests/fixtures/binance/token_basic-info.json": "85a1f746cc078dcbaf76891e620d6182f696a6b65476a3056b51cfcb238cfc50",
+      "backend/tests/fixtures/binance/token_search.json": "bab888717ffb9576a87d1d597e5aea20c788cf1361321ae48fe0d06e8181f3e6",
+      "backend/tests/fixtures/binance/trades.json": "babf91f245d1e6d39ee85ee7de2776b693dad41e242079523a647da8e1571f95",
+      "backend/tests/fixtures/manifest.json": "11ba275d21dfcadb6f2369e79c8ae37d21105c7b43dc4021dba23298cd5c6a92",
+      "backend/tests/fixtures/massive/day_bars.json": "14d008b96dfac07ed51d2de6d1be4b218415b50c90106e61c520ac733ac6dfd0",
+      "backend/tests/fixtures/massive/dividends.json": "cd913f4fa9bf2e8ea0f6421574d6ad70e75eafe5fb316fbbe3d04abf5aee6d0f",
+      "backend/tests/fixtures/massive/holidays.json": "aaa2f2914d9e67201e7808a50c427534c9bafe399c0c03dff7a0843aebc5d44c",
+      "backend/tests/fixtures/massive/minute_bars.json": "0fbb79e607939d643e9bef7512281da53ba1a82fbf9729f088e7c57b9e7cb757",
+      "backend/tests/fixtures/massive/news.json": "0e7d3d078ec8008ad5f8125120b922016118b78e60539e8ea81841a4e3050555",
+      "backend/tests/fixtures/massive/splits.json": "900aade5952b561cbf6b06566840151769d0800304aa976882d1376acb8df8e1",
+      "backend/tests/fixtures/massive/status.json": "47a50878b4abfdf3b1e3bd088e5f4d86c57130e6052d3d989155a0b6b16baa65",
+      "backend/tests/fixtures/trust/real_remediation_capture.json": "34f68d84fa70f6c6a204401ed4bf06981e0e22675e4be95487e9265629c27b35",
+      "backend/tests/integration/test_application.py": "7d0b4fb6edf41dc4c14409b32a46a5089524c8827f8640ab40dc9e96f7cdd977",
+      "backend/tests/integration/test_ask_flow.py": "d45269dfeb0ca7bcc59ece598559f584ec503f2ab43d73941bef08f42e671c45",
+      "backend/tests/integration/test_data_providers.py": "ee503e977c069bb5457b44612ecf6e6947541e091ea0c49207a8f928ea0dd596",
+      "backend/tests/integration/test_demo_sandbox.py": "1e75f50e8025ffd9e54d1fca36a1df1ac604c344d4051909df255ee0a1424828",
+      "backend/tests/integration/test_equity_calendar_ingestion.py": "ea54b2d8361688e395fe3ec88ca753b3e333279955775df18994796b5900405b",
+      "backend/tests/integration/test_trust_api.py": "55ceb838b82690f82ce7cc58b4ac7a9b54b51d1e97e24c20ef02f18ea06d844f",
+      "backend/tests/integration/test_trust_real_capture.py": "9dd4dd7e275d92793fb3ed0d4642f8f79cfbefffdd0f5af85d21b77e007b95d9",
+      "backend/tests/security/test_boundaries.py": "75ab40680bec977c8b9c6c5bbc92bc3bc4512db4cd82ee5395fe21bc16c1c760",
+      "backend/tests/unit/test_config.py": "149de0771db905588e0d8eca6e0588de9c983baf7d3d50c7d7405980b051b0b3",
+      "backend/tests/unit/test_database_demo.py": "abd224eafae8e0093db1b32769cdee0a2d8df063f41585a683a0c578a475339f",
+      "backend/tests/unit/test_exposure.py": "c8b7fadad8e3e051fe8efa29bb3c43cde68066851f61f353948402bc715427db",
+      "backend/tests/unit/test_news_window_remediation.py": "90310405fbf4738490d257ecf38b640aa6365d6787a40fbc3f78e32f0322089b",
+      "backend/tests/unit/test_provider_transport.py": "e6a12ebd329ca66e3a6f9586a9c2118770c3a327150cb9ef159532461c1c80b7",
+      "backend/tests/unit/test_trust.py": "bc77c79e261d81f21df5dcd79bf4027a5e91e65820e6821591a29b8ac76a30e2",
+      "backend/tests/unit/test_trust_blocker_investigation.py": "871f8e58961b6657aea487f6ab99d0ebcf30b8d509568789d80daf163e0e8046",
+      "backend/tests/unit/test_trust_history_investigation.py": "1d828cfc298c80e2638989962d2b37992eae85b109fd16b09760028b29f77037",
+      "backend/tests/unit/test_trust_remediation_diagnostics.py": "64f6b035e1c4960dfb939a84e0483d7b7b2ee5aeba590812b907ede60d25e8e8",
+      "compose.yaml": "21100ba5da3208c52b6e11bf2a756745ec70b4fc32c2ae923d0d832a2a9f2d68",
+      "data/calendar/nyse-2026-2028.json": "fc00670dc9b33eefbb31978966ed4e1986791c577af2a2d9ab3ac898e74d0de8",
+      "data/demo/data-layer.json": "26cb8aa246d6896b09e0f9a0ca734861a4c3c7949dd8ba99ff6eb0cacb9303e9",
+      "data/demo/foundation.json": "4b1d3c7d2b40a37381803f3df36eed22561c5486eaf16cb1ea40008e98127745",
+      "data/demo/trust-sandbox/steady.json": "366b217279ce80a83ac5072637c60c08bd2c5308b79f09db28430583f47a18a8",
+      "data/demo/trust-sandbox/supported-move.json": "701c446d6cda833f6ae488be896a7720ee18683fddb86c2c1a296f3632ee0606",
+      "data/demo/trust-sandbox/thin-move.json": "0b6886f85a75eb45016c3e6be2ffffe42f96cd8383c13b2f5d3b0d8918fb7b06",
+      "docs/API_MATRIX.md": "a37ad95a40a3b51ae4e2a73cc764ab6955998db2758fd16fc2527c72a4f0d4a0",
+      "docs/ARCHITECTURE.md": "e9b010fc1d569ca1fc2d26e90ba4bb7ebbd84631e8bbcaf40370b53f2099adf6",
+      "docs/CANONICAL_PHASE_1_AUDIT.md": "f8e73bbc1b539587bedbb1628fa7cdeb9167f2888ceaca00a1959268137e7604",
+      "docs/CANONICAL_PHASE_2_TRUST_AUDIT.md": "9c741921b309ab9f9facfa65179b5c61ec2f14f58b1e66e6d61f9cbb1fb9e114",
+      "docs/CAPABILITY_GAPS.md": "ee079efea480e4b3ae65009f4d9d86499b6e23edbc22a5dd81e6095bb603b463",
+      "docs/DATA_CONTRACTS.md": "aeaacd2ffdefbb18851e83ea49a8df547e037b15e2d4dd83c4d9c169c40afbfa",
+      "docs/DEMO_OPPORTUNITY_STAGE_2_AUDIT.md": "e6cb25386ad10880a6a0aaf6cc442c5e8c7da234de7f877c328e004a0bfd513a",
+      "docs/DEMO_TRUST_SANDBOX.md": "46af64f341dcd8d76fed5018ea14763034b3a9d64282f2f7d15077523d4f1f72",
+      "docs/DEPENDENCIES.md": "f921f3c2dd00aea8fc79bd569700ddff9c5b88f51ed47cc3bbcdf8832880394d",
+      "docs/DEVELOPER_EXPERIENCE.md": "29d97cd4b017561cd142ba4bc24d2f20faecfdd4b27c67e30615bacfd1318491",
+      "docs/DISCREPANCIES.md": "c46dbcab56768b62a7b08e5b2ca56fdb8285e938672c4e0c86baad0f1012377d",
+      "docs/EXECUTION_GATES.md": "4315228ac4027adeb508f83435288d579db738db7bd6162ad205962248def4d9",
+      "docs/FREE_PROVIDER_FEASIBILITY.md": "40f50665afe72271932ec94051a52191c019c802b09aa9a06acf5041bbd910c0",
+      "docs/MASTER_BUILD_PROMPT.md": "45ef4fbc1547c850308267cefb6041293351d0cc36d7be423348b18d3b17991f",
+      "docs/PHASE_0_GATE.md": "c355a54977ee21291fda6de335d470ba8c46c354fad6c7fb79ab554d59b8c844",
+      "docs/PHASE_0_REMEDIATION.md": "56762ecff9df7186023a5e263432fb2d8724475307459416038f7cfa331f744d",
+      "docs/PHASE_0_REPORT.md": "df4436dc3a657e6c1a8a18e233b8ddf15e6f2c4bfa94ec4c1628d15b5f5f3287",
+      "docs/PHASE_1_DEPENDENCIES.md": "2abab1700c13e13e1b3e385e7f46b3656b02f195ff5094a3926ce9ab018bd185",
+      "docs/PHASE_1_POST_GATE_DEBUG.md": "69a1de3e57a314460f01dc16387a6b75030378bce3b580e4e4aed400eecf3dc4",
+      "docs/PHASE_1_REPORT.md": "7e8084e3cfb1e48100949e578f8a82509039728ef470f85eace485a0a1638d1d",
+      "docs/PHASE_2_REPORT.md": "ee79f725fc44b28a2186536de1a1369f206c6aff2602aa5b9ed4d99257adbe0f",
+      "docs/PHASE_2_TRUST_REMEDIATION.md": "f1449c16220b8b07bc12629ec87b140edcb4c41643368726b810931a1ec15024",
+      "docs/PHASE_2_TRUST_REPORT.md": "f9931d7a0cfd9f2d8227eae650d51c5f81ec5be34e981cc8120069d0dd813af5",
+      "docs/PHASE_MAP.md": "60c01d5eb8858e2128b8e244d592a5e6f9adcdff10ef90e6b550353db26833ab",
+      "docs/REPLAY_STAGE_1_AUDIT.md": "5edee18a96f40d390a93ca21ccea931e7f6c7e8fbca16c1177eb48fd139ae73b",
+      "docs/RESEARCH_NOTES.md": "6529a2b052dc85c996cec7ebe333a6e86984a3911e4ca188d319d14eaace6c33",
+      "docs/RESEARCH_TO_IMPLEMENTATION.md": "2d3bc01f34a7f949a2c65ef9d374f1a95ad7c41e20eab0ca6da07f32d85071be",
+      "docs/SOURCES.md": "a0fc15901b71b66c5537988b0bdb3b0fffc853c193cd6fb528a667225e8eeb6c",
+      "docs/TEST_MATRIX.md": "5e309ca33e5860711a1417fee833314193baf314f997b262594c65b6f672e317",
+      "docs/TRUST_BLOCKER_HISTORICAL_REPORT.md": "6f7a616df24e07bddf04640916884ebccc372a13388c0499bac048109d38da90",
+      "docs/TWELVE_BINANCE_ALIGNMENT_PENDING.md": "56b185acbe48fed2a0a0ccaaa1a90d99909105a9e6757df5bb45bb1b48e02dd0",
+      "docs/TWELVE_BINANCE_ALIGNMENT_RUNBOOK.md": "e177e72f7e1f6012b9268dd4feca9392424afe26446035d413ee262ece3b8fb8",
+      "docs/TWELVE_DATA_FEASIBILITY.md": "88e5d48cfeacd90e3e584396b932aeb89848c335a78f0932b6fac8dd6805f93a",
+      "docs/TWELVE_DATA_TIMESTAMP_SEMANTICS.md": "e5f9beebfff1abd5c04c695702c786b1a4dcc7f983de1a55096d2bda4b196c78",
+      "docs/evidence/BINANCE_READONLY_STATUS.json": "de83d4fa0e07063de87a917ae936dbfc1481d3996fbfdec297c455536a117b54",
+      "docs/evidence/CANONICAL_PHASE_1_BROWSER.json": "054e4826f907df132c0791550ab36eee0e6c5c5cf5b8da4f0ca1629acb9dfb41",
+      "docs/evidence/CANONICAL_PHASE_1_BROWSER_REVERIFICATION.json": "15ab5a531ad50c4eeaf9e22b9172cdd20f4ccd58a95b4407bb17e5d0daa05a2e",
+      "docs/evidence/CANONICAL_PHASE_1_DEMO.json": "0cfd83472f78a2a33ef5e919195c9a6ecb85bbcec35195a9fd39a75f71096856",
+      "docs/evidence/CANONICAL_PHASE_1_GATE.json": "23d7615d551fdafa1d75a817a15b8b92029a15111c07ff76b5c98f33bbd88602",
+      "docs/evidence/CANONICAL_PHASE_1_LIVE.json": "c4c5cfffeffd8b4f317d99a8b206b23c2f2bb9dec6cffa3fdccd175c555ac5bb",
+      "docs/evidence/CANONICAL_PHASE_2_ASK_REGRESSION.json": "6b825131423af420e7b3a2b4938af668cfab0fc94a9f62e42d7308920837d28e",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_API.json": "46915a63d5e1360ea62aff1a514f9e0dc206ddcf94003a5c0701b2820e551526",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_BROWSER.json": "e4b729edcf1a89c700be6fb50fc777d8e497c9af33f90f7c2187c7b971a3afc1",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_DATA_INVESTIGATION.json": "27a7a1d94b2db872f7295ac11841ba6f116f6987577848761dd5e04f61b33b0b",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_DEMO.json": "520daf16672c89c71de5dc5435278882d6c820864dd0aebf63ea17eb95bbddeb",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_GATE.json": "f84e8489a756df2924b9a21f5486d84d563c9270362f076e0463f6c79c8aabdd",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_GATE_INITIAL.json": "aa2899720fdb9620717aebc64b7529c82eb01fc4405d3df885350b66c19985c7",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_GATE_PRE_DATA_INVESTIGATION.json": "626b3b4e9099b2a054f5b9e24c3f3f29960670d0ce8a06019301c6e90db6bae0",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_LIVE.json": "906e8cc28967d6aa9308332c64800012e7c740f4d092350f949521110b35863e",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_API.json": "30e7d80a6fcdaddd4c6e08c47daa719920f3be2afbe80b1df85ebc0acd800152",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_ASK_BROWSER.json": "4b33e4b6bac4f34a87f9b20302987b0245f93b0aeb15ffe564bd56cfac00cfd5",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_BROWSER.json": "e5d895433ce5d600bb6920468d6c64bacf5bfa8ae6562d516293f562b84d737f",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_LIVE.json": "3a95f1dfccf7decbf4dac28d8c455c30ce64ac0f8dc72cb5ccb3dec9b48173b4",
+      "docs/evidence/CANONICAL_PHASE_2_TRUST_REMEDIATION_REVERIFIED.json": "1f65e242f3ac76ad867252cb2526989bf228064746ae54435d13b3575132eea5",
+      "docs/evidence/DEMO_OPPORTUNITY_STAGE_2_AUDIT.json": "dae487681ef6687adc72b6c3992b59802e22503c6c40290a11fe6e6efe9394c0",
+      "docs/evidence/DEMO_TRUST_SANDBOX_BROWSER.json": "ad4ae1e6ed8d4af2d3398d5bb5629843ce3c613b74a5ff171a5ff31c9c71ac9b",
+      "docs/evidence/DEMO_TRUST_SANDBOX_VERIFICATION.json": "85518914218022a893866441baf7e11394d0f25e7b403fd78509d771cba44db8",
+      "docs/evidence/FREE_PROVIDER_EQUITY_FEASIBILITY.json": "544984855de372fd8e7d9ad540423a92d3d088212e364795575689004ffdc400",
+      "docs/evidence/FREE_PROVIDER_FEASIBILITY_PAIRING.json": "73da445f37db2557d5b10eab4401a6d8ff655ef1218b4b4f4bd137926c00434a",
+      "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_FEASIBILITY.json": "24c1cc261096f2aee0c01b4a32a19f6d969524cec19124e63f3ae08f94f7a5e6",
+      "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_HOURLY_RECOVERY.json": "67095ea5369f997198b4d39a9220cde9f359a4fce6af3e7ce98984de503764fc",
+      "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_REVERIFIED.json": "8abfabf919250db4a47800d2fb55c334da8f2553f8fb549f0f4e25b2122a5e46",
+      "docs/evidence/PHASE_2_BINANCE_READS.json": "d7e0984072684226c71da1f7b63d56878927f73dcd9d4baa7b1bc0ed06e9673e",
+      "docs/evidence/PHASE_2_BROWSER.json": "cd715aa1ba5472b4bbf1950ca4c134fd72e691c566b42219e48b0e0b67ec4c36",
+      "docs/evidence/PHASE_2_CANDLE_BOUNDS.json": "3da91f96859cf9227164875895e199aa470859d6c82c579420e53cbc002c38f3",
+      "docs/evidence/PHASE_2_CANDLE_PAGE.json": "3d0abcc0383dc7b8c22908ed1b83b2944597bfafd6c0a84595b1f3dd4457afb1",
+      "docs/evidence/PHASE_2_LOCAL_READS.json": "9d6b2e3431612d1ffe591dd0097ae40c74753f8307890e165764c9601025e156",
+      "docs/evidence/PHASE_2_MASSIVE_READS.json": "a207897431fa2be2aab3f68d319f02866d9ac7dbf8a64cfd066679a75e2f5f36",
+      "docs/evidence/PHASE_2_PIPELINE.json": "921bc6fb11c61366752174258110cb4d9b63e1b5ea03d06e5bcb5cc47e0660c2",
+      "docs/evidence/PHASE_2_PIPELINE_PRE_BOUNDARY_FIX.json": "13e1e1421d0e514544227e2cffbe726674732f2993e0606e249152e5bc9c5bd1",
+      "docs/evidence/REPLAY_STAGE_1_AUDIT.json": "f6aac4180de906a316ddb780fce2e49d46766f07a281445323b079c22913f012",
+      "docs/evidence/TRUST_BLOCKER_HISTORICAL_AUDIT.json": "c6030d043ec7ce52d7b6a9547ac2deb57ba7cc8a08927c92d1a91349482e0957",
+      "docs/evidence/TRUST_BLOCKER_HISTORICAL_AUDIT_INITIAL.json": "25119e91200364da2d3837ae01d1ca40b9351f7f90881a20d467d014fb402761",
+      "docs/evidence/TRUST_BLOCKER_HISTORICAL_BACKFILL.json": "6d1d1b11431f3afb3e685c166109f26f7bf497c1c32324a6a32030789e154ee5",
+      "docs/evidence/TRUST_BLOCKER_RATIO_ATTESTATIONS.json": "65365025ff3678a96b00b632c807a2f382cf9915b58964ee6fbe8fca719b9dba",
+      "docs/evidence/TRUST_BLOCKER_VERIFICATION.json": "59240f37897b4ba95709df4b20124ed03d9af68ed183dedb14b771d3c5702ac5",
+      "docs/evidence/TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY.json": "101516a3d547984564938bb3a8c03e92d3aa57c2e26e342d16606f64dc110b03",
+      "docs/evidence/TWELVE_DATA_NVDA_HISTORICAL_DEPTH.json": "1b9f63cb3b2bf847d9a4c5dae9743393789ba64213fd1900ef53860e51fa4fbe",
+      "docs/evidence/TWELVE_DATA_TIMESTAMP_ACTIVE.json": "ef4fe9ad181212246282883f88cf3941b9789bd5b4243432a52ac8b65f4c1b6b",
+      "docs/evidence/TWELVE_DATA_TIMESTAMP_CLOSED.json": "144935af6f71ffe4a74d5e1521575370fb7d815fc6affdde4234c5cbee12ecd1",
+      "frontend/Dockerfile": "ae71d967b3d41c26874335c3d92620e0df10d1db810a7805182e4eb4a176801b",
+      "frontend/index.html": "beb0936166ede71fd63bec1457abcf0bc3ead9d3e20da5e348be8e68e83b3b85",
+      "frontend/nginx.conf": "a6870512239b7204654569f044a98877e8ea2cfc0086facd6ffa7538877385bf",
+      "frontend/package.json": "5bc9a7fa9dd9e482dad55bacc839667029e4ffe80c6c2b2bc1f5e2ae695b8086",
+      "frontend/src/App.tsx": "ae49c208bacaec16c021146f2a5f2d4fd0d46b4414effe43bbb3bbd15af5b750",
+      "frontend/src/components/AskFlow.tsx": "c5ffa5d97a4432dcc907622bd46911b0ead55ca3b1cc9bc99e82687abb057294",
+      "frontend/src/components/StatusBadge.tsx": "0a87ed815fb14591100ff818d63004a39e8722347346b1ebcb689a35857a2d2f",
+      "frontend/src/components/TrustEvidence.tsx": "9590c76668bf70cad81b76ebabef8cc6e9a0ecd3b797fa1dc9477ddc5d155368",
+      "frontend/src/components/TrustPanel.tsx": "1ecacaf6d0d647259ef0e049d43509c1a64be0caee38d062158ea576956761d3",
+      "frontend/src/hooks/useSystemStatus.ts": "a87d6ecc2c0df1755c930793d723b886e112f9d38c0533c2a2d9d5ab3c5f97c0",
+      "frontend/src/main.tsx": "5a476b6ad6344e7d555950a1c34c6254c06b63857f9d652abf2ffa823e8d67af",
+      "frontend/src/services/demoSandbox.ts": "7e6a0c99c9e872b98f249d52520d280bdcd12961c8924523c1ea7de0f8585f7b",
+      "frontend/src/services/exposure.ts": "f7bddad2bc553757ab46aa3c8696cdc14ad09a562d7a72241b70b27894b2ee7f",
+      "frontend/src/services/system.ts": "76767b5c0b111daab262e055ea24d84ea57edf4b635b2cd7a42bdca77601a4e2",
+      "frontend/src/services/trust.ts": "ff15db0f7d15fcf13890a5425d94652ec7d197a01458532f4b7d6a69905db89b",
+      "frontend/src/test/App.test.tsx": "994919f976b9f4668cb6ca32121252ce4553ffbe3b0b9bec3d84bd4c6dc264e9",
+      "frontend/src/test/AskFlow.test.tsx": "272733a5c8235af4ec393b7aa331b95f8d69a293911ab7f524b32788239c3479",
+      "frontend/src/test/DemoTrustSandbox.test.tsx": "7cac5903682d707bf4d0bc9b6ce64641c9c877971324a8e78cd16379ea6d778e",
+      "frontend/src/test/TrustPanel.test.tsx": "41967755b03226ebcb00b91792fc236cab3c6c50d82b63cb8b1fd47ee5d19279",
+      "frontend/src/test/fixtures.ts": "ca967c8ad43a06970966575201a04e2cddb9df70996656b161aa0ba1738068cb",
+      "frontend/src/test/setup.ts": "34b2367cbd953eee85339c0f4beb425798cccc9a436619b50702028f823080f7",
+      "frontend/src/types/system.ts": "4697f9dda360269530c9f2a4bfec4a8688cb5a5ace7768d1abf1a242db0cd0ef",
+      "frontend/tsconfig.json": "abe78221f0fa9faa449ada202b9c93a2e1f0cbf7cb29f447d4bb46d88ecc365e",
+      "frontend/vite.config.ts": "32c09227b763315589023cbefc3f23413f69e58698a6ff1fb40cd9a682f5bfc8",
+      "package-lock.json": "f5646dac3738885f7a3fa55af3a5b6e592a7c8f2ffb7eae3cfc2bb6dafe1a722",
+      "package.json": "f82ce05f765d2d06f81c1f4e0fecf96453353012c144149beda19ea0fd5a8f9f",
+      "pyproject.toml": "1fa4c70517ab3cd9df30e3e7524a39ec115cccceef23ddf741245c2a54458f26",
+      "requirements-dev.txt": "93b0b2b03ff331aab34b184fe2ef7007498ca4399ce7dddc1ca071404233ebfe",
+      "requirements.txt": "35a5a8fafc391698510d32801a247abbf1f7ef34618de8c48459f44fce024bf1",
+      "scripts/check-ask-browser.mjs": "9dcbb0e1dba684823750dc60f554e91c136bbbc50075ed57207929b4c6533cd3",
+      "scripts/check-integration.mjs": "5e1702ffcd8b5848f0bd274bcd4a2daf439e09706515a0d900eb5fdc2eef7011",
+      "scripts/check-security.py": "bd3aaecdedd3630f7ddf61d71d0dd1dc7d42077405f8f93807d6873441bfe099",
+      "scripts/check-trust-browser.mjs": "e1ba906c4edc97753cd404a0be83aef00991ed8125c2f941e134bfbfb59a9678",
+      "scripts/diagnose-free-providers.py": "eba4d49a8289680d76df5d1b65011bf08d625b3cdbc2fa4fb26796cfe57197da",
+      "scripts/diagnose-twelve-binance-alignment.py": "aba2daa1d27ab0bef33b4179c7804738a712ccbb427f60e0f97b181350ae88c3",
+      "scripts/diagnose-twelve-data.py": "50b0614d28c797eb1c78b5527c1d9d6718437f114935f032e97828a64f095d88",
+      "scripts/diagnose-twelve-timestamps.py": "50a394456208fdba0e0cdd9827a00f7f3664d1fc9b8f002d3943d07180cedd7c",
+      "scripts/investigate-trust-blockers.py": "fac88674c8027a6d3d310e46bc352feec784925ea421d194e14230b4fc37f62a",
+      "scripts/investigate-trust-data.py": "af56fce3e57000c20b5d52525519b733580f4aca0b3a3441b93be5426d3e9c91",
+      "scripts/verify-ask-flow.py": "9cdb76945f957e191e4ba65a1fbf35472b5458b32d09365a682e9bfceefdf3d6",
+      "scripts/verify-data-layer.py": "02d398589d4b9c079fb453d3154697729c54201e0a2580b103110567703c7859",
+      "scripts/verify-trust-remediation.py": "91714c8c45027c9cc5313e3740f4e2198e0a77aa93c75cba9c6f5a669927d7fc",
+      "scripts/verify-trust.py": "f29209100d6e019e484093f180c7fd6b68b7bbeca573008585a30b9c3a03f8bd",
+      "data/phase2-trust-live-verification.db": "67b702ee4419223f27e94f214005f9972bec2abecc68db9986683c65a3d3647c",
+      "data/phase1-live-verification.db": "f2b7e86848f7b62f1668d7eb407da925e4dee2eecd93a1410ea832a60374a4d0",
+      "data/phase2-trust-demo-verification.db": "9580f74ed8d5993bfa98265f3fa2259f8549d4707aae8bf99fb1df70454c2835",
+      "data/phase1-demo-verification.db": "b789b4b4dedcac9ba7de8d5335e713426c0369064ba0f4f51b0d5fb4b912edf2",
+      "data/phase2-trust-history-investigation.db": "8d90dafeaad215787fe94ec8cac54141afa324a82e49a5314cf50aef6e07ea24",
+      "data/phase2-verification.db": "f4366e5f09058e882ad8fef121afd3c7640adddc6f82be25751be5abca1ac4ac",
+      "data/parity-pulse.db": "0a90f5d28093407fbe47242e79e525ba3d0345f1f1cac063b9d145c700b426e3",
+      "data/phase2-trust-remediation-verification.db": "d0333f1344b4a871f3f89d4eb522f8b047cc1c566bee020533be10cde3496131"
+    },
+    "database_counts_before_and_after_unchanged": {
+      "data/phase2-trust-live-verification.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 1,
+        "issuers": 2,
+        "token_metadata": 2,
+        "token_observations": 4,
+        "equity_observations": 0,
+        "news_events": 100,
+        "market_status": 0,
+        "ingestion_checkpoints": 0,
+        "exposure_proposals": 0,
+        "trust_assessments": 1,
+        "trust_samples": 0,
+        "trust_episodes": 0
+      },
+      "data/phase1-live-verification.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 1,
+        "issuers": 2,
+        "token_metadata": 2,
+        "token_observations": 2,
+        "equity_observations": 0,
+        "news_events": 0,
+        "market_status": 0,
+        "ingestion_checkpoints": 0,
+        "exposure_proposals": 1
+      },
+      "data/phase2-trust-demo-verification.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 3,
+        "issuers": 1,
+        "token_metadata": 2,
+        "token_observations": 2,
+        "equity_observations": 2,
+        "news_events": 2,
+        "market_status": 0,
+        "ingestion_checkpoints": 0,
+        "exposure_proposals": 0,
+        "trust_assessments": 1,
+        "trust_samples": 0,
+        "trust_episodes": 0
+      },
+      "data/phase1-demo-verification.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 3,
+        "issuers": 1,
+        "token_metadata": 2,
+        "token_observations": 2,
+        "equity_observations": 2,
+        "news_events": 2,
+        "market_status": 0,
+        "ingestion_checkpoints": 0,
+        "exposure_proposals": 1
+      },
+      "data/phase2-trust-history-investigation.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 1,
+        "issuers": 2,
+        "token_metadata": 4,
+        "token_observations": 83,
+        "equity_observations": 2083,
+        "news_events": 126,
+        "market_status": 0,
+        "ingestion_checkpoints": 3,
+        "exposure_proposals": 0,
+        "trust_assessments": 1,
+        "trust_samples": 0,
+        "trust_episodes": 0
+      },
+      "data/phase2-verification.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 1,
+        "issuers": 2,
+        "token_metadata": 4,
+        "token_observations": 25,
+        "equity_observations": 946,
+        "news_events": 100,
+        "market_status": 2,
+        "ingestion_checkpoints": 4
+      },
+      "data/parity-pulse.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 4,
+        "issuers": 1,
+        "token_metadata": 2,
+        "token_observations": 2,
+        "equity_observations": 2,
+        "news_events": 2,
+        "market_status": 0,
+        "ingestion_checkpoints": 0,
+        "exposure_proposals": 16,
+        "trust_assessments": 13,
+        "trust_samples": 0,
+        "trust_episodes": 0
+      },
+      "data/phase2-trust-remediation-verification.db": {
+        "schema_metadata": 1,
+        "tracked_assets": 1,
+        "issuers": 2,
+        "token_metadata": 4,
+        "token_observations": 8,
+        "equity_observations": 0,
+        "news_events": 100,
+        "market_status": 0,
+        "ingestion_checkpoints": 0,
+        "exposure_proposals": 0,
+        "trust_assessments": 2,
+        "trust_samples": 0,
+        "trust_episodes": 0
+      }
+    },
+    "existing_files_changed": [
+      "README.md",
+      "backend/app/api/demo_sandbox.py",
+      "backend/app/main.py",
+      "frontend/src/components/DemoTrustSandbox.tsx",
+      "frontend/src/styles.css"
+    ],
+    "new_files": [
+      "backend/app/api/demo_opportunity.py",
+      "backend/app/models/demo_opportunity.py",
+      "backend/app/models/opportunity.py",
+      "backend/app/models/risk.py",
+      "backend/app/services/demo_opportunity.py",
+      "backend/app/services/opportunity.py",
+      "backend/app/services/risk.py",
+      "backend/tests/integration/test_demo_opportunity.py",
+      "backend/tests/unit/test_opportunity_risk.py",
+      "data/demo/opportunity/inputs.json",
+      "docs/DEMO_OPPORTUNITY_STAGE_3A.md",
+      "docs/evidence/DEMO_OPPORTUNITY_STAGE_3A_BROWSER.json",
+      "docs/evidence/DEMO_OPPORTUNITY_STAGE_3A_VERIFICATION.json",
+      "frontend/src/components/DemoOpportunityFlow.tsx",
+      "frontend/src/services/demoOpportunity.ts",
+      "frontend/src/test/DemoOpportunityFlow.test.tsx",
+      "frontend/src/test/demoOpportunityFixtures.json"
+    ]
+  },
+  "validation": {
+    "baseline_relevant_backend_tests": 91,
+    "backend_full_tests": {
+      "passed": 404,
+      "existing_tests_retained": 345,
+      "added": 59,
+      "failed": 0
+    },
+    "frontend_full_tests": {
+      "passed": 99,
+      "existing_tests_retained": 66,
+      "added": 33,
+      "failed": 0
+    },
+    "typescript_and_vite_build": "PASS",
+    "ruff_check": "PASS",
+    "ruff_format_check": "PASS",
+    "security": "PASS",
+    "extended_secret_audit": "PASS",
+    "git_diff_check": "PASS",
+    "desktop_mobile_browser": "PASS",
+    "browser_evidence": "docs/evidence/DEMO_OPPORTUNITY_STAGE_3A_BROWSER.json",
+    "known_warning": "Upstream Starlette/httpx TestClient deprecation"
+  },
+  "real_provider_or_network_attempts": 0,
+  "live_execution_calls": 0,
+  "production_database_writes": 0,
+  "quote_service": "NOT_IMPLEMENTED",
+  "transaction_builder": "NOT_IMPLEMENTED",
+  "simulation_service": "NOT_IMPLEMENTED",
+  "paper_execution": "NOT_IMPLEMENTED",
+  "provider_ratio_research_changes": false,
+  "alignment_diagnostic_run": false,
+  "next_stage": "Separately authorized DEMO Stage 3B downstream contracts/integration; quote/preparation/simulation prerequisites documented; no execution"
+}
