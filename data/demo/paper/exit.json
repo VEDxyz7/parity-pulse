@@ -1,0 +1,13 @@
+{
+  "dataset_type": "DEMO_FIXTURE",
+  "synthetic": true,
+  "production_eligible": false,
+  "version": "demo-paper-exit-1",
+  "scenario_id": "supported-move",
+  "seconds_after_entry": 300,
+  "token_mark_price_usd": "53",
+  "slippage_bps": "20",
+  "fees_usd": "0.10",
+  "gas_usd": "0.05",
+  "description": "Explicit synthetic token observation five minutes after entry; illustrative scenario outcome, not live data or a prediction."
+}

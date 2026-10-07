@@ -24,6 +24,7 @@ class DemoPreparationFlow:
         self.simulation_service = SimulationService()
         self.quotes = OrderedDict()
         self.transactions = OrderedDict()
+        self.simulations = OrderedDict()
         self.market_snapshots = {k: digest(v) for k, v in flow.sandbox.datasets.items()}
 
     def context(self, scenario):
@@ -150,10 +151,13 @@ class DemoPreparationFlow:
             context_sha256=self.context(result.scenario_id),
             now=now,
         )
-        return DemoSimulationResult(
+        result = DemoSimulationResult(
             **MARKER,
             inputs_fixture_sha256=self.flow.fixture_hash,
             scenario_id=result.scenario_id,
             simulation=simulation,
             reason_codes=simulation.reason_codes,
         )
+
+        self.flow._save(self.simulations, simulation.simulation_id, result)
+        return result

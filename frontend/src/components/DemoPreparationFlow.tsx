@@ -1,3 +1,4 @@
+import { DemoPaperFlow } from './DemoPaperFlow'
 import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
 import type { OpportunityResult, RiskResult } from '../services/demoOpportunity'
@@ -6,6 +7,7 @@ import { fetchPreparation, fetchQuote, fetchSimulation, type PreparationResult, 
 export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpired }: {
   trust: DemoResult; opportunity: OpportunityResult; risk: RiskResult; opportunityExpired: boolean
 }) {
+  const [paperFilled, setPaperFilled] = useState(false)
   const [quote, setQuote] = useState<QuoteResult | null>(null)
   const [prepared, setPrepared] = useState<PreparationResult | null>(null)
   const [simulation, setSimulation] = useState<SimulationResult | null>(null)
@@ -46,12 +48,12 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
     }
   }
   const q = quote?.quote, transaction = prepared?.transaction, s = simulation?.simulation
-  const disabled = busy !== null || expired || opportunityExpired
+  const disabled = busy !== null || expired || opportunityExpired || paperFilled
   return <section aria-label="Demo Quote Preparation and Simulation" className="demo-preparation-flow">
     <h4>Quote → Risk revalidation → Transaction Preparation → Simulation</h4>
     <p><strong>DEMO SANDBOX</strong><br /><span>SIMULATED DATA</span> — <span>NOT LIVE MARKET DATA</span></p>
     <p>Unsigned synthetic request only. No wallet, order, broadcast or moved funds.</p>
-    <button className="refresh-button" disabled={busy !== null || opportunityExpired} onClick={() => { void run('quote') }}>
+    <button className="refresh-button" disabled={busy !== null || opportunityExpired || paperFilled} onClick={() => { void run('quote') }}>
       {busy === 'quote' ? 'Generating DEMO quote…' : 'Generate DEMO Quote'}
     </button>
     {error && <p role="alert">{error}</p>}
@@ -88,6 +90,7 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
       <p>Preparation reasons: {prepared.reason_codes.join(' · ')} · Revalidated Risk: {prepared.risk_revalidation.status}</p>
       {transaction && <>
         <p>Request ID: <code>{transaction.transaction_id}</code></p>
+        <p>UNSIGNED DEMO PREPARATION · NOT BROADCAST</p>
         <p>DEMO_BUY_REQUEST · CANONICAL_JSON_DEMO_REQUEST · Not signed · Not executed · Not broadcastable</p>
         <details><summary>Prepared DEMO request parameters</summary><pre>{JSON.stringify(transaction.parameters, null, 2)}</pre></details>
         <p>Request fingerprint: <code>{transaction.fingerprint}</code></p>
@@ -98,11 +101,15 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
     </>}
     {s && <>
       <h4>Simulation: <strong>{s.status}</strong>{expired || opportunityExpired ? ' (expired)' : ''}</h4>
+      <p>LOCAL DEMO SIMULATION · NOT ON-CHAIN EXECUTION</p>
       <p>LOCAL DEMO CONSTRAINT EVALUATION — NOT A CHAIN SIMULATION</p>
       <p>Simulation reasons: {s.reason_codes.join(' · ')}</p>
       <ul>{s.checks.map(check => <li key={check.code}>{check.passed ? 'PASS' : 'FAIL'} · {check.code}: {check.detail}</li>)}</ul>
       <p>No real transaction was broadcast. No money moved. Execution remains blocked.</p>
     </>}
+    {simulation && s?.status === 'SIMULATION_PASS' && quote && prepared && <DemoPaperFlow
+      key={s.simulation_id} quote={quote} prepared={prepared} simulation={simulation} origin={opportunity}
+      expired={expired || opportunityExpired} onFilled={() => setPaperFilled(true)} />}
     {quote && <details><summary>Quote / Preparation / Simulation audit contracts</summary><pre>{JSON.stringify({ quote, prepared, simulation }, null, 2)}</pre></details>}
   </section>
 }
