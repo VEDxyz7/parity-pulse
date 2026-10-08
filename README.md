@@ -1,5 +1,35 @@
 # Parity Pulse
 
+Master Phase 15 — Frontend Integration is **PASS for the non-live frontend gate**.
+React consumes existing backend authorities for exposure/routes, Opportunity scans,
+Portfolio/Autopilot, Terminal, Scorecard/Audit and Agent API inspection. Wallet and
+approval capabilities are accurately unavailable; production gates remain unchanged.
+[Phase 15 report, exact files and validation](docs/PHASE_15_REPORT.md).
+Phase 16 has **NOT** started. The older milestone notes below are historical.
+
+Navigate to `#overview`, `#ask` (route comparison / proposal review), `#opportunity`
+(or `#opportunity/<run_id>`), `#autopilot`, `#portfolio`, `#terminal`, `#agent-api`,
+`#settings`, `#audit` (or `#audit/<decision_id>`) and `#demo-sandbox`.
+Analytical navigation does not unlock the disabled execution controls. All numbers,
+rankings, drift, P&L and outcome states come from backend responses. Periodic 30-second
+GET refreshes never scan, save mandates, propose plans, sign or execute automatically.
+
+From the repository root, verify generated contracts and the isolated browser journeys:
+
+```sh
+PYTHONPATH=backend .venv/bin/python scripts/generate-ui-contracts.py --check
+npm test
+.venv/bin/python -m pytest -q
+npm run build
+.venv/bin/python scripts/verify-frontend-phase15.py
+```
+
+The browser runner needs installed Google Chrome and free ports 8054–8057/5178.
+It serves the built UI with disposable synthetic fixture backends, forwards no credentials,
+refuses occupied ports, and stops only its own processes. It prints the retained temporary
+evidence/screenshot directory. No production data, provider verification or real funds.
+`npm run dev` remains the canonical command from the repository root.
+
 Master Phase 14 — Agent API / MCP: a bounded interface over the existing backend.
 Seven typed tools are documented at `#agent-api` and `GET /api/agent/tools`.
 Analytical tools inspect backend state; proposal tools cannot execute, sign, broadcast,
@@ -104,7 +134,7 @@ Hackathon Demo Stage 4 extends the explicit **DEMO SANDBOX** through Trust → O
 
 Canonical Phase 1 — Working Ask Flow is PASS for deterministic, non-executable exposure estimates and persisted DRY_RUN proposals. Engineering Stages 1/2 remain PASS. The backend implements dynamic Binance RWA discovery, market data, independent Massive equity/news adapters, a versioned U.S. calendar, exact Decimal normalization and isolated SQLite persistence. The frontend accepts stock budget requests and displays backend-authoritative estimates, issuer comparison, unknown costs and execution blockers. Canonical Phase 2 adds a separate deterministic analytical Trust endpoint/panel; its gate remains BLOCKED by unavailable real evidence. Production Opportunity scanning and live execution remain deferred. Master Phase 6 adds bounded, non-executable agents; see the current Phase 6 report.
 
-**All LIVE execution is blocked.** The application rejects LIVE configuration even if a flag is set to true. Its ordinary runtime has no live order, broadcast, wallet mutation, portfolio or trading endpoints. DEMO paper APIs operate only on synthetic memory records.
+**All LIVE execution is blocked.** The application rejects LIVE configuration even if a flag is set to true. Its ordinary runtime provides non-executable portfolio/mandate/plan APIs, and has no live order, broadcast or wallet-mutation endpoints. DEMO paper APIs operate only on synthetic memory records.
 
 ## Product roadmap and engineering stages
 
@@ -112,7 +142,7 @@ Canonical product roadmap: Phase 0 — Reconnaissance; Phase 1 — Working Ask F
 
 Engineering Stage 1 — Foundation and Engineering Stage 2 — Data Layer have passed. Foundation supports Canonical Phase 1; Data Layer supports Canonical Phase 1 and prepares Canonical Phase 2. **The current canonical milestone is Phase 1 — Working Ask Flow, PASS:** request parsing, exposure comparison, indicative result/route and persisted DRY_RUN proposal are verified. Vendor quotes and transaction simulation remain unavailable and never reported as successful. Canonical Phase 2 — Trust Layer is analytically implemented and software-verified, with TRUST_GATE=BLOCKED by current equity403, missing mandatory metrics/history and partial news. Production Canonical Phase 3 — Opportunity Mode must not begin before Trust completion and TRUST_GATE=PASS. Separately authorized DEMO Stage 3A demonstrates Opportunity/Risk core calculations using synthetic evidence, without advancing either production gate.
 
-Original PHASE_1/PHASE_2 reports and the legacy `phase: 2` status field refer to engineering milestones. PHASE_1_REPORT now additionally records the completed canonical Ask milestone, and the current UI labels it Canonical Phase 1. The Data Layer report remains PASS and is not renamed as Trust Layer; [EXECUTION_GATES.md](docs/EXECUTION_GATES.md) records current development gates.
+Original PHASE_1/PHASE_2 reports and the legacy `phase: 2` status field refer to engineering milestones. PHASE_1_REPORT now additionally records the completed canonical Ask milestone, while the current UI also links to the later Master Phase 15 analytical surfaces. The Data Layer report remains PASS and is not renamed as Trust Layer; [EXECUTION_GATES.md](docs/EXECUTION_GATES.md) records current development gates.
 
 ## Local startup
 

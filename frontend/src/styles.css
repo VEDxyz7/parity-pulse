@@ -173,3 +173,23 @@ h1 { font-weight: 500; letter-spacing: -1.1px; font-size: clamp(24px, 2.4vw, 33p
 .agent-api-inspection pre { max-width: 100%; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
 .agent-api-inspection details { padding: 16px 0; border-bottom: 1px solid var(--border); }
 .agent-api-inspection summary { cursor: pointer; overflow-wrap: anywhere; }
+/* Phase 15: preserve existing layouts, improve analytical contrast and keyboard/mobile use. */
+.workspace-view { display: grid; gap: 18px; min-width: 0; }
+.workspace-view .panel { padding: 22px; min-width: 0; }
+.workspace-view p, .workspace-view code, .workspace-view summary { overflow-wrap: anywhere; line-height: 1.65; }
+.workspace-view table { min-width: 760px; width: 100%; text-align: left; border-collapse: collapse; font-size: 13px; }
+.workspace-view th, .workspace-view td { padding: 12px; border-bottom: 1px solid #d8ded4; vertical-align: top; }
+.workspace-view pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 400px; overflow: auto; }
+.workspace-form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.workspace-form label { display: grid; gap: 6px; font-size: 13px; }
+.workspace-form input, .workspace-form select { border: 1px solid #9aa89f; background: white; color: #263d36; padding: 10px; border-radius: 6px; width: 100%; min-width: 0; font: inherit; }
+.workspace-form p { grid-column: 1/-1; }
+.mode-notice { border-left: 4px solid #153f35; background: #edf3e9; padding: 16px; }
+.home-actions { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; margin-top: 20px; }
+.home-actions a { padding: 20px; font-weight: 600; }
+.home-actions small { display: block; font-weight: 400; margin-top: 8px; font-size: 12px; line-height: 1.6; }
+.terminal .panel > p, .terminal-record p, .terminal small, .terminal-note, .terminal-asof { color: #475569; }
+.terminal th { color: #334155; }.terminal summary { color: #4140a0; }
+input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [tabindex="0"]:focus-visible { outline: 3px solid #326a93; outline-offset: 3px; }
+[aria-busy="true"] { cursor: progress; }
+@media(max-width:720px) { .workspace-form, .home-actions { grid-template-columns: 1fr; }.workspace-view .panel { padding:16px; }.refresh-button { max-width:100%; white-space:normal; }.workspace-view .ask-details { grid-template-columns:1fr; }.navigation { gap:4px; } }

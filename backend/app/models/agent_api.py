@@ -256,3 +256,28 @@ INPUTS = {
     "get_autopilot_status": ReadInput,
 }
 PROPOSALS = frozenset({"buy_stock_exposure", "find_opportunity"})
+
+
+def project_portfolio(raw):
+    """Shared read projection only; existing service owns all financial values."""
+    raw = dict(raw)
+    for key in ("pending_plan", "latest_decision"):
+        plan = raw[key]
+        raw[key] = (
+            PlanView(
+                **{
+                    k: getattr(plan, k)
+                    for k in PlanView.model_fields
+                    if k not in {"funding", "captured_at"}
+                },
+                funding=plan.snapshot.inputs.funding,
+                captured_at=plan.snapshot.captured_at,
+            )
+            if plan
+            else None
+        )
+    raw["active_positions"] = tuple(
+        PositionView(**{k: getattr(p, k) for k in PositionView.model_fields})
+        for p in raw["active_positions"]
+    )
+    return PortfolioState.model_validate(raw)

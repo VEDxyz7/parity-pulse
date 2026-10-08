@@ -1,0 +1,4249 @@
+{
+  "synthetic": true,
+  "production_eligible": false,
+  "workspace_empty": {
+    "schema_version": "workspace-1",
+    "data_mode": "DEMO",
+    "generated_at": "2026-10-08T17:29:43.044100Z",
+    "run_id": "3c106af9-c465-4a8f-968f-f685f6331c69",
+    "request_id": "b8920f5e-222c-4b4f-9c1e-bbf81cb1a04c",
+    "correlation_id": "329febf8-d80d-4408-baae-8d4c3ea0cae1",
+    "portfolio": {
+      "data_mode": "DEMO",
+      "execution_mode": "DRY_RUN",
+      "config": null,
+      "pending_plan": null,
+      "latest_decision": null,
+      "active_positions": [],
+      "position_coverage_complete": true,
+      "recovery_complete": true,
+      "live_trading_enabled": false,
+      "inspection_only": true
+    },
+    "positions": [],
+    "position_history_complete": true,
+    "wallet": {
+      "status": "WALLET_UNAVAILABLE",
+      "connection": "UNKNOWN",
+      "address": null,
+      "balance": null,
+      "source": "PUBLIC_RUNTIME_CAPABILITY",
+      "reasons": [
+        "WORKER_UNAVAILABLE"
+      ],
+      "execution_ready": false
+    },
+    "production_gates": {
+      "DATA_GATE": "PASS",
+      "DRY_RUN_GATE": "PASS",
+      "TRUST_GATE": "BLOCKED",
+      "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+      "SWAP_LIVE_GATE": "BLOCKED",
+      "RFQ_LIVE_GATE": "BLOCKED",
+      "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+    },
+    "routing_status": "PRODUCTION_CAPABLE_PROVIDER_PARTIAL",
+    "approval_status": "PUBLIC_APPROVAL_UNAVAILABLE",
+    "simulation_status": "EXACT_LIVE_EQUIVALENCE_UNVERIFIED",
+    "execution_mode": "DRY_RUN",
+    "approval_mode": "PROPOSE_ONLY",
+    "execution_ready": false,
+    "broadcast": false,
+    "live_trading_enabled": false,
+    "require_simulation": true,
+    "source": "EXISTING_PORTFOLIO_POSITION_AND_HOST_CAPABILITIES"
+  },
+  "scans": {
+    "steady": {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+      "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+      "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "DEMO",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "100",
+        "risk_budget_usd": "10",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 1,
+      "eligible_count": 0,
+      "rejected_count": 1,
+      "candidates": [
+        {
+          "candidate": {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "NORMAL",
+            "confidence": "LOW",
+            "deviation": "0.007",
+            "volume_percentile": "0.03333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333",
+            "effective_cost": "100.70",
+            "liquidity_usd": "5000",
+            "slippage_bps": "20",
+            "net_edge_usd": null,
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "REJECTED",
+            "tradable": true,
+            "risk_flags": [
+              "EXPECTED_ECONOMICS_UNAVAILABLE",
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "RISK_BUDGET_LIMIT",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "evidence_refs": [
+              "evidence:bf56e50ac18d5e74ead18b08bd53b7d167e6e4598037aeec6924a9dbf9c0e605"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "50.350",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "1000",
+            "persistence_seconds": "900",
+            "news_state": "NO_RELEVANT_NEWS",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": null,
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": null,
+            "estimated_slippage_usd": null,
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": null,
+            "rejection_reasons": [
+              "EXPECTED_ECONOMICS_UNAVAILABLE",
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "RISK_BUDGET_LIMIT",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          },
+          "inclusion": "INCLUDED",
+          "rejection_reasons": [
+            "EXPECTED_ECONOMICS_UNAVAILABLE",
+            "NEWS_UNAVAILABLE_OR_UNALIGNED",
+            "RISK_BUDGET_LIMIT",
+            "TRUST_NOT_LIKELY_INFORMATION"
+          ],
+          "rank": null,
+          "agent_selected": false,
+          "route": null
+        }
+      ],
+      "catalog_rejections": [],
+      "top_k": [],
+      "selected_candidate": null,
+      "final_action": "NO_QUALIFYING_OPPORTUNITY",
+      "blockers": [],
+      "rejection_counts": {
+        "EXPECTED_ECONOMICS_UNAVAILABLE": 1,
+        "NEWS_UNAVAILABLE_OR_UNALIGNED": 1,
+        "RISK_BUDGET_LIMIT": 1,
+        "TRUST_NOT_LIKELY_INFORMATION": 1
+      },
+      "provenance": [
+        {
+          "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "data_mode": "DEMO",
+          "source": "EXISTING_DEMO_DISCOVERY",
+          "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        },
+        {
+          "evidence_id": "evidence:bf56e50ac18d5e74ead18b08bd53b7d167e6e4598037aeec6924a9dbf9c0e605",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_SCAN_EVIDENCE",
+          "digest": "bf56e50ac18d5e74ead18b08bd53b7d167e6e4598037aeec6924a9dbf9c0e605",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        }
+      ],
+      "agent_run": null,
+      "risk_validation": "UNAVAILABLE",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    },
+    "thin-move": {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+      "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+      "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "DEMO",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "100",
+        "risk_budget_usd": "10",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 1,
+      "eligible_count": 0,
+      "rejected_count": 1,
+      "candidates": [
+        {
+          "candidate": {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "LIKELY_NOISE",
+            "confidence": "LOW",
+            "deviation": "0.02",
+            "volume_percentile": "0",
+            "effective_cost": "102.0",
+            "liquidity_usd": "10",
+            "slippage_bps": "20",
+            "net_edge_usd": null,
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "REJECTED",
+            "tradable": true,
+            "risk_flags": [
+              "EXPECTED_ECONOMICS_UNAVAILABLE",
+              "INSUFFICIENT_LIQUIDITY",
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "RISK_BUDGET_LIMIT",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "evidence_refs": [
+              "evidence:c4bbd78bf19108dc32f22866df51943fad355bef88e45b63cc9c8cd1f72a70e1"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "51.00",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "100",
+            "persistence_seconds": "0",
+            "news_state": "NO_RELEVANT_NEWS",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": null,
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": null,
+            "estimated_slippage_usd": null,
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": null,
+            "rejection_reasons": [
+              "EXPECTED_ECONOMICS_UNAVAILABLE",
+              "INSUFFICIENT_LIQUIDITY",
+              "NEWS_UNAVAILABLE_OR_UNALIGNED",
+              "RISK_BUDGET_LIMIT",
+              "TRUST_NOT_LIKELY_INFORMATION"
+            ],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          },
+          "inclusion": "INCLUDED",
+          "rejection_reasons": [
+            "EXPECTED_ECONOMICS_UNAVAILABLE",
+            "INSUFFICIENT_LIQUIDITY",
+            "NEWS_UNAVAILABLE_OR_UNALIGNED",
+            "RISK_BUDGET_LIMIT",
+            "TRUST_NOT_LIKELY_INFORMATION"
+          ],
+          "rank": null,
+          "agent_selected": false,
+          "route": null
+        }
+      ],
+      "catalog_rejections": [],
+      "top_k": [],
+      "selected_candidate": null,
+      "final_action": "NO_QUALIFYING_OPPORTUNITY",
+      "blockers": [],
+      "rejection_counts": {
+        "EXPECTED_ECONOMICS_UNAVAILABLE": 1,
+        "INSUFFICIENT_LIQUIDITY": 1,
+        "NEWS_UNAVAILABLE_OR_UNALIGNED": 1,
+        "RISK_BUDGET_LIMIT": 1,
+        "TRUST_NOT_LIKELY_INFORMATION": 1
+      },
+      "provenance": [
+        {
+          "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "data_mode": "DEMO",
+          "source": "EXISTING_DEMO_DISCOVERY",
+          "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        },
+        {
+          "evidence_id": "evidence:c4bbd78bf19108dc32f22866df51943fad355bef88e45b63cc9c8cd1f72a70e1",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_SCAN_EVIDENCE",
+          "digest": "c4bbd78bf19108dc32f22866df51943fad355bef88e45b63cc9c8cd1f72a70e1",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        }
+      ],
+      "agent_run": null,
+      "risk_validation": "UNAVAILABLE",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    },
+    "supported-move": {
+      "schema_version": "opportunity-scan-1",
+      "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+      "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+      "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+      "timestamp": "2026-10-06T16:00:00Z",
+      "data_mode": "DEMO",
+      "mandate": {
+        "mode": "OPPORTUNITY",
+        "ticker": null,
+        "budget_usd": "100",
+        "risk_budget_usd": "10",
+        "time_window": "PRE_OPEN",
+        "strategy": null,
+        "allocation_stock_percent": null,
+        "allocation_cash_percent": null,
+        "approval_mode": "PROPOSE_ONLY"
+      },
+      "policy": {
+        "version": "opportunity-scan-1",
+        "top_k": 5,
+        "max_representations": 500,
+        "max_stocks": 100,
+        "min_liquidity_usd": "1000",
+        "max_slippage_bps": "50",
+        "min_net_edge_usd": "0.25",
+        "max_age_seconds": 120,
+        "max_alignment_seconds": 30,
+        "min_baseline": 30,
+        "min_model_samples": 30,
+        "min_analogues": 3,
+        "ranking": "CONFIDENCE_EDGE_EVIDENCE_LIQUIDITY_COST_ID",
+        "opportunity_gate": "BLOCKED_BY_TRUST"
+      },
+      "universe_count": 1,
+      "eligible_count": 0,
+      "rejected_count": 1,
+      "candidates": [
+        {
+          "candidate": {
+            "candidate_id": "769e70bf72f5938ff95daa20c4bcb8fa6b8dd84221b6fb724dd589a49c447a2c",
+            "ticker": "NVDA",
+            "issuer": "demo-issuer",
+            "chain_id": "DEMO",
+            "contract": "demo:NVDA",
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-06T16:00:00Z",
+            "available_at": "2026-10-06T16:00:00Z",
+            "trust": "LIKELY_INFORMATION",
+            "confidence": "LOW",
+            "deviation": "0.02",
+            "volume_percentile": "1",
+            "effective_cost": "102.0",
+            "liquidity_usd": "5000",
+            "slippage_bps": "20",
+            "net_edge_usd": null,
+            "predicted_open_return": null,
+            "prediction_samples": 0,
+            "baseline_samples": 30,
+            "analogue_count": 3,
+            "eligibility": "REJECTED",
+            "tradable": true,
+            "risk_flags": [
+              "EXPECTED_ECONOMICS_UNAVAILABLE",
+              "RISK_BUDGET_LIMIT"
+            ],
+            "evidence_refs": [
+              "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e"
+            ],
+            "company": "Nvidia (DEMO)",
+            "token": "NVDADEMO",
+            "token_to_share_ratio": "0.5",
+            "token_price_usd": "51.00",
+            "independent_equity_price_usd": "100",
+            "independent_equity_source": "DEMO_EQUITY",
+            "regime": "REGULAR",
+            "volume_usd": "3000",
+            "persistence_seconds": "900",
+            "news_state": "CORROBORATING",
+            "historical_pattern": null,
+            "prediction_interval_low": null,
+            "prediction_interval_high": null,
+            "prediction_status": "NOT_READY",
+            "economics_basis": "SYNTHETIC_SCENARIO",
+            "proposed_notional_usd": null,
+            "stress_adverse_move_fraction": "0.02",
+            "stress_loss_usd": null,
+            "estimated_slippage_usd": null,
+            "fees_usd": "0.10",
+            "gas_usd": "0.05",
+            "execution_buffer_usd": "0.10",
+            "gross_expected_edge_usd": null,
+            "rejection_reasons": [
+              "EXPECTED_ECONOMICS_UNAVAILABLE",
+              "RISK_BUDGET_LIMIT"
+            ],
+            "liquidity_state": "AVAILABLE",
+            "source_timestamps": {
+              "TOKEN": "2026-10-06T16:00:00Z",
+              "RATIO": "2026-10-06T16:00:00Z",
+              "RATIO_RECEIPT": "2026-10-06T16:00:00Z",
+              "EQUITY": "2026-10-06T16:00:00Z",
+              "LIQUIDITY": "2026-10-06T16:00:00Z",
+              "TRUST": "2026-10-06T16:00:00Z",
+              "COSTS": "2026-10-06T16:00:00Z"
+            }
+          },
+          "inclusion": "INCLUDED",
+          "rejection_reasons": [
+            "EXPECTED_ECONOMICS_UNAVAILABLE",
+            "RISK_BUDGET_LIMIT"
+          ],
+          "rank": null,
+          "agent_selected": false,
+          "route": null
+        }
+      ],
+      "catalog_rejections": [],
+      "top_k": [],
+      "selected_candidate": null,
+      "final_action": "NO_QUALIFYING_OPPORTUNITY",
+      "blockers": [],
+      "rejection_counts": {
+        "EXPECTED_ECONOMICS_UNAVAILABLE": 1,
+        "RISK_BUDGET_LIMIT": 1
+      },
+      "provenance": [
+        {
+          "evidence_id": "evidence:3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "data_mode": "DEMO",
+          "source": "EXISTING_DEMO_DISCOVERY",
+          "digest": "3e1fa6a403be3af95ef45b3b0b5bd4840c880f4f204cababe72f446340f6961f",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        },
+        {
+          "evidence_id": "evidence:d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_SCAN_EVIDENCE",
+          "digest": "d3d6666b9e6f298ce8b37ff755e135e122bbd174929af6fcb585e59f22301a9e",
+          "observed_at": "2026-10-06T16:00:00Z",
+          "available_at": "2026-10-06T16:00:00Z",
+          "synthetic": true
+        }
+      ],
+      "agent_run": null,
+      "risk_validation": "UNAVAILABLE",
+      "opportunity_gate": "BLOCKED_BY_TRUST",
+      "execution_mode": "DRY_RUN",
+      "approval_mode": "PROPOSE_ONLY",
+      "require_simulation": true,
+      "live_trading_enabled": false,
+      "execution_ready": false,
+      "transaction_broadcast": false,
+      "no_broadcast_statement": "No real transaction was broadcast.",
+      "risk_budget_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+    }
+  },
+  "audit": {
+    "schema_version": "terminal-1",
+    "generated_at": "2026-10-08T17:29:43.140988Z",
+    "data_mode": "DEMO",
+    "run_id": "3c106af9-c465-4a8f-968f-f685f6331c69",
+    "request_id": "83f1c1b5-ac0d-448c-8ad5-3479b6a38b88",
+    "correlation_id": "4217fe1d-49fc-4b62-862a-528e27ff19fc",
+    "source_scope": "MODE_SCOPED_PERSISTED_RECORDS",
+    "production_gates": {
+      "DATA_GATE": "PASS",
+      "DRY_RUN_GATE": "PASS",
+      "TRUST_GATE": "BLOCKED",
+      "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+      "SWAP_LIVE_GATE": "BLOCKED",
+      "RFQ_LIVE_GATE": "BLOCKED",
+      "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+    },
+    "execution_mode": "DRY_RUN",
+    "approval_mode": "PROPOSE_ONLY",
+    "execution_ready": false,
+    "broadcast": false,
+    "page": {
+      "items": [
+        {
+          "event_id": "859dc93c413115fbe1ffc443f75a8e2b8e8c9711b84fc1ffdb0df8b744f723f3",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.094671Z",
+          "event_type": "INPUT",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "bf9bda982c111f69b63b2f3988b6e630b55cf24e569348b72b4e53d2c9fe5f42",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "RECORDED",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "bc99d04716d644e023428da44f62597eb3bf80e19f1b09dded8e31bc0d4e0936",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123156Z",
+          "event_type": "INPUT",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "bf9bda982c111f69b63b2f3988b6e630b55cf24e569348b72b4e53d2c9fe5f42",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "RECORDED",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "cd2bad91689691b25bc26dedff7f1ba0f588f1bb04b466092e544c2cf95b80dd",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071012Z",
+          "event_type": "INPUT",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "bf9bda982c111f69b63b2f3988b6e630b55cf24e569348b72b4e53d2c9fe5f42",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "RECORDED",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "37a8c07aa2d03995c73598250feb240404bd764943c4e6ea9d0f34ae8685a653",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.094739Z",
+          "event_type": "DATA_FETCH",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "dd3e90d2558a746a190d8377b783fc9e8a416846f69d6d4e0fb57a1787b2ab2e",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "FROZEN_EVIDENCE_REFERENCES",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "46f55dedbb31e64ae3a4768513c05951ee7e0ee97ae9aa03cee81da8e7ca7ef4",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071083Z",
+          "event_type": "DATA_FETCH",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "c8544d2233a2cf4d8b2b1169f0d4698ea4f812c65530eddcbea1da51ab7188f2",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "FROZEN_EVIDENCE_REFERENCES",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "b86959f1ced18be9340374458a0359179c6873b772b628668676a04d064f4036",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123206Z",
+          "event_type": "DATA_FETCH",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "94cff8504a98ebc5e3fcc068b90d9206d80b55c69946aaa930e93667713258f6",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "FROZEN_EVIDENCE_REFERENCES",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "314ff5cdf901ea29404282e741159acf1463409549e99a4400dfe75056c7c180",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071219Z",
+          "event_type": "TRUST",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "9adbe380a0ec455ec669595029d89530d0aa32a19c7cc96d4496e52a66cbf907",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "PERSISTED_CANDIDATE_EVIDENCE",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "7741cfd5dbeb2d215f79f9ec53f0c50922475a550777ff0784f1d81d9c91cdbc",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.094864Z",
+          "event_type": "TRUST",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "61a14dccf2c8acd4c9acfdf81b01cf6499ca191d7a224d491c0b64e3a7cc43c3",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "PERSISTED_CANDIDATE_EVIDENCE",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "7bd365b5eb4c7e03c0c0c8a553be84f15115b54849262c195973b74bc5c42818",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123320Z",
+          "event_type": "TRUST",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "0c6005458e881abeede11f8849abf3dc2bc53034115480f43a318ff7da6f318f",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "PERSISTED_CANDIDATE_EVIDENCE",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "1ba1ef92e6d4d22f459e05d2c56c92059fe703c39e94bc646c25df4b00cae1f5",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071141Z",
+          "event_type": "CANDIDATE_SCAN",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "9adbe380a0ec455ec669595029d89530d0aa32a19c7cc96d4496e52a66cbf907",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "RECORDED",
+          "input_summary": {},
+          "output_summary": {
+            "universe": 1,
+            "eligible": 0,
+            "rejected": 1
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "a2959deed0f506907b092fd67a130bf66796880da954166161c9c1121fa8ad37",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.094793Z",
+          "event_type": "CANDIDATE_SCAN",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "61a14dccf2c8acd4c9acfdf81b01cf6499ca191d7a224d491c0b64e3a7cc43c3",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "RECORDED",
+          "input_summary": {},
+          "output_summary": {
+            "universe": 1,
+            "eligible": 0,
+            "rejected": 1
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "bca1025805dd06b90b7a4baffdc2d6fe0c102852ecb04fb1cac70a5a9f31a193",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123256Z",
+          "event_type": "CANDIDATE_SCAN",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "0c6005458e881abeede11f8849abf3dc2bc53034115480f43a318ff7da6f318f",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "RECORDED",
+          "input_summary": {},
+          "output_summary": {
+            "universe": 1,
+            "eligible": 0,
+            "rejected": 1
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "44b58cce9cfa1ea816f46821d452851e4a751b1600b74de70e767c372eb072e3",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123383Z",
+          "event_type": "NO_ACTION",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "7937da398a489c89fa370fec172c41184cee21de7daddcc856c9ed58a84fa9b2",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "NO_QUALIFYING_OPPORTUNITY",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "a349c7f05cddeafe38cffd2d9eee1fccd4c5f4fd033a2717ebf93c3fcd28caed",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071291Z",
+          "event_type": "NO_ACTION",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "af928bd7e7bbfc3206235fc50bacf17befe3f2e1b7c97a50e6b18ab2d04ee96b",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "NO_QUALIFYING_OPPORTUNITY",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "f0e5b3869571848cf6c0f73a8921ea9e17f156601ccdfd3338aadf7ff5c4098e",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.094929Z",
+          "event_type": "NO_ACTION",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "448130e3fb94d3bf094028c7a48398e1de66f15d348ac7a632a9ec5e01f96271",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "NO_QUALIFYING_OPPORTUNITY",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "15492fc866002fb0f6611cf96b06f95de870eca6d3ad6322cf872c52b26103a9",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.095014Z",
+          "event_type": "RISK_REJECT",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "69cdf8984a060a9027df02919ecd1c04a3e28d188f5528aad4dd096376448db7",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "UNAVAILABLE",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "591d3fe812c92e07f0784ce7d5b9cf876598bca6e266660ad82fd5bf87c9ffda",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123463Z",
+          "event_type": "RISK_REJECT",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "69cdf8984a060a9027df02919ecd1c04a3e28d188f5528aad4dd096376448db7",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "UNAVAILABLE",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "d75fd8a43075f59c0e108c2d48525f3e9919d30693de3e24423c5d3bd1164477",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071371Z",
+          "event_type": "RISK_REJECT",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "69cdf8984a060a9027df02919ecd1c04a3e28d188f5528aad4dd096376448db7",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "UNAVAILABLE",
+          "input_summary": {},
+          "output_summary": {},
+          "reasons": []
+        },
+        {
+          "event_id": "5cb70c39c4dfedcbba1f44d313593cd0aa6ac332fe5b9cf2545d1f32e90e7538",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123513Z",
+          "event_type": "OUTCOME",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "0c75a489d09eb885fcf5baeb496440ca1a980007a82a444b4c07aa2ce6495b15",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "DEFERRED",
+          "input_summary": {},
+          "output_summary": {
+            "outcome": "DEFERRED",
+            "abstained": true
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "b710af410b7e0c786df07a69927238661ac7f88f334c8ca4de2500db8ac5e0c0",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071429Z",
+          "event_type": "OUTCOME",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "0c75a489d09eb885fcf5baeb496440ca1a980007a82a444b4c07aa2ce6495b15",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "DEFERRED",
+          "input_summary": {},
+          "output_summary": {
+            "outcome": "DEFERRED",
+            "abstained": true
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "ce31eb715a3ff644dbb562b16bf1d45f204c6e2867361b0f070c9b62536e6610",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.095070Z",
+          "event_type": "OUTCOME",
+          "actor": "DETERMINISTIC_BACKEND",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "bcf94e86bd1eafcb2913667326b3442b64a9bb34f948e4ebada3d566168357ae",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "DEFERRED",
+          "input_summary": {},
+          "output_summary": {
+            "outcome": "DEFERRED",
+            "abstained": true
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "68c951436edebe294328dfe75fb785577f31806a70ebc25dcd7d7f7cf4b4305f",
+          "data_mode": "DEMO",
+          "decision_id": "decision:65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "run_id": "65c444f97ee3757ade011f3000f3a3c4e9573e18319044cc7b272c5b6df7134a",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "2803ee9c-2ef9-46ca-ad5c-23f8367f9b29",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.095127Z",
+          "event_type": "SCORECARD",
+          "actor": "EVALUATOR",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "feb0180b2ec76e05400eba5e037e1c1c95305e4449a884d620ab1d0370eb4e1c",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "CORRECT_ABSTENTION",
+          "input_summary": {},
+          "output_summary": {
+            "quality": "CORRECT_ABSTENTION",
+            "score": null,
+            "direction_correct": null
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "c279ba2f268aaaf3359c8ecd951e54b47332db6378dd553689ba21973fcbd381",
+          "data_mode": "DEMO",
+          "decision_id": "decision:68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "run_id": "68a0bc2c96ba4ad0c0627be8f46a4df222fa18504418067eb500f50573f97089",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "0d42b8d4-e711-432a-9283-09a7dd2e7e1b",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.123565Z",
+          "event_type": "SCORECARD",
+          "actor": "EVALUATOR",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "74547b922b4b505ed2a9e30e80470a5bf3fe0085eb6da24c88b2381929d45c79",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "CORRECT_ABSTENTION",
+          "input_summary": {},
+          "output_summary": {
+            "quality": "CORRECT_ABSTENTION",
+            "score": null,
+            "direction_correct": null
+          },
+          "reasons": []
+        },
+        {
+          "event_id": "da78095c783a92233d911bf9dd1b51b5da878c3823c657b42812ea78516c113c",
+          "data_mode": "DEMO",
+          "decision_id": "decision:7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "run_id": "7db0dae8c0f73cda066935cc3c787e98bcfe7ae4f22cd64f85c14b8fc6dcafd1",
+          "episode_id": null,
+          "execution_id": null,
+          "correlation_id": "4274168c-10a7-41af-9256-e293c559a162",
+          "ticker": null,
+          "timestamp": "2026-10-06T16:00:00Z",
+          "recorded_at": "2026-10-08T17:29:43.071557Z",
+          "event_type": "SCORECARD",
+          "actor": "EVALUATOR",
+          "source": "OPPORTUNITY_SCAN",
+          "source_digest": "501d7d41e14da6bd4306c6882873b66c9e00e026266f4734b7cb76b2d59c0ea0",
+          "capture_kind": "PERSISTED_SOURCE_PROJECTION",
+          "status": "CORRECT_ABSTENTION",
+          "input_summary": {},
+          "output_summary": {
+            "quality": "CORRECT_ABSTENTION",
+            "score": null,
+            "direction_correct": null
+          },
+          "reasons": []
+        }
+      ],
+      "limit": 25,
+      "offset": 0,
+      "has_more": false,
+      "reasons": []
+    },
+    "limitations": [
+      "SOURCE_PROJECTIONS_ARE_NOT_NEW_PROVIDER_OR_EXECUTION_OPERATIONS",
+      "UNRECORDED_STAGES_ARE_NEVER_INFERRED_SUCCESSFUL"
+    ]
+  },
+  "workspace_ready": {
+    "schema_version": "workspace-1",
+    "data_mode": "DEMO",
+    "generated_at": "2026-10-08T17:29:43.195505Z",
+    "run_id": "3c106af9-c465-4a8f-968f-f685f6331c69",
+    "request_id": "0000e42f-746f-4f82-8e0d-07daf8c0bbd7",
+    "correlation_id": "b23aebdd-4bbd-4956-abf2-e882393ba59d",
+    "portfolio": {
+      "data_mode": "DEMO",
+      "execution_mode": "DRY_RUN",
+      "config": {
+        "targets": [
+          {
+            "asset": "NVDA",
+            "kind": "TOKENIZED_STOCK",
+            "weight": "0.5",
+            "drift_band": "0.05"
+          },
+          {
+            "asset": "CASH",
+            "kind": "CASH",
+            "weight": "0.5",
+            "drift_band": "0.05"
+          }
+        ],
+        "funding_symbol": "USDT",
+        "max_rebalance_notional_usd": "50",
+        "risk_budget_usd": "2",
+        "max_drift": "1",
+        "max_stock_exposure_usd": "100",
+        "crypto_enabled": false,
+        "approval_mode": "PROPOSE_ONLY",
+        "portfolio_id": "LOCAL_SINGLE_PORTFOLIO",
+        "account_scope": "LOCAL_SINGLE_ACCOUNT",
+        "data_mode": "DEMO",
+        "version": 1,
+        "source": "VALIDATED_USER_CONFIGURATION",
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z"
+      },
+      "pending_plan": {
+        "plan_id": "2c520963946c239ff75a5f1977234725a0cad9a03ce65626101cd9e4e7f1c316",
+        "data_mode": "DEMO",
+        "config": {
+          "targets": [
+            {
+              "asset": "NVDA",
+              "kind": "TOKENIZED_STOCK",
+              "weight": "0.5",
+              "drift_band": "0.05"
+            },
+            {
+              "asset": "CASH",
+              "kind": "CASH",
+              "weight": "0.5",
+              "drift_band": "0.05"
+            }
+          ],
+          "funding_symbol": "USDT",
+          "max_rebalance_notional_usd": "50",
+          "risk_budget_usd": "2",
+          "max_drift": "1",
+          "max_stock_exposure_usd": "100",
+          "crypto_enabled": false,
+          "approval_mode": "PROPOSE_ONLY",
+          "portfolio_id": "LOCAL_SINGLE_PORTFOLIO",
+          "account_scope": "LOCAL_SINGLE_ACCOUNT",
+          "data_mode": "DEMO",
+          "version": 1,
+          "source": "VALIDATED_USER_CONFIGURATION",
+          "created_at": "2026-10-08T15:00:00Z",
+          "updated_at": "2026-10-08T15:00:00Z"
+        },
+        "total_value_usd": "140.0200",
+        "rows": [
+          {
+            "asset": "CASH",
+            "kind": "CASH",
+            "current_value_usd": "100.0200",
+            "target_value_usd": "70.01000",
+            "current_weight": "0.714326524782173975146407656049135837737466076274817883159548635909155835",
+            "target_weight": "0.5",
+            "drift": "0.214326524782173975146407656049135837737466076274817883159548635909155835",
+            "allowed_band": "0.05",
+            "required_delta_usd": "-30.01000",
+            "position_ids": [],
+            "current_share_exposure": "0",
+            "state": "OUTSIDE_BAND",
+            "reasons": [
+              "DRIFT_EXCEEDS_BAND"
+            ]
+          },
+          {
+            "asset": "NVDA",
+            "kind": "TOKENIZED_STOCK",
+            "current_value_usd": "40.0",
+            "target_value_usd": "70.01000",
+            "current_weight": "0.285673475217826024853592343950864162262533923725182116840451364090844165",
+            "target_weight": "0.5",
+            "drift": "-0.214326524782173975146407656049135837737466076274817883159548635909155835",
+            "allowed_band": "0.05",
+            "required_delta_usd": "30.01000",
+            "position_ids": [
+              "87e26a13-6235-4d4d-9083-a662dcfb93d8"
+            ],
+            "current_share_exposure": "0.004",
+            "state": "OUTSIDE_BAND",
+            "reasons": [
+              "DRIFT_EXCEEDS_BAND"
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "action_id": "be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+            "asset": "NVDA",
+            "side": "BUY",
+            "priority": 1,
+            "notional_usd": "30.0100",
+            "quantity_base_units": "300100",
+            "decimals": 6,
+            "current_representation_base_units": "400000",
+            "target_representation_base_units": "700100",
+            "current_share_exposure": "0.004",
+            "estimated_share_delta": "0.003001",
+            "target_share_exposure": "0.007001",
+            "position_id": null,
+            "route": {
+              "schema_version": "routing-1",
+              "route_id": "bbf3b56d-4786-51b5-b41a-0fabdfda005c",
+              "underlying": "NVDA",
+              "requested_notional_usd": "30.01000",
+              "data_mode": "DEMO",
+              "source": "DETERMINISTIC_ROUTER",
+              "timestamp": "2026-10-08T15:00:00Z",
+              "valid_until": "2026-10-08T15:00:30Z",
+              "policy": {
+                "version": "routing-1",
+                "purpose": "INDICATIVE_EXPOSURE",
+                "require_costs": true,
+                "require_liquidity": true,
+                "require_trust": true,
+                "require_risk": true,
+                "min_liquidity_usd": "1000",
+                "max_slippage_bps": "50",
+                "max_age_seconds": 120,
+                "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+                "weights": null,
+                "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+              },
+              "status": "ROUTE_SELECTED",
+              "selected_representation": {
+                "underlying": "NVDA",
+                "issuer": "FIXTURE",
+                "chain_id": "56",
+                "contract": "0x2222222222222222222222222222222222222222",
+                "token": "NVDA"
+              },
+              "issuer": "FIXTURE",
+              "candidates": [
+                {
+                  "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+                  "inputs": {
+                    "identity": {
+                      "underlying": "NVDA",
+                      "issuer": "FIXTURE",
+                      "chain_id": "56",
+                      "contract": "0x2222222222222222222222222222222222222222",
+                      "token": "NVDA"
+                    },
+                    "data_mode": "DEMO",
+                    "token_price_usd": "100",
+                    "token_to_share_ratio": "0.01",
+                    "price_source": "TEST_FIXTURE",
+                    "price_timestamp": "2026-10-08T15:00:00Z",
+                    "price_quality": "DEMO",
+                    "ratio_source": "TEST_FIXTURE",
+                    "ratio_observed_at": "2026-10-08T15:00:00Z",
+                    "ratio_source_timestamp": null,
+                    "supported": true,
+                    "normalization_eligible": true,
+                    "normalization_reasons": [],
+                    "market_state": "regular",
+                    "tradable": true,
+                    "liquidity_usd": "100000",
+                    "liquidity_status": "AVAILABLE",
+                    "liquidity_source": "TEST_FIXTURE",
+                    "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                    "volume_usd": null,
+                    "fees_usd": "0.12",
+                    "gas_usd": "0.1",
+                    "slippage_bps": "50",
+                    "cost_status": "AVAILABLE",
+                    "cost_source": "TEST_FIXTURE",
+                    "cost_timestamp": "2026-10-08T15:00:00Z",
+                    "trust_state": "NORMAL",
+                    "trust_source": "TEST_FIXTURE",
+                    "trust_timestamp": "2026-10-08T15:00:00Z",
+                    "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                    "risk_state": "PASS",
+                    "risk_source": "EXISTING_RISK_ENGINE",
+                    "risk_timestamp": "2026-10-08T15:00:00Z",
+                    "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                    "risk_max_notional_usd": "49.283532338308457711",
+                    "risk_reason_codes": [],
+                    "route_available": true,
+                    "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                  },
+                  "eligible": true,
+                  "rank": 1,
+                  "rejection_reasons": [],
+                  "limitations": [],
+                  "effective_cost_per_share_usd": "10000.000000000000000000",
+                  "estimated_costs_usd": "0.370050000000000000",
+                  "all_in_cost_per_share_usd": "10123.308897034321892703",
+                  "ranking_cost_per_share_usd": "10123.308897034321892703",
+                  "liquidity_state": "AVAILABLE",
+                  "cost_state": "AVAILABLE",
+                  "trust_state": "NORMAL",
+                  "tradability": "TRADABLE"
+                }
+              ],
+              "selected_candidate": {
+                "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+                "inputs": {
+                  "identity": {
+                    "underlying": "NVDA",
+                    "issuer": "FIXTURE",
+                    "chain_id": "56",
+                    "contract": "0x2222222222222222222222222222222222222222",
+                    "token": "NVDA"
+                  },
+                  "data_mode": "DEMO",
+                  "token_price_usd": "100",
+                  "token_to_share_ratio": "0.01",
+                  "price_source": "TEST_FIXTURE",
+                  "price_timestamp": "2026-10-08T15:00:00Z",
+                  "price_quality": "DEMO",
+                  "ratio_source": "TEST_FIXTURE",
+                  "ratio_observed_at": "2026-10-08T15:00:00Z",
+                  "ratio_source_timestamp": null,
+                  "supported": true,
+                  "normalization_eligible": true,
+                  "normalization_reasons": [],
+                  "market_state": "regular",
+                  "tradable": true,
+                  "liquidity_usd": "100000",
+                  "liquidity_status": "AVAILABLE",
+                  "liquidity_source": "TEST_FIXTURE",
+                  "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                  "volume_usd": null,
+                  "fees_usd": "0.12",
+                  "gas_usd": "0.1",
+                  "slippage_bps": "50",
+                  "cost_status": "AVAILABLE",
+                  "cost_source": "TEST_FIXTURE",
+                  "cost_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_state": "NORMAL",
+                  "trust_source": "TEST_FIXTURE",
+                  "trust_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                  "risk_state": "PASS",
+                  "risk_source": "EXISTING_RISK_ENGINE",
+                  "risk_timestamp": "2026-10-08T15:00:00Z",
+                  "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                  "risk_max_notional_usd": "49.283532338308457711",
+                  "risk_reason_codes": [],
+                  "route_available": true,
+                  "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                },
+                "eligible": true,
+                "rank": 1,
+                "rejection_reasons": [],
+                "limitations": [],
+                "effective_cost_per_share_usd": "10000.000000000000000000",
+                "estimated_costs_usd": "0.370050000000000000",
+                "all_in_cost_per_share_usd": "10123.308897034321892703",
+                "ranking_cost_per_share_usd": "10123.308897034321892703",
+                "liquidity_state": "AVAILABLE",
+                "cost_state": "AVAILABLE",
+                "trust_state": "NORMAL",
+                "tradability": "TRADABLE"
+              },
+              "ranking_basis": "ALL_IN_ESTIMATE",
+              "reason_codes": [
+                "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+                "IDENTITY_TIE_BREAK"
+              ],
+              "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+              "execution_ready": false,
+              "transaction_broadcast": false,
+              "live_trading_enabled": false,
+              "execution_mode": "DRY_RUN",
+              "provider_execution_mode": null,
+              "no_broadcast_statement": "No real transaction was broadcast."
+            },
+            "risk": {
+              "evidence_digest": "847bcce30c8498c4efe5c77e4bfb803cc6a8088d7393c5ca4bff0321096c0649",
+              "evaluated_at": "2026-10-08T15:00:00Z",
+              "data_mode": "DEMO",
+              "decision_id": "rebalance_be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+              "status": "PASS",
+              "checks": [
+                {
+                  "code": "RISK_CONTEXT_AVAILABLE",
+                  "passed": true,
+                  "detail": "RISK_CONTEXT_AVAILABLE"
+                },
+                {
+                  "code": "REQUIRED_EVIDENCE_VALID",
+                  "passed": true,
+                  "detail": "REQUIRED_EVIDENCE_VALID"
+                },
+                {
+                  "code": "SYSTEM_RESOLVED",
+                  "passed": true,
+                  "detail": "SYSTEM_RESOLVED"
+                },
+                {
+                  "code": "TRADABLE_ROUTE",
+                  "passed": true,
+                  "detail": "TRADABLE_ROUTE"
+                },
+                {
+                  "code": "DATA_FRESHNESS",
+                  "passed": true,
+                  "detail": "DATA_FRESHNESS"
+                },
+                {
+                  "code": "TIMESTAMP_ALIGNMENT",
+                  "passed": true,
+                  "detail": "TIMESTAMP_ALIGNMENT"
+                },
+                {
+                  "code": "TRUST_REQUIRED",
+                  "passed": true,
+                  "detail": "TRUST_REQUIRED"
+                },
+                {
+                  "code": "OPPORTUNITY_TRUST",
+                  "passed": true,
+                  "detail": "OPPORTUNITY_TRUST"
+                },
+                {
+                  "code": "PRODUCTION_TRUST_GATE",
+                  "passed": true,
+                  "detail": "PRODUCTION_TRUST_GATE"
+                },
+                {
+                  "code": "PRODUCTION_OPPORTUNITY_GATE",
+                  "passed": true,
+                  "detail": "PRODUCTION_OPPORTUNITY_GATE"
+                },
+                {
+                  "code": "RISK_CONTEXT_FRESH",
+                  "passed": true,
+                  "detail": "RISK_CONTEXT_FRESH"
+                },
+                {
+                  "code": "WALLET_ALLOWED",
+                  "passed": true,
+                  "detail": "WALLET_ALLOWED"
+                },
+                {
+                  "code": "RISK_BUDGET_LIMIT",
+                  "passed": true,
+                  "detail": "RISK_BUDGET_LIMIT"
+                },
+                {
+                  "code": "DAILY_LOSS_LIMIT",
+                  "passed": true,
+                  "detail": "DAILY_LOSS_LIMIT"
+                },
+                {
+                  "code": "TRADE_COUNT_LIMIT",
+                  "passed": true,
+                  "detail": "TRADE_COUNT_LIMIT"
+                },
+                {
+                  "code": "COOLDOWN",
+                  "passed": true,
+                  "detail": "COOLDOWN"
+                },
+                {
+                  "code": "CONFIDENCE_MINIMUM",
+                  "passed": true,
+                  "detail": "CONFIDENCE_MINIMUM"
+                },
+                {
+                  "code": "SLIPPAGE_LIMIT",
+                  "passed": true,
+                  "detail": "SLIPPAGE_LIMIT"
+                },
+                {
+                  "code": "LIQUIDITY_MINIMUM",
+                  "passed": true,
+                  "detail": "LIQUIDITY_MINIMUM"
+                },
+                {
+                  "code": "LIQUIDITY_PERCENTILE",
+                  "passed": true,
+                  "detail": "LIQUIDITY_PERCENTILE"
+                },
+                {
+                  "code": "NET_EDGE_MINIMUM",
+                  "passed": true,
+                  "detail": "NET_EDGE_MINIMUM"
+                },
+                {
+                  "code": "POSITION_CAP",
+                  "passed": true,
+                  "detail": "POSITION_CAP"
+                },
+                {
+                  "code": "BUDGET_CAP",
+                  "passed": true,
+                  "detail": "BUDGET_CAP"
+                },
+                {
+                  "code": "WALLET_LIMIT",
+                  "passed": true,
+                  "detail": "WALLET_LIMIT"
+                },
+                {
+                  "code": "PORTFOLIO_CAP",
+                  "passed": true,
+                  "detail": "PORTFOLIO_CAP"
+                },
+                {
+                  "code": "STRESS_RISK_BUDGET",
+                  "passed": true,
+                  "detail": "STRESS_RISK_BUDGET"
+                },
+                {
+                  "code": "STRESS_DAILY_LOSS",
+                  "passed": true,
+                  "detail": "STRESS_DAILY_LOSS"
+                },
+                {
+                  "code": "LIQUIDITY_POSITION_CAP",
+                  "passed": true,
+                  "detail": "LIQUIDITY_POSITION_CAP"
+                },
+                {
+                  "code": "COST_INCLUSIVE_STRESS",
+                  "passed": true,
+                  "detail": "COST_INCLUSIVE_STRESS"
+                }
+              ],
+              "stress_loss_usd": "1.2203000",
+              "maximum_notional_usd": "49.283532338308457711",
+              "risk_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+            },
+            "risk_inputs": {
+              "decision_id": "rebalance_be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+              "data_mode": "DEMO",
+              "purpose": "DIRECT_EXPOSURE",
+              "budget_usd": "50",
+              "risk_budget_usd": "2",
+              "notional_usd": "30.0100",
+              "costs_usd": "0.37005",
+              "conversion_cost_usd": "0.1",
+              "slippage_bps": "50",
+              "net_expected_edge_usd": "1",
+              "liquidity_usd": "100000",
+              "liquidity_p50_usd": "10000",
+              "context": {
+                "data_mode": "DEMO",
+                "observed_at": "2026-10-08T15:00:00Z",
+                "source": "TEST_FIXTURE",
+                "stress_adverse_move_fraction": "0.02",
+                "wallet_available_usd": "100.0200",
+                "existing_exposure_usd": "40.0",
+                "daily_loss_usd": "0",
+                "trades_today": 0,
+                "last_trade_at": null,
+                "system_resolved": true,
+                "wallet_allowed": true,
+                "max_position_usd": "50",
+                "max_portfolio_exposure_usd": "100",
+                "max_daily_loss_usd": "5",
+                "max_risk_budget_usd": "5",
+                "max_trades_per_day": 5,
+                "max_liquidity_fraction": "0.01",
+                "min_confidence": "MEDIUM",
+                "min_liquidity_usd": "1000",
+                "min_liquidity_percentile": 50,
+                "max_slippage_bps": "50",
+                "min_net_edge_usd": "0.25",
+                "cooldown_seconds": 60
+              },
+              "confidence": "HIGH",
+              "trust_state": "NORMAL",
+              "trust_required": true,
+              "tradable": true,
+              "route_available": true,
+              "token_observed_at": "2026-10-08T15:00:00Z",
+              "equity_observed_at": "2026-10-08T15:00:00Z",
+              "evidence_observed_at": "2026-10-08T15:00:00Z",
+              "required_evidence_valid": true,
+              "system_resolved": true
+            },
+            "eligible_for_preparation": true,
+            "reasons": [
+              "DRIFT_EXCEEDS_CONFIGURED_BAND"
+            ],
+            "execution_decision_id": "rebalance_be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+            "source": "DETERMINISTIC_PORTFOLIO_SERVICE",
+            "execution_ready": false
+          }
+        ],
+        "route_decisions": [
+          {
+            "schema_version": "routing-1",
+            "route_id": "bbf3b56d-4786-51b5-b41a-0fabdfda005c",
+            "underlying": "NVDA",
+            "requested_notional_usd": "30.01000",
+            "data_mode": "DEMO",
+            "source": "DETERMINISTIC_ROUTER",
+            "timestamp": "2026-10-08T15:00:00Z",
+            "valid_until": "2026-10-08T15:00:30Z",
+            "policy": {
+              "version": "routing-1",
+              "purpose": "INDICATIVE_EXPOSURE",
+              "require_costs": true,
+              "require_liquidity": true,
+              "require_trust": true,
+              "require_risk": true,
+              "min_liquidity_usd": "1000",
+              "max_slippage_bps": "50",
+              "max_age_seconds": 120,
+              "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+              "weights": null,
+              "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+            },
+            "status": "ROUTE_SELECTED",
+            "selected_representation": {
+              "underlying": "NVDA",
+              "issuer": "FIXTURE",
+              "chain_id": "56",
+              "contract": "0x2222222222222222222222222222222222222222",
+              "token": "NVDA"
+            },
+            "issuer": "FIXTURE",
+            "candidates": [
+              {
+                "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+                "inputs": {
+                  "identity": {
+                    "underlying": "NVDA",
+                    "issuer": "FIXTURE",
+                    "chain_id": "56",
+                    "contract": "0x2222222222222222222222222222222222222222",
+                    "token": "NVDA"
+                  },
+                  "data_mode": "DEMO",
+                  "token_price_usd": "100",
+                  "token_to_share_ratio": "0.01",
+                  "price_source": "TEST_FIXTURE",
+                  "price_timestamp": "2026-10-08T15:00:00Z",
+                  "price_quality": "DEMO",
+                  "ratio_source": "TEST_FIXTURE",
+                  "ratio_observed_at": "2026-10-08T15:00:00Z",
+                  "ratio_source_timestamp": null,
+                  "supported": true,
+                  "normalization_eligible": true,
+                  "normalization_reasons": [],
+                  "market_state": "regular",
+                  "tradable": true,
+                  "liquidity_usd": "100000",
+                  "liquidity_status": "AVAILABLE",
+                  "liquidity_source": "TEST_FIXTURE",
+                  "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                  "volume_usd": null,
+                  "fees_usd": "0.12",
+                  "gas_usd": "0.1",
+                  "slippage_bps": "50",
+                  "cost_status": "AVAILABLE",
+                  "cost_source": "TEST_FIXTURE",
+                  "cost_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_state": "NORMAL",
+                  "trust_source": "TEST_FIXTURE",
+                  "trust_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                  "risk_state": "PASS",
+                  "risk_source": "EXISTING_RISK_ENGINE",
+                  "risk_timestamp": "2026-10-08T15:00:00Z",
+                  "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                  "risk_max_notional_usd": "49.283532338308457711",
+                  "risk_reason_codes": [],
+                  "route_available": true,
+                  "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                },
+                "eligible": true,
+                "rank": 1,
+                "rejection_reasons": [],
+                "limitations": [],
+                "effective_cost_per_share_usd": "10000.000000000000000000",
+                "estimated_costs_usd": "0.370050000000000000",
+                "all_in_cost_per_share_usd": "10123.308897034321892703",
+                "ranking_cost_per_share_usd": "10123.308897034321892703",
+                "liquidity_state": "AVAILABLE",
+                "cost_state": "AVAILABLE",
+                "trust_state": "NORMAL",
+                "tradability": "TRADABLE"
+              }
+            ],
+            "selected_candidate": {
+              "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+              "inputs": {
+                "identity": {
+                  "underlying": "NVDA",
+                  "issuer": "FIXTURE",
+                  "chain_id": "56",
+                  "contract": "0x2222222222222222222222222222222222222222",
+                  "token": "NVDA"
+                },
+                "data_mode": "DEMO",
+                "token_price_usd": "100",
+                "token_to_share_ratio": "0.01",
+                "price_source": "TEST_FIXTURE",
+                "price_timestamp": "2026-10-08T15:00:00Z",
+                "price_quality": "DEMO",
+                "ratio_source": "TEST_FIXTURE",
+                "ratio_observed_at": "2026-10-08T15:00:00Z",
+                "ratio_source_timestamp": null,
+                "supported": true,
+                "normalization_eligible": true,
+                "normalization_reasons": [],
+                "market_state": "regular",
+                "tradable": true,
+                "liquidity_usd": "100000",
+                "liquidity_status": "AVAILABLE",
+                "liquidity_source": "TEST_FIXTURE",
+                "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                "volume_usd": null,
+                "fees_usd": "0.12",
+                "gas_usd": "0.1",
+                "slippage_bps": "50",
+                "cost_status": "AVAILABLE",
+                "cost_source": "TEST_FIXTURE",
+                "cost_timestamp": "2026-10-08T15:00:00Z",
+                "trust_state": "NORMAL",
+                "trust_source": "TEST_FIXTURE",
+                "trust_timestamp": "2026-10-08T15:00:00Z",
+                "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                "risk_state": "PASS",
+                "risk_source": "EXISTING_RISK_ENGINE",
+                "risk_timestamp": "2026-10-08T15:00:00Z",
+                "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                "risk_max_notional_usd": "49.283532338308457711",
+                "risk_reason_codes": [],
+                "route_available": true,
+                "route_support": "SYNTHETIC_DEMO_PREPARATION"
+              },
+              "eligible": true,
+              "rank": 1,
+              "rejection_reasons": [],
+              "limitations": [],
+              "effective_cost_per_share_usd": "10000.000000000000000000",
+              "estimated_costs_usd": "0.370050000000000000",
+              "all_in_cost_per_share_usd": "10123.308897034321892703",
+              "ranking_cost_per_share_usd": "10123.308897034321892703",
+              "liquidity_state": "AVAILABLE",
+              "cost_state": "AVAILABLE",
+              "trust_state": "NORMAL",
+              "tradability": "TRADABLE"
+            },
+            "ranking_basis": "ALL_IN_ESTIMATE",
+            "reason_codes": [
+              "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+              "IDENTITY_TIE_BREAK"
+            ],
+            "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+            "execution_ready": false,
+            "transaction_broadcast": false,
+            "live_trading_enabled": false,
+            "execution_mode": "DRY_RUN",
+            "provider_execution_mode": null,
+            "no_broadcast_statement": "No real transaction was broadcast."
+          }
+        ],
+        "preparations": [],
+        "status": "REBALANCE_REQUIRED",
+        "reasons": [
+          "DRIFT_REBALANCE_PROPOSED"
+        ],
+        "request_id": "441888e2-4bf5-486c-ba5a-942b4719f76b",
+        "correlation_id": "a23bda2a-739c-406a-a61d-1697f111ed19",
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z",
+        "funding": {
+          "asset": {
+            "chain_id": "56",
+            "contract": "0x1111111111111111111111111111111111111111",
+            "symbol": "USDT",
+            "decimals": 6,
+            "source": "TEST_FIXTURE",
+            "observed_at": "2026-10-08T15:00:00Z",
+            "data_mode": "DEMO"
+          },
+          "wallet": "0x3333333333333333333333333333333333333333",
+          "balance_base_units": "100000000",
+          "native_gas_balance_wei": "100000000000000000",
+          "gas_reserve_wei": "1000000000000000",
+          "native_unit_price_usd": "100",
+          "native_price_observed_at": "2026-10-08T15:00:00Z",
+          "unit_price_usd": "1.0002",
+          "price_observed_at": "2026-10-08T15:00:00Z",
+          "balance_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_cost_usd": "0.1",
+          "conversion_cost_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_required": false,
+          "conversion_verified": false,
+          "identity_verified": true,
+          "source": "TEST_FIXTURE"
+        },
+        "captured_at": "2026-10-08T15:00:00Z"
+      },
+      "latest_decision": {
+        "plan_id": "2c520963946c239ff75a5f1977234725a0cad9a03ce65626101cd9e4e7f1c316",
+        "data_mode": "DEMO",
+        "config": {
+          "targets": [
+            {
+              "asset": "NVDA",
+              "kind": "TOKENIZED_STOCK",
+              "weight": "0.5",
+              "drift_band": "0.05"
+            },
+            {
+              "asset": "CASH",
+              "kind": "CASH",
+              "weight": "0.5",
+              "drift_band": "0.05"
+            }
+          ],
+          "funding_symbol": "USDT",
+          "max_rebalance_notional_usd": "50",
+          "risk_budget_usd": "2",
+          "max_drift": "1",
+          "max_stock_exposure_usd": "100",
+          "crypto_enabled": false,
+          "approval_mode": "PROPOSE_ONLY",
+          "portfolio_id": "LOCAL_SINGLE_PORTFOLIO",
+          "account_scope": "LOCAL_SINGLE_ACCOUNT",
+          "data_mode": "DEMO",
+          "version": 1,
+          "source": "VALIDATED_USER_CONFIGURATION",
+          "created_at": "2026-10-08T15:00:00Z",
+          "updated_at": "2026-10-08T15:00:00Z"
+        },
+        "total_value_usd": "140.0200",
+        "rows": [
+          {
+            "asset": "CASH",
+            "kind": "CASH",
+            "current_value_usd": "100.0200",
+            "target_value_usd": "70.01000",
+            "current_weight": "0.714326524782173975146407656049135837737466076274817883159548635909155835",
+            "target_weight": "0.5",
+            "drift": "0.214326524782173975146407656049135837737466076274817883159548635909155835",
+            "allowed_band": "0.05",
+            "required_delta_usd": "-30.01000",
+            "position_ids": [],
+            "current_share_exposure": "0",
+            "state": "OUTSIDE_BAND",
+            "reasons": [
+              "DRIFT_EXCEEDS_BAND"
+            ]
+          },
+          {
+            "asset": "NVDA",
+            "kind": "TOKENIZED_STOCK",
+            "current_value_usd": "40.0",
+            "target_value_usd": "70.01000",
+            "current_weight": "0.285673475217826024853592343950864162262533923725182116840451364090844165",
+            "target_weight": "0.5",
+            "drift": "-0.214326524782173975146407656049135837737466076274817883159548635909155835",
+            "allowed_band": "0.05",
+            "required_delta_usd": "30.01000",
+            "position_ids": [
+              "87e26a13-6235-4d4d-9083-a662dcfb93d8"
+            ],
+            "current_share_exposure": "0.004",
+            "state": "OUTSIDE_BAND",
+            "reasons": [
+              "DRIFT_EXCEEDS_BAND"
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "action_id": "be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+            "asset": "NVDA",
+            "side": "BUY",
+            "priority": 1,
+            "notional_usd": "30.0100",
+            "quantity_base_units": "300100",
+            "decimals": 6,
+            "current_representation_base_units": "400000",
+            "target_representation_base_units": "700100",
+            "current_share_exposure": "0.004",
+            "estimated_share_delta": "0.003001",
+            "target_share_exposure": "0.007001",
+            "position_id": null,
+            "route": {
+              "schema_version": "routing-1",
+              "route_id": "bbf3b56d-4786-51b5-b41a-0fabdfda005c",
+              "underlying": "NVDA",
+              "requested_notional_usd": "30.01000",
+              "data_mode": "DEMO",
+              "source": "DETERMINISTIC_ROUTER",
+              "timestamp": "2026-10-08T15:00:00Z",
+              "valid_until": "2026-10-08T15:00:30Z",
+              "policy": {
+                "version": "routing-1",
+                "purpose": "INDICATIVE_EXPOSURE",
+                "require_costs": true,
+                "require_liquidity": true,
+                "require_trust": true,
+                "require_risk": true,
+                "min_liquidity_usd": "1000",
+                "max_slippage_bps": "50",
+                "max_age_seconds": 120,
+                "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+                "weights": null,
+                "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+              },
+              "status": "ROUTE_SELECTED",
+              "selected_representation": {
+                "underlying": "NVDA",
+                "issuer": "FIXTURE",
+                "chain_id": "56",
+                "contract": "0x2222222222222222222222222222222222222222",
+                "token": "NVDA"
+              },
+              "issuer": "FIXTURE",
+              "candidates": [
+                {
+                  "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+                  "inputs": {
+                    "identity": {
+                      "underlying": "NVDA",
+                      "issuer": "FIXTURE",
+                      "chain_id": "56",
+                      "contract": "0x2222222222222222222222222222222222222222",
+                      "token": "NVDA"
+                    },
+                    "data_mode": "DEMO",
+                    "token_price_usd": "100",
+                    "token_to_share_ratio": "0.01",
+                    "price_source": "TEST_FIXTURE",
+                    "price_timestamp": "2026-10-08T15:00:00Z",
+                    "price_quality": "DEMO",
+                    "ratio_source": "TEST_FIXTURE",
+                    "ratio_observed_at": "2026-10-08T15:00:00Z",
+                    "ratio_source_timestamp": null,
+                    "supported": true,
+                    "normalization_eligible": true,
+                    "normalization_reasons": [],
+                    "market_state": "regular",
+                    "tradable": true,
+                    "liquidity_usd": "100000",
+                    "liquidity_status": "AVAILABLE",
+                    "liquidity_source": "TEST_FIXTURE",
+                    "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                    "volume_usd": null,
+                    "fees_usd": "0.12",
+                    "gas_usd": "0.1",
+                    "slippage_bps": "50",
+                    "cost_status": "AVAILABLE",
+                    "cost_source": "TEST_FIXTURE",
+                    "cost_timestamp": "2026-10-08T15:00:00Z",
+                    "trust_state": "NORMAL",
+                    "trust_source": "TEST_FIXTURE",
+                    "trust_timestamp": "2026-10-08T15:00:00Z",
+                    "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                    "risk_state": "PASS",
+                    "risk_source": "EXISTING_RISK_ENGINE",
+                    "risk_timestamp": "2026-10-08T15:00:00Z",
+                    "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                    "risk_max_notional_usd": "49.283532338308457711",
+                    "risk_reason_codes": [],
+                    "route_available": true,
+                    "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                  },
+                  "eligible": true,
+                  "rank": 1,
+                  "rejection_reasons": [],
+                  "limitations": [],
+                  "effective_cost_per_share_usd": "10000.000000000000000000",
+                  "estimated_costs_usd": "0.370050000000000000",
+                  "all_in_cost_per_share_usd": "10123.308897034321892703",
+                  "ranking_cost_per_share_usd": "10123.308897034321892703",
+                  "liquidity_state": "AVAILABLE",
+                  "cost_state": "AVAILABLE",
+                  "trust_state": "NORMAL",
+                  "tradability": "TRADABLE"
+                }
+              ],
+              "selected_candidate": {
+                "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+                "inputs": {
+                  "identity": {
+                    "underlying": "NVDA",
+                    "issuer": "FIXTURE",
+                    "chain_id": "56",
+                    "contract": "0x2222222222222222222222222222222222222222",
+                    "token": "NVDA"
+                  },
+                  "data_mode": "DEMO",
+                  "token_price_usd": "100",
+                  "token_to_share_ratio": "0.01",
+                  "price_source": "TEST_FIXTURE",
+                  "price_timestamp": "2026-10-08T15:00:00Z",
+                  "price_quality": "DEMO",
+                  "ratio_source": "TEST_FIXTURE",
+                  "ratio_observed_at": "2026-10-08T15:00:00Z",
+                  "ratio_source_timestamp": null,
+                  "supported": true,
+                  "normalization_eligible": true,
+                  "normalization_reasons": [],
+                  "market_state": "regular",
+                  "tradable": true,
+                  "liquidity_usd": "100000",
+                  "liquidity_status": "AVAILABLE",
+                  "liquidity_source": "TEST_FIXTURE",
+                  "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                  "volume_usd": null,
+                  "fees_usd": "0.12",
+                  "gas_usd": "0.1",
+                  "slippage_bps": "50",
+                  "cost_status": "AVAILABLE",
+                  "cost_source": "TEST_FIXTURE",
+                  "cost_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_state": "NORMAL",
+                  "trust_source": "TEST_FIXTURE",
+                  "trust_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                  "risk_state": "PASS",
+                  "risk_source": "EXISTING_RISK_ENGINE",
+                  "risk_timestamp": "2026-10-08T15:00:00Z",
+                  "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                  "risk_max_notional_usd": "49.283532338308457711",
+                  "risk_reason_codes": [],
+                  "route_available": true,
+                  "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                },
+                "eligible": true,
+                "rank": 1,
+                "rejection_reasons": [],
+                "limitations": [],
+                "effective_cost_per_share_usd": "10000.000000000000000000",
+                "estimated_costs_usd": "0.370050000000000000",
+                "all_in_cost_per_share_usd": "10123.308897034321892703",
+                "ranking_cost_per_share_usd": "10123.308897034321892703",
+                "liquidity_state": "AVAILABLE",
+                "cost_state": "AVAILABLE",
+                "trust_state": "NORMAL",
+                "tradability": "TRADABLE"
+              },
+              "ranking_basis": "ALL_IN_ESTIMATE",
+              "reason_codes": [
+                "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+                "IDENTITY_TIE_BREAK"
+              ],
+              "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+              "execution_ready": false,
+              "transaction_broadcast": false,
+              "live_trading_enabled": false,
+              "execution_mode": "DRY_RUN",
+              "provider_execution_mode": null,
+              "no_broadcast_statement": "No real transaction was broadcast."
+            },
+            "risk": {
+              "evidence_digest": "847bcce30c8498c4efe5c77e4bfb803cc6a8088d7393c5ca4bff0321096c0649",
+              "evaluated_at": "2026-10-08T15:00:00Z",
+              "data_mode": "DEMO",
+              "decision_id": "rebalance_be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+              "status": "PASS",
+              "checks": [
+                {
+                  "code": "RISK_CONTEXT_AVAILABLE",
+                  "passed": true,
+                  "detail": "RISK_CONTEXT_AVAILABLE"
+                },
+                {
+                  "code": "REQUIRED_EVIDENCE_VALID",
+                  "passed": true,
+                  "detail": "REQUIRED_EVIDENCE_VALID"
+                },
+                {
+                  "code": "SYSTEM_RESOLVED",
+                  "passed": true,
+                  "detail": "SYSTEM_RESOLVED"
+                },
+                {
+                  "code": "TRADABLE_ROUTE",
+                  "passed": true,
+                  "detail": "TRADABLE_ROUTE"
+                },
+                {
+                  "code": "DATA_FRESHNESS",
+                  "passed": true,
+                  "detail": "DATA_FRESHNESS"
+                },
+                {
+                  "code": "TIMESTAMP_ALIGNMENT",
+                  "passed": true,
+                  "detail": "TIMESTAMP_ALIGNMENT"
+                },
+                {
+                  "code": "TRUST_REQUIRED",
+                  "passed": true,
+                  "detail": "TRUST_REQUIRED"
+                },
+                {
+                  "code": "OPPORTUNITY_TRUST",
+                  "passed": true,
+                  "detail": "OPPORTUNITY_TRUST"
+                },
+                {
+                  "code": "PRODUCTION_TRUST_GATE",
+                  "passed": true,
+                  "detail": "PRODUCTION_TRUST_GATE"
+                },
+                {
+                  "code": "PRODUCTION_OPPORTUNITY_GATE",
+                  "passed": true,
+                  "detail": "PRODUCTION_OPPORTUNITY_GATE"
+                },
+                {
+                  "code": "RISK_CONTEXT_FRESH",
+                  "passed": true,
+                  "detail": "RISK_CONTEXT_FRESH"
+                },
+                {
+                  "code": "WALLET_ALLOWED",
+                  "passed": true,
+                  "detail": "WALLET_ALLOWED"
+                },
+                {
+                  "code": "RISK_BUDGET_LIMIT",
+                  "passed": true,
+                  "detail": "RISK_BUDGET_LIMIT"
+                },
+                {
+                  "code": "DAILY_LOSS_LIMIT",
+                  "passed": true,
+                  "detail": "DAILY_LOSS_LIMIT"
+                },
+                {
+                  "code": "TRADE_COUNT_LIMIT",
+                  "passed": true,
+                  "detail": "TRADE_COUNT_LIMIT"
+                },
+                {
+                  "code": "COOLDOWN",
+                  "passed": true,
+                  "detail": "COOLDOWN"
+                },
+                {
+                  "code": "CONFIDENCE_MINIMUM",
+                  "passed": true,
+                  "detail": "CONFIDENCE_MINIMUM"
+                },
+                {
+                  "code": "SLIPPAGE_LIMIT",
+                  "passed": true,
+                  "detail": "SLIPPAGE_LIMIT"
+                },
+                {
+                  "code": "LIQUIDITY_MINIMUM",
+                  "passed": true,
+                  "detail": "LIQUIDITY_MINIMUM"
+                },
+                {
+                  "code": "LIQUIDITY_PERCENTILE",
+                  "passed": true,
+                  "detail": "LIQUIDITY_PERCENTILE"
+                },
+                {
+                  "code": "NET_EDGE_MINIMUM",
+                  "passed": true,
+                  "detail": "NET_EDGE_MINIMUM"
+                },
+                {
+                  "code": "POSITION_CAP",
+                  "passed": true,
+                  "detail": "POSITION_CAP"
+                },
+                {
+                  "code": "BUDGET_CAP",
+                  "passed": true,
+                  "detail": "BUDGET_CAP"
+                },
+                {
+                  "code": "WALLET_LIMIT",
+                  "passed": true,
+                  "detail": "WALLET_LIMIT"
+                },
+                {
+                  "code": "PORTFOLIO_CAP",
+                  "passed": true,
+                  "detail": "PORTFOLIO_CAP"
+                },
+                {
+                  "code": "STRESS_RISK_BUDGET",
+                  "passed": true,
+                  "detail": "STRESS_RISK_BUDGET"
+                },
+                {
+                  "code": "STRESS_DAILY_LOSS",
+                  "passed": true,
+                  "detail": "STRESS_DAILY_LOSS"
+                },
+                {
+                  "code": "LIQUIDITY_POSITION_CAP",
+                  "passed": true,
+                  "detail": "LIQUIDITY_POSITION_CAP"
+                },
+                {
+                  "code": "COST_INCLUSIVE_STRESS",
+                  "passed": true,
+                  "detail": "COST_INCLUSIVE_STRESS"
+                }
+              ],
+              "stress_loss_usd": "1.2203000",
+              "maximum_notional_usd": "49.283532338308457711",
+              "risk_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+            },
+            "risk_inputs": {
+              "decision_id": "rebalance_be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+              "data_mode": "DEMO",
+              "purpose": "DIRECT_EXPOSURE",
+              "budget_usd": "50",
+              "risk_budget_usd": "2",
+              "notional_usd": "30.0100",
+              "costs_usd": "0.37005",
+              "conversion_cost_usd": "0.1",
+              "slippage_bps": "50",
+              "net_expected_edge_usd": "1",
+              "liquidity_usd": "100000",
+              "liquidity_p50_usd": "10000",
+              "context": {
+                "data_mode": "DEMO",
+                "observed_at": "2026-10-08T15:00:00Z",
+                "source": "TEST_FIXTURE",
+                "stress_adverse_move_fraction": "0.02",
+                "wallet_available_usd": "100.0200",
+                "existing_exposure_usd": "40.0",
+                "daily_loss_usd": "0",
+                "trades_today": 0,
+                "last_trade_at": null,
+                "system_resolved": true,
+                "wallet_allowed": true,
+                "max_position_usd": "50",
+                "max_portfolio_exposure_usd": "100",
+                "max_daily_loss_usd": "5",
+                "max_risk_budget_usd": "5",
+                "max_trades_per_day": 5,
+                "max_liquidity_fraction": "0.01",
+                "min_confidence": "MEDIUM",
+                "min_liquidity_usd": "1000",
+                "min_liquidity_percentile": 50,
+                "max_slippage_bps": "50",
+                "min_net_edge_usd": "0.25",
+                "cooldown_seconds": 60
+              },
+              "confidence": "HIGH",
+              "trust_state": "NORMAL",
+              "trust_required": true,
+              "tradable": true,
+              "route_available": true,
+              "token_observed_at": "2026-10-08T15:00:00Z",
+              "equity_observed_at": "2026-10-08T15:00:00Z",
+              "evidence_observed_at": "2026-10-08T15:00:00Z",
+              "required_evidence_valid": true,
+              "system_resolved": true
+            },
+            "eligible_for_preparation": true,
+            "reasons": [
+              "DRIFT_EXCEEDS_CONFIGURED_BAND"
+            ],
+            "execution_decision_id": "rebalance_be20212176d7b6e638ab7798e243950fd35f430f29531f25b01fd9b81f198767",
+            "source": "DETERMINISTIC_PORTFOLIO_SERVICE",
+            "execution_ready": false
+          }
+        ],
+        "route_decisions": [
+          {
+            "schema_version": "routing-1",
+            "route_id": "bbf3b56d-4786-51b5-b41a-0fabdfda005c",
+            "underlying": "NVDA",
+            "requested_notional_usd": "30.01000",
+            "data_mode": "DEMO",
+            "source": "DETERMINISTIC_ROUTER",
+            "timestamp": "2026-10-08T15:00:00Z",
+            "valid_until": "2026-10-08T15:00:30Z",
+            "policy": {
+              "version": "routing-1",
+              "purpose": "INDICATIVE_EXPOSURE",
+              "require_costs": true,
+              "require_liquidity": true,
+              "require_trust": true,
+              "require_risk": true,
+              "min_liquidity_usd": "1000",
+              "max_slippage_bps": "50",
+              "max_age_seconds": 120,
+              "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+              "weights": null,
+              "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+            },
+            "status": "ROUTE_SELECTED",
+            "selected_representation": {
+              "underlying": "NVDA",
+              "issuer": "FIXTURE",
+              "chain_id": "56",
+              "contract": "0x2222222222222222222222222222222222222222",
+              "token": "NVDA"
+            },
+            "issuer": "FIXTURE",
+            "candidates": [
+              {
+                "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+                "inputs": {
+                  "identity": {
+                    "underlying": "NVDA",
+                    "issuer": "FIXTURE",
+                    "chain_id": "56",
+                    "contract": "0x2222222222222222222222222222222222222222",
+                    "token": "NVDA"
+                  },
+                  "data_mode": "DEMO",
+                  "token_price_usd": "100",
+                  "token_to_share_ratio": "0.01",
+                  "price_source": "TEST_FIXTURE",
+                  "price_timestamp": "2026-10-08T15:00:00Z",
+                  "price_quality": "DEMO",
+                  "ratio_source": "TEST_FIXTURE",
+                  "ratio_observed_at": "2026-10-08T15:00:00Z",
+                  "ratio_source_timestamp": null,
+                  "supported": true,
+                  "normalization_eligible": true,
+                  "normalization_reasons": [],
+                  "market_state": "regular",
+                  "tradable": true,
+                  "liquidity_usd": "100000",
+                  "liquidity_status": "AVAILABLE",
+                  "liquidity_source": "TEST_FIXTURE",
+                  "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                  "volume_usd": null,
+                  "fees_usd": "0.12",
+                  "gas_usd": "0.1",
+                  "slippage_bps": "50",
+                  "cost_status": "AVAILABLE",
+                  "cost_source": "TEST_FIXTURE",
+                  "cost_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_state": "NORMAL",
+                  "trust_source": "TEST_FIXTURE",
+                  "trust_timestamp": "2026-10-08T15:00:00Z",
+                  "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                  "risk_state": "PASS",
+                  "risk_source": "EXISTING_RISK_ENGINE",
+                  "risk_timestamp": "2026-10-08T15:00:00Z",
+                  "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                  "risk_max_notional_usd": "49.283532338308457711",
+                  "risk_reason_codes": [],
+                  "route_available": true,
+                  "route_support": "SYNTHETIC_DEMO_PREPARATION"
+                },
+                "eligible": true,
+                "rank": 1,
+                "rejection_reasons": [],
+                "limitations": [],
+                "effective_cost_per_share_usd": "10000.000000000000000000",
+                "estimated_costs_usd": "0.370050000000000000",
+                "all_in_cost_per_share_usd": "10123.308897034321892703",
+                "ranking_cost_per_share_usd": "10123.308897034321892703",
+                "liquidity_state": "AVAILABLE",
+                "cost_state": "AVAILABLE",
+                "trust_state": "NORMAL",
+                "tradability": "TRADABLE"
+              }
+            ],
+            "selected_candidate": {
+              "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+              "inputs": {
+                "identity": {
+                  "underlying": "NVDA",
+                  "issuer": "FIXTURE",
+                  "chain_id": "56",
+                  "contract": "0x2222222222222222222222222222222222222222",
+                  "token": "NVDA"
+                },
+                "data_mode": "DEMO",
+                "token_price_usd": "100",
+                "token_to_share_ratio": "0.01",
+                "price_source": "TEST_FIXTURE",
+                "price_timestamp": "2026-10-08T15:00:00Z",
+                "price_quality": "DEMO",
+                "ratio_source": "TEST_FIXTURE",
+                "ratio_observed_at": "2026-10-08T15:00:00Z",
+                "ratio_source_timestamp": null,
+                "supported": true,
+                "normalization_eligible": true,
+                "normalization_reasons": [],
+                "market_state": "regular",
+                "tradable": true,
+                "liquidity_usd": "100000",
+                "liquidity_status": "AVAILABLE",
+                "liquidity_source": "TEST_FIXTURE",
+                "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                "volume_usd": null,
+                "fees_usd": "0.12",
+                "gas_usd": "0.1",
+                "slippage_bps": "50",
+                "cost_status": "AVAILABLE",
+                "cost_source": "TEST_FIXTURE",
+                "cost_timestamp": "2026-10-08T15:00:00Z",
+                "trust_state": "NORMAL",
+                "trust_source": "TEST_FIXTURE",
+                "trust_timestamp": "2026-10-08T15:00:00Z",
+                "trust_assessment_id": "f4fb3a84-859f-459d-a866-13e0deb9511a",
+                "risk_state": "PASS",
+                "risk_source": "EXISTING_RISK_ENGINE",
+                "risk_timestamp": "2026-10-08T15:00:00Z",
+                "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                "risk_max_notional_usd": "49.283532338308457711",
+                "risk_reason_codes": [],
+                "route_available": true,
+                "route_support": "SYNTHETIC_DEMO_PREPARATION"
+              },
+              "eligible": true,
+              "rank": 1,
+              "rejection_reasons": [],
+              "limitations": [],
+              "effective_cost_per_share_usd": "10000.000000000000000000",
+              "estimated_costs_usd": "0.370050000000000000",
+              "all_in_cost_per_share_usd": "10123.308897034321892703",
+              "ranking_cost_per_share_usd": "10123.308897034321892703",
+              "liquidity_state": "AVAILABLE",
+              "cost_state": "AVAILABLE",
+              "trust_state": "NORMAL",
+              "tradability": "TRADABLE"
+            },
+            "ranking_basis": "ALL_IN_ESTIMATE",
+            "reason_codes": [
+              "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+              "IDENTITY_TIE_BREAK"
+            ],
+            "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+            "execution_ready": false,
+            "transaction_broadcast": false,
+            "live_trading_enabled": false,
+            "execution_mode": "DRY_RUN",
+            "provider_execution_mode": null,
+            "no_broadcast_statement": "No real transaction was broadcast."
+          }
+        ],
+        "preparations": [],
+        "status": "REBALANCE_REQUIRED",
+        "reasons": [
+          "DRIFT_REBALANCE_PROPOSED"
+        ],
+        "request_id": "441888e2-4bf5-486c-ba5a-942b4719f76b",
+        "correlation_id": "a23bda2a-739c-406a-a61d-1697f111ed19",
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z",
+        "funding": {
+          "asset": {
+            "chain_id": "56",
+            "contract": "0x1111111111111111111111111111111111111111",
+            "symbol": "USDT",
+            "decimals": 6,
+            "source": "TEST_FIXTURE",
+            "observed_at": "2026-10-08T15:00:00Z",
+            "data_mode": "DEMO"
+          },
+          "wallet": "0x3333333333333333333333333333333333333333",
+          "balance_base_units": "100000000",
+          "native_gas_balance_wei": "100000000000000000",
+          "gas_reserve_wei": "1000000000000000",
+          "native_unit_price_usd": "100",
+          "native_price_observed_at": "2026-10-08T15:00:00Z",
+          "unit_price_usd": "1.0002",
+          "price_observed_at": "2026-10-08T15:00:00Z",
+          "balance_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_cost_usd": "0.1",
+          "conversion_cost_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_required": false,
+          "conversion_verified": false,
+          "identity_verified": true,
+          "source": "TEST_FIXTURE"
+        },
+        "captured_at": "2026-10-08T15:00:00Z"
+      },
+      "active_positions": [
+        {
+          "position_id": "87e26a13-6235-4d4d-9083-a662dcfb93d8",
+          "data_mode": "DEMO",
+          "state": "OPEN",
+          "instrument": {
+            "ticker": "NVDA",
+            "company": "Nvidia synthetic fixture",
+            "representation": "nvda_fixture",
+            "token": "NVDA",
+            "contract": "0x2222222222222222222222222222222222222222",
+            "issuer": "FIXTURE",
+            "platform": "FIXTURE",
+            "chain_id": "56",
+            "decimals": 6,
+            "shares_per_token": "0.01",
+            "ratio_observed_at": "2026-10-08T15:00:00Z",
+            "ratio_available_at": "2026-10-08T15:00:00Z",
+            "source": "TEST_FIXTURE",
+            "data_mode": "DEMO"
+          },
+          "filled_quantity_base_units": "400000",
+          "remaining_quantity_base_units": "400000",
+          "normalized_share_exposure": "0.004",
+          "effective_cost_per_share_usd": "10000.0001001",
+          "gross_pnl_usd": null,
+          "net_pnl_usd": null,
+          "reasons": [],
+          "created_at": "2026-10-08T15:00:00Z",
+          "updated_at": "2026-10-08T15:00:00Z"
+        }
+      ],
+      "position_coverage_complete": true,
+      "recovery_complete": true,
+      "live_trading_enabled": false,
+      "inspection_only": true
+    },
+    "positions": [
+      {
+        "position_id": "87e26a13-6235-4d4d-9083-a662dcfb93d8",
+        "data_mode": "DEMO",
+        "state": "OPEN",
+        "instrument": {
+          "ticker": "NVDA",
+          "company": "Nvidia synthetic fixture",
+          "representation": "nvda_fixture",
+          "token": "NVDA",
+          "contract": "0x2222222222222222222222222222222222222222",
+          "issuer": "FIXTURE",
+          "platform": "FIXTURE",
+          "chain_id": "56",
+          "decimals": 6,
+          "shares_per_token": "0.01",
+          "ratio_observed_at": "2026-10-08T15:00:00Z",
+          "ratio_available_at": "2026-10-08T15:00:00Z",
+          "source": "TEST_FIXTURE",
+          "data_mode": "DEMO"
+        },
+        "filled_quantity_base_units": "400000",
+        "remaining_quantity_base_units": "400000",
+        "normalized_share_exposure": "0.004",
+        "effective_cost_per_share_usd": "10000.0001001",
+        "gross_pnl_usd": null,
+        "net_pnl_usd": null,
+        "reasons": [],
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z"
+      }
+    ],
+    "position_history_complete": true,
+    "wallet": {
+      "status": "WALLET_UNAVAILABLE",
+      "connection": "UNKNOWN",
+      "address": null,
+      "balance": null,
+      "source": "PUBLIC_RUNTIME_CAPABILITY",
+      "reasons": [
+        "WORKER_UNAVAILABLE"
+      ],
+      "execution_ready": false
+    },
+    "production_gates": {
+      "DATA_GATE": "PASS",
+      "DRY_RUN_GATE": "PASS",
+      "TRUST_GATE": "BLOCKED",
+      "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+      "SWAP_LIVE_GATE": "BLOCKED",
+      "RFQ_LIVE_GATE": "BLOCKED",
+      "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+    },
+    "routing_status": "PRODUCTION_CAPABLE_PROVIDER_PARTIAL",
+    "approval_status": "PUBLIC_APPROVAL_UNAVAILABLE",
+    "simulation_status": "EXACT_LIVE_EQUIVALENCE_UNVERIFIED",
+    "execution_mode": "DRY_RUN",
+    "approval_mode": "PROPOSE_ONLY",
+    "execution_ready": false,
+    "broadcast": false,
+    "live_trading_enabled": false,
+    "require_simulation": true,
+    "source": "EXISTING_PORTFOLIO_POSITION_AND_HOST_CAPABILITIES"
+  },
+  "workspace_unresolved": {
+    "schema_version": "workspace-1",
+    "data_mode": "DEMO",
+    "generated_at": "2026-10-08T17:29:43.228757Z",
+    "run_id": "3c106af9-c465-4a8f-968f-f685f6331c69",
+    "request_id": "fb4126b3-f956-4f2a-8b36-d1914c282238",
+    "correlation_id": "2b785826-28a9-41c2-94c5-374e67fe5858",
+    "portfolio": {
+      "data_mode": "DEMO",
+      "execution_mode": "DRY_RUN",
+      "config": {
+        "targets": [
+          {
+            "asset": "NVDA",
+            "kind": "TOKENIZED_STOCK",
+            "weight": "0.5",
+            "drift_band": "0.05"
+          },
+          {
+            "asset": "CASH",
+            "kind": "CASH",
+            "weight": "0.5",
+            "drift_band": "0.05"
+          }
+        ],
+        "funding_symbol": "USDT",
+        "max_rebalance_notional_usd": "50",
+        "risk_budget_usd": "2",
+        "max_drift": "1",
+        "max_stock_exposure_usd": "100",
+        "crypto_enabled": false,
+        "approval_mode": "PROPOSE_ONLY",
+        "portfolio_id": "LOCAL_SINGLE_PORTFOLIO",
+        "account_scope": "LOCAL_SINGLE_ACCOUNT",
+        "data_mode": "DEMO",
+        "version": 1,
+        "source": "VALIDATED_USER_CONFIGURATION",
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z"
+      },
+      "pending_plan": null,
+      "latest_decision": {
+        "plan_id": "11fe384b6d1c374fc2a100ae0ebb2455bbe898718bdee2c19e60d6cf69e014f9",
+        "data_mode": "DEMO",
+        "config": {
+          "targets": [
+            {
+              "asset": "NVDA",
+              "kind": "TOKENIZED_STOCK",
+              "weight": "0.5",
+              "drift_band": "0.05"
+            },
+            {
+              "asset": "CASH",
+              "kind": "CASH",
+              "weight": "0.5",
+              "drift_band": "0.05"
+            }
+          ],
+          "funding_symbol": "USDT",
+          "max_rebalance_notional_usd": "50",
+          "risk_budget_usd": "2",
+          "max_drift": "1",
+          "max_stock_exposure_usd": "100",
+          "crypto_enabled": false,
+          "approval_mode": "PROPOSE_ONLY",
+          "portfolio_id": "LOCAL_SINGLE_PORTFOLIO",
+          "account_scope": "LOCAL_SINGLE_ACCOUNT",
+          "data_mode": "DEMO",
+          "version": 1,
+          "source": "VALIDATED_USER_CONFIGURATION",
+          "created_at": "2026-10-08T15:00:00Z",
+          "updated_at": "2026-10-08T15:00:00Z"
+        },
+        "total_value_usd": null,
+        "rows": [
+          {
+            "asset": "CASH",
+            "kind": "CASH",
+            "current_value_usd": null,
+            "target_value_usd": null,
+            "current_weight": null,
+            "target_weight": "0.5",
+            "drift": null,
+            "allowed_band": "0.05",
+            "required_delta_usd": null,
+            "position_ids": [],
+            "current_share_exposure": null,
+            "state": "UNAVAILABLE",
+            "reasons": [
+              "POSITION_RECONCILIATION_UNRESOLVED",
+              "UNCONFIRMED_EXECUTION_NOT_OWNED"
+            ]
+          },
+          {
+            "asset": "NVDA",
+            "kind": "TOKENIZED_STOCK",
+            "current_value_usd": null,
+            "target_value_usd": null,
+            "current_weight": null,
+            "target_weight": "0.5",
+            "drift": null,
+            "allowed_band": "0.05",
+            "required_delta_usd": null,
+            "position_ids": [],
+            "current_share_exposure": null,
+            "state": "UNAVAILABLE",
+            "reasons": [
+              "POSITION_RECONCILIATION_UNRESOLVED",
+              "UNCONFIRMED_EXECUTION_NOT_OWNED"
+            ]
+          }
+        ],
+        "actions": [],
+        "route_decisions": [],
+        "preparations": [],
+        "status": "BLOCKED",
+        "reasons": [
+          "POSITION_RECONCILIATION_UNRESOLVED",
+          "UNCONFIRMED_EXECUTION_NOT_OWNED"
+        ],
+        "request_id": "5c91e09a-5232-4060-9366-252278735b69",
+        "correlation_id": "82ee155a-5f44-4eb3-9765-89ea2d18ebdc",
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z",
+        "funding": {
+          "asset": {
+            "chain_id": "56",
+            "contract": "0x1111111111111111111111111111111111111111",
+            "symbol": "USDT",
+            "decimals": 6,
+            "source": "TEST_FIXTURE",
+            "observed_at": "2026-10-08T15:00:00Z",
+            "data_mode": "DEMO"
+          },
+          "wallet": "0x3333333333333333333333333333333333333333",
+          "balance_base_units": "100000000",
+          "native_gas_balance_wei": "100000000000000000",
+          "gas_reserve_wei": "1000000000000000",
+          "native_unit_price_usd": "100",
+          "native_price_observed_at": "2026-10-08T15:00:00Z",
+          "unit_price_usd": "1.0002",
+          "price_observed_at": "2026-10-08T15:00:00Z",
+          "balance_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_cost_usd": "0.1",
+          "conversion_cost_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_required": false,
+          "conversion_verified": false,
+          "identity_verified": true,
+          "source": "TEST_FIXTURE"
+        },
+        "captured_at": "2026-10-08T15:00:00Z"
+      },
+      "active_positions": [
+        {
+          "position_id": "035e909a-b7f8-4eed-b4c4-81435f11e347",
+          "data_mode": "DEMO",
+          "state": "OPENING",
+          "instrument": {
+            "ticker": "NVDA",
+            "company": "Nvidia synthetic fixture",
+            "representation": "nvda_fixture",
+            "token": "NVDA",
+            "contract": "0x2222222222222222222222222222222222222222",
+            "issuer": "FIXTURE",
+            "platform": "FIXTURE",
+            "chain_id": "56",
+            "decimals": 6,
+            "shares_per_token": "0.01",
+            "ratio_observed_at": "2026-10-08T15:00:00Z",
+            "ratio_available_at": "2026-10-08T15:00:00Z",
+            "source": "TEST_FIXTURE",
+            "data_mode": "DEMO"
+          },
+          "filled_quantity_base_units": "0",
+          "remaining_quantity_base_units": "0",
+          "normalized_share_exposure": "0.00",
+          "effective_cost_per_share_usd": null,
+          "gross_pnl_usd": null,
+          "net_pnl_usd": null,
+          "reasons": [],
+          "created_at": "2026-10-08T15:00:00Z",
+          "updated_at": "2026-10-08T15:00:00Z"
+        }
+      ],
+      "position_coverage_complete": true,
+      "recovery_complete": true,
+      "live_trading_enabled": false,
+      "inspection_only": true
+    },
+    "positions": [
+      {
+        "position_id": "035e909a-b7f8-4eed-b4c4-81435f11e347",
+        "data_mode": "DEMO",
+        "state": "OPENING",
+        "instrument": {
+          "ticker": "NVDA",
+          "company": "Nvidia synthetic fixture",
+          "representation": "nvda_fixture",
+          "token": "NVDA",
+          "contract": "0x2222222222222222222222222222222222222222",
+          "issuer": "FIXTURE",
+          "platform": "FIXTURE",
+          "chain_id": "56",
+          "decimals": 6,
+          "shares_per_token": "0.01",
+          "ratio_observed_at": "2026-10-08T15:00:00Z",
+          "ratio_available_at": "2026-10-08T15:00:00Z",
+          "source": "TEST_FIXTURE",
+          "data_mode": "DEMO"
+        },
+        "filled_quantity_base_units": "0",
+        "remaining_quantity_base_units": "0",
+        "normalized_share_exposure": "0.00",
+        "effective_cost_per_share_usd": null,
+        "gross_pnl_usd": null,
+        "net_pnl_usd": null,
+        "reasons": [],
+        "created_at": "2026-10-08T15:00:00Z",
+        "updated_at": "2026-10-08T15:00:00Z"
+      }
+    ],
+    "position_history_complete": true,
+    "wallet": {
+      "status": "WALLET_UNAVAILABLE",
+      "connection": "UNKNOWN",
+      "address": null,
+      "balance": null,
+      "source": "PUBLIC_RUNTIME_CAPABILITY",
+      "reasons": [
+        "WORKER_UNAVAILABLE"
+      ],
+      "execution_ready": false
+    },
+    "production_gates": {
+      "DATA_GATE": "PASS",
+      "DRY_RUN_GATE": "PASS",
+      "TRUST_GATE": "BLOCKED",
+      "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+      "SWAP_LIVE_GATE": "BLOCKED",
+      "RFQ_LIVE_GATE": "BLOCKED",
+      "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+    },
+    "routing_status": "PRODUCTION_CAPABLE_PROVIDER_PARTIAL",
+    "approval_status": "PUBLIC_APPROVAL_UNAVAILABLE",
+    "simulation_status": "EXACT_LIVE_EQUIVALENCE_UNVERIFIED",
+    "execution_mode": "DRY_RUN",
+    "approval_mode": "PROPOSE_ONLY",
+    "execution_ready": false,
+    "broadcast": false,
+    "live_trading_enabled": false,
+    "require_simulation": true,
+    "source": "EXISTING_PORTFOLIO_POSITION_AND_HOST_CAPABILITIES"
+  },
+  "rebalance_plan": {
+    "plan_id": "58462c4543652529a70adc5ebc729148d1357cb82fbe4257bf09a5a064e10ab6",
+    "data_mode": "DEMO",
+    "version": 0,
+    "config": {
+      "targets": [
+        {
+          "asset": "NVDA",
+          "kind": "TOKENIZED_STOCK",
+          "weight": "0.5",
+          "drift_band": "0.05"
+        },
+        {
+          "asset": "CASH",
+          "kind": "CASH",
+          "weight": "0.5",
+          "drift_band": "0.05"
+        }
+      ],
+      "funding_symbol": "USDT",
+      "max_rebalance_notional_usd": "50",
+      "risk_budget_usd": "2",
+      "max_drift": "1",
+      "max_stock_exposure_usd": "100",
+      "crypto_enabled": false,
+      "approval_mode": "PROPOSE_ONLY",
+      "portfolio_id": "LOCAL_SINGLE_PORTFOLIO",
+      "account_scope": "LOCAL_SINGLE_ACCOUNT",
+      "data_mode": "DEMO",
+      "version": 1,
+      "source": "VALIDATED_USER_CONFIGURATION",
+      "created_at": "2026-10-08T15:00:00Z",
+      "updated_at": "2026-10-08T15:00:00Z"
+    },
+    "snapshot": {
+      "snapshot_id": "bc035bfe09332a3704b48cc441d292b5910ba878984d7bd90087089cffa8c1d0",
+      "config_version": 1,
+      "data_mode": "DEMO",
+      "inputs": {
+        "data_mode": "DEMO",
+        "captured_at": "2026-10-08T15:00:00Z",
+        "position_verified_at": "2026-10-08T15:00:00Z",
+        "inventory_complete": true,
+        "funding": {
+          "asset": {
+            "chain_id": "56",
+            "contract": "0x1111111111111111111111111111111111111111",
+            "symbol": "USDT",
+            "decimals": 6,
+            "source": "TEST_FIXTURE",
+            "observed_at": "2026-10-08T15:00:00Z",
+            "data_mode": "DEMO"
+          },
+          "wallet": "0x3333333333333333333333333333333333333333",
+          "balance_base_units": "100000000",
+          "native_gas_balance_wei": "100000000000000000",
+          "gas_reserve_wei": "1000000000000000",
+          "native_unit_price_usd": "100",
+          "native_price_observed_at": "2026-10-08T15:00:00Z",
+          "unit_price_usd": "1.0002",
+          "price_observed_at": "2026-10-08T15:00:00Z",
+          "balance_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_cost_usd": "0.1",
+          "conversion_cost_observed_at": "2026-10-08T15:00:00Z",
+          "conversion_required": false,
+          "conversion_verified": false,
+          "identity_verified": true,
+          "source": "TEST_FIXTURE"
+        },
+        "token_funding": [
+          {
+            "asset": {
+              "chain_id": "56",
+              "contract": "0x2222222222222222222222222222222222222222",
+              "symbol": "NVDA",
+              "decimals": 6,
+              "source": "TEST_FIXTURE",
+              "observed_at": "2026-10-08T15:00:00Z",
+              "data_mode": "DEMO"
+            },
+            "wallet": "0x3333333333333333333333333333333333333333",
+            "balance_base_units": "400000",
+            "native_gas_balance_wei": "100000000000000000",
+            "gas_reserve_wei": "1000000000000000",
+            "native_unit_price_usd": "100",
+            "native_price_observed_at": "2026-10-08T15:00:00Z",
+            "unit_price_usd": "100",
+            "price_observed_at": "2026-10-08T15:00:00Z",
+            "balance_observed_at": "2026-10-08T15:00:00Z",
+            "conversion_cost_usd": "0.1",
+            "conversion_cost_observed_at": "2026-10-08T15:00:00Z",
+            "conversion_required": false,
+            "conversion_verified": false,
+            "identity_verified": true,
+            "source": "TEST_FIXTURE"
+          }
+        ],
+        "routes": [
+          {
+            "identity": {
+              "underlying": "NVDA",
+              "issuer": "FIXTURE",
+              "chain_id": "56",
+              "contract": "0x2222222222222222222222222222222222222222",
+              "token": "NVDA"
+            },
+            "data_mode": "DEMO",
+            "token_price_usd": "100",
+            "token_to_share_ratio": "0.01",
+            "price_source": "TEST_FIXTURE",
+            "price_timestamp": "2026-10-08T15:00:00Z",
+            "price_quality": "DEMO",
+            "ratio_source": "TEST_FIXTURE",
+            "ratio_observed_at": "2026-10-08T15:00:00Z",
+            "ratio_source_timestamp": null,
+            "supported": true,
+            "normalization_eligible": true,
+            "normalization_reasons": [],
+            "market_state": "regular",
+            "tradable": true,
+            "liquidity_usd": "100000",
+            "liquidity_status": "AVAILABLE",
+            "liquidity_source": "TEST_FIXTURE",
+            "liquidity_timestamp": "2026-10-08T15:00:00Z",
+            "volume_usd": null,
+            "fees_usd": "0.12",
+            "gas_usd": "0.1",
+            "slippage_bps": "50",
+            "cost_status": "AVAILABLE",
+            "cost_source": "TEST_FIXTURE",
+            "cost_timestamp": "2026-10-08T15:00:00Z",
+            "trust_state": "NORMAL",
+            "trust_source": "TEST_FIXTURE",
+            "trust_timestamp": "2026-10-08T15:00:00Z",
+            "trust_assessment_id": "25bfa2ef-c9f5-48b8-b929-7dd94a6b240b",
+            "risk_state": "UNKNOWN",
+            "risk_source": null,
+            "risk_timestamp": null,
+            "risk_id": null,
+            "risk_max_notional_usd": null,
+            "risk_reason_codes": [],
+            "route_available": true,
+            "route_support": "SYNTHETIC_DEMO_PREPARATION"
+          }
+        ],
+        "risks": [
+          {
+            "asset": "NVDA",
+            "evidence": {
+              "decision_id": "test-decision",
+              "data_mode": "DEMO",
+              "purpose": "OPPORTUNITY",
+              "budget_usd": "60",
+              "risk_budget_usd": "2",
+              "notional_usd": "40",
+              "costs_usd": "0.2",
+              "conversion_cost_usd": "0.1",
+              "slippage_bps": "50",
+              "net_expected_edge_usd": "1",
+              "liquidity_usd": "100000",
+              "liquidity_p50_usd": "10000",
+              "context": {
+                "data_mode": "DEMO",
+                "observed_at": "2026-10-08T15:00:00Z",
+                "source": "TEST_FIXTURE",
+                "stress_adverse_move_fraction": "0.02",
+                "wallet_available_usd": "100",
+                "existing_exposure_usd": "0",
+                "daily_loss_usd": "0",
+                "trades_today": 0,
+                "last_trade_at": null,
+                "system_resolved": true,
+                "wallet_allowed": true,
+                "max_position_usd": "50",
+                "max_portfolio_exposure_usd": "100",
+                "max_daily_loss_usd": "5",
+                "max_risk_budget_usd": "5",
+                "max_trades_per_day": 5,
+                "max_liquidity_fraction": "0.01",
+                "min_confidence": "MEDIUM",
+                "min_liquidity_usd": "1000",
+                "min_liquidity_percentile": 50,
+                "max_slippage_bps": "50",
+                "min_net_edge_usd": "0.25",
+                "cooldown_seconds": 60
+              },
+              "confidence": "HIGH",
+              "trust_state": "LIKELY_INFORMATION",
+              "trust_required": true,
+              "tradable": true,
+              "route_available": true,
+              "token_observed_at": "2026-10-08T15:00:00Z",
+              "equity_observed_at": "2026-10-08T15:00:00Z",
+              "evidence_observed_at": "2026-10-08T15:00:00Z",
+              "required_evidence_valid": true,
+              "system_resolved": true
+            }
+          }
+        ],
+        "source": "TEST_FIXTURE",
+        "blockers": []
+      },
+      "positions": [
+        {
+          "position_id": "8a8b615d-b84d-41a7-96b5-3a6ace756357",
+          "account_scope": "LOCAL_SINGLE_ACCOUNT",
+          "data_mode": "DEMO",
+          "application_execution_mode": "DRY_RUN",
+          "instrument": {
+            "ticker": "NVDA",
+            "company": "Nvidia synthetic fixture",
+            "representation": "nvda_fixture",
+            "token": "NVDA",
+            "contract": "0x2222222222222222222222222222222222222222",
+            "issuer": "FIXTURE",
+            "platform": "FIXTURE",
+            "chain_id": "56",
+            "decimals": 6,
+            "shares_per_token": "0.01",
+            "ratio_observed_at": "2026-10-08T15:00:00Z",
+            "ratio_available_at": "2026-10-08T15:00:00Z",
+            "source": "TEST_FIXTURE",
+            "data_mode": "DEMO"
+          },
+          "entry_execution": {
+            "schema_version": "execution-1",
+            "execution_id": "4048d99b-f708-42b7-b8b8-107e1879f607",
+            "request_id": "0ce02fff-1385-44df-afef-7918b494114c",
+            "rfq_request_digest": null,
+            "decision_id": "test-decision",
+            "correlation_id": "wallet-test",
+            "data_mode": "DEMO",
+            "source": "TEST_FIXTURE",
+            "state": "EXECUTION_CONFIRMED",
+            "version": 1,
+            "generation": 0,
+            "created_at": "2026-10-08T15:00:00Z",
+            "updated_at": "2026-10-08T15:00:00Z",
+            "evidence": {
+              "decision_id": "test-decision",
+              "data_mode": "DEMO",
+              "purpose": "OPPORTUNITY",
+              "budget_usd": "60",
+              "risk_budget_usd": "2",
+              "notional_usd": "40",
+              "costs_usd": "0.2",
+              "conversion_cost_usd": "0.1",
+              "slippage_bps": "50",
+              "net_expected_edge_usd": "1",
+              "liquidity_usd": "100000",
+              "liquidity_p50_usd": "10000",
+              "context": {
+                "data_mode": "DEMO",
+                "observed_at": "2026-10-08T15:00:00Z",
+                "source": "TEST_FIXTURE",
+                "stress_adverse_move_fraction": "0.02",
+                "wallet_available_usd": "100",
+                "existing_exposure_usd": "0",
+                "daily_loss_usd": "0",
+                "trades_today": 0,
+                "last_trade_at": null,
+                "system_resolved": true,
+                "wallet_allowed": true,
+                "max_position_usd": "50",
+                "max_portfolio_exposure_usd": "100",
+                "max_daily_loss_usd": "5",
+                "max_risk_budget_usd": "5",
+                "max_trades_per_day": 5,
+                "max_liquidity_fraction": "0.01",
+                "min_confidence": "MEDIUM",
+                "min_liquidity_usd": "1000",
+                "min_liquidity_percentile": 50,
+                "max_slippage_bps": "50",
+                "min_net_edge_usd": "0.25",
+                "cooldown_seconds": 60
+              },
+              "confidence": "HIGH",
+              "trust_state": "LIKELY_INFORMATION",
+              "trust_required": true,
+              "tradable": true,
+              "route_available": true,
+              "token_observed_at": "2026-10-08T15:00:00Z",
+              "equity_observed_at": "2026-10-08T15:00:00Z",
+              "evidence_observed_at": "2026-10-08T15:00:00Z",
+              "required_evidence_valid": true,
+              "system_resolved": true
+            },
+            "risk": {
+              "evidence_digest": "4010bed00324099827c469c7bccd72f04379625897ff1b88f8c14ea6ed882ffb",
+              "evaluated_at": "2026-10-08T15:00:00Z",
+              "data_mode": "DEMO",
+              "decision_id": "test-decision",
+              "status": "PASS",
+              "checks": [
+                {
+                  "code": "RISK_CONTEXT_AVAILABLE",
+                  "passed": true,
+                  "detail": "RISK_CONTEXT_AVAILABLE"
+                },
+                {
+                  "code": "REQUIRED_EVIDENCE_VALID",
+                  "passed": true,
+                  "detail": "REQUIRED_EVIDENCE_VALID"
+                },
+                {
+                  "code": "SYSTEM_RESOLVED",
+                  "passed": true,
+                  "detail": "SYSTEM_RESOLVED"
+                },
+                {
+                  "code": "TRADABLE_ROUTE",
+                  "passed": true,
+                  "detail": "TRADABLE_ROUTE"
+                },
+                {
+                  "code": "DATA_FRESHNESS",
+                  "passed": true,
+                  "detail": "DATA_FRESHNESS"
+                },
+                {
+                  "code": "TIMESTAMP_ALIGNMENT",
+                  "passed": true,
+                  "detail": "TIMESTAMP_ALIGNMENT"
+                },
+                {
+                  "code": "TRUST_REQUIRED",
+                  "passed": true,
+                  "detail": "TRUST_REQUIRED"
+                },
+                {
+                  "code": "OPPORTUNITY_TRUST",
+                  "passed": true,
+                  "detail": "OPPORTUNITY_TRUST"
+                },
+                {
+                  "code": "PRODUCTION_TRUST_GATE",
+                  "passed": true,
+                  "detail": "PRODUCTION_TRUST_GATE"
+                },
+                {
+                  "code": "PRODUCTION_OPPORTUNITY_GATE",
+                  "passed": true,
+                  "detail": "PRODUCTION_OPPORTUNITY_GATE"
+                },
+                {
+                  "code": "RISK_CONTEXT_FRESH",
+                  "passed": true,
+                  "detail": "RISK_CONTEXT_FRESH"
+                },
+                {
+                  "code": "WALLET_ALLOWED",
+                  "passed": true,
+                  "detail": "WALLET_ALLOWED"
+                },
+                {
+                  "code": "RISK_BUDGET_LIMIT",
+                  "passed": true,
+                  "detail": "RISK_BUDGET_LIMIT"
+                },
+                {
+                  "code": "DAILY_LOSS_LIMIT",
+                  "passed": true,
+                  "detail": "DAILY_LOSS_LIMIT"
+                },
+                {
+                  "code": "TRADE_COUNT_LIMIT",
+                  "passed": true,
+                  "detail": "TRADE_COUNT_LIMIT"
+                },
+                {
+                  "code": "COOLDOWN",
+                  "passed": true,
+                  "detail": "COOLDOWN"
+                },
+                {
+                  "code": "CONFIDENCE_MINIMUM",
+                  "passed": true,
+                  "detail": "CONFIDENCE_MINIMUM"
+                },
+                {
+                  "code": "SLIPPAGE_LIMIT",
+                  "passed": true,
+                  "detail": "SLIPPAGE_LIMIT"
+                },
+                {
+                  "code": "LIQUIDITY_MINIMUM",
+                  "passed": true,
+                  "detail": "LIQUIDITY_MINIMUM"
+                },
+                {
+                  "code": "LIQUIDITY_PERCENTILE",
+                  "passed": true,
+                  "detail": "LIQUIDITY_PERCENTILE"
+                },
+                {
+                  "code": "NET_EDGE_MINIMUM",
+                  "passed": true,
+                  "detail": "NET_EDGE_MINIMUM"
+                },
+                {
+                  "code": "POSITION_CAP",
+                  "passed": true,
+                  "detail": "POSITION_CAP"
+                },
+                {
+                  "code": "BUDGET_CAP",
+                  "passed": true,
+                  "detail": "BUDGET_CAP"
+                },
+                {
+                  "code": "WALLET_LIMIT",
+                  "passed": true,
+                  "detail": "WALLET_LIMIT"
+                },
+                {
+                  "code": "PORTFOLIO_CAP",
+                  "passed": true,
+                  "detail": "PORTFOLIO_CAP"
+                },
+                {
+                  "code": "STRESS_RISK_BUDGET",
+                  "passed": true,
+                  "detail": "STRESS_RISK_BUDGET"
+                },
+                {
+                  "code": "STRESS_DAILY_LOSS",
+                  "passed": true,
+                  "detail": "STRESS_DAILY_LOSS"
+                },
+                {
+                  "code": "LIQUIDITY_POSITION_CAP",
+                  "passed": true,
+                  "detail": "LIQUIDITY_POSITION_CAP"
+                },
+                {
+                  "code": "COST_INCLUSIVE_STRESS",
+                  "passed": true,
+                  "detail": "COST_INCLUSIVE_STRESS"
+                }
+              ],
+              "stress_loss_usd": "1.300",
+              "maximum_notional_usd": "50.000000000000000000",
+              "risk_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+            },
+            "funding": {
+              "status": "PASS",
+              "reasons": [],
+              "state": {
+                "asset": {
+                  "chain_id": "56",
+                  "contract": "0x1111111111111111111111111111111111111111",
+                  "symbol": "USDT",
+                  "decimals": 6,
+                  "source": "TEST_FIXTURE",
+                  "observed_at": "2026-10-08T15:00:00Z",
+                  "data_mode": "DEMO"
+                },
+                "wallet": "0x3333333333333333333333333333333333333333",
+                "balance_base_units": "100000000",
+                "native_gas_balance_wei": "100000000000000000",
+                "gas_reserve_wei": "1000000000000000",
+                "native_unit_price_usd": "100",
+                "native_price_observed_at": "2026-10-08T15:00:00Z",
+                "unit_price_usd": "1.0002",
+                "price_observed_at": "2026-10-08T15:00:00Z",
+                "balance_observed_at": "2026-10-08T15:00:00Z",
+                "conversion_cost_usd": "0.1",
+                "conversion_cost_observed_at": "2026-10-08T15:00:00Z",
+                "conversion_required": false,
+                "conversion_verified": false,
+                "identity_verified": true,
+                "source": "TEST_FIXTURE"
+              },
+              "usd_notional": "40",
+              "required_base_units": "39992002",
+              "conversion_cost_usd": "0.1",
+              "evaluated_at": "2026-10-08T15:00:00Z"
+            },
+            "quote": {
+              "request": {
+                "binanceChainId": "56",
+                "amount": "39992002",
+                "fromTokenAddress": "0x1111111111111111111111111111111111111111",
+                "toTokenAddress": "0x2222222222222222222222222222222222222222",
+                "userWalletAddress": "0x3333333333333333333333333333333333333333"
+              },
+              "route": {
+                "binanceChainId": "56",
+                "vendorName": "PcsXRfq",
+                "fromTokenAmount": "39992002",
+                "toTokenAmount": "400000",
+                "tradeFee": "0.12",
+                "estimateGasFee": "10000",
+                "priceImpactPercent": "-0.1",
+                "router": "0x1111111111111111111111111111111111111111--0x2222222222222222222222222222222222222222",
+                "fromToken": {
+                  "tokenContractAddress": "0x1111111111111111111111111111111111111111",
+                  "tokenSymbol": "USDT",
+                  "tokenUnitPrice": "1.0002",
+                  "decimal": "6",
+                  "isHoneyPot": false,
+                  "taxRate": "0"
+                },
+                "toToken": {
+                  "tokenContractAddress": "0x2222222222222222222222222222222222222222",
+                  "tokenSymbol": "NVDA",
+                  "tokenUnitPrice": "100",
+                  "decimal": "6",
+                  "isHoneyPot": false,
+                  "taxRate": "0"
+                },
+                "dexRouterList": [],
+                "feeAmount": null,
+                "feeToken": null,
+                "actualSwapAmount": null,
+                "quoteId": "quote1",
+                "executionMode": "RFQ",
+                "approveTarget": "0x4444444444444444444444444444444444444444"
+              },
+              "data_mode": "DEMO",
+              "source": "TEST_FIXTURE",
+              "requested_at": "2026-10-08T15:00:00Z",
+              "received_at": "2026-10-08T15:00:00Z",
+              "expires_at": "2026-10-08T15:00:30Z"
+            },
+            "route": {
+              "quote": {
+                "request": {
+                  "binanceChainId": "56",
+                  "amount": "39992002",
+                  "fromTokenAddress": "0x1111111111111111111111111111111111111111",
+                  "toTokenAddress": "0x2222222222222222222222222222222222222222",
+                  "userWalletAddress": "0x3333333333333333333333333333333333333333"
+                },
+                "route": {
+                  "binanceChainId": "56",
+                  "vendorName": "PcsXRfq",
+                  "fromTokenAmount": "39992002",
+                  "toTokenAmount": "400000",
+                  "tradeFee": "0.12",
+                  "estimateGasFee": "10000",
+                  "priceImpactPercent": "-0.1",
+                  "router": "0x1111111111111111111111111111111111111111--0x2222222222222222222222222222222222222222",
+                  "fromToken": {
+                    "tokenContractAddress": "0x1111111111111111111111111111111111111111",
+                    "tokenSymbol": "USDT",
+                    "tokenUnitPrice": "1.0002",
+                    "decimal": "6",
+                    "isHoneyPot": false,
+                    "taxRate": "0"
+                  },
+                  "toToken": {
+                    "tokenContractAddress": "0x2222222222222222222222222222222222222222",
+                    "tokenSymbol": "NVDA",
+                    "tokenUnitPrice": "100",
+                    "decimal": "6",
+                    "isHoneyPot": false,
+                    "taxRate": "0"
+                  },
+                  "dexRouterList": [],
+                  "feeAmount": null,
+                  "feeToken": null,
+                  "actualSwapAmount": null,
+                  "quoteId": "quote1",
+                  "executionMode": "RFQ",
+                  "approveTarget": "0x4444444444444444444444444444444444444444"
+                },
+                "data_mode": "DEMO",
+                "source": "TEST_FIXTURE",
+                "requested_at": "2026-10-08T15:00:00Z",
+                "received_at": "2026-10-08T15:00:00Z",
+                "expires_at": "2026-10-08T15:00:30Z"
+              },
+              "build": {
+                "routerResult": {
+                  "binanceChainId": "56",
+                  "vendorName": "PcsXRfq",
+                  "fromTokenAmount": "39992002",
+                  "toTokenAmount": "400000",
+                  "tradeFee": "0.12",
+                  "estimateGasFee": "10000",
+                  "priceImpactPercent": "-0.1",
+                  "router": "0x1111111111111111111111111111111111111111--0x2222222222222222222222222222222222222222",
+                  "fromToken": {
+                    "tokenContractAddress": "0x1111111111111111111111111111111111111111",
+                    "tokenSymbol": "USDT",
+                    "tokenUnitPrice": "1.0002",
+                    "decimal": "6",
+                    "isHoneyPot": false,
+                    "taxRate": "0"
+                  },
+                  "toToken": {
+                    "tokenContractAddress": "0x2222222222222222222222222222222222222222",
+                    "tokenSymbol": "NVDA",
+                    "tokenUnitPrice": "100",
+                    "decimal": "6",
+                    "isHoneyPot": false,
+                    "taxRate": "0"
+                  },
+                  "dexRouterList": [],
+                  "feeAmount": null,
+                  "feeToken": null,
+                  "actualSwapAmount": null
+                },
+                "executionMode": "RFQ",
+                "tx": null,
+                "rfq": {
+                  "vendor": "PcsXRfq",
+                  "txType": "EIP712",
+                  "typedDataToSign": "0x1901abcd",
+                  "signingScheme": "EIP712",
+                  "signatureData": [],
+                  "orderId": "vendor-order-1"
+                }
+              },
+              "slippage_bps": "50",
+              "prepared_at": "2026-10-08T15:00:00Z",
+              "approval_required": false,
+              "allowance": {
+                "data_mode": "DEMO",
+                "token": "0x1111111111111111111111111111111111111111",
+                "owner": "0x3333333333333333333333333333333333333333",
+                "spender": "0x4444444444444444444444444444444444444444",
+                "amount": "100000000",
+                "observed_at": "2026-10-08T15:00:00Z",
+                "source": "TEST_FIXTURE"
+              },
+              "fingerprint": "1e6c53343c2ad0e7553359a7fcb2e35e78603c827e74e3809fef4f485156f515"
+            },
+            "simulation": {
+              "fingerprint": "1e6c53343c2ad0e7553359a7fcb2e35e78603c827e74e3809fef4f485156f515",
+              "payload_digest": "480e2d01f07863d1b2050e2ab09e457801ae88f158c1f8935e5c051741cca094",
+              "data_mode": "DEMO",
+              "source": "TEST_FIXTURE",
+              "evaluated_at": "2026-10-08T15:00:00Z",
+              "status": "UNAVAILABLE",
+              "response": null,
+              "reason_codes": [
+                "RFQ_FINAL_SETTLEMENT_NOT_SIMULATABLE"
+              ],
+              "coverage": "RFQ_SETTLEMENT_UNAVAILABLE",
+              "live_equivalence_verified": false
+            },
+            "approval": null,
+            "approval_simulation": null,
+            "approval_allowance": null,
+            "user_confirmation": null,
+            "order_id": "platform-order",
+            "tx_hash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+            "external_status": "FILLED",
+            "external_tracking_only": true,
+            "filled_quantity_base_units": "400000",
+            "average_execution_price": null,
+            "fees_native_base_units": null,
+            "settled_at": "2026-10-08T15:00:00Z",
+            "settlement_evidence": {
+              "identity": {
+                "execution_id": "4048d99b-f708-42b7-b8b8-107e1879f607",
+                "request_id": "0ce02fff-1385-44df-afef-7918b494114c",
+                "decision_id": "test-decision",
+                "data_mode": "DEMO",
+                "source": "TEST_FIXTURE",
+                "execution_mode": "RFQ",
+                "quote_id": "quote1",
+                "vendor": "PcsXRfq",
+                "wallet": "0x3333333333333333333333333333333333333333",
+                "order_id": "platform-order",
+                "route_fingerprint": "1e6c53343c2ad0e7553359a7fcb2e35e78603c827e74e3809fef4f485156f515"
+              },
+              "received_at": "2026-10-08T15:00:00Z",
+              "corroborated_tx_hash": null,
+              "rfq": {
+                "orderId": "platform-order",
+                "status": "FILLED",
+                "txHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "fromAmount": "39992002",
+                "toAmount": "400000",
+                "filledAt": 1791471600000,
+                "createdAt": 1791471600000
+              },
+              "swap": null
+            },
+            "conflicting_tx_hashes": [],
+            "last_conflicting_tx_hash": null,
+            "settlement_conflict": false,
+            "reason_codes": [
+              "RFQ_FINAL_SETTLEMENT_NOT_SIMULATABLE"
+            ],
+            "execution_ready": false,
+            "broadcast": false,
+            "signed": false,
+            "funds_moved": false
+          },
+          "state": "OPEN",
+          "version": 0,
+          "requested_quantity_base_units": "400000",
+          "filled_quantity_base_units": "400000",
+          "remaining_quantity_base_units": "400000",
+          "applied_exit_executions": [],
+          "valuations": [],
+          "exit_intent": null,
+          "entry_at": "2026-10-08T15:00:00Z",
+          "market_open_at": null,
+          "exit_due_at": null,
+          "closed_at": null,
+          "postopen_exit_minutes": 10,
+          "exit_rule": "PORTFOLIO_DRIFT",
+          "calendar_version": null,
+          "job": {
+            "job_id": "31d19eaa-5a4d-4d67-b656-3de52da9dba6",
+            "status": "WAITING",
+            "next_check_at": "2026-10-08T15:00:00Z",
+            "attempts": 0,
+            "lease_id": null,
+            "lease_until": null
+          },
+          "reasons": [],
+          "created_at": "2026-10-08T15:00:00Z",
+          "updated_at": "2026-10-08T15:00:00Z",
+          "broadcast": false,
+          "signed": false,
+          "funds_moved": false,
+          "synthetic": true,
+          "execution_mode": "RFQ",
+          "requested_quantity": "0.4",
+          "filled_quantity": "0.4",
+          "remaining_quantity": "0.4",
+          "unfilled_quoted_quantity_base_units": "0",
+          "normalized_share_exposure": "0.004",
+          "entry_share_exposure": "0.004",
+          "close_state": "NOT_STARTED",
+          "entry_notional_usd": "40.0000004004",
+          "average_execution_price_usd": "100.000001001",
+          "effective_cost_per_share_usd": "10000.0001001",
+          "exit_notional_usd": null,
+          "fees_usd": null,
+          "gas_usd": null,
+          "gas_native_base_units": [
+            null
+          ],
+          "gross_pnl_usd": null,
+          "net_pnl_usd": null,
+          "holding_duration_seconds": null
+        }
+      ],
+      "captured_at": "2026-10-08T15:00:00Z"
+    },
+    "total_value_usd": "140.0200",
+    "rows": [
+      {
+        "asset": "CASH",
+        "kind": "CASH",
+        "current_value_usd": "100.0200",
+        "target_value_usd": "70.01000",
+        "current_weight": "0.714326524782173975146407656049135837737466076274817883159548635909155835",
+        "target_weight": "0.5",
+        "drift": "0.214326524782173975146407656049135837737466076274817883159548635909155835",
+        "allowed_band": "0.05",
+        "required_delta_usd": "-30.01000",
+        "position_ids": [],
+        "current_share_exposure": "0",
+        "state": "OUTSIDE_BAND",
+        "reasons": [
+          "DRIFT_EXCEEDS_BAND"
+        ]
+      },
+      {
+        "asset": "NVDA",
+        "kind": "TOKENIZED_STOCK",
+        "current_value_usd": "40.0",
+        "target_value_usd": "70.01000",
+        "current_weight": "0.285673475217826024853592343950864162262533923725182116840451364090844165",
+        "target_weight": "0.5",
+        "drift": "-0.214326524782173975146407656049135837737466076274817883159548635909155835",
+        "allowed_band": "0.05",
+        "required_delta_usd": "30.01000",
+        "position_ids": [
+          "8a8b615d-b84d-41a7-96b5-3a6ace756357"
+        ],
+        "current_share_exposure": "0.004",
+        "state": "OUTSIDE_BAND",
+        "reasons": [
+          "DRIFT_EXCEEDS_BAND"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "action_id": "e00ef0bc4844675caf7a6269777a2f6288ab27837b465b90bf2a9a173b299a3c",
+        "asset": "NVDA",
+        "side": "BUY",
+        "priority": 1,
+        "notional_usd": "30.0100",
+        "quantity_base_units": "300100",
+        "decimals": 6,
+        "current_representation_base_units": "400000",
+        "target_representation_base_units": "700100",
+        "current_share_exposure": "0.004",
+        "estimated_share_delta": "0.003001",
+        "target_share_exposure": "0.007001",
+        "position_id": null,
+        "route": {
+          "schema_version": "routing-1",
+          "route_id": "e0f2d437-7650-510c-a831-a001c092c1ae",
+          "underlying": "NVDA",
+          "requested_notional_usd": "30.01000",
+          "data_mode": "DEMO",
+          "source": "DETERMINISTIC_ROUTER",
+          "timestamp": "2026-10-08T15:00:00Z",
+          "valid_until": "2026-10-08T15:00:30Z",
+          "policy": {
+            "version": "routing-1",
+            "purpose": "INDICATIVE_EXPOSURE",
+            "require_costs": true,
+            "require_liquidity": true,
+            "require_trust": true,
+            "require_risk": true,
+            "min_liquidity_usd": "1000",
+            "max_slippage_bps": "50",
+            "max_age_seconds": 120,
+            "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+            "weights": null,
+            "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+          },
+          "status": "ROUTE_SELECTED",
+          "selected_representation": {
+            "underlying": "NVDA",
+            "issuer": "FIXTURE",
+            "chain_id": "56",
+            "contract": "0x2222222222222222222222222222222222222222",
+            "token": "NVDA"
+          },
+          "issuer": "FIXTURE",
+          "candidates": [
+            {
+              "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+              "inputs": {
+                "identity": {
+                  "underlying": "NVDA",
+                  "issuer": "FIXTURE",
+                  "chain_id": "56",
+                  "contract": "0x2222222222222222222222222222222222222222",
+                  "token": "NVDA"
+                },
+                "data_mode": "DEMO",
+                "token_price_usd": "100",
+                "token_to_share_ratio": "0.01",
+                "price_source": "TEST_FIXTURE",
+                "price_timestamp": "2026-10-08T15:00:00Z",
+                "price_quality": "DEMO",
+                "ratio_source": "TEST_FIXTURE",
+                "ratio_observed_at": "2026-10-08T15:00:00Z",
+                "ratio_source_timestamp": null,
+                "supported": true,
+                "normalization_eligible": true,
+                "normalization_reasons": [],
+                "market_state": "regular",
+                "tradable": true,
+                "liquidity_usd": "100000",
+                "liquidity_status": "AVAILABLE",
+                "liquidity_source": "TEST_FIXTURE",
+                "liquidity_timestamp": "2026-10-08T15:00:00Z",
+                "volume_usd": null,
+                "fees_usd": "0.12",
+                "gas_usd": "0.1",
+                "slippage_bps": "50",
+                "cost_status": "AVAILABLE",
+                "cost_source": "TEST_FIXTURE",
+                "cost_timestamp": "2026-10-08T15:00:00Z",
+                "trust_state": "NORMAL",
+                "trust_source": "TEST_FIXTURE",
+                "trust_timestamp": "2026-10-08T15:00:00Z",
+                "trust_assessment_id": "25bfa2ef-c9f5-48b8-b929-7dd94a6b240b",
+                "risk_state": "PASS",
+                "risk_source": "EXISTING_RISK_ENGINE",
+                "risk_timestamp": "2026-10-08T15:00:00Z",
+                "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+                "risk_max_notional_usd": "49.283532338308457711",
+                "risk_reason_codes": [],
+                "route_available": true,
+                "route_support": "SYNTHETIC_DEMO_PREPARATION"
+              },
+              "eligible": true,
+              "rank": 1,
+              "rejection_reasons": [],
+              "limitations": [],
+              "effective_cost_per_share_usd": "10000.000000000000000000",
+              "estimated_costs_usd": "0.370050000000000000",
+              "all_in_cost_per_share_usd": "10123.308897034321892703",
+              "ranking_cost_per_share_usd": "10123.308897034321892703",
+              "liquidity_state": "AVAILABLE",
+              "cost_state": "AVAILABLE",
+              "trust_state": "NORMAL",
+              "tradability": "TRADABLE"
+            }
+          ],
+          "selected_candidate": {
+            "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+            "inputs": {
+              "identity": {
+                "underlying": "NVDA",
+                "issuer": "FIXTURE",
+                "chain_id": "56",
+                "contract": "0x2222222222222222222222222222222222222222",
+                "token": "NVDA"
+              },
+              "data_mode": "DEMO",
+              "token_price_usd": "100",
+              "token_to_share_ratio": "0.01",
+              "price_source": "TEST_FIXTURE",
+              "price_timestamp": "2026-10-08T15:00:00Z",
+              "price_quality": "DEMO",
+              "ratio_source": "TEST_FIXTURE",
+              "ratio_observed_at": "2026-10-08T15:00:00Z",
+              "ratio_source_timestamp": null,
+              "supported": true,
+              "normalization_eligible": true,
+              "normalization_reasons": [],
+              "market_state": "regular",
+              "tradable": true,
+              "liquidity_usd": "100000",
+              "liquidity_status": "AVAILABLE",
+              "liquidity_source": "TEST_FIXTURE",
+              "liquidity_timestamp": "2026-10-08T15:00:00Z",
+              "volume_usd": null,
+              "fees_usd": "0.12",
+              "gas_usd": "0.1",
+              "slippage_bps": "50",
+              "cost_status": "AVAILABLE",
+              "cost_source": "TEST_FIXTURE",
+              "cost_timestamp": "2026-10-08T15:00:00Z",
+              "trust_state": "NORMAL",
+              "trust_source": "TEST_FIXTURE",
+              "trust_timestamp": "2026-10-08T15:00:00Z",
+              "trust_assessment_id": "25bfa2ef-c9f5-48b8-b929-7dd94a6b240b",
+              "risk_state": "PASS",
+              "risk_source": "EXISTING_RISK_ENGINE",
+              "risk_timestamp": "2026-10-08T15:00:00Z",
+              "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+              "risk_max_notional_usd": "49.283532338308457711",
+              "risk_reason_codes": [],
+              "route_available": true,
+              "route_support": "SYNTHETIC_DEMO_PREPARATION"
+            },
+            "eligible": true,
+            "rank": 1,
+            "rejection_reasons": [],
+            "limitations": [],
+            "effective_cost_per_share_usd": "10000.000000000000000000",
+            "estimated_costs_usd": "0.370050000000000000",
+            "all_in_cost_per_share_usd": "10123.308897034321892703",
+            "ranking_cost_per_share_usd": "10123.308897034321892703",
+            "liquidity_state": "AVAILABLE",
+            "cost_state": "AVAILABLE",
+            "trust_state": "NORMAL",
+            "tradability": "TRADABLE"
+          },
+          "ranking_basis": "ALL_IN_ESTIMATE",
+          "reason_codes": [
+            "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+            "IDENTITY_TIE_BREAK"
+          ],
+          "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+          "execution_ready": false,
+          "transaction_broadcast": false,
+          "live_trading_enabled": false,
+          "execution_mode": "DRY_RUN",
+          "provider_execution_mode": null,
+          "no_broadcast_statement": "No real transaction was broadcast."
+        },
+        "risk": {
+          "evidence_digest": "44a78ae45a7ca17797cf13e1a494d773c815236261780237d3d16523e886ab2a",
+          "evaluated_at": "2026-10-08T15:00:00Z",
+          "data_mode": "DEMO",
+          "decision_id": "rebalance_e00ef0bc4844675caf7a6269777a2f6288ab27837b465b90bf2a9a173b299a3c",
+          "status": "PASS",
+          "checks": [
+            {
+              "code": "RISK_CONTEXT_AVAILABLE",
+              "passed": true,
+              "detail": "RISK_CONTEXT_AVAILABLE"
+            },
+            {
+              "code": "REQUIRED_EVIDENCE_VALID",
+              "passed": true,
+              "detail": "REQUIRED_EVIDENCE_VALID"
+            },
+            {
+              "code": "SYSTEM_RESOLVED",
+              "passed": true,
+              "detail": "SYSTEM_RESOLVED"
+            },
+            {
+              "code": "TRADABLE_ROUTE",
+              "passed": true,
+              "detail": "TRADABLE_ROUTE"
+            },
+            {
+              "code": "DATA_FRESHNESS",
+              "passed": true,
+              "detail": "DATA_FRESHNESS"
+            },
+            {
+              "code": "TIMESTAMP_ALIGNMENT",
+              "passed": true,
+              "detail": "TIMESTAMP_ALIGNMENT"
+            },
+            {
+              "code": "TRUST_REQUIRED",
+              "passed": true,
+              "detail": "TRUST_REQUIRED"
+            },
+            {
+              "code": "OPPORTUNITY_TRUST",
+              "passed": true,
+              "detail": "OPPORTUNITY_TRUST"
+            },
+            {
+              "code": "PRODUCTION_TRUST_GATE",
+              "passed": true,
+              "detail": "PRODUCTION_TRUST_GATE"
+            },
+            {
+              "code": "PRODUCTION_OPPORTUNITY_GATE",
+              "passed": true,
+              "detail": "PRODUCTION_OPPORTUNITY_GATE"
+            },
+            {
+              "code": "RISK_CONTEXT_FRESH",
+              "passed": true,
+              "detail": "RISK_CONTEXT_FRESH"
+            },
+            {
+              "code": "WALLET_ALLOWED",
+              "passed": true,
+              "detail": "WALLET_ALLOWED"
+            },
+            {
+              "code": "RISK_BUDGET_LIMIT",
+              "passed": true,
+              "detail": "RISK_BUDGET_LIMIT"
+            },
+            {
+              "code": "DAILY_LOSS_LIMIT",
+              "passed": true,
+              "detail": "DAILY_LOSS_LIMIT"
+            },
+            {
+              "code": "TRADE_COUNT_LIMIT",
+              "passed": true,
+              "detail": "TRADE_COUNT_LIMIT"
+            },
+            {
+              "code": "COOLDOWN",
+              "passed": true,
+              "detail": "COOLDOWN"
+            },
+            {
+              "code": "CONFIDENCE_MINIMUM",
+              "passed": true,
+              "detail": "CONFIDENCE_MINIMUM"
+            },
+            {
+              "code": "SLIPPAGE_LIMIT",
+              "passed": true,
+              "detail": "SLIPPAGE_LIMIT"
+            },
+            {
+              "code": "LIQUIDITY_MINIMUM",
+              "passed": true,
+              "detail": "LIQUIDITY_MINIMUM"
+            },
+            {
+              "code": "LIQUIDITY_PERCENTILE",
+              "passed": true,
+              "detail": "LIQUIDITY_PERCENTILE"
+            },
+            {
+              "code": "NET_EDGE_MINIMUM",
+              "passed": true,
+              "detail": "NET_EDGE_MINIMUM"
+            },
+            {
+              "code": "POSITION_CAP",
+              "passed": true,
+              "detail": "POSITION_CAP"
+            },
+            {
+              "code": "BUDGET_CAP",
+              "passed": true,
+              "detail": "BUDGET_CAP"
+            },
+            {
+              "code": "WALLET_LIMIT",
+              "passed": true,
+              "detail": "WALLET_LIMIT"
+            },
+            {
+              "code": "PORTFOLIO_CAP",
+              "passed": true,
+              "detail": "PORTFOLIO_CAP"
+            },
+            {
+              "code": "STRESS_RISK_BUDGET",
+              "passed": true,
+              "detail": "STRESS_RISK_BUDGET"
+            },
+            {
+              "code": "STRESS_DAILY_LOSS",
+              "passed": true,
+              "detail": "STRESS_DAILY_LOSS"
+            },
+            {
+              "code": "LIQUIDITY_POSITION_CAP",
+              "passed": true,
+              "detail": "LIQUIDITY_POSITION_CAP"
+            },
+            {
+              "code": "COST_INCLUSIVE_STRESS",
+              "passed": true,
+              "detail": "COST_INCLUSIVE_STRESS"
+            }
+          ],
+          "stress_loss_usd": "1.2203000",
+          "maximum_notional_usd": "49.283532338308457711",
+          "risk_semantics": "EX_ANTE_NOT_A_GUARANTEED_MAXIMUM_REALIZED_LOSS"
+        },
+        "risk_inputs": {
+          "decision_id": "rebalance_e00ef0bc4844675caf7a6269777a2f6288ab27837b465b90bf2a9a173b299a3c",
+          "data_mode": "DEMO",
+          "purpose": "DIRECT_EXPOSURE",
+          "budget_usd": "50",
+          "risk_budget_usd": "2",
+          "notional_usd": "30.0100",
+          "costs_usd": "0.37005",
+          "conversion_cost_usd": "0.1",
+          "slippage_bps": "50",
+          "net_expected_edge_usd": "1",
+          "liquidity_usd": "100000",
+          "liquidity_p50_usd": "10000",
+          "context": {
+            "data_mode": "DEMO",
+            "observed_at": "2026-10-08T15:00:00Z",
+            "source": "TEST_FIXTURE",
+            "stress_adverse_move_fraction": "0.02",
+            "wallet_available_usd": "100.0200",
+            "existing_exposure_usd": "40.0",
+            "daily_loss_usd": "0",
+            "trades_today": 0,
+            "last_trade_at": null,
+            "system_resolved": true,
+            "wallet_allowed": true,
+            "max_position_usd": "50",
+            "max_portfolio_exposure_usd": "100",
+            "max_daily_loss_usd": "5",
+            "max_risk_budget_usd": "5",
+            "max_trades_per_day": 5,
+            "max_liquidity_fraction": "0.01",
+            "min_confidence": "MEDIUM",
+            "min_liquidity_usd": "1000",
+            "min_liquidity_percentile": 50,
+            "max_slippage_bps": "50",
+            "min_net_edge_usd": "0.25",
+            "cooldown_seconds": 60
+          },
+          "confidence": "HIGH",
+          "trust_state": "NORMAL",
+          "trust_required": true,
+          "tradable": true,
+          "route_available": true,
+          "token_observed_at": "2026-10-08T15:00:00Z",
+          "equity_observed_at": "2026-10-08T15:00:00Z",
+          "evidence_observed_at": "2026-10-08T15:00:00Z",
+          "required_evidence_valid": true,
+          "system_resolved": true
+        },
+        "eligible_for_preparation": true,
+        "reasons": [
+          "DRIFT_EXCEEDS_CONFIGURED_BAND"
+        ],
+        "execution_decision_id": "rebalance_e00ef0bc4844675caf7a6269777a2f6288ab27837b465b90bf2a9a173b299a3c",
+        "source": "DETERMINISTIC_PORTFOLIO_SERVICE",
+        "execution_ready": false
+      }
+    ],
+    "route_decisions": [
+      {
+        "schema_version": "routing-1",
+        "route_id": "e0f2d437-7650-510c-a831-a001c092c1ae",
+        "underlying": "NVDA",
+        "requested_notional_usd": "30.01000",
+        "data_mode": "DEMO",
+        "source": "DETERMINISTIC_ROUTER",
+        "timestamp": "2026-10-08T15:00:00Z",
+        "valid_until": "2026-10-08T15:00:30Z",
+        "policy": {
+          "version": "routing-1",
+          "purpose": "INDICATIVE_EXPOSURE",
+          "require_costs": true,
+          "require_liquidity": true,
+          "require_trust": true,
+          "require_risk": true,
+          "min_liquidity_usd": "1000",
+          "max_slippage_bps": "50",
+          "max_age_seconds": 120,
+          "ranking": "MIN_EXACT_EFFECTIVE_COST_THEN_IDENTITY",
+          "weights": null,
+          "unknown_cost_behavior": "COMMON_PRICE_ONLY_BASIS_OR_REJECT_IF_REQUIRED"
+        },
+        "status": "ROUTE_SELECTED",
+        "selected_representation": {
+          "underlying": "NVDA",
+          "issuer": "FIXTURE",
+          "chain_id": "56",
+          "contract": "0x2222222222222222222222222222222222222222",
+          "token": "NVDA"
+        },
+        "issuer": "FIXTURE",
+        "candidates": [
+          {
+            "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+            "inputs": {
+              "identity": {
+                "underlying": "NVDA",
+                "issuer": "FIXTURE",
+                "chain_id": "56",
+                "contract": "0x2222222222222222222222222222222222222222",
+                "token": "NVDA"
+              },
+              "data_mode": "DEMO",
+              "token_price_usd": "100",
+              "token_to_share_ratio": "0.01",
+              "price_source": "TEST_FIXTURE",
+              "price_timestamp": "2026-10-08T15:00:00Z",
+              "price_quality": "DEMO",
+              "ratio_source": "TEST_FIXTURE",
+              "ratio_observed_at": "2026-10-08T15:00:00Z",
+              "ratio_source_timestamp": null,
+              "supported": true,
+              "normalization_eligible": true,
+              "normalization_reasons": [],
+              "market_state": "regular",
+              "tradable": true,
+              "liquidity_usd": "100000",
+              "liquidity_status": "AVAILABLE",
+              "liquidity_source": "TEST_FIXTURE",
+              "liquidity_timestamp": "2026-10-08T15:00:00Z",
+              "volume_usd": null,
+              "fees_usd": "0.12",
+              "gas_usd": "0.1",
+              "slippage_bps": "50",
+              "cost_status": "AVAILABLE",
+              "cost_source": "TEST_FIXTURE",
+              "cost_timestamp": "2026-10-08T15:00:00Z",
+              "trust_state": "NORMAL",
+              "trust_source": "TEST_FIXTURE",
+              "trust_timestamp": "2026-10-08T15:00:00Z",
+              "trust_assessment_id": "25bfa2ef-c9f5-48b8-b929-7dd94a6b240b",
+              "risk_state": "PASS",
+              "risk_source": "EXISTING_RISK_ENGINE",
+              "risk_timestamp": "2026-10-08T15:00:00Z",
+              "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+              "risk_max_notional_usd": "49.283532338308457711",
+              "risk_reason_codes": [],
+              "route_available": true,
+              "route_support": "SYNTHETIC_DEMO_PREPARATION"
+            },
+            "eligible": true,
+            "rank": 1,
+            "rejection_reasons": [],
+            "limitations": [],
+            "effective_cost_per_share_usd": "10000.000000000000000000",
+            "estimated_costs_usd": "0.370050000000000000",
+            "all_in_cost_per_share_usd": "10123.308897034321892703",
+            "ranking_cost_per_share_usd": "10123.308897034321892703",
+            "liquidity_state": "AVAILABLE",
+            "cost_state": "AVAILABLE",
+            "trust_state": "NORMAL",
+            "tradability": "TRADABLE"
+          }
+        ],
+        "selected_candidate": {
+          "candidate_id": "06cafb5f-3fc6-5070-bf17-9e8cf8a094eb",
+          "inputs": {
+            "identity": {
+              "underlying": "NVDA",
+              "issuer": "FIXTURE",
+              "chain_id": "56",
+              "contract": "0x2222222222222222222222222222222222222222",
+              "token": "NVDA"
+            },
+            "data_mode": "DEMO",
+            "token_price_usd": "100",
+            "token_to_share_ratio": "0.01",
+            "price_source": "TEST_FIXTURE",
+            "price_timestamp": "2026-10-08T15:00:00Z",
+            "price_quality": "DEMO",
+            "ratio_source": "TEST_FIXTURE",
+            "ratio_observed_at": "2026-10-08T15:00:00Z",
+            "ratio_source_timestamp": null,
+            "supported": true,
+            "normalization_eligible": true,
+            "normalization_reasons": [],
+            "market_state": "regular",
+            "tradable": true,
+            "liquidity_usd": "100000",
+            "liquidity_status": "AVAILABLE",
+            "liquidity_source": "TEST_FIXTURE",
+            "liquidity_timestamp": "2026-10-08T15:00:00Z",
+            "volume_usd": null,
+            "fees_usd": "0.12",
+            "gas_usd": "0.1",
+            "slippage_bps": "50",
+            "cost_status": "AVAILABLE",
+            "cost_source": "TEST_FIXTURE",
+            "cost_timestamp": "2026-10-08T15:00:00Z",
+            "trust_state": "NORMAL",
+            "trust_source": "TEST_FIXTURE",
+            "trust_timestamp": "2026-10-08T15:00:00Z",
+            "trust_assessment_id": "25bfa2ef-c9f5-48b8-b929-7dd94a6b240b",
+            "risk_state": "PASS",
+            "risk_source": "EXISTING_RISK_ENGINE",
+            "risk_timestamp": "2026-10-08T15:00:00Z",
+            "risk_id": "6e922f29-3b59-58e1-b4ad-dcd96746cbae",
+            "risk_max_notional_usd": "49.283532338308457711",
+            "risk_reason_codes": [],
+            "route_available": true,
+            "route_support": "SYNTHETIC_DEMO_PREPARATION"
+          },
+          "eligible": true,
+          "rank": 1,
+          "rejection_reasons": [],
+          "limitations": [],
+          "effective_cost_per_share_usd": "10000.000000000000000000",
+          "estimated_costs_usd": "0.370050000000000000",
+          "all_in_cost_per_share_usd": "10123.308897034321892703",
+          "ranking_cost_per_share_usd": "10123.308897034321892703",
+          "liquidity_state": "AVAILABLE",
+          "cost_state": "AVAILABLE",
+          "trust_state": "NORMAL",
+          "tradability": "TRADABLE"
+        },
+        "ranking_basis": "ALL_IN_ESTIMATE",
+        "reason_codes": [
+          "MINIMUM_ELIGIBLE_EFFECTIVE_COST",
+          "IDENTITY_TIE_BREAK"
+        ],
+        "explanation": "Lowest exact all-in estimated USD cost per real share after eligibility filters; fees, gas and slippage included. Deterministic issuer/chain/contract/token tie-break.",
+        "execution_ready": false,
+        "transaction_broadcast": false,
+        "live_trading_enabled": false,
+        "execution_mode": "DRY_RUN",
+        "provider_execution_mode": null,
+        "no_broadcast_statement": "No real transaction was broadcast."
+      }
+    ],
+    "status": "REBALANCE_REQUIRED",
+    "reasons": [
+      "DRIFT_REBALANCE_PROPOSED"
+    ],
+    "preparations": [],
+    "completion_snapshot": null,
+    "settled_execution_ids": [],
+    "idempotency_key": "c2263ab6-30f8-48e2-bb78-b4613bbe12e3",
+    "request_id": "3ea34473-c13c-4c82-b305-3235d7ee85c2",
+    "correlation_id": "67a89b46-d572-49fe-bff7-1d689732a819",
+    "created_at": "2026-10-08T15:00:00Z",
+    "updated_at": "2026-10-08T15:00:00Z",
+    "execution_mode": "DRY_RUN",
+    "live_trading_enabled": false,
+    "broadcast": false,
+    "authority": "DETERMINISTIC_BACKEND"
+  }
+}

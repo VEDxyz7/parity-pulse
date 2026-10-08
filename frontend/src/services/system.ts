@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 import type { FoundationStatus, SystemStatus, HealthStatus } from '../types/system'
 
 function object(value: unknown): value is Record<string, unknown> {
@@ -39,11 +40,7 @@ function parseHealth(value: unknown): HealthStatus {
 }
 
 async function read(path: string, signal: AbortSignal, correlationId: string): Promise<unknown> {
-  const response = await fetch(path, {
-    method: 'GET', signal, headers: { 'X-Correlation-ID': correlationId }, cache: 'no-store',
-  })
-  if (!response.ok) throw new Error('Backend unavailable. Check the local service and retry.')
-  return response.json()
+  return apiRequest(path, value => value, { signal, correlationId })
 }
 
 export async function fetchFoundationStatus(signal: AbortSignal): Promise<FoundationStatus> {

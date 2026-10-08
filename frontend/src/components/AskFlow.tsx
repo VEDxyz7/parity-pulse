@@ -1,3 +1,4 @@
+import { ProposalReview } from './ProposalReview'
 import { RouteComparison } from './RouteComparison'
 import { useEffect, useRef, useState } from 'react'
 import { requestProposal, type Proposal } from '../services/exposure'
@@ -67,6 +68,7 @@ export function AskFlow({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
       <p>Fees, gas, funding conversion, slippage and liquidity: unknown. Independent current equity: {result.independent_equity.status}{result.independent_equity.price_usd_per_share ? ` / ${result.independent_equity.price_usd_per_share} USD/share (${result.independent_equity.source})` : ' / unavailable'}.</p>
       <p>Simulation: UNAVAILABLE. Execution readiness: BLOCKED. Trust integration: NOT ASSESSED for this proposal.</p>
       <details><summary>Execution blockers and data limitations</summary><ul>{result.execution_blockers.map(reason => <li key={reason}>{reason}</li>)}{Object.entries(result.limitations).map(([key, value]) => <li key={key}>{key}: {value}</li>)}</ul></details>
+      <ProposalReview key={result.proposal_id} proposal={result} mode={mode} expired={expired} />
       <small>Proposal {result.proposal_id} · valid until {result.valid_until}. An estimate is not a vendor quote, simulated transaction, order or position.</small>
     </div>}
   </section>

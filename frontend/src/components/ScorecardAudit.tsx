@@ -1,3 +1,4 @@
+import { readRefresh } from '../hooks/readRefresh'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchEvaluation } from '../services/scorecard'
@@ -7,12 +8,12 @@ import { StatusBadge } from './StatusBadge'
 const value = (v: string | null | undefined) => v ?? 'Unavailable'
 const money = (v: string | null | undefined) => v == null ? 'Unavailable' : `$${v}`
 const codes = (v: string[]) => v.join(' · ') || 'No recorded reason'
-export function ScorecardAudit({ mode }: { mode: Scorecards['data_mode'] }) {
+export function ScorecardAudit({ mode, initialDecision }: { initialDecision?: string; mode: Scorecards['data_mode'] }) {
   const [kind, setKind] = useState(''), [ticker, setTicker] = useState(''), [outcome, setOutcome] = useState('')
-  const [filter, setFilter] = useState(''), [offset, setOffset] = useState(0), [decision, setDecision] = useState('')
+  const [filter, setFilter] = useState(''), [offset, setOffset] = useState(0), [decision, setDecision] = useState(initialDecision ?? '')
   const params = new URLSearchParams(filter); params.set('limit', '25'); params.set('offset', String(offset))
-  const query = useQuery({ queryKey: ['scorecard', mode, filter, offset], queryFn: ({ signal }) => fetchEvaluation<Scorecards>(mode, params, signal), retry: false })
-  const trace = useQuery({ queryKey: ['audit', mode, decision], queryFn: ({ signal }) => fetchEvaluation<Trace>(mode, new URLSearchParams(), signal, decision), enabled: !!decision, retry: false })
+  const query = useQuery({ queryKey: ['scorecard', mode, filter, offset], queryFn: ({ signal }) => fetchEvaluation<Scorecards>(mode, params, signal), ...readRefresh })
+  const trace = useQuery({ queryKey: ['audit', mode, decision], queryFn: ({ signal }) => fetchEvaluation<Trace>(mode, new URLSearchParams(), signal, decision), enabled: !!decision, ...readRefresh })
   const data = query.isError || query.isFetching ? null : query.data
   const trail = trace.isError || trace.isFetching ? null : trace.data
   return <section className="panel scorecard-audit" aria-label="Scorecard and audit">

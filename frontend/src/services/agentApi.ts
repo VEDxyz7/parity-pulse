@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 export const toolNames = ['buy_stock_exposure', 'find_opportunity', 'compare_stock_tokens', 'get_stock_trust', 'get_route', 'get_portfolio', 'get_autopilot_status'] as const
 export type ToolName = typeof toolNames[number]
 export type ToolCatalog = {
@@ -17,7 +18,5 @@ export function parseCatalog(value: unknown): ToolCatalog {
   return value as ToolCatalog
 }
 export async function getCatalog(signal: AbortSignal) {
-  const response = await fetch('/api/agent/tools', { signal, headers: { Accept: 'application/json' } })
-  if (!response.ok) throw new Error('Agent API catalog is unavailable.')
-  return parseCatalog(await response.json())
+  return apiRequest('/api/agent/tools', parseCatalog, { signal })
 }

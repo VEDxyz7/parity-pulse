@@ -7,7 +7,7 @@ export function RouteComparison({ route, expired = false }: { route: RouteDecisi
     <p>{route.explanation}</p>
     <p>Purpose: {route.policy.purpose} · Ranking: {route.ranking_basis} · No weighted score; exact cost, then issuer/chain/contract/token.</p>
     {!expired && route.selected_representation && <p><strong>Selected route:</strong> {route.selected_representation.issuer} / {route.selected_representation.token} · {route.selected_representation.chain_id} / {route.selected_representation.contract}</p>}
-    <div className="comparison-scroll"><table>
+    <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Route comparison table"><table>
       <caption>Route Comparison — {route.underlying ?? 'unresolved stock'}</caption>
       <thead><tr><th>Issuer / Token</th><th>Effective exposure cost / USD per share</th><th>Liquidity / USD</th><th>Estimated fees / gas / USD</th><th>Estimated slippage / bps</th><th>Trust</th><th>Tradability</th><th>Decision</th></tr></thead>
       <tbody>{route.candidates.map(c => <tr key={`${c.candidate_id}:${c.inputs.identity.issuer}`}>

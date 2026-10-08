@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 import type { ExecutionRow, Page, TerminalResult } from './terminal'
 
 type Mode = TerminalResult['data_mode']
@@ -72,12 +73,5 @@ export function parseEvaluation<T extends Scorecards | Trace>(value: unknown, mo
 export async function fetchEvaluation<T extends Scorecards | Trace>(mode: Mode, params: URLSearchParams, signal: AbortSignal, decision?: string): Promise<T> {
   if (decision && !/^[A-Za-z0-9_.:-]{1,160}$/.test(decision)) throw new Error('Invalid decision reference.')
   const path = decision ? `/api/audit/decisions/${encodeURIComponent(decision)}` : '/api/scorecard'
-  const controller = new AbortController(), abort = () => controller.abort()
-  signal.addEventListener('abort', abort, { once: true }); if (signal.aborted) abort()
-  const timer = window.setTimeout(abort, 8000)
-  try {
-    const response = await fetch(`${path}?${params}`, { method: 'GET', signal: controller.signal, cache: 'no-store', headers: { 'X-Correlation-ID': crypto.randomUUID() } })
-    if (!response.ok) throw new Error('Evaluation unavailable.')
-    return parseEvaluation<T>(await response.json(), mode, !!decision)
-  } finally { clearTimeout(timer); signal.removeEventListener('abort', abort) }
+  return apiRequest(`${path}?${params}`, value => parseEvaluation<T>(value, mode, !!decision), { signal })
 }

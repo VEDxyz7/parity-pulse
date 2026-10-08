@@ -31,6 +31,7 @@ from app.api.scorecard import router as scorecard_router
 from app.api.system import router
 from app.api.terminal import router as terminal_router
 from app.api.trust import router as trust_router
+from app.api.workspace import router as workspace_router
 from app.clients.binance_trading import BinanceSafetyClient
 from app.clients.common import ProviderError
 from app.clients.llm import configured_provider
@@ -381,6 +382,7 @@ def create_app(
     app.include_router(terminal_router)
     app.include_router(scorecard_router)
     app.include_router(agent_api_router)
+    app.include_router(workspace_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)

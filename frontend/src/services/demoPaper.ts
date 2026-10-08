@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 import { compare, date, decimal, marked, object, parseRisk, strings, uuid, type OpportunityResult } from './demoOpportunity'
 import { parseSimulation, type PreparationResult, type QuoteResult, type SimulationResult } from './demoPreparation'
 
@@ -106,9 +107,5 @@ export function parseScorecard(v: unknown, row: Lifecycle, origin: OpportunityRe
   return v as unknown as Scorecard
 }
 export async function paperRequest(path: string, signal: AbortSignal, body?: object): Promise<unknown> {
-  const response = await fetch('/api/demo/paper/' + path, { method: body === undefined ? 'GET' : 'POST', signal, cache: 'no-store',
-    headers: { 'Content-Type': 'application/json', 'X-Correlation-ID': crypto.randomUUID() },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }) })
-  if (!response.ok) return invalid()
-  return response.json()
+  return apiRequest('/api/demo/paper/' + path, value => value, { signal, body, timeout: 60_000 })
 }

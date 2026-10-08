@@ -101,6 +101,7 @@ def test_exact_allowlisted_data_and_proposal_routes(client):
     assert paths == {
         "/api/health",
         "/api/agent/tools",
+        "/api/workspace",
         "/api/agent/tools/{name}",
         "/api/system-status",
         "/api/assets",

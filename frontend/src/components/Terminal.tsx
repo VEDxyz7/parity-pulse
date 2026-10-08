@@ -1,3 +1,4 @@
+import { readRefresh } from '../hooks/readRefresh'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchTerminal } from '../services/terminal'
@@ -13,7 +14,7 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
   const [ticker, setTicker] = useState('')
   const [offset, setOffset] = useState(0)
   const [evaluationOpen, setEvaluationOpen] = useState(false)
-  const query = useQuery({ queryKey: ['terminal', mode, ticker, offset], queryFn: ({ signal }) => fetchTerminal(mode, ticker, offset, signal), retry: false })
+  const query = useQuery({ queryKey: ['terminal', mode, ticker, offset], queryFn: ({ signal }) => fetchTerminal(mode, ticker, offset, signal), ...readRefresh })
   const data = query.isError || query.isFetching ? null : query.data
   return <section className="terminal" aria-label="Terminal analytics">
     <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / ANALYTICS</div><h1>Terminal</h1><p>Backend-authoritative evidence. Observation only; no trading actions.</p></div><button className="refresh-button" disabled={query.isFetching} onClick={() => { void query.refetch() }}>Refresh Terminal</button></div>

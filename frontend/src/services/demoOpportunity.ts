@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 import { parseRoute, type RouteDecision } from './routing'
 import type { DemoResult, ScenarioId } from './demoSandbox'
 
@@ -138,11 +139,7 @@ export function parseRisk(v: unknown, opportunity: OpportunityResult): RiskResul
   return v as unknown as RiskResult
 }
 async function post(path: string, body: object, signal: AbortSignal): Promise<unknown> {
-  const response = await fetch(path, { method: 'POST', signal, cache: 'no-store', headers: {
-    'Content-Type': 'application/json', 'X-Correlation-ID': crypto.randomUUID(),
-  }, body: JSON.stringify(body) })
-  if (!response.ok) return invalid()
-  return response.json()
+  return apiRequest(path, value => value, { signal, body, timeout: 60_000 })
 }
 export async function fetchOpportunity(trust: DemoResult, signal: AbortSignal): Promise<OpportunityResult> {
   return parseOpportunity(await post('/api/demo/opportunity', { trust_assessment_id: trust.assessment.assessment_id }, signal), trust)

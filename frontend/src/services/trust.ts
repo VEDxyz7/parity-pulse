@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 // Display backend evidence only. No pricing, baseline, or trust calculations in this module.
 export interface TrustResult {
   assessment_id: string
@@ -89,9 +90,5 @@ export function parseTrust(value: unknown, mode: 'DEMO' | 'LIVE_READ_ONLY'): Tru
 }
 export async function fetchTrust(ticker: string, mode: 'DEMO' | 'LIVE_READ_ONLY', signal: AbortSignal): Promise<TrustResult> {
   if (!/^[A-Z0-9][A-Z0-9.\-]{0,14}$/.test(ticker)) throw new Error('Invalid ticker.')
-  const response = await fetch(`/api/assets/${encodeURIComponent(ticker)}/trust`, {
-    method: 'GET', signal, cache: 'no-store', headers: { 'X-Correlation-ID': crypto.randomUUID() },
-  })
-  if (!response.ok) throw new Error('Trust unavailable.')
-  return parseTrust(await response.json(), mode)
+  return apiRequest(`/api/assets/${encodeURIComponent(ticker)}/trust`, value => parseTrust(value, mode), { signal, timeout: 60_000 })
 }

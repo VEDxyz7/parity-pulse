@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 import { parseTrust, type TrustResult } from './trust'
 
 export type ScenarioId = 'steady' | 'thin-move' | 'supported-move'
@@ -66,9 +67,7 @@ export function parseDemoResult(value: unknown, requested: ScenarioId): DemoResu
   return { ...value, assessment } as unknown as DemoResult
 }
 async function read(path: string, signal: AbortSignal): Promise<unknown> {
-  const response = await fetch(path, { method: 'GET', signal, cache: 'no-store', headers: { 'X-Correlation-ID': crypto.randomUUID() } })
-  if (!response.ok) return invalid()
-  return response.json()
+  return apiRequest(path, value => value, { signal, timeout: 60_000 })
 }
 export async function fetchDemoCatalog(signal: AbortSignal): Promise<DemoScenario[]> {
   return parseDemoCatalog(await read('/api/demo/trust/scenarios', signal))

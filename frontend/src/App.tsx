@@ -6,11 +6,17 @@ import { useSystemStatus } from './hooks/useSystemStatus'
 import { AskFlow } from './components/AskFlow'
 import { TrustPanel } from './components/TrustPanel'
 import { Terminal } from './components/Terminal'
+import { ScorecardAudit } from './components/ScorecardAudit'
 import { AgentApi } from './components/AgentApi'
 import { DemoTrustSandbox } from './components/DemoTrustSandbox'
 import { StatusBadge } from './components/StatusBadge'
 import type { GateName } from './types/system'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
+
+const OpportunityView = lazy(() => import('./components/OpportunityView').then(m => ({ default: m.OpportunityView })))
+const PortfolioView = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.PortfolioView })))
+const SystemView = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.SystemView })))
+const AuditEvents = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.AuditEvents })))
 
 const gates: { key: GateName; label: string; description: string }[] = [
   { key: 'DATA_GATE', label: 'Data & read-only', description: 'Verified access for non-live development' },
@@ -35,6 +41,17 @@ export function App() {
   const showDemo = hash === '#demo-sandbox' || (hash === '' && system?.runtime_mode === 'DEMO')
   const showTerminal = hash === '#terminal'
   const showAgentApi = hash === '#agent-api'
+  const showOpportunity = hash === '#opportunity' || hash.startsWith('#opportunity/')
+  const scanId = /^#opportunity\/([a-f0-9]{64})$/.exec(hash)?.[1]
+  const showPortfolio = hash === '#portfolio', showAutopilot = hash === '#autopilot'
+  const showSettings = hash === '#settings', showAudit = hash === '#audit' || hash.startsWith('#audit/')
+  let decisionId: string | undefined
+  try {
+    const decoded = decodeURIComponent(hash.slice('#audit/'.length))
+    if (hash.startsWith('#audit/') && /^[A-Za-z0-9_.:-]{1,160}$/.test(decoded)) decisionId = decoded
+  } catch { /* Invalid URI never becomes an API identifier. */ }
+  const showAsk = hash === '#ask'
+  const additional = showOpportunity || showPortfolio || showAutopilot || showSettings || showAudit || showAsk
   useEffect(() => {
     if (!['#ask', '#system', '#capabilities'].includes(hash)) return
     const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }))
@@ -51,27 +68,33 @@ export function App() {
       </a>
       <div className="workspace-label">YOUR WORKSPACE <span>01</span></div>
       <nav aria-label="Main navigation" className="navigation">
-        <a href="#overview" className={`nav-item ${showDemo || showTerminal || showAgentApi ? '' : 'active'}`} aria-current={showDemo || showTerminal || showAgentApi ? undefined : 'page'}><LayoutDashboard size={18} />Overview{!showDemo && !showTerminal && !showAgentApi && <span className="nav-dot" />}</a>
+        <a href="#overview" className={`nav-item ${showDemo || showTerminal || showAgentApi || additional ? '' : 'active'}`} aria-current={showDemo || showTerminal || showAgentApi || additional ? undefined : 'page'}><LayoutDashboard size={18} />Overview{!showDemo && !showTerminal && !showAgentApi && !additional && <span className="nav-dot" />}</a>
         <a href="#agent-api" className={`nav-item ${showAgentApi ? 'active' : ''}`} aria-current={showAgentApi ? 'page' : undefined}><Layers3 size={18} />Agent API</a>
         <a href="#terminal" className={`nav-item ${showTerminal ? 'active' : ''}`} aria-current={showTerminal ? 'page' : undefined}><Database size={18} />Terminal</a>
-        <a href="#system" className="nav-item"><Activity size={18} />System status</a>
+        <a href="#settings" className="nav-item"><Activity size={18} />System status</a>
         <a href="#demo-sandbox" className={`nav-item demo-nav ${showDemo ? 'active' : ''}`} aria-current={showDemo ? 'page' : undefined}><ShieldCheck size={18} />DEMO SANDBOX{showDemo && <span className="nav-dot" />}</a>
-        <div className="nav-section">PRODUCT MODES</div>
+        <a href="#opportunity" className={`nav-item ${showOpportunity ? 'active' : ''}`} aria-current={showOpportunity ? 'page' : undefined}><Sparkles size={18} />Opportunity analysis</a>
+        <a href="#autopilot" className={`nav-item ${showAutopilot ? 'active' : ''}`} aria-current={showAutopilot ? 'page' : undefined}><Workflow size={18} />Autopilot status</a>
+        <a href="#portfolio" className={`nav-item ${showPortfolio ? 'active' : ''}`} aria-current={showPortfolio ? 'page' : undefined}><Layers3 size={18} />Portfolio</a>
+        <a href="#audit" className={`nav-item ${showAudit ? 'active' : ''}`} aria-current={showAudit ? 'page' : undefined}><Activity size={18} />Scorecard / Audit</a>
+        <div className="nav-section">EXECUTION AUTHORITY</div>
         <button className="nav-item" disabled={!askReady} onClick={() => { window.location.hash = 'ask' }}><ArrowDownUp size={18} />Direct Exposure<LockKeyhole size={13} /></button>
-        <button className="nav-item deferred" disabled title="Available in a later phase"><Sparkles size={18} />Opportunity<LockKeyhole size={13} /></button>
-        <button className="nav-item deferred" disabled title="Available in a later phase"><Workflow size={18} />Autopilot<LockKeyhole size={13} /></button>
-        <p className="nav-note">Ask for exposure when verified. Opportunity and Autopilot remain unavailable.</p>
+        <button className="nav-item deferred" disabled title="Execution blocked by production safety gates"><Sparkles size={18} />Opportunity<LockKeyhole size={13} /></button>
+        <button className="nav-item deferred" disabled title="Execution blocked by production safety gates"><Workflow size={18} />Autopilot<LockKeyhole size={13} /></button>
+        <p className="nav-note">Ask for exposure when verified. Analytical views are available; production execution remains blocked.</p>
       </nav>
       <div className="sidebar-bottom">
         <div className="safe-card"><ShieldCheck size={20} /><strong>Non-live workspace</strong><p>Prepare exposure estimates.<br />Live execution is unavailable.</p></div>
         <a className="help-link" href="#capabilities"><CircleHelp size={17} />Capability gates<ArrowUpRight size={14} /></a>
-        <div className="workspace-profile"><span>PP</span><div>Local workspace<small>{askReady ? 'Canonical Phase 1 · Working Ask Flow' : `Phase ${system?.phase ?? 1} · ${system?.phase === 2 ? 'Data layer' : 'Foundation'}`}</small></div></div>
+        <div className="workspace-profile"><span>PP</span><div>Local workspace<small>{askReady ? 'Master Phase 15 · Non-live integration' : `Phase ${system?.phase ?? 1} · ${system?.phase === 2 ? 'Data layer' : 'Foundation'}`}</small></div></div>
       </div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>{showAgentApi ? 'Agent API' : showTerminal ? 'Terminal' : showDemo ? 'DEMO SANDBOX' : 'Overview'}</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
+      <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>{showOpportunity ? 'Opportunity analysis' : showPortfolio ? 'Portfolio' : showAutopilot ? 'Autopilot' : showSettings ? 'System Health' : showAudit ? 'Scorecard / Audit' : showAsk ? 'Buy a Stock' : showAgentApi ? 'Agent API' : showTerminal ? 'Terminal' : showDemo ? 'DEMO SANDBOX' : 'Overview'}</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
       <main id="main-content" tabIndex={-1}>
-        {showAgentApi ? <AgentApi /> : showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
+        {additional ? (system ? <Suspense fallback={<p role="status">Loading page…</p>}><div key={`${hash}:${system.run_id}:${system.data_mode}`}>
+          {showOpportunity ? <OpportunityView mode={system.data_mode} sandbox={system.runtime_mode === 'DEMO'} scanId={scanId} /> : showPortfolio || showAutopilot ? <PortfolioView mode={system.data_mode} autopilot={showAutopilot} /> : showSettings ? <SystemView mode={system.data_mode} /> : showAudit ? <div className="workspace-view"><h1>Scorecard / Audit</h1><ScorecardAudit mode={system.data_mode} initialDecision={decisionId ? decisionId : undefined} /><AuditEvents mode={system.data_mode} /></div> : <><h1>Buy a Stock</h1><AskFlow mode={system.data_mode} /><TrustPanel mode={system.data_mode} /></>}
+        </div></Suspense> : <section className="panel demo-unavailable"><h1>Backend state unavailable</h1><p role="status">A verified backend is required. No financial values or cached healthy state are substituted.</p><button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Retry backend status</button></section>) : showAgentApi ? <AgentApi /> : showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
           <section className="page-heading" aria-label="Synthetic sandbox mode"><div><div className="eyebrow">PARITY PULSE / DEMO</div><h1>DEMO SANDBOX</h1><p>SIMULATED DATA — NOT LIVE MARKET DATA</p><p><strong>NO REAL FUNDS WILL MOVE</strong></p></div><a className="refresh-button" href="#overview">Return to Overview</a></section>
           {system?.runtime_mode === 'DEMO' && askReady ? <DemoTrustSandbox key={`sandbox:${system.run_id}`} /> : <section className="panel demo-unavailable" aria-label="Demo sandbox availability">
             <h2>{available ? 'The connected backend has the sandbox disabled.' : 'A verified DEMO backend is required.'}</h2>
@@ -81,8 +104,10 @@ export function App() {
           </section>}
         </> : <>
         {system?.runtime_mode === 'DEMO' && <section className="connection-alert" aria-label="Synthetic sandbox mode"><ShieldCheck size={19} /><div><strong>DEMO SANDBOX</strong><p>SIMULATED DATA — NOT LIVE MARKET DATA</p></div></section>}
-        <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / FOUNDATION</div><h1>Your workspace, ready to grow.</h1><p>A clear view of your environment and the capabilities available today.</p></div><button className="refresh-button" onClick={() => { void query.refetch() }} disabled={query.isFetching}><RefreshCw size={15} className={query.isFetching ? 'spinning' : ''} />{query.isFetching ? 'Checking' : 'Refresh status'}</button></div>
-        <section className="foundation-banner" aria-label="Development scope"><div className="banner-icon"><Layers3 size={26} /></div><div><span className="banner-kicker">{askReady ? 'CANONICAL PHASE 01' : `ENGINEERING STAGE ${system?.phase === 2 ? '02' : '01'}`}</span><h2>A safe starting point.</h2><p>{askReady ? 'Working Ask Flow: deterministic exposure estimates with persisted proposals. Trust assessments are available separately; the Trust gate remains blocked.' : system?.phase === 2 ? 'Read-only data is available through the backend. Intelligence and execution workflows will follow in later phases.' : 'The application foundation is here. Intelligence and execution workflows will follow in later phases.'}</p></div><span className="banner-tag"><LockKeyhole size={14} />Live execution unavailable</span></section>
+        <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / FOUNDATION</div><h1>{askReady ? "Invest in Global Stocks, Smarter." : "Your workspace, ready to grow."}</h1><p>A clear view of your environment and the capabilities available today.</p></div><button className="refresh-button" onClick={() => { void query.refetch() }} disabled={query.isFetching}><RefreshCw size={15} className={query.isFetching ? 'spinning' : ''} />{query.isFetching ? 'Checking' : 'Refresh status'}</button></div>
+        <section className="foundation-banner" aria-label="Development scope"><div className="banner-icon"><Layers3 size={26} /></div><div><span className="banner-kicker">{askReady ? 'MASTER PHASE 15' : `ENGINEERING STAGE ${system?.phase === 2 ? '02' : '01'}`}</span><h2>A safe starting point.</h2><p>{askReady ? 'Backend-authoritative exposure, Opportunity analysis, Portfolio and Audit. Proposals and simulations remain separate from confirmed trades. Production Trust remains blocked.' : system?.phase === 2 ? 'Read-only data is available through the backend. Intelligence and execution workflows will follow in later phases.' : 'The application foundation is here. Intelligence and execution workflows will follow in later phases.'}</p></div><span className="banner-tag"><LockKeyhole size={14} />Live execution unavailable</span></section>
+        {askReady && <p className="mode-notice">Current US market status / next regular opening: unavailable on this health summary. Inspect the backend calendar and per-asset observations in <a href="#terminal">Terminal</a>. Missing market values are not inferred from the browser clock.</p>}
+        {askReady && <section className="home-actions" aria-label="Primary product actions"><a href="#ask" className="panel">Buy a Stock<small>Compare exposure and review a dry-run proposal</small></a><a href="#opportunity" className="panel">Find Opportunity<small>Analytical scans; production execution blocked</small></a><a href="#autopilot" className="panel">Autopilot<small>Inspect targets and propose drift rebalances</small></a></section>}
         <section className="demo-entry"><div><strong>DEMO SANDBOX</strong><p>Explore the existing synthetic pipeline. No real funds will move.</p></div><a className="refresh-button" href="#demo-sandbox">Open DEMO SANDBOX</a></section>
         {query.isError && <div role="alert" className="connection-alert"><Radio size={19} /><div><strong>We couldn’t reach a healthy backend.</strong><p>Check that the local backend is running, then refresh. Service values remain unknown until verified.</p></div></div>}
         <section className="metrics" aria-label="Operational configuration">

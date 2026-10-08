@@ -10,12 +10,10 @@ from app.clients.common import ProviderError
 from app.models.agent_api import (
     INPUTS,
     PROPOSALS,
-    PlanView,
-    PortfolioState,
-    PositionView,
     PublicScan,
     ToolError,
     ToolResult,
+    project_portfolio,
 )
 from app.models.opportunity_scan import OpportunityRequest
 from app.models.portfolio import portfolio_fingerprint
@@ -223,26 +221,7 @@ class AgentAPI:
         context = {k: str(ids[k]) for k in ("request_id", "correlation_id", "run_id")}
         if name in {"get_portfolio", "get_autopilot_status"}:
             raw = await asyncio.to_thread(s.portfolio.state)
-            for key in ("pending_plan", "latest_decision"):
-                plan = raw[key]
-                raw[key] = (
-                    PlanView(
-                        **{
-                            k: getattr(plan, k)
-                            for k in PlanView.model_fields
-                            if k not in {"funding", "captured_at"}
-                        },
-                        funding=plan.snapshot.inputs.funding,
-                        captured_at=plan.snapshot.captured_at,
-                    )
-                    if plan
-                    else None
-                )
-            raw["active_positions"] = tuple(
-                PositionView(**{k: getattr(p, k) for k in PositionView.model_fields})
-                for p in raw["active_positions"]
-            )
-            state = PortfolioState.model_validate(raw)
+            state = project_portfolio(raw)
             return dict(
                 status="AVAILABLE",
                 portfolio=state,

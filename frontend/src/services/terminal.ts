@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 // Authoritative values are exact strings from the backend. No financial arithmetic here.
 export type Page<T> = { items: T[]; limit: number; offset: number; has_more: boolean; reasons: string[] }
 export type TrustRow = {
@@ -96,14 +97,5 @@ export function parseTerminal(value: unknown, mode: TerminalResult['data_mode'])
 export async function fetchTerminal(mode: TerminalResult['data_mode'], ticker: string, offset: number, signal: AbortSignal): Promise<TerminalResult> {
   if (ticker && !/^[A-Z0-9][A-Z0-9.\-]{0,14}$/.test(ticker)) throw new Error('Enter a supported ticker.')
   const params = new URLSearchParams({ limit: '25', offset: String(offset), ...(ticker ? { ticker } : {}) })
-  const controller = new AbortController()
-  const abort = () => controller.abort()
-  signal.addEventListener('abort', abort, { once: true })
-  if (signal.aborted) controller.abort()
-  const timeout = window.setTimeout(abort, 8000)
-  try {
-    const response = await fetch(`/api/terminal?${params}`, { method: 'GET', signal: controller.signal, cache: 'no-store', headers: { 'X-Correlation-ID': crypto.randomUUID() } })
-    if (!response.ok) throw new Error('Terminal records unavailable.')
-    return parseTerminal(await response.json(), mode)
-  } finally { clearTimeout(timeout); signal.removeEventListener('abort', abort) }
+  return apiRequest(`/api/terminal?${params}`, value => parseTerminal(value, mode), { signal })
 }

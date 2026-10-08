@@ -1,3 +1,4 @@
+import { apiRequest } from './api'
 import { parseRoute, type RouteDecision } from './routing'
 export interface Estimate {
   issuer: string; contract: string; chain_id: string; token_symbol: string
@@ -60,11 +61,5 @@ export function parseProposal(value: unknown, expectedMode: 'DEMO' | 'LIVE_READ_
   return value as unknown as Proposal
 }
 export async function requestProposal(text: string, mode: 'DEMO' | 'LIVE_READ_ONLY', signal: AbortSignal): Promise<Proposal> {
-  const response = await fetch('/api/exposure/quote', {
-    method: 'POST', signal, cache: 'no-store',
-    headers: { 'Content-Type': 'application/json', 'X-Correlation-ID': crypto.randomUUID() },
-    body: JSON.stringify({ text }),
-  })
-  if (!response.ok) throw new Error('Proposal unavailable. Check your request and retry.')
-  return parseProposal(await response.json(), mode)
+  return apiRequest('/api/exposure/quote', value => parseProposal(value, mode), { signal, body: { text }, timeout: 60_000 })
 }
