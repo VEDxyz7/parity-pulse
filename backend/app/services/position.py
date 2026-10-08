@@ -45,6 +45,7 @@ class PositionService:
         self.minutes = postopen_exit_minutes
         self.lock = threading.RLock()
         self.recovery_complete = False
+        self.portfolio_exit_guard = None
 
     def has_unresolved(self, decision_id=None):
         if not self.recovery_complete or self.store.count(mode=self.mode, active=True) > 1000:
@@ -101,19 +102,19 @@ class PositionService:
                 )
         raise ValueError("Next regular opening unavailable")
 
-    def create(self, execution_id, instrument):
+    def create(self, execution_id, instrument, *, exit_rule="FIRST_REGULAR_OPEN_PLUS_MINUTES"):
         with self.lock:
             instrument = PositionInstrument.model_validate_json(instrument.model_dump_json())
             old = self.store.for_execution(execution_id, mode=self.mode)
             if old:
-                if old.instrument != instrument:
+                if old.instrument != instrument or old.exit_rule != exit_rule:
                     raise ValueError(
                         "Existing position has different representation/as-of metadata"
                     )
                 return old
             a = self.execution.store.get(execution_id, mode=self.mode)
             now = self.clock()
-            fields = self._entry_fields(None, a)
+            fields = self._entry_fields(None, a, exit_rule=exit_rule)
             p = Position(
                 position_id=uuid4(),
                 data_mode=self.mode,
@@ -122,6 +123,7 @@ class PositionService:
                 version=0,
                 requested_quantity_base_units=a.quote.route.toTokenAmount if a.quote else "0",
                 postopen_exit_minutes=self.minutes,
+                exit_rule=exit_rule,
                 created_at=now,
                 updated_at=now,
                 job=PositionJob(job_id=uuid4(), next_check_at=now),
@@ -131,11 +133,11 @@ class PositionService:
                 return self.store.save(p)
             except ValueError:
                 winner = self.store.for_execution(execution_id, mode=self.mode)
-                if winner and winner.instrument == instrument:
+                if winner and winner.instrument == instrument and winner.exit_rule == exit_rule:
                     return winner
                 raise
 
-    def _entry_fields(self, p, a):
+    def _entry_fields(self, p, a, *, exit_rule="FIRST_REGULAR_OPEN_PLUS_MINUTES"):
         fields = dict(entry_execution=a)
         if a.settlement_conflict or a.conflicting_tx_hashes or a.last_conflicting_tx_hash:
             return {
@@ -151,6 +153,8 @@ class PositionService:
                 state="OPEN",
                 reasons=(),
             )
+            if (p.exit_rule if p else exit_rule) == "PORTFOLIO_DRIFT":
+                return fields
             try:
                 fields.update(
                     self.schedule(
@@ -178,6 +182,8 @@ class PositionService:
         return a
 
     def _calendar_matches(self, p):
+        if p.exit_rule == "PORTFOLIO_DRIFT":
+            return all(v is None for v in (p.market_open_at, p.exit_due_at, p.calendar_version))
         if not p.market_open_at or not p.exit_due_at:
             return False
         try:
@@ -285,7 +291,7 @@ class PositionService:
                         state="EXIT_PENDING",
                         reasons=("DRY_RUN_EXIT_NOT_EXECUTED",),
                     )
-        if p.state in {"OPEN", "UNKNOWN"} and now >= p.exit_due_at:
+        if p.state in {"OPEN", "UNKNOWN"} and p.exit_due_at and now >= p.exit_due_at:
             return self._save(p, state="EXIT_PENDING", reasons=("DETERMINISTIC_EXIT_DUE",))
         return p
 
@@ -384,8 +390,10 @@ class PositionService:
                 or p.entry_at is None
                 or not p.entry_execution.tx_hash
                 or not self._calendar_matches(p)
-                or now < p.exit_due_at
-                or not self._exit_window_open(p, now)
+                or (
+                    p.exit_rule == "FIRST_REGULAR_OPEN_PLUS_MINUTES"
+                    and (now < p.exit_due_at or not self._exit_window_open(p, now))
+                )
                 or self.has_unresolved(p.exit_intent.decision_id if p.exit_intent else None)
             ):
                 raise ValueError("POSITION_EXIT_NOT_SAFE_OR_NOT_DUE")
@@ -412,6 +420,11 @@ class PositionService:
             decision = (
                 "exit_" + hashlib.sha256(f"{p.position_id}:{ordinal}:{amount}".encode()).hexdigest()
             )
+            if p.exit_rule == "PORTFOLIO_DRIFT" and (
+                self.portfolio_exit_guard is None
+                or not self.portfolio_exit_guard(p, amount, decision, evidence, funding_state)
+            ):
+                raise ValueError("PORTFOLIO_REDUCTION_NOT_AUTHORIZED")
             if pending_intent and (
                 p.exit_intent.decision_id != decision or p.exit_intent.quantity_base_units != amount
             ):
@@ -421,7 +434,8 @@ class PositionService:
                 notional = quantity(amount, p.instrument.decimals) * funding_state.unit_price_usd
             if (
                 evidence.data_mode != self.mode
-                or evidence.purpose != "OPPORTUNITY"
+                or evidence.purpose
+                != ("DIRECT_EXPOSURE" if p.exit_rule == "PORTFOLIO_DRIFT" else "OPPORTUNITY")
                 or evidence.decision_id != decision
                 or evidence.notional_usd != notional
                 or funding_state.asset.contract != p.instrument.contract

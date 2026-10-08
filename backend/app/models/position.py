@@ -173,7 +173,9 @@ class Position(ExecutionModel):
     exit_due_at: datetime | None = None
     closed_at: datetime | None = None
     postopen_exit_minutes: int = Field(default=10, strict=True, ge=1, le=120)
-    exit_rule: Literal["FIRST_REGULAR_OPEN_PLUS_MINUTES"] = "FIRST_REGULAR_OPEN_PLUS_MINUTES"
+    exit_rule: Literal["FIRST_REGULAR_OPEN_PLUS_MINUTES", "PORTFOLIO_DRIFT"] = (
+        "FIRST_REGULAR_OPEN_PLUS_MINUTES"
+    )
     calendar_version: Identifier | None = None
     job: PositionJob
     reasons: tuple[Identifier, ...] = Field(default=(), max_length=32)
@@ -221,13 +223,21 @@ class Position(ExecutionModel):
             raise ValueError("Preparation or unknown settlement cannot establish an open position")
         if self.state in {"OPEN", "EXIT_PENDING", "EXITING"} and filled - sold <= 0:
             raise ValueError("Open state requires positive confirmed remaining exposure")
-        if self.state in {"OPEN", "EXIT_PENDING", "EXITING", "CLOSED"} and (
-            self.market_open_at is None
-            or self.exit_due_at is None
-            or self.calendar_version is None
-            or self.market_open_at < self.entry_at
-            or (self.exit_due_at - self.market_open_at).total_seconds()
-            != self.postopen_exit_minutes * 60
+        if self.exit_rule == "PORTFOLIO_DRIFT" and any(
+            v is not None for v in (self.market_open_at, self.exit_due_at, self.calendar_version)
+        ):
+            raise ValueError("Portfolio holdings cannot acquire a timer-based exit schedule")
+        if (
+            self.exit_rule == "FIRST_REGULAR_OPEN_PLUS_MINUTES"
+            and self.state in {"OPEN", "EXIT_PENDING", "EXITING", "CLOSED"}
+            and (
+                self.market_open_at is None
+                or self.exit_due_at is None
+                or self.calendar_version is None
+                or self.market_open_at < self.entry_at
+                or (self.exit_due_at - self.market_open_at).total_seconds()
+                != self.postopen_exit_minutes * 60
+            )
         ):
             raise ValueError(
                 "Established positions require their immutable deterministic exit schedule"
@@ -296,8 +306,14 @@ class Position(ExecutionModel):
             or q.request.userWalletAddress != entry_q.request.userWalletAddress
             or int(q.route.fromToken.decimal) != self.instrument.decimals
             or int(q.route.toToken.decimal) != int(entry_q.route.fromToken.decimal)
-            or self.exit_due_at is None
-            or q.requested_at < self.exit_due_at
+            or (
+                self.exit_rule == "FIRST_REGULAR_OPEN_PLUS_MINUTES"
+                and (self.exit_due_at is None or q.requested_at < self.exit_due_at)
+            )
+            or (
+                self.exit_rule == "PORTFOLIO_DRIFT"
+                and (self.entry_at is None or q.requested_at < self.entry_at)
+            )
         ):
             raise ValueError("Exit must match the held asset, cash asset, wallet, mode and window")
 

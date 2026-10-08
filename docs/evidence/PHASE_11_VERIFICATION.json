@@ -1,0 +1,252 @@
+{
+  "milestone": "MASTER_PHASE_11",
+  "verified_at_utc": "2026-10-08T10:05:50.495438+00:00",
+  "source_head": "c558d0b5ce66664129597feec328777ee0ab472b",
+  "authority": {
+    "path": "docs/MASTER_SPEC.md",
+    "version": "October 7, 2026 VERIFIED_v2",
+    "sha256": "f69a9bd01a622c001c3ec6cb654e00562f6b3d03a8310f9e5ccf68efe4b49c84",
+    "full_spec_read": true,
+    "relevant_section_reread": true
+  },
+  "phase_11_implementation": "PASS",
+  "acceptance_scope": "PERSISTENT_DETERMINISTIC_NON_LIVE_MACHINERY",
+  "production_routing": {
+    "deterministic_shared_algorithm": "PASS",
+    "modes": [
+      "DEMO",
+      "LIVE_READ_ONLY"
+    ],
+    "provider_dependent_verification": "PARTIAL_NOT_VERIFIED",
+    "live_readiness": "BLOCKED",
+    "default_source": "MODE_SCOPED_PROVIDER_CACHE",
+    "live_contract_probe": "OFFLINE_SCHEMA_PROBE_ONLY_NOT_REAL_PROVIDER_EVIDENCE",
+    "provider_quote_handoff_test": "TEST_FIXTURE_ONLY_NOT_REAL_PROVIDER_EVIDENCE",
+    "no_duplicate_router": true,
+    "no_direct_transaction_construction": true
+  },
+  "gates": {
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "TRUST_GATE": "BLOCKED",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+  },
+  "prior_phases": {
+    "phase_6": "PASS_NON_LIVE",
+    "phase_7": "PARTIAL_REAL_INPUT_ASSEMBLY",
+    "phase_8": "PARTIAL_LIVE_EQUIVALENCE",
+    "phase_9": "PARTIAL_ACTUAL_WALLET_RUNTIME",
+    "phase_10": "PASS_NON_LIVE"
+  },
+  "validation": [
+    {
+      "name": "backend",
+      "command": "PYTHONPATH=backend:. .venv/bin/python -m pytest -q",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/backend-final.txt",
+      "log_sha256": "8b668f7058482c51443d0d0ee69a5ed475d2c390877d3c119f37254673ed83cc",
+      "passed": 1212
+    },
+    {
+      "name": "phase_11_focused",
+      "command": "PYTHONPATH=backend:. .venv/bin/python -m pytest -q backend/tests/unit/test_portfolio.py backend/tests/integration/test_portfolio_api.py",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/focused.txt",
+      "log_sha256": "986f2b7cfd968088040a0c8d41cff53a58b9095e4f4c8cf489cd5f78ad917efb",
+      "passed": 94
+    },
+    {
+      "name": "phase_6_to_10_regressions",
+      "command": "PYTHONPATH=backend:. .venv/bin/python -m pytest -q backend/tests/integration/test_allowance_remediation.py backend/tests/integration/test_llm_transport_remediation.py backend/tests/integration/test_settlement_remediation.py backend/tests/integration/test_wallet_quota_remediation.py backend/tests/unit/test_position.py backend/tests/integration/test_position_api.py",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/remediation-regressions.txt",
+      "log_sha256": "c2163fed8ad63f235d3acaab689d94565648fdf10b325e444758fdc8e7d8f110",
+      "passed": 156
+    },
+    {
+      "name": "frontend",
+      "command": "npm test",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/frontend-final.txt",
+      "log_sha256": "2c7db83d0ac231ebd4ca25f5085eb38d4ca9051cf99cbc64ffa163d24345de65",
+      "passed": 173
+    },
+    {
+      "name": "typecheck_build",
+      "command": "npm run build",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/build-final.txt",
+      "log_sha256": "ae9475d8656c01691dfca25a06e6e0f7bc353a9d1aa727a43ea5ab32818def67"
+    },
+    {
+      "name": "ruff",
+      "command": ".venv/bin/ruff check backend scripts",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/ruff-final.txt",
+      "log_sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "name": "format",
+      "command": ".venv/bin/ruff format --check backend scripts",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/format-final.txt",
+      "log_sha256": "8bd907e3f37b3bb4491b54daffe622118b9bda087169decdc8250b55518cd565"
+    },
+    {
+      "name": "python_dependency_consistency",
+      "command": ".venv/bin/python -m pip check",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/pip-check.txt",
+      "log_sha256": "5d75293a39ebe3a81095f7ffc5af10cc770838874775d41ba2a3f53a04babb34"
+    },
+    {
+      "name": "node_dependency_consistency",
+      "command": "npm ls --all",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/npm-dependencies.txt",
+      "log_sha256": "615febe865f736ec58a57fb22baf355be588c6ee3fd166ecf4dd2f764aebdf80"
+    },
+    {
+      "name": "browser",
+      "command": "node /private/tmp/parity-phase11/check-demo-ui.mjs",
+      "status": "PASS",
+      "log_file": "/private/tmp/parity-phase11/browser-final.txt",
+      "log_sha256": "9ee938eb393ac5178e65f2a0568035df66fef46cdf8960848e8c27e77faee7f0",
+      "passed": 6
+    },
+    {
+      "name": "project_security",
+      "command": ".venv/bin/python scripts/check-security.py",
+      "status": "PASS",
+      "result": {
+        "configured_secret_leakage": "PASS",
+        "git_env_ignore": "PASS",
+        "docker_env_exclusion": "PASS",
+        "frontend_secret_isolation": "PASS",
+        "artifacts_scanned": 416
+      },
+      "log_file": "/private/tmp/parity-phase11/security-final.txt",
+      "log_sha256": "70eadde3cff9c71a615ce2182bae37b224bb60f7f7588fd22f6eec1811aaa78b"
+    },
+    {
+      "name": "extended_configured_secret_check",
+      "status": "PASS",
+      "result": {
+        "configured_credentials_exposed": false,
+        "artifacts_scanned": 407,
+        "scope": "Configured API_KEY and SECRET_KEY values, including optional equity providers",
+        "status": "PASS"
+      },
+      "log_file": "/private/tmp/parity-phase11/extended-secret-check.txt",
+      "log_sha256": "7c12726bfa608776ac6875c84218d1bf1e2bac3909d58b20a5130764cb858232"
+    }
+  ],
+  "inherited_test_timing_limitation": {
+    "test": "test_process_timeout_output_limit_stderr_and_parse_errors_fail_safely[stderr/nonzero case]",
+    "earlier_full_runs": "Intermittent WALLET_READ_TIMEOUT instead of expected CLI_READ_FAILED; both fail closed",
+    "isolated_cases": "4 passed",
+    "temporary_process_selector_probe": "Full suite 1212 passed; no missed-exit readiness case reproduced",
+    "final_ordinary_run": "1212 passed, 3 warnings in 33.57s",
+    "wallet_client_changed": false,
+    "wallet_test_or_timeout_changed": false
+  },
+  "browser": {
+    "scenarios_passed": 6,
+    "local_request_count": 43,
+    "live_provider_calls": 0,
+    "live_execution_calls": 0,
+    "ordinary_overview_trust": "INSUFFICIENT_EVIDENCE",
+    "production_opportunity_navigation_disabled": true,
+    "portfolio_smoke": "BLOCKED_MISSING_INPUTS_NULL_NAV_ZERO_ACTIONS",
+    "disposable_servers_stopped": true,
+    "user_ports_8000_5173_terminated": false
+  },
+  "baseline_audit": {
+    "artifacts_compared": 386,
+    "existing_artifacts_modified": [
+      "backend/app/main.py",
+      "backend/app/models/position.py",
+      "backend/app/services/position.py",
+      "backend/tests/security/test_boundaries.py"
+    ],
+    "other_existing_artifacts_unchanged": true,
+    "critical_unchanged_sha256": {
+      "docs/MASTER_SPEC.md": "f69a9bd01a622c001c3ec6cb654e00562f6b3d03a8310f9e5ccf68efe4b49c84",
+      "docs/EXECUTION_GATES.md": "4ad5a644f092f627f391412b6a90960f556872abffe2a1ab046456991437b03a",
+      "docs/PHASE_MAP.md": "cebb5d983ee03f057159c69e1738762bf366ab06ebe9e4271e19d6bb4ba4e384",
+      "backend/app/config.py": "33091a2680c6846394eed32fd81c100cc28c29f1dbcf2e63ac07f4330b832302",
+      "backend/app/services/trust.py": "838867cff620ff5ded33c0c19cbc4fd69905ad595eb32620751bd5f42a011bc2",
+      "backend/app/services/risk.py": "1e5c247420d01cfe536261b6777831637deff297575431c6916b5b5a72bb861f",
+      "backend/app/services/funding.py": "9cc1c972271a0f842999af9829d035554a4039332eb1ffa57799e41d4bfb1c8a",
+      "backend/app/services/routing.py": "3d8ddabbab155e9a8d0fe8332341029fa141747e847a3e69d5e496ea9fcdc549",
+      "backend/app/services/execution.py": "f32c838d43436d331d28f28e7bbd41e0de8e8c04fe5892feca2a01fece299928",
+      "backend/app/services/agentic_wallet.py": "455bcec0de9e805eff3240e8c7f5f6b70b76f98a35b459e7212b91363aed3dcd",
+      "backend/app/clients/baw_cli.py": "a35fa8dd28754c5a21605366b5c4561666150a0cbaa7140cd8a78fa7244bc9fa",
+      "backend/app/clients/execution_gateway.py": "ebb565f38b1aa44dbd4d7c6b466183126710538048a205a3526783fe94b2b645",
+      "backend/app/clients/binance_trading.py": "1e7e3e9793e0e8ba6708524a37856191f77684f03de7c2c5f01907353bcd5b81",
+      "backend/app/models/execution.py": "38b4c4860b1fff3019758abbeba096c93f7613ec8f03a361ecd7f4bfa7aa0fce"
+    }
+  },
+  "files_changed": [
+    "backend/app/api/portfolio.py",
+    "backend/app/main.py",
+    "backend/app/models/portfolio.py",
+    "backend/app/models/position.py",
+    "backend/app/repositories/portfolio.py",
+    "backend/app/services/portfolio.py",
+    "backend/app/services/portfolio_sources.py",
+    "backend/app/services/position.py",
+    "backend/tests/integration/test_portfolio_api.py",
+    "backend/tests/security/test_boundaries.py",
+    "backend/tests/unit/test_portfolio.py",
+    "docs/PHASE_11_REPORT.md",
+    "docs/evidence/PHASE_11_BROWSER.json",
+    "docs/evidence/PHASE_11_SYNTHETIC_PLANS.json",
+    "docs/evidence/PHASE_11_VERIFICATION.json"
+  ],
+  "artifact_sha256": {
+    "backend/app/api/portfolio.py": "6a07118f50bad963007b30a820a5ea2afcf0a155520078925e8a0f80f5476a46",
+    "backend/app/main.py": "1deacb1714381eeead9f99c48e485076f684e747c0c862b0db58afd91d8849f0",
+    "backend/app/models/portfolio.py": "984a2051aecb23cafd67c8a8d69815bc99bbfb81b69c9e27d32680a8bcd63bae",
+    "backend/app/models/position.py": "dc3045b203df0ab981d88d8435a04bffcf8aca74a08657147c691d9a029dd4d5",
+    "backend/app/repositories/portfolio.py": "3df8fa7116abb65b6e57f9ad85426cade1292a5582af6771acf377c167d9dfb8",
+    "backend/app/services/portfolio.py": "516905b7615f36fcacf954ce979063d5bc6c94f0324f2fbc25436d2a66246737",
+    "backend/app/services/portfolio_sources.py": "32df0cc7f120a94d29c32755dc11d0fd40cb36805d054530a6e8ed7d08a6d8ae",
+    "backend/app/services/position.py": "e5cc7554ab6cc18156774d09dfd2941d452192fac141b06d34691709cbfed752",
+    "backend/tests/integration/test_portfolio_api.py": "47d7b908c5d06fadff616de16afa6ef940f69a49f8f3e0239b54915583f3d5c4",
+    "backend/tests/security/test_boundaries.py": "3d649d3dfd44af2fd416c30b3d063dcd1043b770ff072caa2671c168bad8ee54",
+    "backend/tests/unit/test_portfolio.py": "61c599b868a50d153a7d32411b79fd05f7dfbfbe203575030fd184820ea143de",
+    "docs/PHASE_11_REPORT.md": "877af682272f85cddf567b91113e1df48e9bcdf392cf7bf56ec9f4e5358ce5c3",
+    "docs/evidence/PHASE_11_BROWSER.json": "6dacb9a47e597220090ea5cdd6c3fbb826811f24d06752dc99190e2bb7e2ca2b",
+    "docs/evidence/PHASE_11_SYNTHETIC_PLANS.json": "790a38acaa3090906f6a8a7b92c25a63a9ae5c78b1b9afa44c6d69a3e64d1e9b"
+  },
+  "financial_test_evidence": {
+    "synthetic": true,
+    "production_eligible": false,
+    "real_historical_episodes_added": 0,
+    "synthetic_plans": "PHASE_11_SYNTHETIC_PLANS.json"
+  },
+  "remaining_blockers": [
+    "Verified complete current inventory and fresh wallet funding/price provenance",
+    "Production host assembly of independent equity, Trust, liquidity and cost evidence",
+    "Production provider route/build/simulation verification and transaction equivalence",
+    "Actual Agentic Wallet runtime and live controls remain unverified",
+    "Optional nonzero BTC/ETH exposure has no independently verified integration"
+  ],
+  "safety": {
+    "production_gate_or_threshold_changes": false,
+    "real_signatures": 0,
+    "live_orders": 0,
+    "transaction_broadcasts": 0,
+    "wallet_mutations": 0,
+    "funds_moved": false,
+    "authenticated_external_provider_calls": 0,
+    "fixture_data_written_to_production_observations": false,
+    "commit_created": false,
+    "pushed": false,
+    "phase_12_started": false
+  }
+}

@@ -73,10 +73,13 @@ def test_frontend_input_cannot_change_config_or_activate_execution(client):
         "/api/rfq/submit",
         "/api/broadcast",
         "/api/wallet/settings",
-        "/api/portfolio",
-        "/api/autopilot",
     ]:
         assert client.post(route, json={}).status_code == 404
+    assert client.post("/api/portfolio", json={}).status_code == 405
+    assert client.post("/api/autopilot", json={}).status_code == 422
+    assert (
+        client.put("/api/portfolio/config", json={"live_trading_enabled": True}).status_code == 422
+    )
     # Phase 7 adds analytical scanning only; unvalidated or execution-bearing input is rejected.
     assert client.post("/api/opportunities/scan", json={}).status_code == 422
     assert (
@@ -108,6 +111,14 @@ def test_exact_allowlisted_data_and_proposal_routes(client):
         "/api/opportunities/{run_id}",
         "/api/positions",
         "/api/positions/{position_id}",
+        "/api/portfolio",
+        "/api/portfolio/config",
+        "/api/autopilot",
+        "/api/portfolio/drift",
+        "/api/portfolio/plans",
+        "/api/portfolio/plans/{plan_id}",
+        "/api/portfolio/pending",
+        "/api/portfolio/audit",
     }
     for path in ("/api/positions", "/api/positions/00000000-0000-4000-8000-000000000001"):
         assert client.post(path, json={"state": "OPEN", "broadcast": True}).status_code == 405

@@ -23,6 +23,8 @@ from app.api.demo_sandbox import router as demo_sandbox_router
 from app.api.exposure import router as exposure_router
 from app.api.middleware import RequestContextMiddleware
 from app.api.opportunity_scan import router as opportunity_scan_router
+from app.api.portfolio import autopilot_router
+from app.api.portfolio import router as portfolio_router
 from app.api.positions import router as positions_router
 from app.api.system import router
 from app.api.trust import router as trust_router
@@ -35,6 +37,7 @@ from app.demo import load_demo_fixture
 from app.models.execution import ExecutionControls
 from app.repositories.execution import ExecutionStore
 from app.repositories.opportunity_scan import OpportunityScanStore
+from app.repositories.portfolio import PortfolioStore
 from app.repositories.position import PositionStore
 from app.services.agentic_wallet import AgenticWalletAdapter
 from app.services.data_layer import DataLayer
@@ -46,6 +49,8 @@ from app.services.execution import SafetyExecutionService
 from app.services.exposure import ExposureService
 from app.services.opportunity_scan import OpportunityScanService
 from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
+from app.services.portfolio import PortfolioService
+from app.services.portfolio_sources import CachedPortfolioSource
 from app.services.position import PositionService
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
@@ -72,7 +77,11 @@ def error_response(request: Request, status: int, code: str, message: str) -> JS
 
 
 def create_app(
-    settings: Settings | None = None, *, llm_provider=None, position_recovery_limit=100
+    settings: Settings | None = None,
+    *,
+    llm_provider=None,
+    position_recovery_limit=100,
+    portfolio_source=None,
 ) -> FastAPI:
     if type(position_recovery_limit) is not int or not 1 <= position_recovery_limit <= 1000:
         raise ValueError("Bounded position recovery required")
@@ -170,6 +179,23 @@ def create_app(
             app.state.position_recovery_results = app.state.positions.recover(
                 limit=position_recovery_limit
             )
+            portfolio_directory = (
+                None
+                if execution_directory is None
+                else Path(database_file).resolve().parent
+                / "portfolio/phase11"
+                / configured.data_mode
+            )
+            app.state.portfolio_store = PortfolioStore(portfolio_directory)
+            app.state.portfolio = PortfolioService(
+                app.state.portfolio_store,
+                app.state.positions,
+                portfolio_source
+                or CachedPortfolioSource(app.state.data_layer, clock=lambda: datetime.now(UTC)),
+                clock=lambda: datetime.now(UTC),
+            )
+            app.state.portfolio.recover()
+            app.state.positions.portfolio_exit_guard = app.state.portfolio.can_reduce
             app.state.demo_sandbox = (
                 DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
             )
@@ -241,6 +267,9 @@ def create_app(
                     app.state.position_store.close()
                 app.state.positions = None
                 app.state.execution_store.close()
+            if getattr(app.state, "portfolio_store", None) is not None:
+                app.state.portfolio_store.close()
+            app.state.portfolio = None
             app.state.safety_execution = None
             if database is not None:
                 database.close()
@@ -293,6 +322,8 @@ def create_app(
     app.include_router(trust_router)
     app.include_router(opportunity_scan_router)
     app.include_router(positions_router)
+    app.include_router(portfolio_router)
+    app.include_router(autopilot_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)
