@@ -149,7 +149,9 @@ class AuditEvent(DataModel):
     actor: Literal["DETERMINISTIC_BACKEND", "STRUCTURED_AGENT", "EVALUATOR"]
     source: str
     source_digest: str
-    capture_kind: Literal["PERSISTED_SOURCE_PROJECTION"] = "PERSISTED_SOURCE_PROJECTION"
+    capture_kind: Literal["PERSISTED_SOURCE_PROJECTION", "OBSERVED_TOOL_INVOCATION"] = (
+        "PERSISTED_SOURCE_PROJECTION"
+    )
     status: str
     input_summary: dict[str, Scalar] = Field(default_factory=dict, max_length=30)
     output_summary: dict[str, Scalar] = Field(default_factory=dict, max_length=30)

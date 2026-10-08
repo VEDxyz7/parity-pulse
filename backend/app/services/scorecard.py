@@ -1184,10 +1184,30 @@ class ScorecardService:
                 control_quality_counts=dict(Counter(c.control_quality for c in cards)),
             )
 
-    def events(self, cards):
+    def events(self, cards, query=None):
         ids = {i for c in cards for i in c.event_ids}
         events = self.store.list(AuditEvent, mode=self.mode)
-        selected = tuple(sorted((e for e in events if e.event_id in ids), key=self.audit.order))
-        if ids != {e.event_id for e in selected}:
+        decisions = {c.decision_id for c in cards}
+
+        def included(e):
+            if e.event_id in ids:
+                return True
+            if e.capture_kind != "OBSERVED_TOOL_INVOCATION":
+                return False
+            if query is None:
+                return e.decision_id in decisions
+            if query.scorecard_type or query.outcome or query.execution_status:
+                if e.decision_id not in decisions:
+                    return False
+            return (
+                (not query.decision_id or e.decision_id == query.decision_id)
+                and (not query.ticker or e.ticker == query.ticker)
+                and (not query.after or e.timestamp >= query.after)
+                and (not query.before or e.timestamp <= query.before)
+                and e.timestamp <= (query.as_of or self.clock())
+            )
+
+        selected = tuple(sorted((e for e in events if included(e)), key=self.audit.order))
+        if not ids.issubset({e.event_id for e in selected}):
             raise ValueError("Evaluation trace is incomplete")
         return selected

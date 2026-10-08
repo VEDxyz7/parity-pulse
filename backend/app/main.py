@@ -15,6 +15,7 @@ from starlette.exceptions import HTTPException
 from app import __version__
 from app.agents.memory import AgentStore
 from app.agents.orchestrator import AgentOrchestrator
+from app.api.agent_api import router as agent_api_router
 from app.api.assets import router as assets_router
 from app.api.demo_opportunity import router as demo_opportunity_router
 from app.api.demo_paper import router as demo_paper_router
@@ -37,12 +38,14 @@ from app.config import Settings
 from app.database import Database
 from app.demo import load_demo_fixture
 from app.models.execution import ExecutionControls
+from app.repositories.agent_api import ToolReceipts
 from app.repositories.execution import ExecutionStore
 from app.repositories.opportunity_scan import OpportunityScanStore
 from app.repositories.portfolio import PortfolioStore
 from app.repositories.position import PositionStore
 from app.repositories.research import ResearchStore
 from app.repositories.scorecard import ScorecardStore
+from app.services.agent_api import AgentAPI
 from app.services.agentic_wallet import AgenticWalletAdapter
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
@@ -250,6 +253,14 @@ def create_app(
                 paper=app.state.demo_paper,
                 demo_preparation=app.state.demo_preparation,
             )
+            app.state.tool_receipts = ToolReceipts(
+                None
+                if execution_directory is None
+                else Path(database_file).resolve().parent
+                / "agent-api/phase14"
+                / configured.data_mode
+            )
+            app.state.agent_api = AgentAPI(app.state, app.state.tool_receipts)
             for client in app.state.data_layer.clients:
                 client.run_id = app.state.run_id
             app.state.demo_fixture = load_demo_fixture() if configured.data_mode == "DEMO" else None
@@ -280,6 +291,9 @@ def create_app(
             if llm_transport is not None:
                 await llm_transport.close()
             app.state.ready = False
+            if getattr(app.state, "tool_receipts", None) is not None:
+                app.state.tool_receipts.close()
+            app.state.agent_api = None
             if getattr(app.state, "scorecard_store", None) is not None:
                 app.state.scorecard_store.close()
             app.state.scorecard = None
@@ -366,6 +380,7 @@ def create_app(
     app.include_router(autopilot_router)
     app.include_router(terminal_router)
     app.include_router(scorecard_router)
+    app.include_router(agent_api_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)

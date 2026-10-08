@@ -100,6 +100,8 @@ def test_exact_allowlisted_data_and_proposal_routes(client):
     paths = set(client.get("/openapi.json").json()["paths"])
     assert paths == {
         "/api/health",
+        "/api/agent/tools",
+        "/api/agent/tools/{name}",
         "/api/system-status",
         "/api/assets",
         "/api/assets/{ticker}",

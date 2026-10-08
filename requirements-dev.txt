@@ -8,3 +8,5 @@ Pygments==2.21.0
 pytest-cov==7.1.0
 pytest==9.1.1
 ruff==0.16.10
+# Phase 14 optional MCP transport and its protocol/contract tests.
+mcp==2.3.0

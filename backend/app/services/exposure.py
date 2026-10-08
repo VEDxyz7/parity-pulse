@@ -159,7 +159,7 @@ class ExposureService:
         self.router = RoutingService()
         self.routing_evidence = RoutingEvidenceReader(database)
 
-    def propose(self, text, *, run_id, request_id, correlation_id):
+    def propose(self, text, *, run_id, request_id, correlation_id, persist=True):
         intent = parse_intent(text)
         mode = self.layer.mode
         now = self.clock()
@@ -212,12 +212,15 @@ class ExposureService:
                         comparisons.append(
                             estimate(token, price, intent.budget_usd, self.clock(), mode)
                         )
-                        self.layer.repository.save([token, price])
-                    self.layer.repository.save([asset, *found["issuers"]])
+                        if persist:
+                            self.layer.repository.save([token, price])
+                    if persist:
+                        self.layer.repository.save([asset, *found["issuers"]])
                     limitations.update(self.layer.catalog_limitations())
                     try:
                         independent = self.layer.equity.get_snapshot(asset.ticker)
-                        self.layer.repository.save([independent])
+                        if persist:
+                            self.layer.repository.save([independent])
                     except ProviderError as error:
                         limitations["independent_equity"] = error.kind
             except (ProviderError, ValidationError, ValueError, ArithmeticError) as error:
@@ -307,9 +310,10 @@ class ExposureService:
             execution_blockers=blockers,
             limitations=limitations,
         )
-        self.repository.save(proposal)  # Persistence failure means no successful proposal response.
+        if persist:
+            self.repository.save(proposal)  # Failure means no successful proposal response.
         logger.info(
-            "DRY_RUN_PROPOSAL_PERSISTED",
+            "DRY_RUN_PROPOSAL_PERSISTED" if persist else "READ_ONLY_ROUTE_ANALYZED",
             extra={
                 "event_fields": {
                     "run_id": run_id,

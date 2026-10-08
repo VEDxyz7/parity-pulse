@@ -96,7 +96,7 @@ def events(request: Request, query: Annotated[ScorecardQuery, Query()]):
         request,
         query,
         lambda service, cards: AuditPage(
-            **context(request), page=page(service.events(cards), query)
+            **context(request), page=page(service.events(cards, query), query)
         ),
     )
 

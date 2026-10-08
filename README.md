@@ -1,5 +1,28 @@
 # Parity Pulse
 
+Master Phase 14 — Agent API / MCP: a bounded interface over the existing backend.
+Seven typed tools are documented at `#agent-api` and `GET /api/agent/tools`.
+Analytical tools inspect backend state; proposal tools cannot execute, sign, broadcast,
+submit RFQs, or change wallet/portfolio rules. Production gates remain unchanged.
+See [Phase 14 report](docs/PHASE_14_REPORT.md) for acceptance and remaining provider blockers.
+
+For local MCP clients, keep the canonical backend running on loopback, then launch from
+the repository root:
+
+```sh
+.venv/bin/python -m pip install -e '.[mcp]'
+PYTHONPATH=backend .venv/bin/python -m app.mcp_server --port 8000
+```
+
+This uses the official SDK's stdio transport and forwards only the seven allowlisted tools
+to that backend. It owns no wallet, provider credentials, or second database. The HTTP
+invocation endpoint is loopback-only and rejects foreign Host/Origin and forwarded headers;
+remote authenticated MCP deployment is not implemented. Proposal calls require separate
+decimal-string USD and risk budgets and a stable UUID `idempotency_key`. Repeat the same
+key after a lost response; a pending receipt returns `RECONCILIATION_REQUIRED` and cannot
+automatically resubmit. Returned receipts keep their original timestamps and expiration.
+Phase 15 has not started. Earlier dated milestones below are historical records.
+
 Master Phase 9 — Agentic Wallet: **IMPLEMENTATION PASS; local runtime UNAVAILABLE**.
 The official `baw` read adapter, normalized wallet contracts, DRY_RUN gateway checks and
 read-only reconciliation reuse Phase 8 safety infrastructure. No wallet executor is enabled.

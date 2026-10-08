@@ -32,7 +32,7 @@ export type Scorecards = Context & { page: Page<Evaluation>; metrics: { decision
 export type AuditEvent = { event_id: string; decision_id: string; timestamp: string; recorded_at: string; event_type: string
   status: string; actor: string; source: string; source_digest: string; correlation_id: string | null; execution_id: string | null
   input_summary: Record<string, string | boolean | number | null>; output_summary: Record<string, string | boolean | number | null>
-  reasons: string[]; capture_kind: 'PERSISTED_SOURCE_PROJECTION' }
+  reasons: string[]; capture_kind: 'PERSISTED_SOURCE_PROJECTION' | 'OBSERVED_TOOL_INVOCATION' }
 export type Trace = Context & { decision_id: string; complete_for_recorded_scope: boolean; scorecards: Evaluation[]; events: AuditEvent[]
   stages: { stage: string; status: string; event_ids: string[] }[] }
 const gates = { DATA_GATE: 'PASS', DRY_RUN_GATE: 'PASS', TRUST_GATE: 'BLOCKED', OPPORTUNITY_GATE: 'BLOCKED_BY_TRUST', SWAP_LIVE_GATE: 'BLOCKED', RFQ_LIVE_GATE: 'BLOCKED', AGENTIC_WALLET_LIVE_GATE: 'BLOCKED' }
@@ -46,7 +46,7 @@ export function parseEvaluation<T extends Scorecards | Trace>(value: unknown, mo
   if (!obj(value) || value.data_mode !== mode || value.broadcast !== false || value.execution_ready !== false || value.execution_mode !== 'DRY_RUN' || value.approval_mode !== 'PROPOSE_ONLY' || !stamp(value.generated_at) || !strings(value.limitations) || !obj(value.production_gates) || !Object.entries(gates).every(([k,v]) => (value.production_gates as Record<string,unknown>)[k] === v)) return fail()
   if (trace) {
     if (typeof value.decision_id !== 'string' || !Array.isArray(value.events) || value.events.length > 2000 || !Array.isArray(value.stages) || value.stages.length > 25 || !Array.isArray(value.scorecards) || typeof value.complete_for_recorded_scope !== 'boolean') return fail()
-    for (const e of value.events) if (!obj(e) || !stamp(e.timestamp) || !stamp(e.recorded_at) || !['event_id','event_type','status','actor','source','source_digest'].every(k => typeof e[k] === 'string') || e.decision_id !== value.decision_id || e.capture_kind !== 'PERSISTED_SOURCE_PROJECTION' || !obj(e.input_summary) || !obj(e.output_summary) || !strings(e.reasons)) return fail()
+    for (const e of value.events) if (!obj(e) || !stamp(e.timestamp) || !stamp(e.recorded_at) || !['event_id','event_type','status','actor','source','source_digest'].every(k => typeof e[k] === 'string') || e.decision_id !== value.decision_id || !['PERSISTED_SOURCE_PROJECTION', 'OBSERVED_TOOL_INVOCATION'].includes(String(e.capture_kind)) || !obj(e.input_summary) || !obj(e.output_summary) || !strings(e.reasons)) return fail()
     for (const s of value.stages) if (!obj(s) || typeof s.stage !== 'string' || !['RECORDED','UNAVAILABLE_OR_NOT_APPLICABLE'].includes(String(s.status)) || !strings(s.event_ids)) return fail()
   } else if (!obj(value.page) || !Array.isArray(value.page.items) || value.page.items.length > 100 || !Number.isInteger(value.page.offset) || !Number.isInteger(value.page.limit) || typeof value.page.has_more !== 'boolean' || !strings(value.page.reasons) || !obj(value.metrics) || typeof value.metrics.decision_count !== 'number' || !obj(value.metrics.control_quality_counts) || value.metrics.statistical_validation !== 'NOT_CLAIMED') return fail()
   const cards = trace ? value.scorecards as unknown[] : (value.page as Record<string, unknown>).items as unknown[]

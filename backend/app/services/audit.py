@@ -139,8 +139,16 @@ class AuditService:
         if not selected:
             raise LookupError("Unknown mode-scoped decision")
         ids = {i for c in selected for i in c.event_ids}
-        found = sorted((e for e in events if e.event_id in ids), key=self.order)
-        if ids != {e.event_id for e in found}:
+        found = sorted(
+            (
+                e
+                for e in events
+                if e.event_id in ids
+                or (e.capture_kind == "OBSERVED_TOOL_INVOCATION" and e.decision_id == decision_id)
+            ),
+            key=self.order,
+        )
+        if not ids.issubset({e.event_id for e in found}):
             raise ValueError("Incomplete decision audit references")
         groups = tuple(
             TraceStage(
