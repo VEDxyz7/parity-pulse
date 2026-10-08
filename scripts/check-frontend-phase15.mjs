@@ -8,8 +8,9 @@ import assert from 'node:assert/strict'
 
 const outputDir = process.env.PARITY_PHASE15_DIR
 assert(outputDir, 'Use the isolated Phase 15 runner')
-let localRequestQueue=Promise.resolve();
-const localFetch=(...args)=>{ const next=localRequestQueue.then(()=>fetch(args[0],{...args[1],signal:AbortSignal.timeout(8000)})); localRequestQueue=next.then(()=>{},()=>{}); return next; };
+// Forward independently: Phase 16 verifies the actual concurrent memory runtime.
+const apiTimings=[];
+const localFetch=async (...args)=>{ const started=performance.now();try{return await fetch(args[0],{...args[1],signal:AbortSignal.timeout(8000)})}finally{apiTimings.push({path:new URL(args[0]).pathname,elapsed_ms:performance.now()-started})} };
 const profile = await mkdtemp(join(tmpdir(), 'parity-demo-ui-browser-'))
 const child = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', [
   '--headless=new', '--no-first-run', '--no-default-browser-check', '--disable-extensions',
@@ -32,7 +33,7 @@ try {
   ws = new WebSocket(target.webSocketDebuggerUrl)
   await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = reject })
   let sequence = 0
-  const pending = new Map(), requests = [], errors = [], observations = []
+  const pending = new Map(), requests = [], errors = [], observations = [], networkOrigins = new Set()
   const call = (method, params = {}) => new Promise((resolve, reject) => {
     const id = ++sequence
     const deadline=setTimeout(()=>{pending.delete(id);reject(new Error('Browser command timeout: '+method))},30000)
@@ -43,10 +44,11 @@ try {
     const originPhase=phase, originBackend=backendPort;
     const message = JSON.parse(event.data)
     if (message.id) { pending.get(message.id)?.(message); pending.delete(message.id) }
+    if (message.method === 'Network.requestWillBeSent') { const url=new URL(message.params.request.url);if(['http:','https:'].includes(url.protocol)){networkOrigins.add(url.origin);if(url.origin!=='http://127.0.0.1:5178')errors.push('EXTERNAL_BROWSER_REQUEST')} }
     if (message.method === 'Runtime.exceptionThrown') errors.push('BROWSER_RUNTIME_EXCEPTION')
     if (message.method !== 'Fetch.requestPaused') return
     const { requestId, request } = message.params
-    const path = new URL(request.url).pathname
+    const path = decodeURIComponent(new URL(request.url).pathname)
     try {
       const paper = /^\/api\/demo\/paper\/(fills|positions\/[0-9a-f-]{36}\/(monitor|exit|scorecard))$/.test(path)
       const analytical = ['/api/health', '/api/system-status', '/api/demo/trust/scenarios',
@@ -105,6 +107,7 @@ try {
     await writeFile(join(outputDir, name + '.png'), Buffer.from(result.result.data, 'base64'))
   }
   await call('Runtime.enable'); await call('Page.enable')
+  await call('Network.enable');
   await call('Fetch.enable', { patterns: [{ urlPattern: 'http://127.0.0.1:5178/api/*' }] })
   for (const viewport of [
     { name: 'desktop', width: 1440, height: 1100, mobile: false, backend: 8054 },
@@ -251,8 +254,9 @@ try {
   }
   const text = () => evaluate('document.body.innerText');
   const input = (label,value) => evaluate(`(()=>{const l=Array.from(document.querySelectorAll('label')).find(l=>l.textContent.startsWith(${JSON.stringify(label)})); const i=l?.querySelector('input,select'); if(!i)throw Error('Input unavailable'); Object.getOwnPropertyDescriptor(i.tagName==='SELECT'?HTMLSelectElement.prototype:HTMLInputElement.prototype,'value').set.call(i,${JSON.stringify(value)});i.dispatchEvent(new Event(i.tagName==='SELECT'?'change':'input',{bubbles:true}));})()`);
-  const navigate = async(hash,tag='') => {await call('Page.navigate',{url:'http://127.0.0.1:5178/?phase15='+tag+hash});await wait('Array.from(document.querySelectorAll(".status-badge")).some(b=>b.textContent==="Backend connected")',true)};
-  const mark = async(viewport,journey,details={})=>{assert(await evaluate('document.documentElement.scrollWidth<=innerWidth'),journey+' overflow');workspaceObservations.push({viewport,journey,status:'PASS',no_page_overflow:true,...details});console.log(JSON.stringify({viewport,journey,status:'PASS'}));};
+  let journeyStarted; const loadTimings=[];
+  const navigate = async(hash,tag='') => {journeyStarted=performance.now();await call('Page.navigate',{url:'http://127.0.0.1:5178/?phase15='+tag+hash});await wait('Array.from(document.querySelectorAll(".status-badge")).some(b=>b.textContent==="Backend connected")',true);loadTimings.push({tag,ready_ms:performance.now()-journeyStarted,navigation:await evaluate('(()=>{const n=performance.getEntriesByType("navigation")[0];return n?{dom_content_loaded_ms:n.domContentLoadedEventEnd,load_ms:n.loadEventEnd}:null})()')})};
+  const mark = async(viewport,journey,details={})=>{assert(await evaluate('document.documentElement.scrollWidth<=innerWidth'),journey+' overflow');workspaceObservations.push({viewport,journey,journey_elapsed_ms:performance.now()-journeyStarted,status:'PASS',no_page_overflow:true,...details});console.log(JSON.stringify({viewport,journey,status:'PASS'}));};
   for (const viewport of [{name:'desktop',width:1440,height:1100,backend:8054},{name:'mobile',width:390,height:844,backend:8055},{name:'tablet',width:768,height:1024,backend:8054}]) {
     phase='WORKSPACE';backendPort=viewport.backend;
     await call('Emulation.setDeviceMetricsOverride',{width:viewport.width,height:viewport.height,mobile:viewport.name==='mobile',deviceScaleFactor:1});
@@ -316,10 +320,21 @@ try {
   assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b=>b.textContent==="Create Paper Fill")'),false);
   await shot('mobile-simulation-failure');await mark('mobile','Actual simulation failure',{risk_revalidation:true,no_paper_fill:true});
 
+  // Real persisted agent/scan identifiers include colons. Exercise the encoded
+  // HTTP path through React, not only a mocked API transport.
+  phase='WORKSPACE';backendPort=8054;
+  const persistedAudit=await (await localFetch('http://127.0.0.1:8054/api/scorecard?scorecard_type=OPPORTUNITY&limit=100')).json();
+  const agentDecision=persistedAudit.page.items.find(e=>e.decision_id.startsWith('decision:'))?.decision_id;
+  assert(agentDecision,'A seeded original agent/scan decision must be inspectable');
+  await navigate('#audit/'+agentDecision,'encoded-agent-audit');
+  await wait('document.querySelector(".decision-audit")?.innerText.includes("Complete for recorded scope:")',true);
+  assert((await text()).includes(agentDecision));
+  await mark('mobile','Encoded original agent/scan decision → audit trace',{encoded_colon_contract:true});
+
   assert.equal(errors.length, 0)
   assert(requests.every(r => r.status === 200 || ['TERMINAL','AGENT_API','WORKSPACE'].includes(r.phase) && r.status === 503 && r.injected))
   const report = {
-    milestone: 'PHASE_15_FRONTEND_INTEGRATION', verified_at_utc: new Date().toISOString(), status: 'PASS',
+    milestone: 'PHASE_16_HARDENING_BROWSER', forwarding_serialized:false, api_timings:apiTimings, load_timings:loadTimings, verified_at_utc: new Date().toISOString(), status: 'PASS',
     browser: 'Disposable headless Google Chrome', frontend: 'Built UI at localhost:5178',
     dataset_type: 'DEMO_FIXTURE', synthetic: true, production_eligible: false,
     actual_local_backends: { desktop: 8054, mobile: 8055, ordinary_runtime_with_synthetic_data: 8056, simulation_failure:8057 },
@@ -327,7 +342,7 @@ try {
     dedicated_navigation: '#demo-sandbox', pipeline_statuses_verified: true,
     production_trust_calls_from_demo_sandbox: 0, ordinary_overview_trust: 'INSUFFICIENT_EVIDENCE',
     ordinary_runtime_demo_requests: 0, production_opportunity_navigation_disabled: true,
-    live_provider_calls: 0, live_execution_calls: 0, runtime_errors: errors, request_log: requests,
+    network_origins:[...networkOrigins], external_browser_requests:0, live_provider_calls: 0, live_execution_calls: 0, runtime_errors: errors, request_log: requests,
   }
   await writeFile(join(outputDir, 'browser-evidence.json'), JSON.stringify(report, null, 2) + '\n')
   console.log(JSON.stringify({ status: 'PASS', scenarios: observations.length, local_api_requests: requests.length, production_trust_calls_from_demo: 0, live_execution_calls: 0 }))

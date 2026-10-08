@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "transport": "OFFICIAL_SDK_STDIO_SUBPROCESS",
+  "synthetic": true,
+  "live_execution_calls": 0,
+  "calls": [
+    {
+      "tool": "buy_stock_exposure",
+      "status": "DEFERRED",
+      "decision_id": "13494714-a3af-4a44-99a7-8e6cf5145dd5",
+      "replayed": false
+    },
+    {
+      "tool": "find_opportunity",
+      "status": "DEFERRED",
+      "decision_id": "decision:2d945b87e04befeec5791d4ac739c85a40239803e49ed941544c1da81822b33f",
+      "replayed": false
+    },
+    {
+      "tool": "compare_stock_tokens",
+      "status": "AVAILABLE",
+      "decision_id": null,
+      "replayed": false
+    },
+    {
+      "tool": "get_stock_trust",
+      "status": "AVAILABLE",
+      "decision_id": null,
+      "replayed": false
+    },
+    {
+      "tool": "get_route",
+      "status": "PROPOSAL",
+      "decision_id": null,
+      "replayed": false
+    },
+    {
+      "tool": "get_portfolio",
+      "status": "AVAILABLE",
+      "decision_id": null,
+      "replayed": false
+    },
+    {
+      "tool": "get_autopilot_status",
+      "status": "AVAILABLE",
+      "decision_id": null,
+      "replayed": false
+    },
+    {
+      "tool": "buy_stock_exposure",
+      "status": "DEFERRED",
+      "decision_id": "13494714-a3af-4a44-99a7-8e6cf5145dd5",
+      "replayed": true
+    }
+  ]
+}

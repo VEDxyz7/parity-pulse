@@ -93,6 +93,12 @@ def main():
                         raise RuntimeError("Isolated test readiness failed") from None
                     time.sleep(0.1)
         subprocess.run(
+            [str(ROOT / ".venv/bin/python"), str(ROOT / "scripts/check-mcp-hardening.py")],
+            cwd=ROOT,
+            env=safe,
+            check=True,
+        )
+        subprocess.run(
             ["node", str(ROOT / "scripts/check-frontend-phase15.mjs")],
             cwd=ROOT,
             env=safe,

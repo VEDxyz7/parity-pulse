@@ -5,7 +5,10 @@ export class ApiError extends Error {
   }
 }
 export async function apiRequest<T>(path: string, parse: (value: unknown) => T, options: { signal: AbortSignal; body?: object; method?: 'GET' | 'POST' | 'PUT'; timeout?: number; correlationId?: string }): Promise<T> {
-  if (!path.startsWith('/api/') || path.startsWith('//') || path.includes('://')) throw new ApiError('INVALID_RESPONSE')
+  // Service paths are local canonical paths. Refuse browser normalization,
+  // encoded traversal and fragments before any request leaves the client.
+  const pathname = path.split('?')[0]
+  if (!/^\/api\/(?:[A-Za-z0-9_.:-]|%3[aA]|\/)+(?:\?[^#\\\s]*)?$/.test(path) || pathname.includes('//') || pathname.split('/').some(segment => segment === '.' || segment === '..')) throw new ApiError('INVALID_RESPONSE')
   const controller = new AbortController(), abort = () => controller.abort()
   options.signal.addEventListener('abort', abort, { once: true })
   if (options.signal.aborted) abort()

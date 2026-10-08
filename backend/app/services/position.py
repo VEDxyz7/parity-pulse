@@ -300,54 +300,61 @@ class PositionService:
         if type(limit) is not int or not 1 <= limit <= 1000:
             raise ValueError("Bounded monitoring required")
         results = []
-        for p in self.store.list(mode=self.mode, limit=limit, active=True):
-            now = self.clock()
-            if p.state in FINAL or (
-                p.job.status == "BLOCKED" and (not recovery or p.job.attempts >= 3)
-            ):
-                continue
-            if p.job.status == "RUNNING" and now < p.job.lease_until:
-                continue
-            if not recovery and now < p.job.next_check_at:
-                continue
-            lease = change(
-                p.job, status="RUNNING", lease_id=uuid4(), lease_until=now + timedelta(seconds=30)
-            )
-            try:
-                p = self._save(p, job=lease)
-            except ValueError:
-                continue  # Another worker won the persisted CAS lease.
-            try:
-                p = self._reconcile(p, now)
-            except (ValueError, LookupError, ProviderError, TypeError):
-                p = self.store.get(p.position_id, mode=self.mode)
+        for observed in self.store.list(mode=self.mode, limit=limit, active=True):
+            # Coordinate monitor transitions with this host's manual preparation.
+            # Persisted CAS/leases still arbitrate independent processes.
+            with self.lock:
+                p = self.store.get(observed.position_id, mode=self.mode)
+                now = self.clock()
+                if p.state in FINAL or (
+                    p.job.status == "BLOCKED" and (not recovery or p.job.attempts >= 3)
+                ):
+                    continue
+                if p.job.status == "RUNNING" and now < p.job.lease_until:
+                    continue
+                if not recovery and now < p.job.next_check_at:
+                    continue
+                lease = change(
+                    p.job,
+                    status="RUNNING",
+                    lease_id=uuid4(),
+                    lease_until=now + timedelta(seconds=30),
+                )
+                try:
+                    p = self._save(p, job=lease)
+                except ValueError:
+                    continue  # Another worker won the persisted CAS lease.
+                try:
+                    p = self._reconcile(p, now)
+                except (ValueError, LookupError, ProviderError, TypeError):
+                    p = self.store.get(p.position_id, mode=self.mode)
+                    p = self._save(
+                        p,
+                        state="RECONCILIATION_REQUIRED",
+                        reasons=("POSITION_EVIDENCE_RECONCILIATION_REQUIRED",),
+                    )
+                attempts = min(3, p.job.attempts + 1) if p.state in UNRESOLVED else 0
+                if attempts >= 3 and p.state in {"OPENING", "EXITING"}:
+                    p = self._save(
+                        p, state="UNKNOWN", reasons=("STATUS_RETRY_LIMIT_REACHED_NO_NEW_ORDER",)
+                    )
+                blocked = attempts >= 3 or p.state == "EXIT_PENDING"
+                status = "FINISHED" if p.state in FINAL else "BLOCKED" if blocked else "WAITING"
+                next_at = now + timedelta(seconds=60)
+                if p.state == "OPEN" and p.exit_due_at:
+                    next_at = p.exit_due_at
                 p = self._save(
                     p,
-                    state="RECONCILIATION_REQUIRED",
-                    reasons=("POSITION_EVIDENCE_RECONCILIATION_REQUIRED",),
+                    job=change(
+                        p.job,
+                        status=status,
+                        attempts=attempts,
+                        next_check_at=next_at,
+                        lease_id=None,
+                        lease_until=None,
+                    ),
                 )
-            attempts = min(3, p.job.attempts + 1) if p.state in UNRESOLVED else 0
-            if attempts >= 3 and p.state in {"OPENING", "EXITING"}:
-                p = self._save(
-                    p, state="UNKNOWN", reasons=("STATUS_RETRY_LIMIT_REACHED_NO_NEW_ORDER",)
-                )
-            blocked = attempts >= 3 or p.state == "EXIT_PENDING"
-            status = "FINISHED" if p.state in FINAL else "BLOCKED" if blocked else "WAITING"
-            next_at = now + timedelta(seconds=60)
-            if p.state == "OPEN" and p.exit_due_at:
-                next_at = p.exit_due_at
-            p = self._save(
-                p,
-                job=change(
-                    p.job,
-                    status=status,
-                    attempts=attempts,
-                    next_check_at=next_at,
-                    lease_id=None,
-                    lease_until=None,
-                ),
-            )
-            results.append(p)
+                results.append(p)
         return results
 
     def recover(self, *, limit=100):

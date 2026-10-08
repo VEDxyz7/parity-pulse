@@ -1051,7 +1051,15 @@ def test_preparation_or_missing_settlement_cannot_complete_or_establish_ownershi
         s.register_confirmed_entry(plan.plan_id, a.action_id, instrument())
     with pytest.raises(ValueError, match="CONFIRMED"):
         s.complete(plan.plan_id)
-    assert s.store.pending(mode="DEMO") is not None
+    pending = s.store.pending(mode="DEMO")
+    assert pending.plan_id == plan.plan_id
+    assert len(pending.preparations) == 1
+    prepared = pending.preparations[0]
+    attempt = s.positions.execution.store.get(prepared.execution_id, mode="DEMO")
+    assert prepared.action_id == a.action_id
+    assert attempt.decision_id == a.execution_decision_id
+    assert attempt.state != "EXECUTION_CONFIRMED"
+    assert s.positions.store.count(mode="DEMO") == 1  # Original holding only, no invented entry.
 
 
 def test_verified_reduction_completes_plan_but_never_cancels_external_execution():

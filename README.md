@@ -1,11 +1,16 @@
 # Parity Pulse
 
+Master Phase 16 — Hardening is **PASS for the non-live release-candidate scope**.
+See [the hardening report and release checklist](docs/PHASE_16_REPORT.md) for exact
+tests, performance, recovery evidence and unresolved provider/LIVE blockers.
+Trust, Opportunity and all LIVE gates remain unchanged. Phase 17 is not started.
+
 Master Phase 15 — Frontend Integration is **PASS for the non-live frontend gate**.
 React consumes existing backend authorities for exposure/routes, Opportunity scans,
 Portfolio/Autopilot, Terminal, Scorecard/Audit and Agent API inspection. Wallet and
 approval capabilities are accurately unavailable; production gates remain unchanged.
 [Phase 15 report, exact files and validation](docs/PHASE_15_REPORT.md).
-Phase 16 has **NOT** started. The older milestone notes below are historical.
+The older milestone notes below are historical.
 
 Navigate to `#overview`, `#ask` (route comparison / proposal review), `#opportunity`
 (or `#opportunity/<run_id>`), `#autopilot`, `#portfolio`, `#terminal`, `#agent-api`,
@@ -28,6 +33,15 @@ The browser runner needs installed Google Chrome and free ports 8054–8057/5178
 It serves the built UI with disposable synthetic fixture backends, forwards no credentials,
 refuses occupied ports, and stops only its own processes. It prints the retained temporary
 evidence/screenshot directory. No production data, provider verification or real funds.
+The same runner now verifies concurrent forwarding, external-request detection and
+the actual MCP stdio bridge against its disposable fixtures. For offline timings:
+
+```sh
+.venv/bin/python scripts/benchmark-hardening.py --evidence /tmp/parity-phase16-performance.json
+```
+
+The benchmark refuses an existing evidence file. It uses temporary synthetic stores;
+its timings do not certify provider latency or live readiness.
 `npm run dev` remains the canonical command from the repository root.
 
 Master Phase 14 — Agent API / MCP: a bounded interface over the existing backend.

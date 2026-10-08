@@ -1,0 +1,70 @@
+{
+  "artifact": "/private/tmp/parity-phase16/replay-store/a3e7be2630acccb2b7496d87f2e584ce2cf8af34811461738336d42aba59e98e.json",
+  "candidate_counts_by_issuer": {
+    "bstock": 17,
+    "ondo": 31
+  },
+  "candidate_episodes": 48,
+  "candidate_openings": 31,
+  "coverage": {
+    "equity_bar_count": 2143,
+    "equity_end": "2026-10-05T23:59:00+00:00",
+    "equity_interval_counts": {
+      "1minute": 1921,
+      "5minute": 222
+    },
+    "equity_start": "2026-03-06T20:59:00+00:00",
+    "loaded_at": null,
+    "malformed_rows": {},
+    "persisted_real_baseline_episodes": 0,
+    "persisted_real_trust_samples": 0,
+    "representations": {
+      "bstock": {
+        "end": "2026-10-06T10:00:00+00:00",
+        "historical_candles": 2805,
+        "historical_ratio": "UNAVAILABLE",
+        "interval_counts": {
+          "1d": 107,
+          "1h": 2388,
+          "1m": 310
+        },
+        "start": "2026-06-12T00:00:00+00:00"
+      },
+      "ondo": {
+        "end": "2026-10-05T23:00:00+00:00",
+        "historical_candles": 4546,
+        "historical_ratio": "UNAVAILABLE",
+        "interval_counts": {
+          "1d": 174,
+          "1h": 4102,
+          "1m": 270
+        },
+        "start": "2026-03-03T07:00:00+00:00"
+      }
+    },
+    "unique_existing_token_records": 122,
+    "unique_primary_raw_bars": 7336
+  },
+  "dataset_digest": "988c0b9304e6f1ab5e4d6552838c956af5e1e732fa088760d4632c8296c80194",
+  "execution_calls": 0,
+  "implementation_digest": "0cfacb5593c4134cc8ac22e82bd948dd8f13b29194e82c731acaa27ac3cde310",
+  "implementation_evidence": "OFFLINE_REAL_DATA_REPLAY_NOT_SYNTHETIC",
+  "opportunity_gate": "BLOCKED_BY_TRUST",
+  "phase_5_data_gate": "BLOCKED",
+  "posthoc_outcomes": 48,
+  "predictions": 0,
+  "production_writes": 0,
+  "qualifying_analogues": 0,
+  "qualifying_baseline_episodes": 0,
+  "qualifying_opening_model_episodes": 0,
+  "rejection_counts": {
+    "ASOF_TOKEN_SHARE_RATIO_UNAVAILABLE": 48,
+    "CALENDAR_VERSION_NOT_YET_VERIFIED": 48,
+    "KNOWN_PREVIOUS_REGULAR_CLOSE_UNAVAILABLE": 48,
+    "KNOWN_TOKEN_PRICE_OR_METADATA_UNAVAILABLE": 48,
+    "REQUIRED_FEATURES_UNAVAILABLE": 48
+  },
+  "run_id": "a3e7be2630acccb2b7496d87f2e584ce2cf8af34811461738336d42aba59e98e",
+  "trust_gate": "BLOCKED",
+  "identical_across_fresh_process_restart": true
+}

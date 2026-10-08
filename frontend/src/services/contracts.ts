@@ -6,6 +6,18 @@ const object = (v: unknown): v is Record<string, unknown> => typeof v === 'objec
 const supported = new Set(['$defs','$ref','title','description','default','type','const','enum','anyOf','properties','required','additionalProperties','items','minItems','maxItems','minLength','maxLength','pattern','format','minimum','maximum','exclusiveMinimum','exclusiveMaximum','readOnly','minProperties','maxProperties','oneOf','discriminator','patternProperties','ge','gt','le'])
 const decimalPattern = '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
 const serializedDecimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/
+function calendarDate(value: string): boolean {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+  if (!match) return false
+  const [, y, m, d] = match, year = Number(y), month = Number(m), day = Number(d)
+  const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)
+  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  return year >= 1 && month >= 1 && month <= 12 && day >= 1 && day <= days[month - 1]
+}
+function timestamp(value: string): boolean {
+  const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(?:Z|[+-](\d{2}):(\d{2}))$/.exec(value)
+  return !!match && calendarDate(match[1]) && Number(match[2]) <= 23 && Number(match[3]) <= 59 && Number(match[4]) <= 59 && Number(match[5] ?? 0) <= 23 && Number(match[6] ?? 0) <= 59 && Number.isFinite(Date.parse(value))
+}
 export function validateWire<T>(name: keyof typeof schemas, value: unknown): T {
   const root = schemas[name] as Schema
   let nodes = 0
@@ -20,9 +32,9 @@ export function validateWire<T>(name: keyof typeof schemas, value: unknown): T {
       if (typeof v !== 'string' || v.length > 10000 || typeof s.minLength === 'number' && v.length < s.minLength || typeof s.maxLength === 'number' && v.length > s.maxLength) return false
       // Exact lexemes emitted by Pydantic Decimal serializers can use exponents.
       if (typeof s.pattern === 'string' && !(s.pattern === decimalPattern ? serializedDecimal : new RegExp(s.pattern)).test(v)) return false
-      if (s.format === 'date-time' && (!/(?:Z|[+-]\d{2}:\d{2})$/.test(v) || !Number.isFinite(Date.parse(v)))) return false
+      if (s.format === 'date-time' && !timestamp(v)) return false
       if (s.format === 'uuid' && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)) return false
-      if (s.format === 'date' && !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false
+      if (s.format === 'date' && !calendarDate(v)) return false
       if (s.format && !['date-time','uuid','date'].includes(String(s.format))) return false
     }
     if (s.type === 'boolean' && typeof v !== 'boolean') return false

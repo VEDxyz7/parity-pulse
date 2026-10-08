@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, event, text
 from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.pool import QueuePool
 
 from app.models import data_tables  # noqa: F401 — register the Phase 2 ORM tables
 from app.models.base import Base, SchemaMetadata
@@ -13,12 +13,20 @@ from app.models.base import Base, SchemaMetadata
 class Database:
     def __init__(self, url: str):
         database = make_url(url).database
-        if database != ":memory:":
+        memory = database in {None, "", ":memory:"}
+        if not memory:
             Path(database).expanduser().resolve().parent.mkdir(parents=True, exist_ok=True)
         self.engine = create_engine(
             url,
             connect_args={"check_same_thread": False, "timeout": 5},
-            poolclass=StaticPool if database == ":memory:" else None,
+            # SQLite memory databases have one connection. Exclusive checkouts
+            # prevent a concurrent health/session close from rolling back its
+            # owner's transaction; only DB access waits, not whole requests.
+            **(
+                dict(poolclass=QueuePool, pool_size=1, max_overflow=0, pool_timeout=5)
+                if memory
+                else {}
+            ),
         )
         self.sessions = sessionmaker(bind=self.engine, expire_on_commit=False)
 

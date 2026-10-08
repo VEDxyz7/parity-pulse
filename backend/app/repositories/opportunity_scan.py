@@ -1,8 +1,10 @@
 """Immutable mode-scoped scan audit. Dedicated SQLite store; no production table access."""
 
 from pathlib import Path
+from threading import RLock
 
 from sqlalchemy import Column, MetaData, String, Table, create_engine, select
+from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.pool import StaticPool
 
 from app.models.opportunity_scan import OpportunityScan
@@ -11,6 +13,7 @@ from app.services.research_episodes import fingerprint
 
 class OpportunityScanStore:
     def __init__(self, directory=None):
+        self.lock = RLock()
         if directory is None:
             self.engine = create_engine(
                 "sqlite://", poolclass=StaticPool, connect_args={"check_same_thread": False}
@@ -36,7 +39,13 @@ class OpportunityScanStore:
         scan = OpportunityScan.model_validate_json(scan.model_dump_json())
         payload = scan.model_dump_json()
         checksum = fingerprint(scan)
-        with self.engine.begin() as db:
+        with self.lock, self.engine.begin() as db:
+            # The unique key arbitrates across separate workers/processes too.
+            db.execute(
+                insert(self.table)
+                .values(id=scan.run_id, mode=scan.data_mode, digest=checksum, payload=payload)
+                .on_conflict_do_nothing(index_elements=["id"])
+            )
             old = (
                 db.execute(select(self.table).where(self.table.c.id == scan.run_id))
                 .mappings()
@@ -46,17 +55,12 @@ class OpportunityScanStore:
                 if (
                     old["digest"] != checksum
                     or fingerprint(OpportunityScan.model_validate_json(old["payload"])) != checksum
+                    or old["mode"] != scan.data_mode
                 ):
                     raise ValueError("Conflicting immutable scan audit")
-            else:
-                db.execute(
-                    self.table.insert().values(
-                        id=scan.run_id, mode=scan.data_mode, digest=checksum, payload=payload
-                    )
-                )
 
     def get(self, run_id, *, mode):
-        with self.engine.connect() as db:
+        with self.lock, self.engine.connect() as db:
             row = (
                 db.execute(
                     select(self.table).where(self.table.c.id == run_id, self.table.c.mode == mode)
@@ -75,7 +79,7 @@ class OpportunityScanStore:
         self.engine.dispose()
 
     def list(self, *, mode):
-        with self.engine.connect() as db:
+        with self.lock, self.engine.connect() as db:
             ids = (
                 db.execute(
                     select(self.table.c.id)
