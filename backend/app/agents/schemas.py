@@ -218,6 +218,17 @@ class DecisionOutput(DataModel):
     execution_authorized: Literal[False] = False
 
 
+class InterpretationClaim(DataModel):
+    evidence_ref: Identifier
+    conclusion: Literal[
+        "SUPPORTS_ANALYSIS",
+        "LIMITS_ANALYSIS",
+        "REQUIRES_ABSTENTION",
+        "CONFLICTING_EVIDENCE",
+        "NO_EXECUTION_AUTHORITY",
+    ]
+
+
 class AgentResponse[T](DataModel):
     run_id: Identifier
     decision_id: Identifier
@@ -232,6 +243,7 @@ class AgentResponse[T](DataModel):
     confidence: AgentConfidence
     limitations: Codes = ()
     conflicts: Codes = ()
+    reasoning_summary: tuple[InterpretationClaim, ...] = Field(default=(), max_length=8)
     provider: Identifier = "DETERMINISTIC"
     model: Identifier = "deterministic-agents-1"
 

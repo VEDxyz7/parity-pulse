@@ -27,6 +27,7 @@ from app.api.system import router
 from app.api.trust import router as trust_router
 from app.clients.binance_trading import BinanceSafetyClient
 from app.clients.common import ProviderError
+from app.clients.llm import configured_provider
 from app.config import Settings
 from app.database import Database
 from app.demo import load_demo_fixture
@@ -67,7 +68,7 @@ def error_response(request: Request, status: int, code: str, message: str) -> JS
     )
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, *, llm_provider=None) -> FastAPI:
     try:
         configured = (
             Settings.model_validate(
@@ -84,6 +85,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         configure_logging(configured.log_level, configured.redaction_values())
         database = None
+        llm_transport = None
         try:
             database = Database(
                 "sqlite:///:memory:"
@@ -107,9 +109,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
             app.state.opportunity_scan_store = OpportunityScanStore(scan_directory)
             agent_store = AgentStore(scan_directory / "agents" if scan_directory else None)
+            provider = llm_provider
+            if provider is None:
+                provider, llm_transport = configured_provider(configured)
             app.state.opportunity_scan = OpportunityScanService(
                 store=app.state.opportunity_scan_store,
-                orchestrator=AgentOrchestrator(store=agent_store),
+                orchestrator=AgentOrchestrator(store=agent_store, provider=provider),
             )
             app.state.opportunity_source = (
                 DemoScanSource()
@@ -184,6 +189,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
             raise RuntimeError("Application lifecycle failed; consult sanitized logs") from None
         finally:
+            if llm_transport is not None:
+                await llm_transport.close()
             app.state.ready = False
             app.state.demo_fixture = None
             if getattr(app.state, "data_layer", None) is not None:

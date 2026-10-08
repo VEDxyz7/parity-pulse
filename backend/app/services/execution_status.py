@@ -4,8 +4,8 @@ import time
 from datetime import UTC, datetime
 
 from app.clients.common import ProviderError
-from app.models.data import source_time
-from app.models.execution import ExecutionAttempt, address
+from app.models.execution import ExecutionAttempt, RFQStatus, SettlementEvidence, SwapStatus
+from app.services.execution_confirmation import settlement_identity, settlement_values
 from app.services.execution_state_machine import TERMINAL, ExecutionStateMachine
 
 
@@ -14,7 +14,7 @@ class ExecutionStatusTracker:
         self.provider, self.store, self.sleep = provider, store, sleep
         self.machine = ExecutionStateMachine()
 
-    def reconcile(self, attempt, *, now, expected_terminal=None):
+    def reconcile(self, attempt, *, now, expected_terminal=None, corroborated_tx_hash=None):
         if expected_terminal not in {None, "SUCCESS", "FAILED"}:
             raise ValueError("Invalid independent terminal corroboration")
         attempt = ExecutionAttempt.model_validate_json(attempt.model_dump_json())
@@ -27,6 +27,7 @@ class ExecutionStatusTracker:
             raise ValueError("STATUS_PROVIDER_MODE_MISMATCH")
         target = "EXECUTION_UNKNOWN"
         fields = {}
+        observed_conflict = None
         try:
             if q.route.executionMode == "RFQ":
                 if attempt.order_id is None:
@@ -42,82 +43,66 @@ class ExecutionStatusTracker:
                     "EXPIRED": "EXECUTION_EXPIRED",
                     "CANCELLED": "EXECUTION_CANCELLED",
                 }.get(status.status, "EXECUTION_UNKNOWN")
+                status = RFQStatus.model_validate_json(status.model_dump_json())
+                expected_hash = attempt.tx_hash or corroborated_tx_hash
+                if (
+                    status.txHash
+                    and expected_hash
+                    and status.txHash.lower() != expected_hash.lower()
+                ):
+                    observed_conflict = status.txHash
+                    raise ValueError("Known transaction hash conflict")
                 if status.status == "FILLED":
-                    if (
-                        status.txHash is None
-                        or status.fromAmount != q.request.amount
-                        or status.toAmount is None
-                        or status.filledAt is None
-                        or source_time(status.filledAt) > received
-                        or source_time(status.createdAt) > source_time(status.filledAt)
-                    ):
-                        raise ValueError("Filled settlement fields invalid")
-                    from decimal import Decimal, localcontext
-
-                    with localcontext() as ctx:
-                        ctx.prec = 256
-                        minimum = Decimal(q.route.toTokenAmount) * (
-                            1 - attempt.route.slippage_bps / Decimal(10000)
-                        )
-                    if int(status.toAmount) < minimum:
-                        raise ValueError("RFQ minimum receive violated")
-                    target = "EXECUTION_CONFIRMED"
-                    fields.update(
-                        tx_hash=status.txHash,
-                        filled_quantity_base_units=status.toAmount,
-                        settled_at=source_time(status.filledAt),
+                    evidence = SettlementEvidence(
+                        identity=settlement_identity(attempt),
+                        received_at=received,
+                        corroborated_tx_hash=corroborated_tx_hash,
+                        rfq=status,
                     )
+                    fields.update(
+                        settlement_values(attempt, evidence), settlement_evidence=evidence
+                    )
+                    target = "EXECUTION_CONFIRMED"
             else:
                 if attempt.tx_hash is None:
                     raise ValueError("Transaction hash required")
                 status, received = self.provider.swap_status(attempt.tx_hash)
                 if status is not None:
-                    tx = attempt.route.build.tx
-                    if status.txHash.lower() != attempt.tx_hash.lower() or (
-                        status.fromAddress,
-                        status.toAddress,
-                    ) != (tx.sender, tx.to):
+                    status = SwapStatus.model_validate_json(status.model_dump_json())
+                    if status.txHash.lower() != attempt.tx_hash.lower():
+                        observed_conflict = status.txHash
                         raise ValueError("Transaction identity mismatch")
                     fields = {"external_status": status.status}
                     if status.status == "failed":
                         target = "EXECUTION_FAILED"
-                    elif (
-                        status.status == "success"
-                        and not status.errorMsg
-                        and int(status.height) > 0
-                        and status.txType == "Swap"
-                        and status.dexRouter == tx.to
-                    ):
-                        # Match actual settled token identities and units.
-                        if not status.fromTokenDetails or not status.toTokenDetails:
-                            raise ValueError("Missing settled token details")
-                        sells = status.fromTokenDetails
-                        buys = status.toTokenDetails
-                        if (
-                            len(sells) != 1
-                            or len(buys) != 1
-                            or address(sells[0]["tokenAddress"]) != q.request.fromTokenAddress
-                            or str(sells[0]["amount"]) != q.request.amount
-                            or address(buys[0]["tokenAddress"]) != q.request.toTokenAddress
-                        ):
-                            raise ValueError("Settled token binding mismatch")
-                        quantity = str(buys[0]["amount"])
-                        if int(quantity) < int(tx.minReceiveAmount):
-                            raise ValueError("Minimum receive violated")
-                        settled = source_time(int(status.txTime))
-                        if settled > received:
-                            raise ValueError("Future settlement")
-                        target = "EXECUTION_CONFIRMED"
-                        fields.update(
-                            filled_quantity_base_units=quantity,
-                            settled_at=settled,
-                            fees_native_base_units=status.txFee,
+                    elif status.status == "success":
+                        evidence = SettlementEvidence(
+                            identity=settlement_identity(attempt),
+                            received_at=received,
+                            corroborated_tx_hash=corroborated_tx_hash,
+                            swap=status,
                         )
+                        fields.update(
+                            settlement_values(attempt, evidence), settlement_evidence=evidence
+                        )
+                        target = "EXECUTION_CONFIRMED"
             if not 0 <= (received - now).total_seconds() <= 30:
                 raise ValueError("Invalid receipt time")
         except (ProviderError, ValueError, TypeError, KeyError):
             target = "EXECUTION_UNKNOWN"
             fields = {"reason_codes": ("STATUS_UNRESOLVED_NO_NEW_ORDER",)}
+            if observed_conflict is not None:
+                conflicts = tuple(
+                    dict.fromkeys((*attempt.conflicting_tx_hashes, observed_conflict))
+                )
+                fields = {
+                    "reason_codes": ("CONTRADICTORY_TRANSACTION_HASH_RECONCILIATION_REQUIRED",),
+                    "conflicting_tx_hashes": conflicts[:10],
+                    "last_conflicting_tx_hash": observed_conflict,
+                    "settlement_conflict": True,
+                }
+                if attempt.tx_hash is None and corroborated_tx_hash is not None:
+                    fields["tx_hash"] = corroborated_tx_hash
         if (
             expected_terminal is not None
             and target in TERMINAL
@@ -125,7 +110,17 @@ class ExecutionStatusTracker:
             != ("EXECUTION_CONFIRMED" if expected_terminal == "SUCCESS" else "EXECUTION_FAILED")
         ):
             target = "EXECUTION_UNKNOWN"
-            fields = {"reason_codes": ("CONFLICTING_EXTERNAL_TERMINAL_EVIDENCE",)}
+            fields = {
+                "reason_codes": ("CONFLICTING_EXTERNAL_TERMINAL_EVIDENCE",),
+                "settlement_conflict": True,
+            }
+        if target in TERMINAL and (
+            attempt.settlement_conflict
+            or attempt.conflicting_tx_hashes
+            or attempt.last_conflicting_tx_hash
+        ):
+            target = "EXECUTION_UNKNOWN"
+            fields = {"reason_codes": ("CONTRADICTORY_SETTLEMENT_RECONCILIATION_REQUIRED",)}
         if target == attempt.state:
             # Repeated pending/unknown reads remain recorded, not illegal duplicate transitions.
             result = ExecutionAttempt.model_validate(

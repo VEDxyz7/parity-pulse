@@ -24,6 +24,10 @@ class WalletReconciler:
         now = max(now, self.adapter.clock())
         reasons = []
         wallet_state = "UNKNOWN"
+        wallet_hash = current.tx_hash
+        conflicts = current.conflicting_tx_hashes
+        last_conflict = current.last_conflicting_tx_hash
+        terminal_conflict = current.settlement_conflict
         if (
             snapshot.capability_status not in {"VERIFIED_READ", "FIXTURE_VERIFIED"}
             or snapshot.connection != "CONNECTED"
@@ -62,12 +66,24 @@ class WalletReconciler:
                         )
                     ):
                         wallet_state = order.status
+                        wallet_hash = order.tx_hash or wallet_hash
                     else:
                         reasons.append("WALLET_ORDER_BINDING_UNVERIFIED")
+                        if (
+                            order.sell_token == q.request.fromTokenAddress
+                            and order.buy_token == q.request.toTokenAddress
+                            and amount == q.request.amount
+                            and current.tx_hash
+                            and order.tx_hash
+                            and current.tx_hash.lower() != order.tx_hash.lower()
+                        ):
+                            conflicts = tuple(dict.fromkeys((*conflicts, order.tx_hash)))[:10]
+                            last_conflict, terminal_conflict = order.tx_hash, True
+                            reasons.append("CONTRADICTORY_TRANSACTION_HASH_RECONCILIATION_REQUIRED")
                 else:
                     reasons.append("WALLET_ORDER_UNKNOWN_NO_NEW_ORDER")
-            if current.tx_hash:
-                result = self.adapter.read_records("history", tx_hash=current.tx_hash)
+            if wallet_hash:
+                result = self.adapter.read_records("history", tx_hash=wallet_hash)
                 if (
                     result.capability_status not in {"VERIFIED_READ", "FIXTURE_VERIFIED"}
                     or len(result.transactions) != 1
@@ -75,23 +91,36 @@ class WalletReconciler:
                 ):
                     reasons.append("WALLET_HISTORY_UNKNOWN_NO_NEW_ORDER")
                 elif wallet_state == "FINISHED" and result.transactions[0].status != "confirmed":
+                    terminal_conflict = True
                     reasons.append("WALLET_TERMINAL_EVIDENCE_CONFLICT")
+                    reasons.append("CONFLICTING_EXTERNAL_TERMINAL_EVIDENCE")
                 elif wallet_state == "FAILED" and result.transactions[0].status != "failed":
+                    terminal_conflict = True
                     reasons.append("WALLET_TERMINAL_EVIDENCE_CONFLICT")
+                    reasons.append("CONFLICTING_EXTERNAL_TERMINAL_EVIDENCE")
             if wallet_state in {"PENDING", "UNKNOWN"} and wallet_order_id is not None:
                 reasons.append("WALLET_ORDER_NOT_TERMINAL_SUCCESS")
         if not reasons and self.execution_tracker is not None:
             # Only Phase 8's exact settlement tracker confirms execution.
             expected = {"FINISHED": "SUCCESS", "FAILED": "FAILED"}.get(wallet_state)
             current = self.execution_tracker.reconcile(
-                current, now=max(now, self.adapter.clock()), expected_terminal=expected
+                current,
+                now=max(now, self.adapter.clock()),
+                expected_terminal=expected,
+                corroborated_tx_hash=wallet_hash,
             )
             reasons.append("PHASE8_EXACT_SETTLEMENT_RECONCILIATION")
         else:
             reasons.append("EXACT_SETTLEMENT_UNVERIFIED_NO_NEW_ORDER")
             if current.state != "EXECUTION_UNKNOWN":
                 updated = ExecutionStateMachine().transition(
-                    current, "EXECUTION_UNKNOWN", now=now, reason_codes=tuple(reasons)
+                    current,
+                    "EXECUTION_UNKNOWN",
+                    now=now,
+                    reason_codes=tuple(reasons),
+                    conflicting_tx_hashes=conflicts,
+                    last_conflicting_tx_hash=last_conflict,
+                    settlement_conflict=terminal_conflict,
                 )
             else:
                 updated = ExecutionAttempt.model_validate(
@@ -100,6 +129,9 @@ class WalletReconciler:
                         "version": current.version + 1,
                         "updated_at": now,
                         "reason_codes": tuple(reasons),
+                        "conflicting_tx_hashes": conflicts,
+                        "last_conflicting_tx_hash": last_conflict,
+                        "settlement_conflict": terminal_conflict,
                     }
                 )
             self.store.save(updated, expected_version=current.version)

@@ -407,7 +407,7 @@ def test_approval_exact_calldata_and_route_binding():
     approval = ApprovalService().prepare(r, approval_response(r.quote.request.amount), now=NOW)
     assert approval.token == SELL and approval.spender == SPENDER
     assert approval.transaction.to == SELL and approval.transaction.value == "0"
-    assert ApprovalService().confirmed(approval, r, allowance(), now=NOW)
+    assert ApprovalService().confirmed(approval, r, allowance(approval.amount), now=NOW)
     assert not ApprovalService().confirmed(
         approval, route(quote(request(), quote_id="quote2"), a=allowance("0")), allowance(), now=NOW
     )
@@ -430,7 +430,7 @@ def test_approval_is_simulated_and_waits_before_trade_then_rebuilds():
     s, a = prepared(balance="0")
     assert a.state == "APPROVAL_REQUIRED" and a.approval_simulation.status == "PASS"
     assert len([v for v in s.provider.calls if v[0] == "simulate"]) == 2
-    b = s.observe_approval(a, allowance(), funding_state=funding())
+    b = s.observe_approval(a, allowance(a.approval.amount), funding_state=funding())
     assert (
         b.state == "APPROVAL_CONFIRMED"
         and b.generation == 1

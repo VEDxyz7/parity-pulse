@@ -21,6 +21,7 @@ class LLMRequest(DataModel):
     structured_evidence_json: StrictStr = Field(max_length=50000)
     validated_response_json: StrictStr = Field(max_length=50000)
     response_schema_json: StrictStr = Field(max_length=50000)
+    allowed_claims_json: StrictStr = Field(default="[]", max_length=50000)
 
 
 class LLMProvider(Protocol):
@@ -72,6 +73,10 @@ class LLMConfiguration(BaseSettings):
     model: Identifier | None = None
     api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     base_url: StrictStr | None = Field(default=None, exclude=True, repr=False)
+    timeout_seconds: int = Field(default=5, strict=True, ge=1, le=30)
+    max_output_bytes: int = Field(default=50000, strict=True, ge=1024, le=50000)
+    max_output_tokens: int = Field(default=4096, strict=True, ge=128, le=8192)
+    structured_output: bool = Field(default=True, strict=True)
 
     @model_validator(mode="after")
     def configured(self):

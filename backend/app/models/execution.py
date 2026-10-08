@@ -391,6 +391,7 @@ class PreparedApproval(ExecutionModel):
     token: Address
     spender: Address
     amount: Units
+    pre_allowance_amount: Units
     transaction: EvmTransaction
     fingerprint: Digest
 
@@ -399,6 +400,14 @@ class PreparedApproval(ExecutionModel):
 
     @model_validator(mode="after")
     def valid(self):
+        expected = "0x095ea7b3" + "0" * 24 + self.spender[2:] + format(int(self.amount), "064x")
+        if (
+            self.transaction.to != self.token
+            or self.transaction.value != "0"
+            or self.transaction.data.lower() != expected.lower()
+            or not int(self.pre_allowance_amount) < int(self.amount) < 2**256 - 1
+        ):
+            raise ValueError("Exact bounded approval calldata required")
         if fingerprint(self.critical()) != self.fingerprint:
             raise ValueError("Approval fingerprint mismatch")
         return self
@@ -571,6 +580,38 @@ class SwapStatus(ExecutionModel):
     toTokenDetails: tuple[dict, ...] | None = None
 
 
+class SettlementIdentity(ExecutionModel):
+    execution_id: UUID
+    request_id: UUID
+    decision_id: Identifier
+    data_mode: Mode
+    source: Literal["BINANCE_WEB3", "TEST_FIXTURE"]
+    execution_mode: ExecutionMode
+    quote_id: Identifier
+    vendor: Identifier
+    wallet: Address
+    order_id: Identifier | None
+    route_fingerprint: Digest
+
+
+class SettlementEvidence(ExecutionModel):
+    """Captured response plus exact host request context, never a success-label override."""
+
+    identity: SettlementIdentity
+    received_at: datetime
+    corroborated_tx_hash: Hash | None = None
+    rfq: RFQStatus | None = None
+    swap: SwapStatus | None = None
+
+    @model_validator(mode="after")
+    def branch(self):
+        if (self.identity.execution_mode == "RFQ") != (self.rfq is not None):
+            raise ValueError("Settlement mode/response mismatch")
+        if (self.identity.execution_mode == "SWAP") != (self.swap is not None):
+            raise ValueError("Settlement requires exactly one matching response")
+        return self
+
+
 class ExecutionControls(ExecutionModel):
     data_mode: Mode
     execution_mode: Literal["DRY_RUN"] = "DRY_RUN"
@@ -647,6 +688,10 @@ class ExecutionAttempt(ExecutionModel):
     average_execution_price: Positive | None = None
     fees_native_base_units: Units | None = None
     settled_at: datetime | None = None
+    settlement_evidence: SettlementEvidence | None = None
+    conflicting_tx_hashes: tuple[Hash, ...] = Field(default=(), max_length=10)
+    last_conflicting_tx_hash: Hash | None = None
+    settlement_conflict: bool = Field(default=False, strict=True)
     reason_codes: tuple[str, ...] = ()
     execution_ready: Literal[False] = False
     broadcast: Literal[False] = False
@@ -699,8 +744,8 @@ class ExecutionAttempt(ExecutionModel):
             self.external_tracking_only and (self.order_id or self.tx_hash)
         ):
             raise ValueError("Submitted/observed states require independently tracked identifiers")
-        if self.state == "EXECUTION_CONFIRMED" and (
-            self.external_status not in ("FILLED", "success") or self.settled_at is None
-        ):
-            raise ValueError("Only documented terminal success confirms execution")
+        if self.state == "EXECUTION_CONFIRMED":
+            from app.services.execution_confirmation import validate_confirmation
+
+            validate_confirmation(self)
         return self

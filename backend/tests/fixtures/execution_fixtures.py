@@ -252,11 +252,24 @@ class FixtureProvider:
     def simulate(self, tx, *, mode):
         assert mode == "DEMO"
         self.calls.append(("simulate", tx.evm_payload()))
+        # Explicit synthetic approve effects, derived from the actual tested calldata.
+        # This is protocol evidence only, never a provider/runtime capability claim.
+        changes = ()
+        if tx.data.startswith("0x095ea7b3"):
+            changes = (
+                dict(
+                    tokenAddress=tx.to,
+                    owner=tx.sender,
+                    spender="0x" + tx.data[34:74],
+                    preAmount="0",
+                    postAmount=str(int(tx.data[74:138], 16)),
+                ),
+            )
         return self.response_override or SimulationResponse(
             status=self.simulation_status,
             failReason=None if self.simulation_status == "SUCCESS" else "reverted",
             balanceChanges=(),
-            allowanceChanges=(),
+            allowanceChanges=changes,
         ), self.clock()
 
 

@@ -85,18 +85,55 @@ class ExecutionStore:
                 ):
                     raise ValueError("EXECUTION_CONCURRENT_OR_DUPLICATE_WRITE")
                 previous = self._validate(old)
+                if (previous.settlement_conflict and not attempt.settlement_conflict) or (
+                    previous.last_conflicting_tx_hash and attempt.last_conflicting_tx_hash is None
+                ):
+                    raise ValueError("IMMUTABLE_SETTLEMENT_CONFLICT")
+                if (
+                    previous.state
+                    in {
+                        "EXECUTION_CONFIRMED",
+                        "EXECUTION_FAILED",
+                        "EXECUTION_CANCELLED",
+                        "EXECUTION_EXPIRED",
+                        "BLOCKED",
+                    }
+                    and previous.external_tracking_only
+                ):
+                    raise ValueError("IMMUTABLE_EXTERNAL_TERMINAL_RECORD")
+                if previous.tx_hash is not None and (
+                    attempt.tx_hash is None or previous.tx_hash.lower() != attempt.tx_hash.lower()
+                ):
+                    raise ValueError("IMMUTABLE_KNOWN_TRANSACTION_HASH")
+                if not set(previous.conflicting_tx_hashes).issubset(attempt.conflicting_tx_hashes):
+                    raise ValueError("IMMUTABLE_CONTRADICTORY_EVIDENCE")
+                if previous.external_tracking_only and any(
+                    getattr(previous, key) != getattr(attempt, key)
+                    for key in (
+                        "quote",
+                        "route",
+                        "order_id",
+                        "evidence",
+                        "rfq_request_digest",
+                        "external_tracking_only",
+                        "generation",
+                    )
+                ):
+                    raise ValueError("IMMUTABLE_EXTERNAL_EXECUTION_BINDING")
                 if (
                     previous.decision_id,
                     previous.data_mode,
                     previous.request_id,
                     previous.source,
                     previous.created_at,
+                    previous.correlation_id,
                 ) != (
                     attempt.decision_id,
                     attempt.data_mode,
                     attempt.request_id,
                     attempt.source,
                     attempt.created_at,
+                    attempt.correlation_id,
                 ):
                     raise ValueError("EXECUTION_IDENTITY_MUTATION")
                 result = db.execute(

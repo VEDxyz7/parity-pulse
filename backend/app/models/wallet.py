@@ -4,7 +4,7 @@ from datetime import date, datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 
 from app.models.data import Nonnegative, Positive
 from app.models.execution import Address, Digest, ExecutionModel, Hash, Identifier, Mode
@@ -39,6 +39,19 @@ class WalletSettings(ExecutionModel):
     developer_quota_used_usd: Nonnegative
     developer_quota_date: date
     developer_balance_exceeded: bool = Field(strict=True)
+
+    @field_validator("quota_date", "developer_quota_date", mode="before")
+    @classmethod
+    def exact_quota_date(cls, value):
+        if type(value) is date:
+            return value
+        if (
+            type(value) is not str
+            or len(value) != 10
+            or date.fromisoformat(value).isoformat() != value
+        ):
+            raise ValueError("Exact ISO quota date required")
+        return value
 
     @model_validator(mode="after")
     def consistent(self):

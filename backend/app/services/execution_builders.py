@@ -185,6 +185,7 @@ class ApprovalService:
             token=tx.to,
             spender=spender,
             amount=amount,
+            pre_allowance_amount=route.allowance.amount,
             transaction=tx,
         )
         serial = {**fields, "transaction": tx.model_dump(mode="json", by_alias=True)}
@@ -199,6 +200,11 @@ class ApprovalService:
         observation = AllowanceState.model_validate_json(observation.model_dump_json())
         return (
             approval.route_fingerprint == route.fingerprint
+            and approval.token == route.quote.request.fromTokenAddress
+            and approval.transaction.sender == route.quote.request.userWalletAddress
+            and approval.spender == route.quote.route.approveTarget
+            and approval.amount == route.quote.request.amount
+            and approval.pre_allowance_amount == route.allowance.amount
             and route.quote.requested_at <= now < route.quote.expires_at
             and (observation.token, observation.spender, observation.owner, observation.data_mode)
             == (
@@ -207,6 +213,6 @@ class ApprovalService:
                 approval.transaction.sender,
                 route.quote.data_mode,
             )
-            and int(observation.amount) >= int(approval.amount)
+            and observation.amount == approval.amount
             and 0 <= (now - observation.observed_at).total_seconds() <= 120
         )

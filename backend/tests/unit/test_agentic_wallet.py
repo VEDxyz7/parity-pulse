@@ -435,6 +435,9 @@ def test_exact_phase8_tracker_required_for_wallet_reconciliation(status, expecte
     s, a = external(store)
     w = WalletWire()
     w.values["orders"]["list"][0]["status"] = status
+    if status == "FAILED":
+        # A failed wallet order must not be paired with a confirmed history fixture.
+        w.values["history"]["transactions"][0]["status"] = "failed"
     if status == "FINISHED":
         record = RFQStatus(
             orderId="platform-order",

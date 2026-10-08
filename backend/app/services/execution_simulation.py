@@ -11,6 +11,34 @@ from app.models.execution import (
 from app.services.execution_builders import current_quote
 
 
+def allowance_envelope_valid(artifact, response):
+    """No implicit unlimited approval. Swap may only consume the bound allowance."""
+    changes = response.allowanceChanges
+    if isinstance(artifact, PreparedApproval):
+        if len(changes) != 1:
+            return False
+        c = changes[0]
+        return (
+            (c.tokenAddress, c.owner, c.spender)
+            == (artifact.token, artifact.transaction.sender, artifact.spender)
+            and c.preAmount == artifact.pre_allowance_amount
+            and c.postAmount == artifact.amount
+            and int(c.preAmount) < int(c.postAmount) < 2**256 - 1
+        )
+    if not changes:
+        return True
+    if len(changes) != 1 or artifact.allowance is None:
+        return False
+    c, a = changes[0], artifact.allowance
+    return (
+        (c.tokenAddress, c.owner, c.spender) == (a.token, a.owner, a.spender)
+        and c.preAmount == a.amount
+        and max(0, int(a.amount) - int(artifact.quote.request.amount))
+        <= int(c.postAmount)
+        <= int(c.preAmount)
+    )
+
+
 class ExecutionSimulationService:
     def __init__(self, provider):
         self.provider = provider
@@ -49,14 +77,30 @@ class ExecutionSimulationService:
             response = SimulationResponse.model_validate_json(response.model_dump_json())
             if not 0 <= (received - now).total_seconds() <= 30:
                 raise ValueError("Invalid simulation receipt")
-            status = "PASS" if response.status == "SUCCESS" else "FAIL"
-            reasons = () if status == "PASS" else ("PROVIDER_SIMULATION_FAILED",)
-        except (ProviderError, ValueError, TypeError):
+            safe_allowance = allowance_envelope_valid(artifact, response)
+            status = "PASS" if response.status == "SUCCESS" and safe_allowance else "FAIL"
+            reasons = (
+                ()
+                if status == "PASS"
+                else (
+                    "ALLOWANCE_SAFETY_ENVELOPE_VIOLATED"
+                    if not safe_allowance
+                    else "PROVIDER_SIMULATION_FAILED",
+                )
+            )
+        except ProviderError:
             response, received, status, reasons = (
                 None,
                 now,
                 "UNAVAILABLE",
                 ("SIMULATION_UNAVAILABLE_OR_INVALID",),
+            )
+        except (ValueError, TypeError, AttributeError):
+            response, received, status, reasons = (
+                None,
+                now,
+                "FAIL",
+                ("SIMULATION_SCHEMA_OR_ALLOWANCE_INVALID",),
             )
         return ExecutionSimulation(
             fingerprint=artifact.fingerprint,
@@ -86,6 +130,7 @@ class ExecutionSimulationService:
             and simulation.response is not None
             and simulation.response.status == "SUCCESS"
             and not simulation.response.failReason
+            and allowance_envelope_valid(artifact, simulation.response)
             and simulation.fingerprint == artifact.fingerprint
             and simulation.data_mode == mode
             and (

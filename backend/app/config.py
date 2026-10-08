@@ -34,8 +34,22 @@ class Settings(BaseSettings):
     massive_data_quality: Literal["UNKNOWN", "DELAYED", "REALTIME"] = "UNKNOWN"
     massive_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     llm_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    llm_enabled: bool = False
+    llm_provider: str | None = None
+    llm_model: str | None = None
+    llm_base_url: str | None = Field(default=None, exclude=True, repr=False)
+    llm_timeout_seconds: int = Field(default=5, ge=1, le=30)
+    llm_max_output_bytes: int = Field(default=50000, ge=1024, le=50000)
+    llm_max_output_tokens: int = Field(default=4096, ge=128, le=8192)
+    llm_structured_output: bool = True
 
-    @field_validator("live_trading_enabled", "require_simulation", mode="before")
+    @field_validator(
+        "live_trading_enabled",
+        "require_simulation",
+        "llm_enabled",
+        "llm_structured_output",
+        mode="before",
+    )
     @classmethod
     def explicit_boolean(cls, value: object) -> bool:
         if isinstance(value, bool):
@@ -75,6 +89,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def non_live_only(self) -> "Settings":
+        if self.llm_enabled and not (self.llm_provider and self.llm_model and self.llm_base_url):
+            raise ValueError("Enabled LLM requires explicit provider/model/base URL")
         if self.runtime_mode == "DEMO" and self.data_mode != "DEMO":
             raise ValueError("DEMO sandbox requires explicit DEMO data mode")
         if self.execution_mode != "DRY_RUN" or self.live_trading_enabled:

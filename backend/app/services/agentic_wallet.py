@@ -304,6 +304,7 @@ class AgenticWalletAdapter:
 
 class WalletSafetyChecks:
     def evaluate(self, snapshot, attempt, funding_state, *, now):
+        now = utc(now)
         snapshot = WalletSnapshot.model_validate_json(snapshot.model_dump_json())
         checks = []
 

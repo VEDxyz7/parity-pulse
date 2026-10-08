@@ -85,6 +85,35 @@ class ExecutionStateMachine:
         }
         if immutable.intersection(updates):
             raise ValueError("IMMUTABLE_ATTEMPT_IDENTITY")
+        if (
+            attempt.tx_hash is not None
+            and "tx_hash" in updates
+            and (
+                updates["tx_hash"] is None or updates["tx_hash"].lower() != attempt.tx_hash.lower()
+            )
+        ):
+            raise ValueError("IMMUTABLE_KNOWN_TRANSACTION_HASH")
+        if attempt.external_tracking_only:
+            for key in (
+                "quote",
+                "route",
+                "order_id",
+                "evidence",
+                "rfq_request_digest",
+                "external_tracking_only",
+            ):
+                if key in updates and updates[key] != getattr(attempt, key):
+                    raise ValueError("IMMUTABLE_EXTERNAL_EXECUTION_BINDING")
+        if "conflicting_tx_hashes" in updates and not set(attempt.conflicting_tx_hashes).issubset(
+            updates["conflicting_tx_hashes"]
+        ):
+            raise ValueError("IMMUTABLE_TRANSACTION_CONFLICT_EVIDENCE")
+        if (attempt.settlement_conflict and updates.get("settlement_conflict") is False) or (
+            attempt.last_conflicting_tx_hash
+            and "last_conflicting_tx_hash" in updates
+            and updates["last_conflicting_tx_hash"] is None
+        ):
+            raise ValueError("IMMUTABLE_SETTLEMENT_CONFLICT")
         values = {
             **attempt.model_dump(),
             **updates,
@@ -94,6 +123,12 @@ class ExecutionStateMachine:
         }
         result = ExecutionAttempt.model_validate(values)
         if attempt.state in EXTERNAL and target in TERMINAL:
+            if (
+                result.settlement_conflict
+                or result.conflicting_tx_hashes
+                or result.last_conflicting_tx_hash
+            ):
+                raise ValueError("UNRESOLVED_SETTLEMENT_CONFLICT")
             expected = {
                 "EXECUTION_CONFIRMED": {"FILLED", "success"},
                 "EXECUTION_FAILED": {"FAILED", "failed"},
