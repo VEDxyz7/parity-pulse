@@ -106,4 +106,8 @@ def test_exact_allowlisted_data_and_proposal_routes(client):
         "/api/exposure/proposals/{proposal_id}",
         "/api/opportunities/scan",
         "/api/opportunities/{run_id}",
+        "/api/positions",
+        "/api/positions/{position_id}",
     }
+    for path in ("/api/positions", "/api/positions/00000000-0000-4000-8000-000000000001"):
+        assert client.post(path, json={"state": "OPEN", "broadcast": True}).status_code == 405

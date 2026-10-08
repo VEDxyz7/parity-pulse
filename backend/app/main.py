@@ -23,6 +23,7 @@ from app.api.demo_sandbox import router as demo_sandbox_router
 from app.api.exposure import router as exposure_router
 from app.api.middleware import RequestContextMiddleware
 from app.api.opportunity_scan import router as opportunity_scan_router
+from app.api.positions import router as positions_router
 from app.api.system import router
 from app.api.trust import router as trust_router
 from app.clients.binance_trading import BinanceSafetyClient
@@ -34,6 +35,7 @@ from app.demo import load_demo_fixture
 from app.models.execution import ExecutionControls
 from app.repositories.execution import ExecutionStore
 from app.repositories.opportunity_scan import OpportunityScanStore
+from app.repositories.position import PositionStore
 from app.services.agentic_wallet import AgenticWalletAdapter
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
@@ -44,6 +46,7 @@ from app.services.execution import SafetyExecutionService
 from app.services.exposure import ExposureService
 from app.services.opportunity_scan import OpportunityScanService
 from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
+from app.services.position import PositionService
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
 
@@ -68,7 +71,11 @@ def error_response(request: Request, status: int, code: str, message: str) -> JS
     )
 
 
-def create_app(settings: Settings | None = None, *, llm_provider=None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None, *, llm_provider=None, position_recovery_limit=100
+) -> FastAPI:
+    if type(position_recovery_limit) is not int or not 1 <= position_recovery_limit <= 1000:
+        raise ValueError("Bounded position recovery required")
     try:
         configured = (
             Settings.model_validate(
@@ -144,6 +151,25 @@ def create_app(settings: Settings | None = None, *, llm_provider=None) -> FastAP
                 clock=lambda: datetime.now(UTC),
                 wallet_adapter=AgenticWalletAdapter(data_mode=configured.data_mode),
             )
+            position_directory = (
+                None
+                if execution_directory is None
+                else Path(database_file).resolve().parent
+                / "positions/phase10"
+                / configured.data_mode
+            )
+            app.state.position_store = PositionStore(app.state.execution_store, position_directory)
+            app.state.positions = PositionService(
+                app.state.position_store,
+                app.state.safety_execution,
+                clock=lambda: datetime.now(UTC),
+                postopen_exit_minutes=configured.postopen_exit_minutes,
+            )
+            app.state.safety_execution.position_guard = app.state.positions.has_unresolved
+            # Bounded startup recovery performs status reads only. No execution/wallet writes.
+            app.state.position_recovery_results = app.state.positions.recover(
+                limit=position_recovery_limit
+            )
             app.state.demo_sandbox = (
                 DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
             )
@@ -211,6 +237,9 @@ def create_app(settings: Settings | None = None, *, llm_provider=None) -> FastAP
             if getattr(app.state, "safety_client", None) is not None:
                 app.state.safety_client.close()
             if getattr(app.state, "execution_store", None) is not None:
+                if getattr(app.state, "position_store", None) is not None:
+                    app.state.position_store.close()
+                app.state.positions = None
                 app.state.execution_store.close()
             app.state.safety_execution = None
             if database is not None:
@@ -263,6 +292,7 @@ def create_app(settings: Settings | None = None, *, llm_provider=None) -> FastAP
     app.include_router(exposure_router)
     app.include_router(trust_router)
     app.include_router(opportunity_scan_router)
+    app.include_router(positions_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)

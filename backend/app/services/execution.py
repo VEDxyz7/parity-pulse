@@ -18,7 +18,9 @@ logger = logging.getLogger("parity.execution")
 
 
 class SafetyExecutionService:
-    def __init__(self, provider, store, controls, *, clock, wallet_adapter=None):
+    def __init__(
+        self, provider, store, controls, *, clock, wallet_adapter=None, position_guard=None
+    ):
         self.provider, self.store, self.clock = provider, store, clock
         self.controls = ExecutionControls.model_validate_json(controls.model_dump_json())
         self.risk = RiskEngine()
@@ -34,6 +36,7 @@ class SafetyExecutionService:
             else DryRunExecutionGateway(self.controls)
         )
         self.lock = threading.RLock()
+        self.position_guard = position_guard
 
     def _save(self, previous, result):
         self.store.save(result, expected_version=previous.version)
@@ -84,6 +87,8 @@ class SafetyExecutionService:
             attempt, owned = self.store.claim(attempt)
             if not owned:
                 return attempt
+            if self.position_guard is not None and self.position_guard(evidence.decision_id):
+                return self._move(attempt, "BLOCKED", reason_codes=("POSITION_STATE_UNRESOLVED",))
             if self.store.pending(mode=self.controls.data_mode):
                 return self._move(attempt, "BLOCKED", reason_codes=("RESTART_STATE_UNRESOLVED",))
             risk = self.risk.evaluate_execution(evidence, now=now)
@@ -130,6 +135,8 @@ class SafetyExecutionService:
             ):
                 raise ValueError("STALE_OR_EXHAUSTED_REQUOTE_ATTEMPT")
             now = self.clock()
+            if self.position_guard is not None and self.position_guard(current.decision_id):
+                raise ValueError("POSITION_STATE_UNRESOLVED")
             risk = self.risk.evaluate_execution(current.evidence, now=now)
             funding = self.funding.check(
                 current.evidence.notional_usd,

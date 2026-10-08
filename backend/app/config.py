@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     require_simulation: bool = True
     database_url: str = f"sqlite:///{ROOT_DIR / 'data' / 'parity-pulse.db'}"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+    postopen_exit_minutes: int = Field(default=10, ge=1, le=120)
 
     binance_web3_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     binance_web3_secret_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
@@ -87,8 +88,21 @@ class Settings(BaseSettings):
             raise ValueError("Phase 1 supports local SQLite only, without URL credentials/options")
         return value
 
+    @field_validator("postopen_exit_minutes", mode="before")
+    @classmethod
+    def exact_exit_minutes(cls, value):
+        if isinstance(value, (float, bool)):
+            raise ValueError("Exit minutes must be an integer configuration value")
+        return value
+
     @model_validator(mode="after")
     def non_live_only(self) -> "Settings":
+        if (
+            self.runtime_mode == "LIVE"
+            and self.app_env == "production"
+            and make_url(self.database_url).database == ":memory:"
+        ):
+            raise ValueError("Production canonical lifecycle requires durable SQLite storage")
         if self.llm_enabled and not (self.llm_provider and self.llm_model and self.llm_base_url):
             raise ValueError("Enabled LLM requires explicit provider/model/base URL")
         if self.runtime_mode == "DEMO" and self.data_mode != "DEMO":

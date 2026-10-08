@@ -121,6 +121,18 @@ Start the existing backend with `RUNTIME_MODE=DEMO DATA_MODE=DEMO` (see the [DEM
 
 Overview's **Assess trust** remains the canonical assessment. The production Opportunity sidebar item remains disabled. In the ordinary runtime, the sandbox page explains that DEMO APIs are disabled and makes no fallback calls. Production gates and all live execution restrictions are unchanged.
 
+### Master Phase 10: durable position machinery
+
+The canonical lifecycle now persists positions, execution evidence, quantities, exit intents and monitor jobs in mode-separated SQLite stores under `data/positions/phase10/`. `GET /api/positions` and `GET /api/positions/{position_id}` inspect the local single-account records. They expose no write or execution operation. The existing DEMO paper ledger remains separate and synthetic.
+
+`POSTOPEN_EXIT_MINUTES=10` schedules the deterministic exit after the first verified NYSE regular opening at or after confirmed entry. It accepts integer minutes from 1 to 120. A bounded startup recovery restores jobs and reconciles existing execution IDs; an expired lease can be reclaimed, while unresolved settlement blocks dependent preparation. Run the one-shot monitor from the repository root (a host scheduler may invoke it once per minute):
+
+```sh
+.venv/bin/python scripts/monitor-positions.py --limit 100
+```
+
+The monitor only reads existing status and records due exits. Fresh host-verified risk/funding/allowance facts are still required for exit preparation through the existing safety pipeline. Actual exits remain blocked; a quote or simulation does not close a position. Production refuses in-memory canonical storage. See the [Phase 10 report](docs/PHASE_10_REPORT.md) for evidence, recovery behavior and remaining live blockers. Phase 11 has not started.
+
 ### An existing development server occupies the port
 
 Run only one backend on port 8000 and one frontend on port 5173. A second launch can initialize successfully and then fail to bind because the first instance is still running. Inspect the listener before taking action:
