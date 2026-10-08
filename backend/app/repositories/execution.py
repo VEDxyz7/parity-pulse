@@ -243,5 +243,27 @@ class ExecutionStore:
             in {"EXECUTION_SUBMITTED", "EXECUTION_PENDING", "EXECUTION_UNKNOWN"}
         ]
 
+    def list(self, *, mode, limit=100, offset=0):
+        """Bounded inspection; every projected attempt still validates its complete journal."""
+        if (
+            mode not in {"DEMO", "LIVE_READ_ONLY"}
+            or not 1 <= limit <= 101
+            or not 0 <= offset <= 10000
+        ):
+            raise ValueError("Bounded mode-scoped execution inspection required")
+        with self.lock, self.engine.connect() as db:
+            ids = (
+                db.execute(
+                    select(self.table.c.id)
+                    .where(self.table.c.mode == mode)
+                    .order_by(self.table.c.id)
+                    .offset(offset)
+                    .limit(limit)
+                )
+                .scalars()
+                .all()
+            )
+        return [self.get(key, mode=mode) for key in ids]
+
     def close(self):
         self.engine.dispose()

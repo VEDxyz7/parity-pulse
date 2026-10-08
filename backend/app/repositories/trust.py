@@ -81,3 +81,24 @@ class TrustRepository:
                 )
             )
             return TrustAssessment.model_validate_json(row.payload) if row else None
+
+    def latest(self, ticker, mode, at):
+        if mode not in {"LIVE", "DEMO"}:
+            raise ValueError("Explicit data mode required")
+        with self.database.sessions() as session:
+            row = session.scalar(
+                select(TrustAssessmentRow)
+                .where(
+                    TrustAssessmentRow.data_mode == mode,
+                    TrustAssessmentRow.ticker == ticker,
+                    TrustAssessmentRow.ingestion_timestamp <= at.isoformat(),
+                )
+                .order_by(TrustAssessmentRow.ingestion_timestamp.desc(), TrustAssessmentRow.id)
+                .limit(1)
+            )
+        result = TrustAssessment.model_validate_json(row.payload) if row else None
+        if result and (
+            result.data_mode != mode or result.ticker != ticker or result.evaluated_at > at
+        ):
+            raise ValueError("Conflicting persisted Trust identity")
+        return result

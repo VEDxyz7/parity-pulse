@@ -1,0 +1,448 @@
+{
+  "milestone": "PHASE_12_REGRESSION",
+  "verified_at_utc": "2026-10-08T12:52:14.694Z",
+  "status": "PASS",
+  "browser": "Disposable headless Google Chrome",
+  "frontend": "Built UI at localhost:5175",
+  "dataset_type": "DEMO_FIXTURE",
+  "synthetic": true,
+  "production_eligible": false,
+  "actual_local_backends": {
+    "desktop": 8021,
+    "mobile": 8022,
+    "ordinary_runtime_with_synthetic_data": 8023
+  },
+  "scenario_results": [
+    {
+      "viewport": "desktop",
+      "scenario": "steady",
+      "trust": "NORMAL",
+      "opportunity": "NO_OPPORTUNITY",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "desktop",
+      "scenario": "thin-move",
+      "trust": "LIKELY_NOISE",
+      "opportunity": "REJECTED_BY_TRUST",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "desktop",
+      "scenario": "supported-move",
+      "trust": "LIKELY_INFORMATION",
+      "opportunity": "ACTIONABLE",
+      "full_hero_flow": true,
+      "stand_down": false,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile",
+      "scenario": "steady",
+      "trust": "NORMAL",
+      "opportunity": "NO_OPPORTUNITY",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile",
+      "scenario": "thin-move",
+      "trust": "LIKELY_NOISE",
+      "opportunity": "REJECTED_BY_TRUST",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile",
+      "scenario": "supported-move",
+      "trust": "LIKELY_INFORMATION",
+      "opportunity": "ACTIONABLE",
+      "full_hero_flow": true,
+      "stand_down": false,
+      "status": "PASS"
+    }
+  ],
+  "terminal_scenarios": [
+    {
+      "viewport": "desktop",
+      "status": "PASS",
+      "sections": 6,
+      "backend_exact_values": true,
+      "empty_filter": true,
+      "api_failure_clears_values": true,
+      "recovery": true,
+      "no_overflow": true,
+      "live_calls": 0
+    },
+    {
+      "viewport": "mobile",
+      "status": "PASS",
+      "sections": 6,
+      "backend_exact_values": true,
+      "empty_filter": true,
+      "api_failure_clears_values": true,
+      "recovery": true,
+      "no_overflow": true,
+      "live_calls": 0
+    }
+  ],
+  "portfolio_api_smoke": {
+    "version": 1,
+    "status": "BLOCKED",
+    "total": null,
+    "actions": 0,
+    "broadcast": false,
+    "latest": true,
+    "audit": 2
+  },
+  "desktop_mobile_no_page_overflow": true,
+  "dedicated_navigation": "#demo-sandbox",
+  "pipeline_statuses_verified": true,
+  "production_trust_calls_from_demo_sandbox": 0,
+  "ordinary_overview_trust": "INSUFFICIENT_EVIDENCE",
+  "ordinary_runtime_demo_requests": 0,
+  "production_opportunity_navigation_disabled": true,
+  "live_provider_calls": 0,
+  "live_execution_calls": 0,
+  "runtime_errors": [],
+  "request_log": [
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/steady",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/thin-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/quote",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/prepare",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/simulate",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/paper/fills",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/bad25563-73ad-5fe6-a873-1be5c48ee3a4/monitor",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/bad25563-73ad-5fe6-a873-1be5c48ee3a4/exit",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/paper/positions/bad25563-73ad-5fe6-a873-1be5c48ee3a4/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/steady",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/thin-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/quote",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/prepare",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/simulate",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/paper/fills",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/3b1dfdbb-6926-5575-97b3-29435bffb546/monitor",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/3b1dfdbb-6926-5575-97b3-29435bffb546/exit",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/paper/positions/3b1dfdbb-6926-5575-97b3-29435bffb546/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/assets/NVDA/trust",
+      "status": 200
+    },
+    {
+      "phase": "PORTFOLIO_API_SMOKE",
+      "method": "POST",
+      "path": "/api/autopilot",
+      "status": 200
+    },
+    {
+      "phase": "PORTFOLIO_API_SMOKE",
+      "method": "POST",
+      "path": "/api/portfolio/plans",
+      "status": 200
+    },
+    {
+      "phase": "PORTFOLIO_API_SMOKE",
+      "method": "GET",
+      "path": "/api/portfolio",
+      "status": 200
+    },
+    {
+      "phase": "PORTFOLIO_API_SMOKE",
+      "method": "GET",
+      "path": "/api/portfolio/audit",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    }
+  ]
+}

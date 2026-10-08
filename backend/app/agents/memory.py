@@ -185,3 +185,26 @@ class AgentStore:
 
     def close(self):
         self._engine.dispose()
+
+    def list_runs(self, mode, at, *, limit=100, offset=0):
+        """Inspection only: no orchestration, provider calls or memory updates."""
+        if (
+            mode not in {"DEMO", "LIVE_READ_ONLY"}
+            or not 1 <= limit <= 101
+            or not 0 <= offset <= 10000
+        ):
+            raise ValueError("Bounded mode-scoped agent inspection required")
+        table = self._tables["agent_runs"]
+        with self._lock, self._engine.connect() as connection:
+            ids = (
+                connection.execute(
+                    select(table.c.id)
+                    .where(table.c.mode == mode, table.c.timestamp <= at.isoformat())
+                    .order_by(table.c.timestamp.desc(), table.c.id)
+                    .offset(offset)
+                    .limit(limit)
+                )
+                .scalars()
+                .all()
+            )
+        return tuple(self.load_run(identifier, mode) for identifier in ids)

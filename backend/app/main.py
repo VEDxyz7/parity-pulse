@@ -27,6 +27,7 @@ from app.api.portfolio import autopilot_router
 from app.api.portfolio import router as portfolio_router
 from app.api.positions import router as positions_router
 from app.api.system import router
+from app.api.terminal import router as terminal_router
 from app.api.trust import router as trust_router
 from app.clients.binance_trading import BinanceSafetyClient
 from app.clients.common import ProviderError
@@ -39,6 +40,7 @@ from app.repositories.execution import ExecutionStore
 from app.repositories.opportunity_scan import OpportunityScanStore
 from app.repositories.portfolio import PortfolioStore
 from app.repositories.position import PositionStore
+from app.repositories.research import ResearchStore
 from app.services.agentic_wallet import AgenticWalletAdapter
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
@@ -52,6 +54,7 @@ from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
 from app.services.portfolio import PortfolioService
 from app.services.portfolio_sources import CachedPortfolioSource
 from app.services.position import PositionService
+from app.services.terminal import TerminalService
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
 
@@ -82,6 +85,7 @@ def create_app(
     llm_provider=None,
     position_recovery_limit=100,
     portfolio_source=None,
+    terminal_research_store=None,
 ) -> FastAPI:
     if type(position_recovery_limit) is not int or not 1 <= position_recovery_limit <= 1000:
         raise ValueError("Bounded position recovery required")
@@ -196,6 +200,17 @@ def create_app(
             )
             app.state.portfolio.recover()
             app.state.positions.portfolio_exit_guard = app.state.portfolio.can_reduce
+            app.state.terminal = TerminalService(
+                app.state.data_layer,
+                app.state.trust,
+                agent_store,
+                app.state.execution_store,
+                app.state.positions,
+                app.state.portfolio,
+                terminal_research_store
+                or ResearchStore(Path(__file__).resolve().parents[2] / "data/research/phase5"),
+                clock=lambda: datetime.now(UTC),
+            )
             app.state.demo_sandbox = (
                 DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
             )
@@ -270,6 +285,7 @@ def create_app(
             if getattr(app.state, "portfolio_store", None) is not None:
                 app.state.portfolio_store.close()
             app.state.portfolio = None
+            app.state.terminal = None
             app.state.safety_execution = None
             if database is not None:
                 database.close()
@@ -324,6 +340,7 @@ def create_app(
     app.include_router(positions_router)
     app.include_router(portfolio_router)
     app.include_router(autopilot_router)
+    app.include_router(terminal_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)

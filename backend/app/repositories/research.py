@@ -64,3 +64,13 @@ class ResearchStore:
         if run.run_id != identifier:
             raise ValueError("Replay identity conflict")
         return run
+
+    def list(self, mode):
+        """Bounded immutable catalog; loading uses the original checksum/schema checks."""
+        if mode not in {"DEMO", "LIVE"}:
+            raise ValueError("Explicit replay mode required")
+        paths = sorted(self.directory.glob("*.json"))
+        if len(paths) > 50 or any(p.stat().st_size > 2_000_000 for p in paths):
+            raise ValueError("Replay catalog inspection bound exceeded")
+        runs = [self.load(p.stem) for p in paths]
+        return tuple(run for run in runs if run.data_mode == mode)

@@ -5,6 +5,7 @@ import {
 import { useSystemStatus } from './hooks/useSystemStatus'
 import { AskFlow } from './components/AskFlow'
 import { TrustPanel } from './components/TrustPanel'
+import { Terminal } from './components/Terminal'
 import { DemoTrustSandbox } from './components/DemoTrustSandbox'
 import { StatusBadge } from './components/StatusBadge'
 import type { GateName } from './types/system'
@@ -31,6 +32,7 @@ export function App() {
   const available = Boolean(verified)
   const askReady = system?.gates.DRY_RUN_GATE === 'PASS'
   const showDemo = hash === '#demo-sandbox' || (hash === '' && system?.runtime_mode === 'DEMO')
+  const showTerminal = hash === '#terminal'
   useEffect(() => {
     if (!['#ask', '#system', '#capabilities'].includes(hash)) return
     const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }))
@@ -47,7 +49,8 @@ export function App() {
       </a>
       <div className="workspace-label">YOUR WORKSPACE <span>01</span></div>
       <nav aria-label="Main navigation" className="navigation">
-        <a href="#overview" className={`nav-item ${showDemo ? '' : 'active'}`} aria-current={showDemo ? undefined : 'page'}><LayoutDashboard size={18} />Overview{!showDemo && <span className="nav-dot" />}</a>
+        <a href="#overview" className={`nav-item ${showDemo || showTerminal ? '' : 'active'}`} aria-current={showDemo || showTerminal ? undefined : 'page'}><LayoutDashboard size={18} />Overview{!showDemo && !showTerminal && <span className="nav-dot" />}</a>
+        <a href="#terminal" className={`nav-item ${showTerminal ? 'active' : ''}`} aria-current={showTerminal ? 'page' : undefined}><Database size={18} />Terminal</a>
         <a href="#system" className="nav-item"><Activity size={18} />System status</a>
         <a href="#demo-sandbox" className={`nav-item demo-nav ${showDemo ? 'active' : ''}`} aria-current={showDemo ? 'page' : undefined}><ShieldCheck size={18} />DEMO SANDBOX{showDemo && <span className="nav-dot" />}</a>
         <div className="nav-section">PRODUCT MODES</div>
@@ -63,9 +66,9 @@ export function App() {
       </div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>{showDemo ? 'DEMO SANDBOX' : 'Overview'}</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
+      <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>{showTerminal ? 'Terminal' : showDemo ? 'DEMO SANDBOX' : 'Overview'}</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
       <main id="main-content" tabIndex={-1}>
-        {showDemo ? <>
+        {showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
           <section className="page-heading" aria-label="Synthetic sandbox mode"><div><div className="eyebrow">PARITY PULSE / DEMO</div><h1>DEMO SANDBOX</h1><p>SIMULATED DATA — NOT LIVE MARKET DATA</p><p><strong>NO REAL FUNDS WILL MOVE</strong></p></div><a className="refresh-button" href="#overview">Return to Overview</a></section>
           {system?.runtime_mode === 'DEMO' && askReady ? <DemoTrustSandbox key={`sandbox:${system.run_id}`} /> : <section className="panel demo-unavailable" aria-label="Demo sandbox availability">
             <h2>{available ? 'The connected backend has the sandbox disabled.' : 'A verified DEMO backend is required.'}</h2>
