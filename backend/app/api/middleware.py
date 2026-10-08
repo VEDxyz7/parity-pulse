@@ -2,6 +2,8 @@ import logging
 from time import perf_counter
 from uuid import UUID, uuid4
 
+from starlette.concurrency import run_in_threadpool
+
 from app.utils.logging import correlation_id_context, request_id_context
 
 logger = logging.getLogger("parity.request")
@@ -53,6 +55,32 @@ class RequestContextMiddleware:
             await self.app(scope, receive, send_with_ids)
         finally:
             route = getattr(scope.get("route"), "path", "unmatched")
+            # Capture evaluation projections after successful decision-producing operations.
+            # A capture failure never rewrites the already persisted decision or grants action.
+            state = getattr(scope.get("app"), "state", None)
+            service = getattr(state, "scorecard", None) if state is not None else None
+            if (
+                service is not None
+                and 200 <= status < 300
+                and (
+                    scope["method"] in {"POST", "PUT"}
+                    and route.startswith(
+                        (
+                            "/api/exposure/",
+                            "/api/opportunities/",
+                            "/api/portfolio/",
+                            "/api/autopilot",
+                            "/api/demo/",
+                        )
+                    )
+                    or route == "/api/assets/{ticker}/trust"
+                )
+            ):
+                try:
+                    await run_in_threadpool(service.capture)
+                except Exception:
+                    # The read APIs retry validation and return 503 for unresolved sources.
+                    logger.error("SCORECARD_CAPTURE_UNAVAILABLE")
             logger.info(
                 "REQUEST_COMPLETED",
                 extra={

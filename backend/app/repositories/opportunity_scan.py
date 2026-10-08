@@ -73,3 +73,19 @@ class OpportunityScanStore:
 
     def close(self):
         self.engine.dispose()
+
+    def list(self, *, mode):
+        with self.engine.connect() as db:
+            ids = (
+                db.execute(
+                    select(self.table.c.id)
+                    .where(self.table.c.mode == mode)
+                    .order_by(self.table.c.id)
+                    .limit(101)
+                )
+                .scalars()
+                .all()
+            )
+        if len(ids) > 100:
+            raise ValueError("Scan inspection bound exceeded")
+        return tuple(self.get(i, mode=mode) for i in ids)

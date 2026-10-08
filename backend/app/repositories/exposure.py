@@ -27,6 +27,28 @@ class ExposureRepository:
                 )
             )
 
+    def list_original(self, mode, at):
+        """Immutable decision inputs, without get()'s current-time expiry projection."""
+        if mode not in {"DEMO", "LIVE"}:
+            raise ValueError("Explicit proposal mode required")
+        with self.database.sessions() as session:
+            rows = session.scalars(
+                select(ExposureProposalRow)
+                .where(ExposureProposalRow.data_mode == mode)
+                .order_by(ExposureProposalRow.id)
+                .limit(101)
+            ).all()
+            if len(rows) > 100:
+                raise ValueError("Proposal inspection bound exceeded")
+            result = []
+            for row in rows:
+                value = ExposureProposal.model_validate_json(row.payload)
+                if str(value.proposal_id) != row.id or value.data_mode != mode:
+                    raise ValueError("Proposal identity binding conflict")
+                if value.created_at <= at:
+                    result.append(value)
+        return tuple(result)
+
     def get(self, proposal_id: UUID, mode: str, now: datetime):
         if mode not in {"DEMO", "LIVE"}:
             raise ValueError("Explicit data mode required")

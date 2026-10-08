@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchTerminal } from '../services/terminal'
 import type { TerminalResult } from '../services/terminal'
 import { StatusBadge } from './StatusBadge'
+import { ScorecardAudit } from './ScorecardAudit'
 
 const value = (v: string | null | undefined) => v ?? 'Unavailable'
 const money = (v: string | null | undefined) => v === null || v === undefined ? 'Unavailable' : `$${v}`
@@ -11,11 +12,14 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
   const [input, setInput] = useState('')
   const [ticker, setTicker] = useState('')
   const [offset, setOffset] = useState(0)
+  const [evaluationOpen, setEvaluationOpen] = useState(false)
   const query = useQuery({ queryKey: ['terminal', mode, ticker, offset], queryFn: ({ signal }) => fetchTerminal(mode, ticker, offset, signal), retry: false })
   const data = query.isError || query.isFetching ? null : query.data
   return <section className="terminal" aria-label="Terminal analytics">
     <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / ANALYTICS</div><h1>Terminal</h1><p>Backend-authoritative evidence. Observation only; no trading actions.</p></div><button className="refresh-button" disabled={query.isFetching} onClick={() => { void query.refetch() }}>Refresh Terminal</button></div>
     <div className="connection-alert"><div><strong>{mode === 'DEMO' ? 'SIMULATED DATA — NOT LIVE MARKET DATA' : 'LIVE READ ONLY — CACHED PROVIDER DATA'}</strong><p>NO REAL FUNDS WILL MOVE · Production Trust and live execution remain blocked.</p></div></div>
+    <button className="refresh-button" aria-expanded={evaluationOpen} onClick={() => setEvaluationOpen(v => !v)}>Scorecard &amp; audit</button>
+    {evaluationOpen && <ScorecardAudit key={mode} mode={mode} />}
     <form className="terminal-filter" onSubmit={e => { e.preventDefault(); setOffset(0); setTicker(input.trim().toUpperCase()) }}>
       <label htmlFor="terminal-ticker">Underlying ticker</label><input id="terminal-ticker" value={input} maxLength={15} placeholder="All cached stocks" onChange={e => setInput(e.target.value)} /><button className="refresh-button">Apply filter</button>
     </form>

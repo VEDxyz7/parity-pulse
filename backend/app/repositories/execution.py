@@ -267,3 +267,26 @@ class ExecutionStore:
 
     def close(self):
         self.engine.dispose()
+
+    def history(self, execution_id, *, mode):
+        """Read authentic snapshots after the existing full-chain validator."""
+        head = self.get(execution_id, mode=mode)
+        if head.version > 500:
+            raise ValueError("Execution history inspection bound exceeded")
+        with self.lock, self.engine.connect() as db:
+            rows = (
+                db.execute(
+                    select(self.events.c.payload)
+                    .where(
+                        self.events.c.attempt == str(execution_id),
+                        self.events.c.version <= head.version,
+                    )
+                    .order_by(self.events.c.version)
+                )
+                .scalars()
+                .all()
+            )
+        values = tuple(ExecutionAttempt.model_validate_json(p) for p in rows)
+        if len(values) != head.version + 1 or values[-1] != head:
+            raise ValueError("Execution history changed during inspection")
+        return values

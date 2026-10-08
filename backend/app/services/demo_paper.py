@@ -68,6 +68,11 @@ class DemoPaperLedger:
                 raise LookupError("Unknown paper position")
             return PaperLifecycle.model_validate_json(self.rows[position_id])
 
+    def list(self):
+        """Validated snapshots for the evaluator; no fill/exit or clock advance."""
+        with self.lock:
+            return tuple(self.get(key) for key in sorted(self.rows, key=str))
+
     def _mandate(self, now):
         core = self.preparation.flow
         base = core.fixture.risk_inputs

@@ -58,6 +58,11 @@ class DemoOpportunityFlow:
         self._save(self.trust_results, result.assessment.assessment_id, result)
         return result
 
+    def snapshots(self):
+        """Read bounded historical analyses without treating expired proposals as live."""
+        with self.lock:
+            return tuple(value for value, _ in self.opportunities.values())
+
     def opportunity(self, assessment_id):
         trust, elapsed = self._read(self.trust_results, assessment_id)
         dataset = self.sandbox.datasets[trust.scenario_id]

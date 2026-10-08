@@ -26,6 +26,7 @@ from app.api.opportunity_scan import router as opportunity_scan_router
 from app.api.portfolio import autopilot_router
 from app.api.portfolio import router as portfolio_router
 from app.api.positions import router as positions_router
+from app.api.scorecard import router as scorecard_router
 from app.api.system import router
 from app.api.terminal import router as terminal_router
 from app.api.trust import router as trust_router
@@ -41,6 +42,7 @@ from app.repositories.opportunity_scan import OpportunityScanStore
 from app.repositories.portfolio import PortfolioStore
 from app.repositories.position import PositionStore
 from app.repositories.research import ResearchStore
+from app.repositories.scorecard import ScorecardStore
 from app.services.agentic_wallet import AgenticWalletAdapter
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
@@ -54,6 +56,7 @@ from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
 from app.services.portfolio import PortfolioService
 from app.services.portfolio_sources import CachedPortfolioSource
 from app.services.position import PositionService
+from app.services.scorecard import ScorecardService
 from app.services.terminal import TerminalService
 from app.services.trust import TrustService
 from app.utils.logging import configure_logging
@@ -229,6 +232,24 @@ def create_app(
                 if configured.runtime_mode == "DEMO"
                 else None
             )
+            app.state.scorecard_store = ScorecardStore(
+                None
+                if execution_directory is None
+                else Path(database_file).resolve().parent
+                / "scorecard/phase13"
+                / configured.data_mode
+            )
+            app.state.scorecard = ScorecardService(
+                app.state.scorecard_store,
+                app.state.terminal,
+                app.state.exposure.repository,
+                app.state.opportunity_scan_store,
+                clock=lambda: datetime.now(UTC),
+                secrets=configured.redaction_values(),
+                demo_flow=app.state.demo_opportunity,
+                paper=app.state.demo_paper,
+                demo_preparation=app.state.demo_preparation,
+            )
             for client in app.state.data_layer.clients:
                 client.run_id = app.state.run_id
             app.state.demo_fixture = load_demo_fixture() if configured.data_mode == "DEMO" else None
@@ -259,6 +280,9 @@ def create_app(
             if llm_transport is not None:
                 await llm_transport.close()
             app.state.ready = False
+            if getattr(app.state, "scorecard_store", None) is not None:
+                app.state.scorecard_store.close()
+            app.state.scorecard = None
             app.state.demo_fixture = None
             if getattr(app.state, "data_layer", None) is not None:
                 app.state.data_layer.close()
@@ -341,6 +365,7 @@ def create_app(
     app.include_router(portfolio_router)
     app.include_router(autopilot_router)
     app.include_router(terminal_router)
+    app.include_router(scorecard_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)

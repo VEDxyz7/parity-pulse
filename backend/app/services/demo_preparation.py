@@ -25,7 +25,22 @@ class DemoPreparationFlow:
         self.quotes = OrderedDict()
         self.transactions = OrderedDict()
         self.simulations = OrderedDict()
+        self.quote_attempts = OrderedDict()
+        self.preparation_attempts = OrderedDict()
         self.market_snapshots = {k: digest(v) for k, v in flow.sandbox.datasets.items()}
+
+    def snapshots(self):
+        """Bounded read-only artifacts for audit; expiry never grants execution authority."""
+        with self.flow.lock:
+            return tuple(
+                tuple(v for v, _ in cache.values())
+                for cache in (
+                    self.flow.risks,
+                    self.quote_attempts,
+                    self.preparation_attempts,
+                    self.simulations,
+                )
+            )
 
     def context(self, scenario):
         return digest(
@@ -109,6 +124,7 @@ class DemoPreparationFlow:
         )
         if result.status == "QUOTED":
             self.flow._save(self.quotes, quote.quote_id, result)
+        self.flow._save(self.quote_attempts, digest(result), result)
         return result
 
     def prepare(self, quote_id):
@@ -139,6 +155,7 @@ class DemoPreparationFlow:
         )
         if transaction is not None:
             self.flow._save(self.transactions, transaction.transaction_id, prepared)
+        self.flow._save(self.preparation_attempts, digest(prepared), prepared)
         return prepared
 
     def simulate(self, transaction_id):

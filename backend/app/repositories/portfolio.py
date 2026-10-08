@@ -366,3 +366,19 @@ class PortfolioStore:
 
     def close(self):
         self.engine.dispose()
+
+    def list_plans(self, *, mode):
+        with self.lock, self.engine.connect() as db:
+            ids = (
+                db.execute(
+                    select(self.plans.c.plan_id)
+                    .where(self.plans.c.mode == mode)
+                    .order_by(self.plans.c.plan_id)
+                    .limit(101)
+                )
+                .scalars()
+                .all()
+            )
+        if len(ids) > 100:
+            raise ValueError("Portfolio inspection bound exceeded")
+        return tuple(self.get(i, mode=mode) for i in ids)
