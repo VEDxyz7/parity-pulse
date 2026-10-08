@@ -5,7 +5,7 @@ import threading
 from uuid import uuid4
 
 from app.clients.common import ProviderError
-from app.clients.execution_gateway import DryRunExecutionGateway
+from app.clients.execution_gateway import AgenticWalletCliGateway, DryRunExecutionGateway
 from app.models.execution import ExecutionAttempt, ExecutionControls, QuoteRequest, fingerprint
 from app.services.aggregator_quote import AggregatorQuoteService
 from app.services.execution_builders import ApprovalService, ExecutionRouteBuilder
@@ -18,7 +18,7 @@ logger = logging.getLogger("parity.execution")
 
 
 class SafetyExecutionService:
-    def __init__(self, provider, store, controls, *, clock):
+    def __init__(self, provider, store, controls, *, clock, wallet_adapter=None):
         self.provider, self.store, self.clock = provider, store, clock
         self.controls = ExecutionControls.model_validate_json(controls.model_dump_json())
         self.risk = RiskEngine()
@@ -28,7 +28,11 @@ class SafetyExecutionService:
         self.approvals = ApprovalService()
         self.simulator = ExecutionSimulationService(provider)
         self.machine = ExecutionStateMachine()
-        self.gateway = DryRunExecutionGateway(self.controls)
+        self.gateway = (
+            AgenticWalletCliGateway(self.controls, wallet_adapter)
+            if wallet_adapter is not None
+            else DryRunExecutionGateway(self.controls)
+        )
         self.lock = threading.RLock()
 
     def _save(self, previous, result):

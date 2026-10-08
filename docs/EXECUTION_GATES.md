@@ -1,5 +1,36 @@
 # Development and execution capability gates
 
+## Master Phase 9 — Agentic Wallet, October 8, 2026
+
+**PHASE_9_IMPLEMENTATION=PASS** verifies the typed read adapter, unavailable-state handling,
+DRY_RUN gateway integration and read-only reconciliation without real capital. Actual `baw`
+runtime/authentication remains UNAVAILABLE / NOT_VERIFIED. [Phase 9 report](PHASE_9_REPORT.md)
+and [capabilities](AGENTIC_WALLET_CAPABILITIES.md) specify exact evidence levels.
+
+```text
+DATA_GATE=PASS
+DRY_RUN_GATE=PASS
+TRUST_GATE=BLOCKED
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST
+SWAP_LIVE_GATE=BLOCKED
+RFQ_LIVE_GATE=BLOCKED
+AGENTIC_WALLET_LIVE_GATE=BLOCKED
+```
+
+Every existing gate purpose, prerequisite, threshold and safety requirement is unchanged.
+The public app has no connected CLI worker or wallet mutation API. The gateway is DRY_RUN-only
+and cannot sign/submit/broadcast, even with successful synthetic wallet checks or AUTONOMOUS
+preview configuration. Wallet-only fixture PASS never passes the wallet LIVE gate.
+
+Future wallet LIVE requires actual controlled-runtime/session/chain/token/security verification,
+authoritative state and transaction-specific confirmation, exact preview/execution equivalence and
+all Phase 8 hard controls. SWAP gas/nonce/effect coverage and RFQ final-settlement equivalence
+remain unresolved. Real Trust evidence remains 0/30 baseline, 0/30 model and 0/3 analogues.
+No live gate is silently advanced by the presence of an adapter.
+
+Phase 10 was NOT started. Earlier “next phase/not started” statements below remain dated
+implementation checkpoints. `docs/MASTER_SPEC.md` remains the unchanged sole authority.
+
 ## Master Phase 8 — Safety and Execution, October 8, 2026
 
 **PHASE_8_IMPLEMENTATION=PASS** certifies deterministic safety infrastructure and fail-closed

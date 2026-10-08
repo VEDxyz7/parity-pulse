@@ -1,5 +1,19 @@
 # API matrix — contracts and implementation through Phase 2
 
+## Master Phase 9 — Agentic Wallet read adapter, October 8, 2026
+
+The current official Skills Hub mechanism is `binance-agentic-wallet` / `baw`, separate from
+ordinary Web3 Wallet REST. Reviewed skill version 1.12.0 requires CLI 1.10.0. Local runtime
+is **UNAVAILABLE**, not authenticated capability PASS. Exact commands, schemas, evidence levels,
+source discrepancies and limitations are in the [wallet capability matrix](AGENTIC_WALLET_CAPABILITIES.md)
+and [Phase 9 report](PHASE_9_REPORT.md).
+
+Typed read-only commands cover status, chains, address, balances, settings, lock, bounded market
+order/history records and indicative quotes. No auth, preview, signing, transfer, swap, cancellation,
+settings update or submission command is admitted. No new public wallet endpoint or invented remote
+Agentic Wallet interface exists. All production gates remain unchanged; Phase 10 was NOT started.
+Earlier rows retain their dated documentation/runtime evidence and are not overwritten.
+
 ## Master Phase 8 safety contracts — October 8, 2026
 
 Official [Trading API](https://web3.binance.com/en/dev-docs/catalog/web3-wallet/api/rest-api/trading-api),

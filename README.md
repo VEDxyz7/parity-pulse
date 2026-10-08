@@ -1,5 +1,18 @@
 # Parity Pulse
 
+Master Phase 9 — Agentic Wallet: **IMPLEMENTATION PASS; local runtime UNAVAILABLE**.
+The official `baw` read adapter, normalized wallet contracts, DRY_RUN gateway checks and
+read-only reconciliation reuse Phase 8 safety infrastructure. No wallet executor is enabled.
+See [Phase 9 report](docs/PHASE_9_REPORT.md) and
+[capability matrix](docs/AGENTIC_WALLET_CAPABILITIES.md).
+
+From the repository root, `.venv/bin/python scripts/inspect-wallet.py --read-only` opts into
+installed official CLI reads and prints only sanitized capability metadata. It currently returns
+`BAW_UNAVAILABLE`; it never installs, authenticates, signs or submits an order. The public app
+does not spawn a CLI worker. DATA/DRY_RUN remain PASS, TRUST remains BLOCKED, OPPORTUNITY
+remains BLOCKED_BY_TRUST, and all three LIVE gates remain BLOCKED. Phase 10 was NOT started.
+The dated milestones below remain historical checkpoints.
+
 Master Phase 8 — Safety and Execution: **IMPLEMENTATION PASS**. Deterministic Risk,
 funding/base-unit checks, Binance quote/build contracts, approvals, fingerprints, simulation,
 durable state/status tracking and a fail-closed ExecutionGateway are implemented as host-only

@@ -144,3 +144,46 @@ class DryRunExecutionGateway(ExecutionGateway):
             < confirmation.expires_at
             <= attempt.quote.expires_at
         )
+
+
+class AgenticWalletCliGateway(DryRunExecutionGateway):
+    """Read-only wallet checks around the existing hard-control gateway.
+
+    No wallet executor exists. No preview, signing, swap or submit fallback is possible.
+    """
+
+    def __init__(self, controls, adapter):
+        super().__init__(controls)
+        self.adapter = adapter
+
+    def dry_run(self, attempt, *, now, funding_state):
+        from app.models.wallet import WalletDryRunResult
+        from app.services.agentic_wallet import WalletSafetyChecks
+
+        snapshot = self.adapter.snapshot()
+        evaluated = max(now, self.adapter.clock())
+        check = WalletSafetyChecks().evaluate(snapshot, attempt, funding_state, now=evaluated)
+        reasons = super().submit(attempt, now=evaluated, funding_state=funding_state)
+        return WalletDryRunResult(
+            execution_id=attempt.execution_id,
+            request_id=attempt.request_id,
+            decision_id=attempt.decision_id,
+            data_mode=attempt.data_mode,
+            evaluated_at=evaluated,
+            route_fingerprint=check.route_fingerprint,
+            wallet=check,
+            reasons=tuple(
+                dict.fromkeys(
+                    (
+                        *reasons,
+                        *check.reasons,
+                        "WALLET_EXECUTION_DISABLED",
+                        "WALLET_EXACT_PREVIEW_NOT_VERIFIED",
+                        "WALLET_QUOTA_RESET_TIMEZONE_NOT_VERIFIED",
+                    )
+                )
+            ),
+        )
+
+    def submit(self, attempt, *, now, funding_state):
+        return self.dry_run(attempt, now=now, funding_state=funding_state).reasons

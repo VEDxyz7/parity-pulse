@@ -1,0 +1,393 @@
+{
+  "phase": "MASTER_PHASE_9_AGENTIC_WALLET",
+  "verified_at_utc": "2026-10-07T22:01:44.157183+00:00",
+  "required_cli_version": "1.10.0",
+  "skill_version": "1.12.0",
+  "mechanism": "OFFICIAL_BINANCE_SKILLS_HUB_BAW_CLI_NOT_WALLET_REST",
+  "local_inventory": {
+    "baw_on_path": null,
+    "npm_global_package": null,
+    "node_version": "v24.12.0",
+    "candidate_config_dirs": {
+      "~/.baw": false,
+      "~/.config/agentic-wallet": false
+    },
+    "inventory_scope": "Bounded inspected paths only; not exhaustive disk search"
+  },
+  "actual_read_diagnostic": {
+    "command": ".venv/bin/python scripts/inspect-wallet.py --read-only",
+    "result": {
+      "mode": "LIVE_READ_ONLY",
+      "source": "UNAVAILABLE",
+      "capability_status": "UNAVAILABLE",
+      "connection": "UNKNOWN",
+      "requested_at": "2026-10-07T21:47:13.455777+00:00",
+      "received_at": "2026-10-07T21:47:13.455878+00:00",
+      "bsc_support_observed": false,
+      "errors": [
+        "BAW_UNAVAILABLE"
+      ],
+      "limitations": [
+        "READ_WINDOW_NOT_PROVIDER_OBSERVATION",
+        "BALANCES_BELOW_0_01_USD_OMITTED",
+        "RESTRICTED_TOKEN_LIST_NOT_EXPOSED",
+        "QUOTA_RESET_TIMEZONE_NOT_DOCUMENTED",
+        "SESSION_READS_NOT_ATOMIC",
+        "LIVE_EXECUTION_BLOCKED"
+      ],
+      "live_authorized": false
+    },
+    "cli_processes_spawned": 0,
+    "authenticated_wallet_reads": 0
+  },
+  "official_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/SKILL.md",
+      "sha256": "49be13d839703bf6b1565fa2ea487f40836cd490127753e801e9764bcc7fd746",
+      "verification": "DOCUMENTATION_ONLY"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/references/external-sign.md",
+      "sha256": "f4aea6e040b7396d69f28d78fa657da86a491958346f00a801f8502869182fd9",
+      "verification": "DOCUMENTATION_ONLY"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/references/market-order.md",
+      "sha256": "11e9c1149e897b90abec06fc6e062653de1c26235271dd04bf0c7d10c9bd1b6b",
+      "verification": "DOCUMENTATION_ONLY"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/references/preflight.md",
+      "sha256": "6b2fedcdba5d027ce8d542391f0730f06a3ce0e23cd31c83e8895b7833bc3730",
+      "verification": "DOCUMENTATION_ONLY"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/references/security.md",
+      "sha256": "d09629047175ab8700031e3d60f37cfa492684e039033797f16f59dc3cbd3d18",
+      "verification": "DOCUMENTATION_ONLY"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/references/wallet-setting.md",
+      "sha256": "53590f678c1095ee5a7cfc8264036ca2a151f39e7fe5a0b51cff203204b0324a",
+      "verification": "DOCUMENTATION_ONLY"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/binance/binance-skills-hub/main/skills/binance-web3/binance-agentic-wallet/references/wallet-view.md",
+      "sha256": "ff3186653d872222badde5e68a02558227dd61b94b056471475c61fb0d5cb148",
+      "verification": "DOCUMENTATION_ONLY"
+    }
+  ],
+  "capabilities": {
+    "wallet_status": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "address": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "balances": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "security_settings": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "supported_chains": {
+      "actual_status": "NOT_VERIFIED",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "transaction_history": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "token_scope": {
+      "actual_status": "NOT_VERIFIED",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "daily_quota": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "market_order_status": {
+      "actual_status": "UNAVAILABLE",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "quote": {
+      "actual_status": "NOT_VERIFIED",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "tokenized_stock": {
+      "actual_status": "NOT_VERIFIED",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "dry_run": {
+      "actual_status": "FIXTURE_VERIFIED",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    },
+    "live": {
+      "actual_status": "BLOCKED",
+      "evidence_level": "DOCUMENTATION_AND_SYNTHETIC_CONTRACT_TESTS_ONLY",
+      "live_authorized": false
+    }
+  },
+  "synthetic_checks": {
+    "label": "SYNTHETIC_PROTOCOL_FIXTURES_NOT_REAL_WALLET_EVIDENCE",
+    "snapshot_capability": "FIXTURE_VERIFIED",
+    "snapshot_limitations": [
+      "READ_WINDOW_NOT_PROVIDER_OBSERVATION",
+      "BALANCES_BELOW_0_01_USD_OMITTED",
+      "RESTRICTED_TOKEN_LIST_NOT_EXPOSED",
+      "QUOTA_RESET_TIMEZONE_NOT_DOCUMENTED",
+      "SESSION_READS_NOT_ATOMIC",
+      "LIVE_EXECUTION_BLOCKED"
+    ],
+    "dry_run": {
+      "execution_id": "6393a340-d85a-4463-bbc0-5924586053bd",
+      "decision_id": "test-decision",
+      "request_id": "57235b7a-dfbc-420c-94cf-2363e6307f78",
+      "route_fingerprint": "1d611a6994b7b31076436de10f57cc496ba4042c0980fe34ad979a46ae70238b",
+      "evaluated_at": "2026-10-08T15:00:00Z",
+      "data_mode": "DEMO",
+      "wallet": {
+        "status": "PASS",
+        "data_mode": "DEMO",
+        "evaluated_at": "2026-10-08T15:00:00Z",
+        "snapshot_digest": "189cacbd8291736be2a719b51f1d1257efef6d5daed2fbb1685aa27e91ad3712",
+        "route_fingerprint": "1d611a6994b7b31076436de10f57cc496ba4042c0980fe34ad979a46ae70238b",
+        "checks": [
+          {
+            "code": "WALLET_AVAILABLE",
+            "passed": true
+          },
+          {
+            "code": "WALLET_MODE",
+            "passed": true
+          },
+          {
+            "code": "WALLET_READ_FRESH",
+            "passed": true
+          },
+          {
+            "code": "WALLET_BSC_SUPPORTED",
+            "passed": true
+          },
+          {
+            "code": "WALLET_IDENTITY",
+            "passed": true
+          },
+          {
+            "code": "WALLET_UNLOCKED",
+            "passed": true
+          },
+          {
+            "code": "WALLET_PENDING_RECONCILED",
+            "passed": true
+          },
+          {
+            "code": "WALLET_SETTINGS_AVAILABLE",
+            "passed": true
+          },
+          {
+            "code": "WALLET_SESSION_VALID",
+            "passed": true
+          },
+          {
+            "code": "WALLET_TOKEN_SCOPE_VERIFIED",
+            "passed": true
+          },
+          {
+            "code": "WALLET_QUOTA_DATE_CURRENT",
+            "passed": true
+          },
+          {
+            "code": "WALLET_SPENDING_LIMIT",
+            "passed": true
+          },
+          {
+            "code": "WALLET_DEVELOPER_LIMIT",
+            "passed": true
+          },
+          {
+            "code": "WALLET_DEVELOPER_AVAILABLE",
+            "passed": true
+          },
+          {
+            "code": "WALLET_CONFIRMATION_POLICY",
+            "passed": true
+          },
+          {
+            "code": "WALLET_FUNDING_BALANCE_MATCH",
+            "passed": true
+          },
+          {
+            "code": "WALLET_NATIVE_BALANCE_MATCH",
+            "passed": true
+          }
+        ],
+        "reasons": [],
+        "live_authorized": false
+      },
+      "reasons": [
+        "LIVE_EQUIVALENCE_NOT_VERIFIED",
+        "EXPLICIT_USER_CONFIRMATION_REQUIRED",
+        "SWAP_LIVE_GATE_BLOCKED",
+        "DRY_RUN_STOP_NO_EXECUTION",
+        "LIVE_TRADING_DISABLED",
+        "AGENTIC_WALLET_LIVE_GATE_BLOCKED",
+        "WALLET_EXECUTION_DISABLED",
+        "WALLET_EXACT_PREVIEW_NOT_VERIFIED",
+        "WALLET_QUOTA_RESET_TIMEZONE_NOT_VERIFIED"
+      ],
+      "execution_ready": false,
+      "signed": false,
+      "broadcast": false,
+      "funds_moved": false
+    },
+    "restricted_token_scope": {
+      "status": "BLOCKED",
+      "data_mode": "DEMO",
+      "evaluated_at": "2026-10-08T15:00:00Z",
+      "snapshot_digest": "3814f6fe0a057daa0eb9ace9df608c1103ab8b15f20d4284e8b3206c952e0140",
+      "route_fingerprint": "1d611a6994b7b31076436de10f57cc496ba4042c0980fe34ad979a46ae70238b",
+      "checks": [
+        {
+          "code": "WALLET_AVAILABLE",
+          "passed": true
+        },
+        {
+          "code": "WALLET_MODE",
+          "passed": true
+        },
+        {
+          "code": "WALLET_READ_FRESH",
+          "passed": true
+        },
+        {
+          "code": "WALLET_BSC_SUPPORTED",
+          "passed": true
+        },
+        {
+          "code": "WALLET_IDENTITY",
+          "passed": true
+        },
+        {
+          "code": "WALLET_UNLOCKED",
+          "passed": true
+        },
+        {
+          "code": "WALLET_PENDING_RECONCILED",
+          "passed": true
+        },
+        {
+          "code": "WALLET_SETTINGS_AVAILABLE",
+          "passed": true
+        },
+        {
+          "code": "WALLET_SESSION_VALID",
+          "passed": true
+        },
+        {
+          "code": "WALLET_TOKEN_SCOPE_VERIFIED",
+          "passed": false
+        },
+        {
+          "code": "WALLET_QUOTA_DATE_CURRENT",
+          "passed": true
+        },
+        {
+          "code": "WALLET_SPENDING_LIMIT",
+          "passed": true
+        },
+        {
+          "code": "WALLET_DEVELOPER_LIMIT",
+          "passed": true
+        },
+        {
+          "code": "WALLET_DEVELOPER_AVAILABLE",
+          "passed": true
+        },
+        {
+          "code": "WALLET_CONFIRMATION_POLICY",
+          "passed": true
+        },
+        {
+          "code": "WALLET_FUNDING_BALANCE_MATCH",
+          "passed": true
+        },
+        {
+          "code": "WALLET_NATIVE_BALANCE_MATCH",
+          "passed": true
+        }
+      ],
+      "reasons": [
+        "WALLET_TOKEN_SCOPE_VERIFIED"
+      ],
+      "live_authorized": false
+    },
+    "readonly_operations_tested": [
+      "cli-check --required-version",
+      "market-order list",
+      "wallet address",
+      "wallet balance",
+      "wallet chains",
+      "wallet settings",
+      "wallet status",
+      "wallet tx-history",
+      "wallet tx-lock"
+    ],
+    "provider_account_access_verified": false
+  },
+  "activity": {
+    "real_wallet_read_commands": 0,
+    "auth_commands": 0,
+    "installs": 0,
+    "signatures": 0,
+    "broadcasts": 0,
+    "order_submissions": 0,
+    "wallet_mutations": 0,
+    "funds_moved": 0
+  },
+  "continuation_recheck": {
+    "verified_at_utc": "2026-10-08T01:57:58.734830+00:00",
+    "command": ".venv/bin/python scripts/inspect-wallet.py --read-only",
+    "result": {
+      "mode": "LIVE_READ_ONLY",
+      "source": "UNAVAILABLE",
+      "capability_status": "UNAVAILABLE",
+      "connection": "UNKNOWN",
+      "requested_at": "2026-10-08T01:57:58.867337+00:00",
+      "received_at": "2026-10-08T01:57:58.867438+00:00",
+      "bsc_support_observed": false,
+      "errors": [
+        "BAW_UNAVAILABLE"
+      ],
+      "limitations": [
+        "READ_WINDOW_NOT_PROVIDER_OBSERVATION",
+        "BALANCES_BELOW_0_01_USD_OMITTED",
+        "RESTRICTED_TOKEN_LIST_NOT_EXPOSED",
+        "QUOTA_RESET_TIMEZONE_NOT_DOCUMENTED",
+        "SESSION_READS_NOT_ATOMIC",
+        "LIVE_EXECUTION_BLOCKED"
+      ],
+      "live_authorized": false
+    },
+    "cli_processes_spawned": 0,
+    "authenticated_wallet_reads": 0,
+    "npm_global_inventory": "PACKAGE_NOT_PRESENT_IN_INSPECTED_GLOBAL_INVENTORY",
+    "official_manifest_version_unchanged": true
+  }
+}

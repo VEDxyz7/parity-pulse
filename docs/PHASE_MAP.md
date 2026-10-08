@@ -1,5 +1,22 @@
 # Product phases and engineering stages
 
+## Master Phase 9 — Agentic Wallet, October 8, 2026
+
+**PHASE_9_IMPLEMENTATION=PASS; actual wallet runtime UNAVAILABLE.** This authorized engineering
+milestone adds official CLI read contracts, typed normalization, wallet hard-control checks and
+DRY_RUN/reconciliation integration with Phase 8. [Phase 9 report](PHASE_9_REPORT.md) records
+the exact scope, verification and external prerequisites.
+
+Canonical Trust/data eligibility remains blocked; this is not a canonical product Trust PASS.
+DATA_GATE=PASS; DRY_RUN_GATE=PASS; TRUST_GATE=BLOCKED; OPPORTUNITY_GATE=BLOCKED_BY_TRUST;
+SWAP_LIVE_GATE=BLOCKED; RFQ_LIVE_GATE=BLOCKED; AGENTIC_WALLET_LIVE_GATE=BLOCKED.
+The canonical/engineering mapping and historical Data Layer evidence below are preserved.
+
+Master Phase 10 — Position Management was NOT started. No persistent position management,
+post-open exit engine or live position monitoring was added. Future work needs separate authorization;
+all unresolved data, wallet and execution-safety prerequisites still apply. Earlier dated next-phase
+statements are historical snapshots. The sole `docs/MASTER_SPEC.md` remains unchanged.
+
 ## Master Phase 8 — Safety and Execution, October 8, 2026
 
 **PHASE_8_IMPLEMENTATION=PASS.** This separately authorized master engineering milestone

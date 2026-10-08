@@ -1,5 +1,32 @@
 # Architecture decision record — through Phase 2
 
+## Master Phase 9 — controlled wallet reads and DRY_RUN, October 8, 2026
+
+**Implementation PASS; actual CLI runtime UNAVAILABLE; production gates unchanged.**
+[Phase 9 report](PHASE_9_REPORT.md) and [capability matrix](AGENTIC_WALLET_CAPABILITIES.md)
+separate actual observations from official documentation and synthetic tests.
+
+`BawReadOnlyClient` is a closed command/argument transport with no shell, bounded time/output,
+sanitized errors and exact reviewed version checks. `AgenticWalletAdapter` produces immutable
+typed snapshot/order/history/indicative-quote results. Public startup injects a client-less adapter;
+only an explicitly controlled local host/diagnostic can opt into real CLI reads. No authentication,
+secret store, remote REST interface, public wallet API or mutation transport is added.
+
+`AgenticWalletCliGateway` extends the existing DRY_RUN gateway and adds wallet identity, chain,
+balance, quota, token-scope, session, confirmation and pending-state checks. It reuses all Phase 8
+Risk/Funding/Quote/Fingerprint/Simulation/Approval checks and always blocks execution. Snapshots
+remain transient; CLI token marks do not become independently timestamped funding/equity prices.
+
+`WalletReconciler` reads existing mode-scoped attempts with their original IDs/CAS versions.
+Only the Phase 8 settlement tracker can confirm exact terminal execution; its optional independent
+corroboration guard keeps conflicts UNKNOWN. Wallet status/FINISHED/hash alone never confirms.
+Timeouts and restarts create no new order. No position persistence, monitoring or exit engine is added.
+
+DEMO fixtures cannot enter LIVE_READ_ONLY. Frontend, research, Trust, routing, agents, Opportunity,
+Risk arithmetic and the full paper lifecycle remain unchanged. DATA/DRY_RUN=PASS; TRUST=BLOCKED;
+OPPORTUNITY=BLOCKED_BY_TRUST; all three LIVE gates=BLOCKED. Phase 10 was NOT started.
+Earlier architecture sections remain historical snapshots; the sole master specification is unchanged.
+
 ## Master Phase 8 — host-only safety and execution, October 8, 2026
 
 **Implementation PASS; all production gates unchanged.** [Phase 8 report](PHASE_8_REPORT.md)

@@ -14,7 +14,9 @@ class ExecutionStatusTracker:
         self.provider, self.store, self.sleep = provider, store, sleep
         self.machine = ExecutionStateMachine()
 
-    def reconcile(self, attempt, *, now):
+    def reconcile(self, attempt, *, now, expected_terminal=None):
+        if expected_terminal not in {None, "SUCCESS", "FAILED"}:
+            raise ValueError("Invalid independent terminal corroboration")
         attempt = ExecutionAttempt.model_validate_json(attempt.model_dump_json())
         if attempt.state in TERMINAL:
             return attempt
@@ -116,6 +118,14 @@ class ExecutionStatusTracker:
         except (ProviderError, ValueError, TypeError, KeyError):
             target = "EXECUTION_UNKNOWN"
             fields = {"reason_codes": ("STATUS_UNRESOLVED_NO_NEW_ORDER",)}
+        if (
+            expected_terminal is not None
+            and target in TERMINAL
+            and target
+            != ("EXECUTION_CONFIRMED" if expected_terminal == "SUCCESS" else "EXECUTION_FAILED")
+        ):
+            target = "EXECUTION_UNKNOWN"
+            fields = {"reason_codes": ("CONFLICTING_EXTERNAL_TERMINAL_EVIDENCE",)}
         if target == attempt.state:
             # Repeated pending/unknown reads remain recorded, not illegal duplicate transitions.
             result = ExecutionAttempt.model_validate(

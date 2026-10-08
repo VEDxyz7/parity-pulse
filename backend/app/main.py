@@ -33,6 +33,7 @@ from app.demo import load_demo_fixture
 from app.models.execution import ExecutionControls
 from app.repositories.execution import ExecutionStore
 from app.repositories.opportunity_scan import OpportunityScanStore
+from app.services.agentic_wallet import AgenticWalletAdapter
 from app.services.data_layer import DataLayer
 from app.services.demo_opportunity import DemoOpportunityFlow
 from app.services.demo_paper import DemoPaperLedger
@@ -136,6 +137,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 app.state.execution_store,
                 ExecutionControls(data_mode=configured.data_mode),
                 clock=lambda: datetime.now(UTC),
+                wallet_adapter=AgenticWalletAdapter(data_mode=configured.data_mode),
             )
             app.state.demo_sandbox = (
                 DemoTrustSandbox() if configured.runtime_mode == "DEMO" else None
