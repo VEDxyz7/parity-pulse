@@ -1,0 +1,16 @@
+{
+  "name": "parity-pulse-agent-studio",
+  "private": true,
+  "type": "module",
+  "description": "BNB Agent Studio sidecar: Altana session-key execution + x402 paid parity signals",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node server.mjs",
+    "grant-session": "node grant-session.mjs"
+  },
+  "dependencies": {
+    "@altananetwork/sdk": "0.9.0",
+    "@altananetwork/x402-server": "0.2.0",
+    "viem": "2.57.4"
+  }
+}

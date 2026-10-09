@@ -22,6 +22,7 @@ READ_OPERATIONS = {
         "rwa/underlying-profile",
         "rwa/tokens",
         "rwa/underlying-market",
+        "token/top-liquidity",
     },
     "POST": {"price", "price-info", "token/basic-info"},
 }

@@ -37,11 +37,14 @@ class RiskEngine:
         times = (e.token_observed_at, e.equity_observed_at, e.evidence_observed_at)
         check("DATA_FRESHNESS", all(0 <= (now - t).total_seconds() <= 120 for t in times))
         check("TIMESTAMP_ALIGNMENT", abs((times[0] - times[1]).total_seconds()) <= 30)
-        check("TRUST_REQUIRED", e.trust_state in ("NORMAL", "LIKELY_INFORMATION"))
+        # Without Trust (configured rebalance only) the Trust-history checks do not apply;
+        # every financial, liquidity, freshness and wallet limit below still does.
+        trust = e.trust_required
+        check("TRUST_REQUIRED", not trust or e.trust_state in ("NORMAL", "LIKELY_INFORMATION"))
         check(
             "OPPORTUNITY_TRUST", e.purpose != "OPPORTUNITY" or e.trust_state == "LIKELY_INFORMATION"
         )
-        check("PRODUCTION_TRUST_GATE", e.data_mode == "DEMO")
+        check("PRODUCTION_TRUST_GATE", not trust or e.data_mode == "DEMO")
         check("PRODUCTION_OPPORTUNITY_GATE", e.purpose != "OPPORTUNITY" or e.data_mode == "DEMO")
         stress, maximum = None, None
         if c is not None:
@@ -63,7 +66,8 @@ class RiskEngine:
             )
             check(
                 "LIQUIDITY_PERCENTILE",
-                e.liquidity_usd is not None
+                not trust
+                or e.liquidity_usd is not None
                 and e.liquidity_p50_usd is not None
                 and e.liquidity_usd >= e.liquidity_p50_usd,
             )

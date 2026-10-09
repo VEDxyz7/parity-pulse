@@ -7,9 +7,9 @@ export interface SystemStatus {
   runtime_mode?: 'DEMO'
   environment: 'development' | 'test' | 'production'
   data_mode: 'DEMO' | 'LIVE_READ_ONLY'
-  execution_mode: 'DRY_RUN'
-  approval_mode: 'PROPOSE_ONLY'
-  live_trading_enabled: false
+  execution_mode: 'DRY_RUN' | 'LIVE'
+  approval_mode: 'PROPOSE_ONLY' | 'AUTONOMOUS'
+  live_trading_enabled: boolean
   require_simulation: true
   database_status: 'connected' | 'unavailable'
   service_version: string

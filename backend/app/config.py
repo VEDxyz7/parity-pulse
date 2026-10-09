@@ -1,5 +1,6 @@
-"""Typed startup configuration; live execution remains unavailable in every runtime."""
+"""Typed startup configuration; live execution requires an explicit, capped, multi-flag opt-in."""
 
+from decimal import Decimal
 from pathlib import Path
 from typing import Literal
 
@@ -29,6 +30,19 @@ class Settings(BaseSettings):
     database_url: str = f"sqlite:///{ROOT_DIR / 'data' / 'parity-pulse.db'}"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     postopen_exit_minutes: int = Field(default=10, ge=1, le=120)
+    # Live rebalance execution: every flag checked in non_live_only must agree before any order.
+    live_max_notional_usd: Decimal | None = Field(default=None, gt=0, le=1000)
+    live_max_slippage_bps: int = Field(default=100, ge=1, le=500)
+    trust_required_for_rebalance: bool = True
+    equity_reference_source: Literal["MASSIVE", "BINANCE_PERP_INDEX"] = "MASSIVE"
+    # POSITIONS: Phase 10 journal is the holdings authority. WALLET: on-chain balances are.
+    portfolio_inventory: Literal["POSITIONS", "WALLET"] = "POSITIONS"
+    live_wallet_address: str | None = Field(default=None, pattern=r"^0x[0-9a-fA-F]{40}$")
+    live_signer: Literal["LOCAL_KEY", "AGENTIC_WALLET", "ALTANA"] = "LOCAL_KEY"
+    altana_sidecar_url: str = Field(default="http://127.0.0.1:8787", pattern=r"^http://127\.0\.0\.1:")
+    sidecar_token: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    live_signer_private_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    bsc_rpc_url: str = Field(default="https://bsc-dataseed.bnbchain.org", pattern=r"^https://")
 
     binance_web3_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     binance_web3_secret_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
@@ -47,6 +61,7 @@ class Settings(BaseSettings):
     @field_validator(
         "live_trading_enabled",
         "require_simulation",
+        "trust_required_for_rebalance",
         "llm_enabled",
         "llm_structured_output",
         mode="before",
@@ -64,6 +79,8 @@ class Settings(BaseSettings):
         "binance_web3_secret_key",
         "massive_api_key",
         "llm_api_key",
+        "live_signer_private_key",
+        "sidecar_token",
         mode="before",
     )
     @classmethod
@@ -107,13 +124,33 @@ class Settings(BaseSettings):
             raise ValueError("Enabled LLM requires explicit provider/model/base URL")
         if self.runtime_mode == "DEMO" and self.data_mode != "DEMO":
             raise ValueError("DEMO sandbox requires explicit DEMO data mode")
-        if self.execution_mode != "DRY_RUN" or self.live_trading_enabled:
-            raise ValueError("LIVE execution is blocked in Phase 1")
-        if self.approval_mode != "PROPOSE_ONLY":
-            raise ValueError("Phase 1 requires PROPOSE_ONLY")
+        live = self.execution_mode == "LIVE"
+        if (live or self.live_trading_enabled or self.approval_mode != "PROPOSE_ONLY") and not (
+            live
+            and self.live_trading_enabled
+            and self.runtime_mode == "LIVE"
+            and self.data_mode == "LIVE_READ_ONLY"
+            and self.live_max_notional_usd is not None
+        ):
+            raise ValueError(
+                "LIVE execution requires EXECUTION_MODE=LIVE, LIVE_TRADING_ENABLED=true, "
+                "RUNTIME_MODE=LIVE, DATA_MODE=LIVE_READ_ONLY and LIVE_MAX_NOTIONAL_USD"
+            )
         if not self.require_simulation:
             raise ValueError("Simulation cannot be disabled")
+        if live and self.portfolio_inventory != "WALLET":
+            raise ValueError("LIVE execution is wallet-inventory rebalancing only")
+        if live and self.live_signer == "LOCAL_KEY" and self.live_signer_private_key is None:
+            raise ValueError("LIVE LOCAL_KEY signer requires LIVE_SIGNER_PRIVATE_KEY")
+        if live and self.live_signer == "ALTANA" and self.sidecar_token is None:
+            raise ValueError("LIVE ALTANA signer requires SIDECAR_TOKEN")
+        if self.portfolio_inventory == "WALLET" and self.data_mode != "LIVE_READ_ONLY":
+            raise ValueError("Wallet inventory requires LIVE_READ_ONLY data")
         return self
+
+    @property
+    def live_execution(self) -> bool:
+        return self.execution_mode == "LIVE" and self.live_trading_enabled
 
     def redaction_values(self) -> tuple[str, ...]:
         """Only for the log redactor. Never serialize this return value."""
@@ -122,5 +159,7 @@ class Settings(BaseSettings):
             self.binance_web3_secret_key,
             self.massive_api_key,
             self.llm_api_key,
+            self.live_signer_private_key,
+            self.sidecar_token,
         )
         return tuple(value.get_secret_value() for value in values if value is not None)

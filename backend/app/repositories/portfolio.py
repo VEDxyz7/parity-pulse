@@ -281,7 +281,8 @@ class PortfolioStore:
                 if getattr(old, field) != getattr(plan, field):
                     raise ValueError("Immutable rebalance decision inputs")
             if old.status != plan.status and not (
-                old.status == "REBALANCE_REQUIRED" and plan.status in {"RETIRED", "COMPLETED"}
+                old.status == "REBALANCE_REQUIRED"
+                and plan.status in {"RETIRED", "COMPLETED", "EXECUTED"}
             ):
                 raise ValueError("Illegal rebalance retirement")
             if old.status != "REBALANCE_REQUIRED" and plan.preparations != old.preparations:

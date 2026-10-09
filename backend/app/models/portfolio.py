@@ -202,6 +202,7 @@ class RebalanceAction(ExecutionModel):
     estimated_share_delta: Signed
     target_share_exposure: Nonnegative
     position_id: UUID | None = None
+    inventory_source: Literal["PHASE10_POSITION", "WALLET_BALANCE"] = "PHASE10_POSITION"
     route: RouteDecision
     risk: ExecutionRiskDecision
     risk_inputs: ExecutionRiskEvidence
@@ -222,7 +223,10 @@ class RebalanceAction(ExecutionModel):
 
         if self.risk.evidence_digest != risk_digest(self.risk_inputs):
             raise ValueError("Risk decision is not bound to the action inputs")
-        if (self.side == "SELL") != (self.position_id is not None):
+        if self.inventory_source == "WALLET_BALANCE":
+            if self.position_id is not None:
+                raise ValueError("Wallet-balance actions are not bound to Phase 10 positions")
+        elif (self.side == "SELL") != (self.position_id is not None):
             raise ValueError("Reductions require an identified owned position")
         if (
             self.risk_inputs.decision_id != self.execution_decision_id
@@ -255,7 +259,10 @@ class RebalancePlan(ExecutionModel):
     rows: tuple[DriftRow, ...]
     actions: tuple[RebalanceAction, ...] = Field(max_length=100)
     route_decisions: tuple[RouteDecision, ...] = Field(default=(), max_length=100)
-    status: Literal["NO_ACTION", "BLOCKED", "REBALANCE_REQUIRED", "RETIRED", "COMPLETED"]
+    # EXECUTED: every leg of a wallet-inventory plan settled on-chain (see live fill journal).
+    status: Literal[
+        "NO_ACTION", "BLOCKED", "REBALANCE_REQUIRED", "RETIRED", "COMPLETED", "EXECUTED"
+    ]
     reasons: tuple[Identifier, ...]
     preparations: tuple[PreparationRecord, ...] = Field(default=(), max_length=100)
     completion_snapshot: PortfolioSnapshot | None = None
@@ -265,9 +272,9 @@ class RebalancePlan(ExecutionModel):
     correlation_id: UUID
     created_at: datetime
     updated_at: datetime
-    execution_mode: Literal["DRY_RUN"] = "DRY_RUN"
-    live_trading_enabled: Literal[False] = False
-    broadcast: Literal[False] = False
+    execution_mode: Literal["DRY_RUN", "LIVE"] = "DRY_RUN"
+    live_trading_enabled: bool = Field(default=False, strict=True)
+    broadcast: bool = Field(default=False, strict=True)
     authority: Literal["DETERMINISTIC_BACKEND"] = "DETERMINISTIC_BACKEND"
 
     @model_validator(mode="after")

@@ -157,10 +157,16 @@ class QuoteToken(ExecutionModel):
 class SegmentToken(ExecutionModel):
     tokenContractAddress: Address
     tokenSymbol: Identifier
+    # Current API repeats the full token descriptor per route segment (informational only).
+    # Excluded from dumps so route fingerprints keep their established canonical form.
+    tokenUnitPrice: Positive | None = Field(default=None, exclude=True)
+    decimal: Units | None = Field(default=None, exclude=True)
+    isHoneyPot: bool | None = Field(default=None, strict=True, exclude=True)
+    taxRate: Nonnegative | None = Field(default=None, le=1, exclude=True)
 
 
 class DexProtocol(ExecutionModel):
-    dexName: Identifier
+    dexName: str = Field(strict=True, pattern=r"^[A-Za-z0-9 ._()-]{1,128}$")
     percent: Nonnegative = Field(le=100)
 
 
@@ -223,6 +229,7 @@ class QuoteRoute(RouterResult):
     quoteId: Identifier
     executionMode: ExecutionMode
     approveTarget: Address | None = None
+    isBest: bool | None = Field(default=None, strict=True, exclude=True)
 
 
 class ProviderQuote(ExecutionModel):
@@ -271,11 +278,17 @@ class EvmTransaction(ExecutionModel):
     computeUnitPrice: None = None
     computeUnitLimit: None = None
 
+    @field_validator("signatureData", mode="before")
+    @classmethod
+    def empty_signatures(cls, value):
+        return () if value is None else value
+
     @model_validator(mode="after")
     def gas_valid(self):
         if int(self.gas) <= 0 or int(self.gasPrice) <= 0:
             raise ValueError("Explicit positive gas fields required")
-        if self.maxPriorityFeePerGas is not None:
+        # BSC builds repeat gasPrice as the priority fee; that is an unambiguous legacy price.
+        if self.maxPriorityFeePerGas is not None and self.maxPriorityFeePerGas != self.gasPrice:
             raise ValueError("Ambiguous mixed legacy/EIP1559 fees require verified rebuild")
         return self
 
@@ -496,8 +509,10 @@ class ExecutionRiskEvidence(ExecutionModel):
 
     @model_validator(mode="after")
     def trust_mandatory(self):
-        if not self.trust_required:
-            raise ValueError("Trust cannot be disabled for execution preparation")
+        # Only a configured portfolio rebalance (direct exposure) may run without Trust;
+        # Opportunity selection is a Trust-derived signal and keeps it mandatory.
+        if not self.trust_required and self.purpose != "DIRECT_EXPOSURE":
+            raise ValueError("Trust cannot be disabled for opportunity execution preparation")
         if self.context is not None and self.context.data_mode != self.data_mode:
             raise ValueError("Mixed risk evidence modes")
         return self

@@ -17,6 +17,7 @@ const OpportunityView = lazy(() => import('./components/OpportunityView').then(m
 const PortfolioView = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.PortfolioView })))
 const SystemView = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.SystemView })))
 const AuditEvents = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.AuditEvents })))
+const LiveRebalance = lazy(() => import('./components/LiveRebalance').then(m => ({ default: m.LiveRebalance })))
 
 const gates: { key: GateName; label: string; description: string }[] = [
   { key: 'DATA_GATE', label: 'Data & read-only', description: 'Verified access for non-live development' },
@@ -50,8 +51,8 @@ export function App() {
     const decoded = decodeURIComponent(hash.slice('#audit/'.length))
     if (hash.startsWith('#audit/') && /^[A-Za-z0-9_.:-]{1,160}$/.test(decoded)) decisionId = decoded
   } catch { /* Invalid URI never becomes an API identifier. */ }
-  const showAsk = hash === '#ask'
-  const additional = showOpportunity || showPortfolio || showAutopilot || showSettings || showAudit || showAsk
+  const showAsk = hash === '#ask', showLive = hash === '#live'
+  const additional = showOpportunity || showPortfolio || showAutopilot || showSettings || showAudit || showAsk || showLive
   useEffect(() => {
     if (!['#ask', '#system', '#capabilities'].includes(hash)) return
     const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }))
@@ -75,6 +76,7 @@ export function App() {
         <a href="#demo-sandbox" className={`nav-item demo-nav ${showDemo ? 'active' : ''}`} aria-current={showDemo ? 'page' : undefined}><ShieldCheck size={18} />DEMO SANDBOX{showDemo && <span className="nav-dot" />}</a>
         <a href="#opportunity" className={`nav-item ${showOpportunity ? 'active' : ''}`} aria-current={showOpportunity ? 'page' : undefined}><Sparkles size={18} />Opportunity analysis</a>
         <a href="#autopilot" className={`nav-item ${showAutopilot ? 'active' : ''}`} aria-current={showAutopilot ? 'page' : undefined}><Workflow size={18} />Autopilot status</a>
+        <a href="#live" className={`nav-item ${showLive ? 'active' : ''}`} aria-current={showLive ? 'page' : undefined}><Radio size={18} />Live rebalance</a>
         <a href="#portfolio" className={`nav-item ${showPortfolio ? 'active' : ''}`} aria-current={showPortfolio ? 'page' : undefined}><Layers3 size={18} />Portfolio</a>
         <a href="#audit" className={`nav-item ${showAudit ? 'active' : ''}`} aria-current={showAudit ? 'page' : undefined}><Activity size={18} />Scorecard / Audit</a>
         <div className="nav-section">EXECUTION AUTHORITY</div>
@@ -90,10 +92,10 @@ export function App() {
       </div>
     </aside>
     <div className="workspace">
-      <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>{showOpportunity ? 'Opportunity analysis' : showPortfolio ? 'Portfolio' : showAutopilot ? 'Autopilot' : showSettings ? 'System Health' : showAudit ? 'Scorecard / Audit' : showAsk ? 'Buy a Stock' : showAgentApi ? 'Agent API' : showTerminal ? 'Terminal' : showDemo ? 'DEMO SANDBOX' : 'Overview'}</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
+      <header className="topbar"><div><span className="breadcrumb">Workspace</span><span className="breadcrumb-slash">/</span>{showOpportunity ? 'Opportunity analysis' : showPortfolio ? 'Portfolio' : showAutopilot ? 'Autopilot' : showSettings ? 'System Health' : showAudit ? 'Scorecard / Audit' : showAsk ? 'Buy a Stock' : showLive ? 'Live rebalance' : showAgentApi ? 'Agent API' : showTerminal ? 'Terminal' : showDemo ? 'DEMO SANDBOX' : 'Overview'}</div><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
       <main id="main-content" tabIndex={-1}>
         {additional ? (system ? <Suspense fallback={<p role="status">Loading page…</p>}><div key={`${hash}:${system.run_id}:${system.data_mode}`}>
-          {showOpportunity ? <OpportunityView mode={system.data_mode} sandbox={system.runtime_mode === 'DEMO'} scanId={scanId} /> : showPortfolio || showAutopilot ? <PortfolioView mode={system.data_mode} autopilot={showAutopilot} /> : showSettings ? <SystemView mode={system.data_mode} /> : showAudit ? <div className="workspace-view"><h1>Scorecard / Audit</h1><ScorecardAudit mode={system.data_mode} initialDecision={decisionId ? decisionId : undefined} /><AuditEvents mode={system.data_mode} /></div> : <><h1>Buy a Stock</h1><AskFlow mode={system.data_mode} /><TrustPanel mode={system.data_mode} /></>}
+          {showLive ? <LiveRebalance /> : showOpportunity ? <OpportunityView mode={system.data_mode} sandbox={system.runtime_mode === 'DEMO'} scanId={scanId} /> : showPortfolio || showAutopilot ? <PortfolioView mode={system.data_mode} autopilot={showAutopilot} /> : showSettings ? <SystemView mode={system.data_mode} /> : showAudit ? <div className="workspace-view"><h1>Scorecard / Audit</h1><ScorecardAudit mode={system.data_mode} initialDecision={decisionId ? decisionId : undefined} /><AuditEvents mode={system.data_mode} /></div> : <><h1>Buy a Stock</h1><AskFlow mode={system.data_mode} /><TrustPanel mode={system.data_mode} /></>}
         </div></Suspense> : <section className="panel demo-unavailable"><h1>Backend state unavailable</h1><p role="status">A verified backend is required. No financial values or cached healthy state are substituted.</p><button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Retry backend status</button></section>) : showAgentApi ? <AgentApi /> : showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
           <section className="page-heading" aria-label="Synthetic sandbox mode"><div><div className="eyebrow">PARITY PULSE / DEMO</div><h1>DEMO SANDBOX</h1><p>SIMULATED DATA — NOT LIVE MARKET DATA</p><p><strong>NO REAL FUNDS WILL MOVE</strong></p></div><a className="refresh-button" href="#overview">Return to Overview</a></section>
           {system?.runtime_mode === 'DEMO' && askReady ? <DemoTrustSandbox key={`sandbox:${system.run_id}`} /> : <section className="panel demo-unavailable" aria-label="Demo sandbox availability">

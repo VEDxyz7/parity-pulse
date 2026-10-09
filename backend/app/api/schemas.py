@@ -31,9 +31,10 @@ class HealthStatus(PublicModel):
 class SystemStatus(PublicModel):
     environment: Literal["development", "test", "production"]
     data_mode: Literal["DEMO", "LIVE_READ_ONLY"]
-    execution_mode: Literal["DRY_RUN"]
-    approval_mode: Literal["PROPOSE_ONLY"]
-    live_trading_enabled: Literal[False]
+    # LIVE appears only under the full startup opt-in (see Settings.non_live_only).
+    execution_mode: Literal["DRY_RUN", "LIVE"]
+    approval_mode: Literal["PROPOSE_ONLY", "AUTONOMOUS"]
+    live_trading_enabled: bool
     require_simulation: Literal[True]
     database_status: Literal["connected", "unavailable"]
     service_version: str

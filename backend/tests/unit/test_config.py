@@ -71,3 +71,34 @@ def test_settings_cannot_be_mutated_or_injected_to_bypass_safety():
     unsafe = Settings.model_construct(execution_mode="LIVE", live_trading_enabled=True)
     with pytest.raises(RuntimeError, match="startup refused"):
         create_app(unsafe)
+
+
+LIVE_OPT_IN = dict(
+    execution_mode="LIVE",
+    live_trading_enabled=True,
+    runtime_mode="LIVE",
+    data_mode="LIVE_READ_ONLY",
+    live_max_notional_usd="25",
+    portfolio_inventory="WALLET",
+    live_signer_private_key="0x" + "11" * 32,
+)
+
+
+def test_live_execution_requires_every_flag_and_a_notional_cap():
+    settings = Settings(_env_file=None, **LIVE_OPT_IN)
+    assert settings.live_execution is True
+    assert settings.require_simulation is True
+    for missing in set(LIVE_OPT_IN) - {"runtime_mode"}:  # runtime_mode defaults to LIVE
+        partial = {k: v for k, v in LIVE_OPT_IN.items() if k != missing}
+        with pytest.raises(ValidationError):
+            Settings(_env_file=None, **partial)
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, **{**LIVE_OPT_IN, "runtime_mode": "DEMO"})
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, **{**LIVE_OPT_IN, "live_max_notional_usd": "5000"})
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, **{**LIVE_OPT_IN, "require_simulation": False})
+
+
+def test_default_settings_never_enable_live_execution():
+    assert Settings(_env_file=None).live_execution is False

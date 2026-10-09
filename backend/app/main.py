@@ -26,6 +26,7 @@ from app.api.middleware import RequestContextMiddleware
 from app.api.opportunity_scan import router as opportunity_scan_router
 from app.api.portfolio import autopilot_router
 from app.api.portfolio import router as portfolio_router
+from app.api.live import router as live_router
 from app.api.positions import router as positions_router
 from app.api.scorecard import router as scorecard_router
 from app.api.system import router
@@ -198,14 +199,25 @@ def create_app(
                 / configured.data_mode
             )
             app.state.portfolio_store = PortfolioStore(portfolio_directory)
+            app.state.live = None
+            source = portfolio_source
+            if configured.portfolio_inventory == "WALLET" and source is None:
+                from app.services.live_wiring import LiveRuntime
+
+                app.state.live = LiveRuntime(configured, app.state.data_layer, portfolio_directory)
+                source = app.state.live.source
             app.state.portfolio = PortfolioService(
                 app.state.portfolio_store,
                 app.state.positions,
-                portfolio_source
+                source
                 or CachedPortfolioSource(app.state.data_layer, clock=lambda: datetime.now(UTC)),
                 clock=lambda: datetime.now(UTC),
+                trust_required=configured.trust_required_for_rebalance,
+                inventory=configured.portfolio_inventory,
             )
             app.state.portfolio.recover()
+            if app.state.live is not None:
+                app.state.live.attach(app.state.portfolio)
             app.state.positions.portfolio_exit_guard = app.state.portfolio.can_reduce
             app.state.terminal = TerminalService(
                 app.state.data_layer,
@@ -321,6 +333,8 @@ def create_app(
                     app.state.position_store.close()
                 app.state.positions = None
                 app.state.execution_store.close()
+            if getattr(app.state, "live", None) is not None:
+                app.state.live.close()
             if getattr(app.state, "portfolio_store", None) is not None:
                 app.state.portfolio_store.close()
             app.state.portfolio = None
@@ -378,6 +392,9 @@ def create_app(
     app.include_router(opportunity_scan_router)
     app.include_router(positions_router)
     app.include_router(portfolio_router)
+    if configured.portfolio_inventory == "WALLET":
+        # Live wallet routes exist only when wallet inventory is configured.
+        app.include_router(live_router)
     app.include_router(autopilot_router)
     app.include_router(terminal_router)
     app.include_router(scorecard_router)

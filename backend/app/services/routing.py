@@ -69,10 +69,12 @@ class RoutingService:
                 reasons.append("UNSUPPORTED_OR_INVALID_NORMALIZATION")
             if row.token_price_usd is None:
                 reasons.append("TOKEN_PRICE_UNAVAILABLE")
+            # "open": issuer reports openState=True/TRADING without a session (24/7 AMM tokens).
             if row.tradable is not True or row.market_state not in {
                 "regular",
                 "premarket",
                 "postmarket",
+                "open",
             }:
                 reasons.append("REPRESENTATION_NOT_TRADABLE")
             if row.route_available is False or row.route_support == "UNAVAILABLE":
@@ -147,6 +149,8 @@ class RoutingService:
                 reasons.append("TRUST_REQUIREMENT_FAILED")
             if row.trust_state == "UNKNOWN" or not trust_fresh:
                 limitations.append("TRUST_NOT_CURRENTLY_VERIFIED")
+            if not policy.require_trust and policy.purpose != "OPPORTUNITY":
+                limitations.append("TRUST_NOT_EVALUATED")
             risk_fresh = (
                 self._fresh(row.risk_timestamp, now)
                 and bool(row.risk_source)
@@ -202,7 +206,7 @@ class RoutingService:
                     trust_state=row.trust_state,
                     tradability="TRADABLE"
                     if row.tradable is True
-                    and row.market_state in {"regular", "premarket", "postmarket"}
+                    and row.market_state in {"regular", "premarket", "postmarket", "open"}
                     else "UNKNOWN"
                     if row.tradable is None
                     else "NOT_TRADABLE",

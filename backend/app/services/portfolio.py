@@ -32,8 +32,18 @@ def fresh(at, now):
 
 
 class PortfolioService:
-    def __init__(self, store, positions, source, *, clock):
+    def __init__(
+        self, store, positions, source, *, clock, trust_required=True, inventory="POSITIONS"
+    ):
         self.store, self.positions, self.source, self.clock = store, positions, source, clock
+        if inventory not in {"POSITIONS", "WALLET"}:
+            raise ValueError("Unsupported inventory authority")
+        # POSITIONS: holdings are Phase 10 confirmed positions. WALLET: holdings are the
+        # verified on-chain balances in the captured token funding states (live rebalance).
+        self.inventory = inventory
+        # Configured rebalancing may run on cost/liquidity/risk/freshness alone when the
+        # operator disables Trust; routes are then labelled TRUST_NOT_EVALUATED.
+        self.trust_required = trust_required
         self.mode = positions.mode
         self.router, self.risk, self.funding = RoutingService(), RiskEngine(), FundingService()
         self.lock = threading.RLock()
@@ -92,16 +102,17 @@ class PortfolioService:
         config = self.store.config(mode=self.mode)
         plan = self.store.pending(mode=self.mode)
         count = self.positions.store.count(mode=self.mode, active=True)
+        live = getattr(self, "live_execution", False)
         return dict(
             data_mode=self.mode,
-            execution_mode="DRY_RUN",
+            execution_mode="LIVE" if live else "DRY_RUN",
             config=config,
             pending_plan=plan,
             latest_decision=self.store.latest(mode=self.mode),
             active_positions=self.positions.store.list(mode=self.mode, active=True, limit=100),
             position_coverage_complete=count <= 100,
             recovery_complete=self.recovery_complete,
-            live_trading_enabled=False,
+            live_trading_enabled=live,
         )
 
     def capture(self, config):
@@ -240,11 +251,16 @@ class PortfolioService:
             if not reasons:
                 f = snapshot.inputs.funding
                 values["CASH"] = quantity(f.balance_base_units, f.asset.decimals) * f.unit_price_usd
-                for p in owned:
+                for p in owned if self.inventory == "POSITIONS" else ():
                     values[p.instrument.ticker] += (
                         p.remaining_quantity * marks[p.instrument.contract].token_price_usd
                     )
                     shares[p.instrument.ticker] += p.normalized_share_exposure
+                for h in self._holdings(snapshot):
+                    mark = marks[h.asset.contract]
+                    held = quantity(h.balance_base_units, h.asset.decimals)
+                    values[mark.identity.underlying] += held * mark.token_price_usd
+                    shares[mark.identity.underlying] += held * mark.token_to_share_ratio
             total = sum(values.values(), Decimal(0)) if not reasons else None
             if total is not None and total <= 0:
                 reasons.append("PORTFOLIO_VALUE_NOT_POSITIVE")
@@ -329,6 +345,53 @@ class PortfolioService:
                             actions.append(action)
                         else:
                             reasons.append("NO_TRUST_RISK_ROUTE_FOR_ASSET")
+                    elif self.inventory == "WALLET":
+                        held = sorted(
+                            (
+                                h
+                                for h in self._holdings(snapshot)
+                                if marks[h.asset.contract].identity.underlying == row.asset
+                            ),
+                            key=lambda h: (
+                                -quantity(h.balance_base_units, h.asset.decimals)
+                                * marks[h.asset.contract].token_price_usd,
+                                h.asset.contract,
+                            ),
+                        )
+                        for h in held:
+                            if amount <= 0:
+                                break
+                            mark = marks[h.asset.contract]
+                            value = (
+                                quantity(h.balance_base_units, h.asset.decimals)
+                                * mark.token_price_usd
+                            )
+                            action = self._action(
+                                config,
+                                snapshot,
+                                row,
+                                [mark],
+                                min(amount, value),
+                                len(actions) + 1,
+                                None,
+                                route_decisions,
+                                holding=h,
+                            )
+                            if action:
+                                actions.append(action)
+                                amount -= action.notional_usd
+                            else:
+                                reasons.append("HELD_REPRESENTATION_REDUCTION_BLOCKED")
+                        dust = sum(
+                            (
+                                marks[h.asset.contract].token_price_usd
+                                * Decimal(10) ** (-h.asset.decimals)
+                                for h in held
+                            ),
+                            Decimal(0),
+                        )
+                        if amount > dust:
+                            reasons.append("REDUCTION_QUANTITY_UNAVAILABLE")
                     else:
                         holdings = sorted(
                             (p for p in owned if p.instrument.ticker == row.asset),
@@ -452,12 +515,24 @@ class PortfolioService:
                     if r.identity.contract == p.instrument.contract
                 )
                 for p in snapshot.positions
-                if p.state in OWNED
+                if p.state in OWNED and self.inventory == "POSITIONS"
+            ),
+            Decimal(0),
+        ) + sum(
+            (
+                quantity(h.balance_base_units, h.asset.decimals) * h.unit_price_usd
+                for h in self._holdings(snapshot)
             ),
             Decimal(0),
         )
         cash = snapshot.inputs.funding
         cash_usd = quantity(cash.balance_base_units, cash.asset.decimals) * cash.unit_price_usd
+        if self.inventory == "WALLET" and funding.asset.contract != cash.asset.contract:
+            # A wallet sale spends the held token, not cash: bound it by the token's value.
+            cash_usd = (
+                quantity(funding.balance_base_units, funding.asset.decimals)
+                * funding.unit_price_usd
+            )
         context = change(
             template.context, wallet_available_usd=cash_usd, existing_exposure_usd=stock_value
         )
@@ -474,15 +549,38 @@ class PortfolioService:
             conversion_cost_usd=funding.conversion_cost_usd,
             slippage_bps=route.slippage_bps,
             context=context,
-            trust_state=route.trust_state,
+            trust_state=route.trust_state
+            if route.trust_state != "UNKNOWN"
+            else "INSUFFICIENT_EVIDENCE",
+            trust_required=self.trust_required,
             tradable=route.tradable is True,
             route_available=route.route_available is True,
             liquidity_usd=route.liquidity_usd,
             token_observed_at=route.price_timestamp,
         )
 
+    def _holdings(self, snapshot):
+        """Wallet inventory: verified, non-zero token balances that have a captured mark."""
+        if self.inventory != "WALLET":
+            return ()
+        marks = {r.identity.contract for r in snapshot.inputs.routes}
+        return tuple(
+            f
+            for f in snapshot.inputs.token_funding
+            if int(f.balance_base_units) > 0 and f.asset.contract in marks
+        )
+
     def _action(
-        self, config, snapshot, drift, routes, notional, priority, position, route_decisions
+        self,
+        config,
+        snapshot,
+        drift,
+        routes,
+        notional,
+        priority,
+        position,
+        route_decisions,
+        holding=None,
     ):
         now = self.clock()
         mode = "DEMO" if self.mode == "DEMO" else "LIVE"
@@ -493,7 +591,9 @@ class PortfolioService:
             return None
         context = risk_template.context
         funding = (
-            snapshot.inputs.funding
+            holding
+            if holding is not None
+            else snapshot.inputs.funding
             if position is None
             else next(
                 (
@@ -536,7 +636,8 @@ class PortfolioService:
                         route.price_timestamp,
                     )
                 )
-                or route.trust_state not in {"NORMAL", "LIKELY_INFORMATION"}
+                or self.trust_required
+                and route.trust_state not in {"NORMAL", "LIKELY_INFORMATION"}
             ):
                 candidates.append(route)
                 continue
@@ -561,7 +662,7 @@ class PortfolioService:
         policy = RoutePolicy(
             require_costs=True,
             require_liquidity=True,
-            require_trust=True,
+            require_trust=self.trust_required,
             require_risk=True,
             min_liquidity_usd=context.min_liquidity_usd,
             max_slippage_bps=context.max_slippage_bps,
@@ -576,6 +677,8 @@ class PortfolioService:
         decimals = (
             position.instrument.decimals
             if position
+            else holding.asset.decimals
+            if holding is not None
             else self.source.decimals(route.identity.contract)
         )
         if type(decimals) is not int or not 0 <= decimals <= 36:
@@ -583,10 +686,14 @@ class PortfolioService:
         units = int(Fraction(notional) / Fraction(route.token_price_usd) * 10**decimals)
         if position:
             units = min(units, int(position.remaining_quantity_base_units))
+        if holding is not None:
+            if holding.asset.contract != route.identity.contract:
+                return None
+            units = min(units, int(holding.balance_base_units))
         if units <= 0 or units >= 2**256:
             return None
         actual = quantity(str(units), decimals) * route.token_price_usd
-        side = "SELL" if position else "BUY"
+        side = "SELL" if position or holding is not None else "BUY"
         action_id = fingerprint(
             dict(
                 snapshot=snapshot.snapshot_id,
@@ -613,11 +720,11 @@ class PortfolioService:
         if funding_check.status != "PASS":
             reasons.extend(funding_check.reasons)
         if (
-            position
+            (position or holding is not None)
             and funding
             and (
                 funding.unit_price_usd != route.token_price_usd
-                or funding.asset.decimals != position.instrument.decimals
+                or funding.asset.decimals != decimals
                 or int(funding_check.required_base_units or "0") != units
             )
         ):
@@ -629,15 +736,20 @@ class PortfolioService:
             * route.token_to_share_ratio
             * (1 if side == "BUY" else -1)
         )
-        current_units = (
-            int(position.remaining_quantity_base_units)
-            if position
-            else sum(
+        if position:
+            current_units = int(position.remaining_quantity_base_units)
+        elif self.inventory == "WALLET":
+            current_units = sum(
+                int(h.balance_base_units)
+                for h in self._holdings(snapshot)
+                if h.asset.contract == route.identity.contract
+            )
+        else:
+            current_units = sum(
                 int(p.remaining_quantity_base_units)
                 for p in snapshot.positions
                 if p.state in OWNED and p.instrument.contract == route.identity.contract
             )
-        )
         return RebalanceAction(
             action_id=action_id,
             asset=drift.asset,
@@ -654,6 +766,9 @@ class PortfolioService:
             estimated_share_delta=delta,
             target_share_exposure=max(Decimal(0), drift.current_share_exposure + delta),
             position_id=position.position_id if position else None,
+            inventory_source="WALLET_BALANCE"
+            if self.inventory == "WALLET"
+            else "PHASE10_POSITION",
             route=routing,
             risk=risk,
             risk_inputs=e,
@@ -939,6 +1054,25 @@ class PortfolioService:
                     status="COMPLETED",
                     completion_snapshot=current,
                     settled_execution_ids=tuple(execution_ids),
+                    updated_at=self.clock(),
+                ),
+                expected_version=plan.version,
+            )
+
+    def mark_executed(self, plan_id):
+        """Wallet-inventory plans only: the live executor confirmed every leg on-chain."""
+        with self.lock:
+            plan = self.store.get(plan_id, mode=self.mode)
+            if self.inventory != "WALLET" or plan.status != "REBALANCE_REQUIRED":
+                raise ValueError("Only a pending wallet-inventory plan can be marked executed")
+            return self.store.save(
+                change(
+                    plan,
+                    version=plan.version + 1,
+                    status="EXECUTED",
+                    execution_mode="LIVE",
+                    live_trading_enabled=True,
+                    broadcast=True,
                     updated_at=self.clock(),
                 ),
                 expected_version=plan.version,

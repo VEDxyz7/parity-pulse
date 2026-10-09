@@ -20,7 +20,9 @@ spec.loader.exec_module(diagnostics)
 
 
 def test_diagnostic_endpoints_are_isolated_reads_production_allowlist_unchanged():
-    assert "token/top-liquidity" not in READ_OPERATIONS["GET"]
+    # Live liquidity evidence reads pool reserves: GET only, never a write or POST.
+    assert "token/top-liquidity" in READ_OPERATIONS["GET"]
+    assert "token/top-liquidity" not in READ_OPERATIONS["POST"]
     pool = diagnostics.PoolDiagnosticClient(SecretStr("synthetic"), SecretStr("synthetic-secret"))
     trade = diagnostics.TradeDiagnosticClient(SecretStr("synthetic-massive"))
     try:
