@@ -95,6 +95,23 @@ async function handle(req, res) {
     });
     return json(res, result.status === "FAILED" ? 409 : 200, result);
   }
+  if (req.method === "POST" && url.pathname === "/altana/sign-typed-data") {
+    // ERC-1271 signature for an RFQ order the Python verifier already bounded. The vendor's
+    // settlement contract must have been approved once with approveSignatureChecker.
+    if (!authorized(req)) return json(res, 401, { error: "UNAUTHORIZED" });
+    if (!session) return json(res, 404, { error: "ALTANA_SESSION_NOT_CONFIGURED" });
+    const { typedData } = await body(req);
+    if (!typedData?.domain || !typedData?.types || !typedData?.message || !typedData?.primaryType) {
+      return json(res, 422, { error: "INVALID_TYPED_DATA" });
+    }
+    if (Number(typedData.domain.chainId) !== 56) return json(res, 422, { error: "WRONG_CHAIN" });
+    const { EIP712Domain, ...types } = typedData.types; // viem derives the domain type itself
+    const signature = await client.signOrderTypedData({
+      session,
+      typedData: { ...typedData, types },
+    });
+    return json(res, 200, { signature, wallet: session.walletAddress.toLowerCase() });
+  }
   if (req.method === "GET" && url.pathname === "/x402") {
     return json(res, 200, {
       service: "parity-pulse",

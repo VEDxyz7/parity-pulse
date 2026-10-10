@@ -61,3 +61,9 @@ def test_client_is_read_only_closed_grammar(path, params):
         client.build_request("GET", path, params, None)
     with pytest.raises(ProviderError):
         client.authorize("POST", "/fapi/v1/premiumIndex")
+
+
+def test_future_stamped_index_is_clamped_to_receipt_time():
+    ahead = FakeClient(index_time=NOW + timedelta(seconds=2))
+    ref = EquityReferenceService(ahead, clock=lambda: NOW).reference("NVDA")
+    assert ref.observed_at == NOW  # FakeClient receipt time

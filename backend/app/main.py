@@ -214,6 +214,8 @@ def create_app(
                 clock=lambda: datetime.now(UTC),
                 trust_required=configured.trust_required_for_rebalance,
                 inventory=configured.portfolio_inventory,
+                allow_closed_underlying=configured.portfolio_inventory == "WALLET"
+                and configured.closed_market_swap,
             )
             app.state.portfolio.recover()
             if app.state.live is not None:

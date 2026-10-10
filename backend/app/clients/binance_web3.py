@@ -41,8 +41,18 @@ SAFETY_PATHS = {
 }
 
 
+# The only write: RFQ order submission, signable solely by the live trading client.
+LIVE_WRITE_PATHS = {"POST": {"/api/v1/dex/aggregator/order/submit"}}
+
+
 def sign_request(
-    secret: SecretStr, timestamp: str, method: str, wire_path: str, body: bytes
+    secret: SecretStr,
+    timestamp: str,
+    method: str,
+    wire_path: str,
+    body: bytes,
+    *,
+    live_writes: bool = False,
 ) -> str:
     import re
 
@@ -58,7 +68,10 @@ def sign_request(
         and re.fullmatch(r"/build/api/v1/dex/aggregator/order/[A-Za-z0-9_-]{1,128}", path)
         and not path.endswith("/submit")
     )
-    if not (market or safety or status):
+    live = live_writes and path.startswith("/build/") and path.removeprefix(
+        "/build"
+    ) in LIVE_WRITE_PATHS.get(method.upper(), set())
+    if not (market or safety or status or live):
         raise ValueError("Signing requires an explicitly reviewed /build operation")
     message = (timestamp + method.upper() + wire_path).encode() + body
     return base64.b64encode(
@@ -116,7 +129,12 @@ class BinanceWeb3Client(ReadTransport):
                 "X-OC-APIKEY": self.api_key.get_secret_value(),
                 "X-OC-TIMESTAMP": timestamp,
                 "X-OC-SIGN": sign_request(
-                    self.secret_key, timestamp, method, request.url.raw_path.decode(), raw
+                    self.secret_key,
+                    timestamp,
+                    method,
+                    request.url.raw_path.decode(),
+                    raw,
+                    live_writes=getattr(self, "live_writes", False),
                 ),
                 "X-OC-RECV-WINDOW": str(self.recv_window),
                 "Content-Type": "application/json",

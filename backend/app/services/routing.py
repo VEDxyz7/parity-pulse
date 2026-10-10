@@ -19,6 +19,10 @@ from app.models.routing import RouteCandidate, RouteDecision, RouteInput, RouteP
 from app.services.normalization import effective_price_per_share
 
 
+SESSION_STATES = {"regular", "premarket", "postmarket", "open"}
+CLOSED_STATES = {"offhours", "overnight", "closed"}
+
+
 def digest(value):
     if hasattr(value, "model_dump"):
         value = value.model_dump(mode="json")
@@ -70,13 +74,13 @@ class RoutingService:
             if row.token_price_usd is None:
                 reasons.append("TOKEN_PRICE_UNAVAILABLE")
             # "open": issuer reports openState=True/TRADING without a session (24/7 AMM tokens).
-            if row.tradable is not True or row.market_state not in {
-                "regular",
-                "premarket",
-                "postmarket",
-                "open",
-            }:
+            # Closed-underlying states trade only on on-chain pools and only when the policy
+            # explicitly allows it (live wallet rebalancing over weekends/off-hours).
+            states = SESSION_STATES | (CLOSED_STATES if policy.allow_closed_underlying else set())
+            if row.tradable is not True or row.market_state not in states:
                 reasons.append("REPRESENTATION_NOT_TRADABLE")
+            elif row.market_state in CLOSED_STATES:
+                limitations.append("UNDERLYING_MARKET_CLOSED")
             if row.route_available is False or row.route_support == "UNAVAILABLE":
                 reasons.append("ROUTE_UNAVAILABLE")
             if policy.purpose == "OPPORTUNITY" and (
@@ -206,7 +210,9 @@ class RoutingService:
                     trust_state=row.trust_state,
                     tradability="TRADABLE"
                     if row.tradable is True
-                    and row.market_state in {"regular", "premarket", "postmarket", "open"}
+                    and row.market_state
+                    in SESSION_STATES
+                    | (CLOSED_STATES if policy.allow_closed_underlying else set())
                     else "UNKNOWN"
                     if row.tradable is None
                     else "NOT_TRADABLE",

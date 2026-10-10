@@ -4,11 +4,12 @@ from decimal import Decimal
 from pathlib import Path
 
 from app.clients.binance_futures import BinanceIndexClient
-from app.clients.binance_trading import BinanceSafetyClient
+from app.clients.binance_trading import BinanceSafetyClient, LiveTradingClient
 from app.clients.bsc_rpc import BscRpcClient
 from app.repositories.live_fills import LiveFillStore
 from app.services.equity_reference import EquityReferenceService
 from app.services.live_portfolio_source import LiveLimits, LivePortfolioSource
+from app.services.rfq_orders import parse_allowlist
 
 
 class LiveRuntime:
@@ -17,8 +18,13 @@ class LiveRuntime:
     def __init__(self, configured, data_layer, directory):
         self.settings = configured
         self.index = BinanceIndexClient()
-        self.trading = BinanceSafetyClient(
-            configured.binance_web3_api_key, configured.binance_web3_secret_key, cache_ttl=0
+        # Only the full live opt-in gets the client that can submit RFQ orders.
+        client = LiveTradingClient if configured.live_execution else BinanceSafetyClient
+        self.trading = client(
+            configured.binance_web3_api_key,
+            configured.binance_web3_secret_key,
+            cache_ttl=0,
+            min_interval=1.2,
         )
         self.rpc = BscRpcClient(configured.bsc_rpc_url, allow_send=configured.live_execution)
         self.journal = LiveFillStore(
@@ -45,6 +51,7 @@ class LiveRuntime:
             wallet=self.wallet,
             limits=self.limits,
             activity=self.journal.activity,
+            capture_rfq=self.journal.capture_rfq,
         )
         self.executor = None
 
@@ -75,6 +82,9 @@ class LiveRuntime:
             max_notional_usd=self.limits.max_notional_usd,
             max_slippage_bps=self.limits.max_slippage_bps,
             gas_reserve_wei=self.limits.gas_reserve_wei,
+            rfq_allowlist=parse_allowlist(self.settings.rfq_settlement_allowlist)
+            if self.settings.rfq_enabled
+            else None,
         )
         portfolio.live_execution = True
         return self.executor
@@ -89,6 +99,12 @@ class LiveRuntime:
             trust_required=self.limits.trust_required,
             equity_reference="BINANCE_USDM_EQUITY_INDEX",
             chain_id=56,
+            rfq_enabled=bool(self.executor and self.executor.rfq_enabled),
+            rfq_settlements={
+                k: sorted(v)
+                for k, v in parse_allowlist(self.settings.rfq_settlement_allowlist).items()
+            },
+            closed_market_swap=self.settings.closed_market_swap,
         )
 
     def close(self):

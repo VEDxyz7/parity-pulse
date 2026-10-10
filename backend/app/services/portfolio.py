@@ -33,7 +33,15 @@ def fresh(at, now):
 
 class PortfolioService:
     def __init__(
-        self, store, positions, source, *, clock, trust_required=True, inventory="POSITIONS"
+        self,
+        store,
+        positions,
+        source,
+        *,
+        clock,
+        trust_required=True,
+        inventory="POSITIONS",
+        allow_closed_underlying=False,
     ):
         self.store, self.positions, self.source, self.clock = store, positions, source, clock
         if inventory not in {"POSITIONS", "WALLET"}:
@@ -41,6 +49,9 @@ class PortfolioService:
         # POSITIONS: holdings are Phase 10 confirmed positions. WALLET: holdings are the
         # verified on-chain balances in the captured token funding states (live rebalance).
         self.inventory = inventory
+        if allow_closed_underlying and inventory != "WALLET":
+            raise ValueError("Closed-underlying trading is wallet rebalancing only")
+        self.allow_closed_underlying = allow_closed_underlying
         # Configured rebalancing may run on cost/liquidity/risk/freshness alone when the
         # operator disables Trust; routes are then labelled TRUST_NOT_EVALUATED.
         self.trust_required = trust_required
@@ -664,6 +675,7 @@ class PortfolioService:
             require_liquidity=True,
             require_trust=self.trust_required,
             require_risk=True,
+            allow_closed_underlying=self.allow_closed_underlying,
             min_liquidity_usd=context.min_liquidity_usd,
             max_slippage_bps=context.max_slippage_bps,
         )

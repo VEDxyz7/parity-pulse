@@ -1,13 +1,21 @@
-"""Live rebalance execution for wallet-inventory plans (BSC mainnet, SWAP routes only).
+"""Live rebalance execution for wallet-inventory plans (BSC mainnet).
 
-Per action, in plan priority order (sales before purchases):
+Per action, in plan priority order (sales before purchases), the best of two route kinds:
+
+SWAP (verification=EXACT_SIMULATION):
   fresh quote -> bound checks vs plan -> exact approval (simulated, sent, confirmed)
   -> build -> provider simulation must SUCCEED with the expected balance changes
   -> native gas check -> sign + send -> receipt status 1 -> on-chain balance reconciliation.
 
-Hard limits enforced here independently of planning: per-action notional cap, slippage cap,
-SWAP-only (no RFQ signing), wallet identity, journal idempotency (an action that already has
-a journal row is reconciled, never re-sent). Any failed check stops the whole plan.
+RFQ (verification=SIGNED_ORDER_BOUND; never while the underlying market is closed):
+  fresh quote -> exact approval to the vendor's known spender -> /swap payload captured
+  -> EIP-712 order verified against plan bounds (rfq_orders) -> sign -> signature recovered
+  -> requestId journaled before submit -> /order/submit -> poll -> receipt + balance diff must
+  satisfy the signed bounds.
+
+Hard limits enforced here independently of planning: per-action notional cap (half when the
+underlying is closed), slippage cap, wallet identity, settlement allowlist, journal idempotency
+(a journaled leg is reconciled, never re-sent or re-signed). Any failed check stops the plan.
 """
 
 import threading
@@ -15,14 +23,22 @@ import time
 from datetime import UTC, datetime
 from decimal import Decimal, localcontext
 
+import json
+from uuid import uuid4
+
 from app.clients.bsc_rpc import approve_calldata
 from app.clients.common import ProviderError
-from app.models.execution import EvmTransaction, QuoteRequest
+from app.models.execution import BuildResponse, EvmTransaction, QuoteRequest, RFQSubmission
 from app.services.live_portfolio_source import USDT, USDT_DECIMALS
+from app.services.routing import CLOSED_STATES
 
 APPROVE_GAS = 80000
 RECEIPT_TIMEOUT_SECONDS = 90
 MAX_PLAN_AGE_SECONDS = 600
+ORDER_POLL_SECONDS = 120
+RESUBMIT_WINDOW_SECONDS = 1800  # Binance: requestId idempotent for 30 minutes
+RFQ_VENDORS = {"CowSwap", "InchFusion", "PcsXRfq"}
+NOT_FILLED = {"FAILED", "EXPIRED", "CANCELLED"}
 
 
 class LiveExecutionError(Exception):
@@ -45,6 +61,7 @@ class LiveRebalanceExecutor:
         gas_reserve_wei,
         clock=lambda: datetime.now(UTC),
         sleep=time.sleep,
+        rfq_allowlist=None,
     ):
         if portfolio.inventory != "WALLET":
             raise ValueError("Live execution requires wallet-inventory planning")
@@ -56,6 +73,14 @@ class LiveRebalanceExecutor:
         self.clock, self.sleep = clock, sleep
         self.lock = threading.Lock()
         self._usdt_price = None
+        # RFQ needs: a settlement allowlist, a client that can submit, a typed-data signer.
+        self.rfq_allowlist = rfq_allowlist
+        self.rfq_enabled = bool(
+            rfq_allowlist is not None
+            and hasattr(trading, "submit_rfq")
+            and getattr(trading, "live_writes", False)
+            and hasattr(signer, "sign_typed_data")
+        )
 
     # -- public --------------------------------------------------------------------------
     def execute(self, plan_id):
@@ -105,11 +130,20 @@ class LiveRebalanceExecutor:
         try:
             return self._run(action, token, record)
         except (LiveExecutionError, ProviderError, ValueError, ArithmeticError) as error:
-            code = getattr(error, "code", None) or getattr(error, "kind", None)
-            code = code or type(error).__name__.upper()
+            if isinstance(error, ProviderError):
+                from app.clients.binance_trading import provider_reason
+
+                code = provider_reason(error)
+            else:
+                code = getattr(error, "code", None) or type(error).__name__.upper()
             current = self.journal.get(action.action_id)
-            if current.get("swap_tx"):
-                # A swap was sent: never call it rejected; settle it from its receipt.
+            evidence = current["evidence"]
+            if evidence.get("rfq_request_id") and not evidence.get("rfq_status_order_id"):
+                # Signed but submission not acknowledged: stay SIGNED; the next run resubmits
+                # the identical idempotent body (same requestId), never a new signature.
+                return self.journal.upsert(action.action_id, status="SIGNED", reasons=[str(code)])
+            if current.get("swap_tx") or evidence.get("rfq_request_id"):
+                # Something was sent: never call it rejected; settle it from chain/provider.
                 current = self.journal.upsert(
                     action.action_id, status="SUBMITTED", reasons=[str(code)]
                 )
@@ -117,7 +151,9 @@ class LiveRebalanceExecutor:
             return self.journal.upsert(action.action_id, status="REJECTED", reasons=[str(code)])
 
     def _run(self, action, token, record):
-        if action.notional_usd > self.max_notional:
+        closed = action.route.selected_candidate.inputs.market_state in CLOSED_STATES
+        cap = self.max_notional / 2 if closed else self.max_notional
+        if action.notional_usd > cap:
             raise LiveExecutionError("LIVE_NOTIONAL_CAP")
         if not action.eligible_for_preparation or action.risk.status != "PASS":
             raise LiveExecutionError("ACTION_NOT_RISK_APPROVED")
@@ -154,14 +190,28 @@ class LiveRebalanceExecutor:
             toTokenAddress=buy,
             userWalletAddress=wallet,
         )
-        quotes = [
-            q
-            for q in self.trading.quote(request, mode="LIVE_READ_ONLY")
-            if q.route.executionMode == "SWAP" and q.route.approveTarget
-        ]
-        if not quotes:
+        offered = self.trading.quote(request, mode="LIVE_READ_ONLY")
+        swaps = [q for q in offered if q.route.executionMode == "SWAP" and q.route.approveTarget]
+        rfqs = (
+            [
+                q
+                for q in offered
+                if q.route.executionMode == "RFQ" and q.route.vendorName in RFQ_VENDORS
+            ]
+            if self.rfq_enabled and not closed
+            else []
+        )
+        best_swap = max(swaps, key=lambda q: int(q.route.toTokenAmount), default=None)
+        best_rfq = max(rfqs, key=lambda q: int(q.route.toTokenAmount), default=None)
+        # Exact simulation beats a signed-order bound: RFQ only when strictly better.
+        if best_rfq is not None and (
+            best_swap is None
+            or int(best_rfq.route.toTokenAmount) > int(best_swap.route.toTokenAmount)
+        ):
+            return self._rfq_leg(action, sell, buy, amount, minimum_out, slip, best_rfq, mark)
+        if best_swap is None:
             raise LiveExecutionError("NO_SIMULATABLE_SWAP_ROUTE")
-        quote = max(quotes, key=lambda q: int(q.route.toTokenAmount))
+        quote = best_swap
         impact = abs(quote.route.priceImpactPercent or Decimal(0)) * 10000
         if impact > self.max_slippage_bps:
             raise LiveExecutionError("PRICE_IMPACT_LIMIT")
@@ -177,32 +227,11 @@ class LiveRebalanceExecutor:
             price_impact_bps=str(impact),
             spender=spender,
             plan_mark_usd=str(mark.token_price_usd),
+            route="SWAP",
+            verification="EXACT_SIMULATION",
         )
         record = self.journal.upsert(action.action_id, status="QUOTED", evidence=evidence)
-        # Exact approval only for this leg's amount; never unlimited.
-        if self.rpc.allowance(sell, wallet, spender) < amount:
-            approve_tx = EvmTransaction.model_validate(
-                {
-                    "from": wallet,
-                    "to": sell,
-                    "data": approve_calldata(spender, amount),
-                    "value": "0",
-                    "gas": str(APPROVE_GAS),
-                    "gasPrice": str(self.rpc.gas_price()),
-                }
-            )
-            sim, _ = self.trading.simulate(approve_tx, mode="LIVE_READ_ONLY")
-            if sim.status != "SUCCESS":
-                raise LiveExecutionError("APPROVAL_SIMULATION_FAILED")
-            self._gas(approve_tx)
-            approve_hash = self._send(approve_tx)
-            record = self.journal.upsert(
-                action.action_id, status="APPROVING", approve_tx=approve_hash
-            )
-            if not self._confirmed(approve_hash):
-                raise LiveExecutionError("APPROVAL_NOT_CONFIRMED")
-            if self.rpc.allowance(sell, wallet, spender) < amount:
-                raise LiveExecutionError("APPROVAL_NOT_OBSERVED")
+        self._approve(action.action_id, sell, spender, amount)
         # Requote after approval if the 30s quote lifetime is close to expiry.
         if (quote.expires_at - self.clock()).total_seconds() < 10:
             quote = max(
@@ -270,7 +299,236 @@ class LiveRebalanceExecutor:
             realized_cost_usd=self._cost(action, spent, received),
         )
 
+    # -- RFQ ---------------------------------------------------------------------------------
+    def _rfq_leg(self, action, sell, buy, amount, minimum_out, slip, quote, mark):
+        from app.services.rfq_orders import DEFAULT_SPENDERS, Expected, RFQRejected, verify
+
+        wallet, vendor = self.signer.address, quote.route.vendorName
+        if self.signer.rfq_signing_scheme == "eip1271" and vendor != "CowSwap":
+            raise LiveExecutionError("RFQ_VENDOR_REQUIRES_EOA")
+        impact = abs(quote.route.priceImpactPercent or Decimal(0)) * 10000
+        if impact > self.max_slippage_bps:
+            raise LiveExecutionError("PRICE_IMPACT_LIMIT")
+        if int(quote.route.toTokenAmount) < minimum_out:
+            raise LiveExecutionError("QUOTE_BELOW_PLAN_MINIMUM")
+        spender = DEFAULT_SPENDERS[vendor]
+        # Cross-check Binance's vendor approval against the vendor's known spender.
+        approval = self.trading.rfq_approval(token=sell, amount=amount, vendor=vendor)
+        offered_spender = approval.data[34:74] if approval.data.startswith("0x095ea7b3") else ""
+        if "0x" + offered_spender.lower() != spender:
+            raise LiveExecutionError("RFQ_APPROVAL_SPENDER_MISMATCH")
+        evidence = dict(
+            route="RFQ",
+            verification="SIGNED_ORDER_BOUND",
+            vendor=vendor,
+            quote_id=quote.route.quoteId,
+            amount_in=str(amount),
+            quoted_out=quote.route.toTokenAmount,
+            minimum_out=str(minimum_out),
+            price_impact_bps=str(impact),
+            spender=spender,
+            plan_mark_usd=str(mark.token_price_usd),
+        )
+        self.journal.upsert(action.action_id, status="QUOTED", evidence=evidence)
+        self._approve(action.action_id, sell, spender, amount)
+        raw = self.trading.build_rfq(quote, slippage_bps=slip)
+        try:
+            build = BuildResponse.model_validate(raw)
+            if build.executionMode != "RFQ" or build.rfq is None or build.rfq.vendor != vendor:
+                raise LiveExecutionError("RFQ_BUILD_SHAPE_MISMATCH")
+            typed = json.loads(build.rfq.typedDataToSign)
+            order = verify(
+                vendor,
+                typed,
+                Expected(
+                    wallet=wallet,
+                    sell_token=sell,
+                    sell_max=amount,
+                    buy_token=buy,
+                    min_buy=minimum_out,
+                    now=int(self.clock().timestamp()),
+                ),
+                self.rfq_allowlist,
+            )
+            if order.spender != spender:
+                raise LiveExecutionError("RFQ_ORDER_SPENDER_MISMATCH")
+        except (RFQRejected, LiveExecutionError, ValueError) as error:
+            code = getattr(error, "code", None) or "RFQ_BUILD_INVALID"
+            self.journal.capture_rfq(raw, verdict="REJECTED", reason=code)
+            self._revoke(sell, spender)  # the exact approval is no longer needed
+            raise LiveExecutionError(code) from None
+        self.journal.capture_rfq(raw, verdict="ACCEPTED")
+        signature = self.signer.sign_typed_data(typed)
+        scheme = build.rfq.signingScheme or self.signer.rfq_signing_scheme
+        if scheme.lower() != self.signer.rfq_signing_scheme:
+            raise LiveExecutionError("RFQ_SIGNING_SCHEME_MISMATCH")
+        if self.signer.rfq_signing_scheme == "eip712" and not self._recovers(typed, signature):
+            raise LiveExecutionError("RFQ_SIGNATURE_NOT_FROM_WALLET")
+        request_id = uuid4()
+        evidence = dict(
+            evidence,
+            order=order.summary(),
+            rfq_order_id=build.rfq.orderId,
+            rfq_request_id=str(request_id),
+            rfq_signature=signature,
+            rfq_signing_scheme=scheme,
+            rfq_signed_at=self.clock().isoformat(),
+        )
+        # Journal the requestId and signature before the POST: a crash can only resubmit the
+        # identical idempotent body, never sign a second order.
+        self.journal.upsert(action.action_id, status="SIGNED", evidence=evidence)
+        before = (self.rpc.erc20_balance(sell, wallet), self.rpc.erc20_balance(buy, wallet))
+        evidence = dict(evidence, balances_before=[str(before[0]), str(before[1])])
+        self.journal.upsert(action.action_id, evidence=evidence)
+        order_id = self._submit(evidence, vendor)
+        evidence = dict(evidence, rfq_status_order_id=order_id)
+        record = self.journal.upsert(action.action_id, status="SUBMITTED", evidence=evidence)
+        return self._settle_rfq(record, poll=True)
+
+    def _recovers(self, typed, signature):
+        from eth_account import Account
+        from eth_account.messages import encode_typed_data
+
+        from app.services.rfq_orders import order_hash
+
+        _, full = order_hash(typed)
+        recovered = Account.recover_message(encode_typed_data(full_message=full), signature=signature)
+        return recovered.lower() == self.signer.address
+
+    def _submit(self, evidence, vendor):
+        from pydantic import SecretStr
+
+        submission = RFQSubmission(
+            requestId=evidence["rfq_request_id"],
+            userSignature=SecretStr(evidence["rfq_signature"]),
+            vendor=vendor,
+            quoteId=evidence["rfq_order_id"],
+            signingScheme=evidence["rfq_signing_scheme"],
+        )
+        return self.trading.submit_rfq(submission)
+
+    def _settle_rfq(self, record, *, poll):
+        evidence = record["evidence"]
+        order = evidence["order"]
+        order_id = evidence.get("rfq_status_order_id") or evidence["rfq_order_id"]
+        deadline = time.monotonic() + (ORDER_POLL_SECONDS if poll else 0)
+        while True:
+            status, _ = self.trading.order_status(order_id)
+            if status.status == "FILLED" or status.status in NOT_FILLED:
+                break
+            if time.monotonic() >= deadline:
+                return self.journal.upsert(record["action_id"], status="SUBMITTED")
+            self.sleep(2)
+        if status.status in NOT_FILLED:
+            # Nothing moved; drop the leftover exact allowance best-effort.
+            self._revoke(record["token"] if record["side"] == "SELL" else USDT, order["spender"])
+            return self.journal.upsert(
+                record["action_id"], status="NOT_FILLED", reasons=["RFQ_" + status.status]
+            )
+        receipt = self.rpc.receipt(status.txHash) if status.txHash else None
+        if not receipt or receipt.get("status") != "0x1":
+            return self.journal.upsert(
+                record["action_id"],
+                status="RECONCILIATION_REQUIRED",
+                reasons=["RFQ_FILLED_WITHOUT_SUCCESSFUL_RECEIPT"],
+            )
+        wallet = self.signer.address
+        sell, buy = order["sell_token"], order["buy_token"]
+        before = evidence.get("balances_before")
+        if before:
+            spent = int(before[0]) - self.rpc.erc20_balance(sell, wallet)
+            received = self.rpc.erc20_balance(buy, wallet) - int(before[1])
+        else:  # restarted before balances were journaled: fall back to the provider amounts
+            spent, received = int(status.fromAmount or 0), int(status.toAmount or 0)
+        evidence = dict(
+            evidence,
+            swap_tx=status.txHash,
+            spent=str(spent),
+            received=str(received),
+            gas_used=str(int(receipt.get("gasUsed", "0x0"), 16)),
+            block=str(int(receipt.get("blockNumber", "0x0"), 16)),
+        )
+        within = spent <= int(order["sell_amount"]) and received >= int(order["min_buy_to_wallet"])
+        return self.journal.upsert(
+            record["action_id"],
+            status="CONFIRMED" if within else "RECONCILIATION_REQUIRED",
+            swap_tx=status.txHash,
+            evidence=evidence,
+            reasons=[] if within else ["RFQ_FILL_OUTSIDE_SIGNED_BOUNDS"],
+        )
+
+    def _reconcile_rfq(self, record):
+        evidence = record["evidence"]
+        if record["status"] in {"CONFIRMED", "FAILED", "NOT_FILLED", "RECONCILIATION_REQUIRED"}:
+            return record
+        if record["status"] == "SIGNED":
+            signed = datetime.fromisoformat(evidence["rfq_signed_at"])
+            if (self.clock() - signed).total_seconds() > RESUBMIT_WINDOW_SECONDS:
+                return self.journal.upsert(
+                    record["action_id"],
+                    status="RECONCILIATION_REQUIRED",
+                    reasons=["RFQ_SUBMIT_OUTCOME_UNKNOWN_PAST_IDEMPOTENCY_WINDOW"],
+                )
+            try:
+                order_id = self._submit(evidence, evidence["vendor"])  # same requestId and body
+            except ProviderError as error:
+                from app.clients.binance_trading import provider_reason
+
+                return self.journal.upsert(
+                    record["action_id"], status="SIGNED", reasons=[provider_reason(error)]
+                )
+            record = self.journal.upsert(
+                record["action_id"],
+                status="SUBMITTED",
+                evidence=dict(evidence, rfq_status_order_id=order_id),
+            )
+        try:
+            return self._settle_rfq(record, poll=False)
+        except ProviderError:
+            return record
+
     # -- helpers -------------------------------------------------------------------------
+    def _approve(self, action_id, token, spender, amount):
+        """Exact approval for this leg only; never unlimited. Simulated, sent, confirmed."""
+        wallet = self.signer.address
+        if self.rpc.allowance(token, wallet, spender) >= amount:
+            return
+        approve_tx = EvmTransaction.model_validate(
+            {
+                "from": wallet,
+                "to": token,
+                "data": approve_calldata(spender, amount),
+                "value": "0",
+                "gas": str(APPROVE_GAS),
+                "gasPrice": str(self.rpc.gas_price()),
+            }
+        )
+        sim, _ = self.trading.simulate(approve_tx, mode="LIVE_READ_ONLY")
+        if sim.status != "SUCCESS":
+            raise LiveExecutionError("APPROVAL_SIMULATION_FAILED")
+        self._gas(approve_tx)
+        approve_hash = self._send(approve_tx)
+        self.journal.upsert(action_id, status="APPROVING", approve_tx=approve_hash)
+        if not self._confirmed(approve_hash):
+            raise LiveExecutionError("APPROVAL_NOT_CONFIRMED")
+        if self.rpc.allowance(token, wallet, spender) < amount:
+            raise LiveExecutionError("APPROVAL_NOT_OBSERVED")
+
+    def _revoke(self, token, spender):
+        try:
+            if self.rpc.allowance(token, self.signer.address, spender) == 0:
+                return
+            self.signer.send(
+                to=token,
+                data=approve_calldata(spender, 0),
+                value=0,
+                gas=APPROVE_GAS,
+                gas_price=self.rpc.gas_price(),
+            )
+        except (LiveExecutionError, ProviderError, ValueError):
+            pass  # best effort: the order expired, an exact leftover allowance is bounded
+
+
     def portfolio_usdt_price(self):
         return self._usdt_price
 
@@ -314,6 +572,8 @@ class LiveRebalanceExecutor:
 
     def _reconcile(self, record):
         """Never resend a journaled leg; only observe its submitted transaction."""
+        if record["evidence"].get("route") == "RFQ" and record["evidence"].get("rfq_request_id"):
+            return self._reconcile_rfq(record)
         if record["status"] in {"CONFIRMED", "FAILED"}:
             return record
         if not record.get("swap_tx"):

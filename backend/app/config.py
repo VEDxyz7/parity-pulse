@@ -37,6 +37,13 @@ class Settings(BaseSettings):
     equity_reference_source: Literal["MASSIVE", "BINANCE_PERP_INDEX"] = "MASSIVE"
     # POSITIONS: Phase 10 journal is the holdings authority. WALLET: on-chain balances are.
     portfolio_inventory: Literal["POSITIONS", "WALLET"] = "POSITIONS"
+    # Wallet rebalancing may swap on on-chain pools while the underlying market is closed
+    # (weekends/off-hours), at half the per-trade cap. RFQ is never used then.
+    closed_market_swap: bool = True
+    # RFQ settlement contracts beyond the verified defaults, e.g. the PancakeSwap X reactor:
+    # "PcsXRfq:0x...". Unlisted settlement contracts are refused and captured for review.
+    rfq_settlement_allowlist: str = ""
+    rfq_enabled: bool = True
     live_wallet_address: str | None = Field(default=None, pattern=r"^0x[0-9a-fA-F]{40}$")
     live_signer: Literal["LOCAL_KEY", "AGENTIC_WALLET", "ALTANA"] = "LOCAL_KEY"
     altana_sidecar_url: str = Field(default="http://127.0.0.1:8787", pattern=r"^http://127\.0\.0\.1:")
@@ -62,6 +69,8 @@ class Settings(BaseSettings):
         "live_trading_enabled",
         "require_simulation",
         "trust_required_for_rebalance",
+        "closed_market_swap",
+        "rfq_enabled",
         "llm_enabled",
         "llm_structured_output",
         mode="before",
@@ -144,6 +153,12 @@ class Settings(BaseSettings):
             raise ValueError("LIVE LOCAL_KEY signer requires LIVE_SIGNER_PRIVATE_KEY")
         if live and self.live_signer == "ALTANA" and self.sidecar_token is None:
             raise ValueError("LIVE ALTANA signer requires SIDECAR_TOKEN")
+        try:
+            from app.services.rfq_orders import parse_allowlist
+
+            parse_allowlist(self.rfq_settlement_allowlist)
+        except ValueError:
+            raise ValueError("Invalid RFQ_SETTLEMENT_ALLOWLIST") from None
         if self.portfolio_inventory == "WALLET" and self.data_mode != "LIVE_READ_ONLY":
             raise ValueError("Wallet inventory requires LIVE_READ_ONLY data")
         return self

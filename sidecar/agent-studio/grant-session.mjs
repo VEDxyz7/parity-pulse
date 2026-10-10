@@ -71,6 +71,15 @@ console.log(
   }),
 );
 
+// RFQ via CowSwap with an Altana wallet needs the settlement contract approved as an
+// ERC-1271 signature checker: --approve-checker 0x9008D19f58AAbD9eD0D60971565AA8510560ab41
+const checkerFlag = process.argv.indexOf("--approve-checker");
+if (checkerFlag > 0) {
+  const checker = process.argv[checkerFlag + 1];
+  const result = await client.approveSignatureChecker({ wallet, signer: owner, session, checker, chainId: 56 });
+  console.log(JSON.stringify({ event: "SIGNATURE_CHECKER_APPROVED", checker, tx: result.transactionHash ?? null }));
+}
+
 if (process.argv.includes("--register-agent")) {
   const card = {
     type: "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",

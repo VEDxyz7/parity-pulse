@@ -21,6 +21,7 @@ READ_METHODS = {
     "eth_gasPrice",
     "eth_getTransactionReceipt",
     "eth_blockNumber",
+    "eth_getCode",
 }
 ADDRESS = re.compile(r"^0x[0-9a-fA-F]{40}$")
 HASH = re.compile(r"^0x[0-9a-fA-F]{64}$")
@@ -93,6 +94,10 @@ class BscRpcClient:
     def allowance(self, token, owner, spender):
         data = ALLOWANCE + word(owner) + word(spender)
         return int(self.read("eth_call", {"to": token, "data": data}, "latest") or "0x0", 16)
+
+    def has_code(self, address):
+        word(address)
+        return (self.read("eth_getCode", address, "latest") or "0x") not in ("0x", "0x0")
 
     def nonce(self, owner):
         word(owner)

@@ -34,6 +34,11 @@ def parity(ticker: str, request: Request):
         raise HTTPException(503, error.kind) from None
 
 
+@router.get("/rfq/captures")
+def rfq_captures(request: Request):
+    return runtime(request).journal.rfq_captures(50)
+
+
 @router.get("/fills")
 def fills(request: Request):
     return runtime(request).journal.recent(100)
@@ -56,4 +61,27 @@ def execute(plan_id: str, request: Request):
     except LiveExecutionError as error:
         raise HTTPException(409, error.code) from None
     plan = request.app.state.portfolio.store.get(plan_id, mode=request.app.state.portfolio.mode)
+    return {"plan_id": plan_id, "plan_status": plan.status, "legs": legs}
+
+
+IN_FLIGHT = {"PREPARING", "QUOTED", "APPROVING", "SIGNED", "SUBMITTED"}
+
+
+@router.post("/plans/{plan_id}/retire")
+def retire(plan_id: str, request: Request):
+    """Release a pending plan after a terminal non-success leg (e.g. an expired RFQ order).
+
+    Refused while any leg could still settle; those must reconcile first (rerun execute).
+    """
+    live = runtime(request)
+    legs = live.journal.for_plan(plan_id)
+    if any(leg["status"] in IN_FLIGHT for leg in legs):
+        raise HTTPException(409, "LEG_IN_FLIGHT_RECONCILE_FIRST")
+    portfolio = request.app.state.portfolio
+    try:
+        plan = portfolio.retire(plan_id)
+    except LookupError:
+        raise HTTPException(404) from None
+    except ValueError as error:
+        raise HTTPException(409, str(error)) from None
     return {"plan_id": plan_id, "plan_status": plan.status, "legs": legs}

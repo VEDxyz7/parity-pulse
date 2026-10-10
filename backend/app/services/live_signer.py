@@ -36,6 +36,17 @@ class LocalKeySigner:
         raw = signed.raw_transaction.hex()
         return self.rpc.send_raw_transaction(raw if raw.startswith("0x") else "0x" + raw)
 
+    rfq_signing_scheme = "eip712"
+
+    def sign_typed_data(self, typed):
+        """EIP-712 v4 signature over an already verified order (see rfq_orders.verify)."""
+        from app.services.rfq_orders import order_hash
+
+        _, full = order_hash(typed)
+        signed = self._account.sign_typed_data(full_message=full)
+        value = signed.signature.hex()
+        return value if value.startswith("0x") else "0x" + value
+
 
 class AltanaSigner:
     """BNB Agent Studio Altana smart wallet via the localhost sidecar's scoped session key.
@@ -74,3 +85,20 @@ class AltanaSigner:
         if response.status_code != 200 or not isinstance(tx_hash, str) or len(tx_hash) != 66:
             raise LiveExecutionError("ALTANA_EXECUTE_FAILED")
         return tx_hash.lower()
+
+    rfq_signing_scheme = "eip1271"
+
+    def sign_typed_data(self, typed):
+        """ERC-1271 smart-wallet signature via the sidecar (Altana signOrderTypedData)."""
+        from app.services.live_execution import LiveExecutionError
+
+        response = self.http.post(
+            self.url + "/altana/sign-typed-data",
+            json={"typedData": typed},
+            headers={"x-sidecar-token": self.token.get_secret_value()},
+        )
+        body = response.json() if response.content else {}
+        signature = body.get("signature")
+        if response.status_code != 200 or not isinstance(signature, str):
+            raise LiveExecutionError("ALTANA_SIGN_FAILED")
+        return signature

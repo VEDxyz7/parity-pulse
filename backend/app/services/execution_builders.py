@@ -32,6 +32,7 @@ class ExecutionRouteBuilder:
         expected = quote.route.model_dump(exclude={"quoteId", "executionMode", "approveTarget"})
         if (
             response.executionMode != quote.route.executionMode
+            or response.routerResult is None
             or response.routerResult.model_dump() != expected
         ):
             raise ValueError("QUOTE_BUILD_ROUTE_MISMATCH")

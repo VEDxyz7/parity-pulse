@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { apiRequest, ApiError } from '../services/api'
 
-type Status = { wallet: string; signer: string | null; live_execution: boolean; max_notional_usd: string; max_slippage_bps: string; trust_required: boolean; equity_reference: string }
+type Status = { wallet: string; signer: string | null; live_execution: boolean; max_notional_usd: string; max_slippage_bps: string; trust_required: boolean; equity_reference: string; rfq_enabled?: boolean; closed_market_swap?: boolean; rfq_settlements?: Record<string, string[]> }
+type Capture = { captured_at: string; vendor: string | null; primary_type: string | null; verifying_contract: string | null; verdict: string; reason: string | null }
 type Representation = { issuer: string; token: string; contract: string; token_price_usd: string; shares_per_token: string; price_per_share_usd: string; deviation_bps: string; market_state: string }
 type Parity = { ticker: string; equity_reference_usd: string; equity_observed_at: string; representations: Representation[] }
 type Action = { action_id: string; side: string; asset: string; notional_usd: string; eligible_for_preparation: boolean; reasons: string[]; route: { selected_representation: { token: string } | null } }
@@ -22,6 +23,7 @@ export function LiveRebalance() {
   const [parity, setParity] = useState<Parity | null>(null)
   const [plan, setPlan] = useState<Plan | null>(null)
   const [legs, setLegs] = useState<Leg[]>([])
+  const [captures, setCaptures] = useState<Capture[]>([])
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -30,7 +32,10 @@ export function LiveRebalance() {
     const controller = new AbortController()
     try { await work(controller.signal) } catch (e) { if (!(e instanceof DOMException)) setError(message(e)) } finally { setBusy(null) }
   }
-  const refreshFills = (signal: AbortSignal) => apiRequest('/api/live/fills', parseList<Leg>, { signal }).then(setLegs)
+  const refreshFills = (signal: AbortSignal) => Promise.all([
+    apiRequest('/api/live/fills', parseList<Leg>, { signal }).then(setLegs),
+    apiRequest('/api/live/rfq/captures', parseList<Capture>, { signal }).then(setCaptures),
+  ]).then(() => undefined)
   useEffect(() => {
     const controller = new AbortController()
     apiRequest('/api/live/status', parse<Status>, { signal: controller.signal }).then(setStatus).catch(e => { if (!(e instanceof DOMException)) setError(message(e)) })
@@ -45,6 +50,7 @@ export function LiveRebalance() {
       {status ? <>
         <p><strong>{status.live_execution ? 'LIVE EXECUTION ENABLED — real BSC mainnet transactions' : 'Read-only wallet planning — no transactions are sent'}</strong></p>
         <p>Wallet <a href={`https://bscscan.com/address/${status.wallet}`} target="_blank" rel="noreferrer"><code>{status.wallet}</code></a> · Signer: {status.signer ?? 'none'} · Per-trade cap {money(status.max_notional_usd)} · Slippage cap {status.max_slippage_bps} bps · Trust: {status.trust_required ? 'required' : 'not evaluated (classifier parked)'} · Equity reference: {status.equity_reference}</p>
+        <p>RFQ: {status.rfq_enabled ? 'enabled — orders verified against signed bounds (settlement not simulable)' : 'disabled'} · Weekend / off-hours pool swaps: {status.closed_market_swap ? 'allowed at half cap, SWAP only' : 'off'}{status.rfq_settlements ? ` · RFQ settlements: ${Object.entries(status.rfq_settlements).map(([v, a]) => `${v} ${a.length ? a.map(x => x.slice(0, 8) + '…').join('/') : 'none (capture first)'}`).join(' · ')}` : ''}</p>
       </> : <p role="status">{error ?? 'Loading wallet status…'}</p>}
     </section>
 
@@ -70,6 +76,7 @@ export function LiveRebalance() {
         <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Drift rows"><table><thead><tr><th>Asset</th><th>Current</th><th>Target</th><th>Weight</th><th>Target weight</th><th>State</th></tr></thead>
           <tbody>{plan.rows.map(r => <tr key={r.asset}><td>{r.asset}</td><td>{money(r.current_value_usd)}</td><td>{money(r.target_value_usd)}</td><td>{r.current_weight ? (Number(r.current_weight) * 100).toFixed(2) + '%' : '—'}</td><td>{(Number(r.target_weight) * 100).toFixed(2)}%</td><td>{r.state}</td></tr>)}</tbody></table></div>
         {plan.actions.length > 0 && <ul>{plan.actions.map(a => <li key={a.action_id}>{a.side} {money(a.notional_usd)} {a.asset} via {a.route.selected_representation?.token ?? '—'} · {a.eligible_for_preparation ? 'risk approved' : 'blocked: ' + a.reasons.join(', ')}</li>)}</ul>}
+        {plan.status === 'REBALANCE_REQUIRED' && legs.some(l => ['NOT_FILLED', 'REJECTED', 'FAILED', 'RECONCILIATION_REQUIRED'].includes(l.status)) && <button className="refresh-button" disabled={busy !== null} onClick={() => void run('retire', signal => apiRequest(`/api/live/plans/${plan.plan_id}/retire`, parse<{ plan_status: string }>, { signal, method: 'POST' }).then(r => setPlan({ ...plan, status: r.plan_status })))}>Retire plan (a leg did not fill)</button>}
         {status?.live_execution && plan.status === 'REBALANCE_REQUIRED' && <button className="refresh-button" disabled={busy !== null} onClick={() => void run('execute', signal => apiRequest(`/api/live/plans/${plan.plan_id}/execute`, parse<{ plan_status: string; legs: Leg[] }>, { signal, method: 'POST', timeout: 240000 }).then(r => { setPlan({ ...plan, status: r.plan_status }); return refreshFills(signal) }))}>{busy === 'execute' ? 'Executing on BSC…' : 'Execute plan on BSC mainnet'}</button>}
       </>}
     </section>
@@ -77,8 +84,16 @@ export function LiveRebalance() {
     <section className="panel">
       <h2>Execution journal</h2>
       {legs.length === 0 ? <p>No live legs yet.</p> : <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Fills"><table>
-        <thead><tr><th>Side</th><th>Asset</th><th>Notional</th><th>Status</th><th>Approve tx</th><th>Swap tx</th><th>Execution cost vs mark</th><th>Reasons</th></tr></thead>
-        <tbody>{legs.map(l => <tr key={l.action_id}><td>{l.side}</td><td>{l.asset}</td><td>{money(l.notional_usd)}</td><td>{l.status}</td><td>{scan(l.approve_tx)}</td><td>{scan(l.swap_tx)}</td><td>{money(l.realized_cost_usd)}</td><td>{l.reasons.join(', ')}</td></tr>)}</tbody>
+        <thead><tr><th>Side</th><th>Asset</th><th>Notional</th><th>Route</th><th>Verification</th><th>Status</th><th>Approve tx</th><th>Settlement tx</th><th>RFQ order</th><th>Execution cost vs mark</th><th>Reasons</th></tr></thead>
+        <tbody>{legs.map(l => <tr key={l.action_id}><td>{l.side}</td><td>{l.asset}</td><td>{money(l.notional_usd)}</td><td>{l.evidence.route ?? 'SWAP'}{l.evidence.vendor ? ` · ${l.evidence.vendor}` : ''}</td><td>{l.evidence.verification ?? '—'}</td><td>{l.status}</td><td>{scan(l.approve_tx)}</td><td>{scan(l.swap_tx)}</td><td>{l.evidence.rfq_status_order_id ?? l.evidence.rfq_order_id ?? '—'}</td><td>{money(l.realized_cost_usd)}</td><td>{l.reasons.join(', ')}</td></tr>)}</tbody>
+      </table></div>}
+    </section>
+    <section className="panel">
+      <h2>RFQ payload captures</h2>
+      <p>Every RFQ order Binance returns is recorded (accepted or refused) so real vendor formats and settlement contracts can be confirmed before they are allowlisted.</p>
+      {captures.length === 0 ? <p>No RFQ payloads captured yet (RFQ market makers quote during issuer sessions).</p> : <div className="comparison-scroll" tabIndex={0} role="region" aria-label="RFQ captures"><table>
+        <thead><tr><th>Captured</th><th>Vendor</th><th>Order type</th><th>Settlement contract</th><th>Verdict</th><th>Reason</th></tr></thead>
+        <tbody>{captures.map((c, i) => <tr key={i}><td>{c.captured_at}</td><td>{c.vendor ?? '—'}</td><td>{c.primary_type ?? '—'}</td><td>{c.verifying_contract ? <a href={`https://bscscan.com/address/${c.verifying_contract}`} target="_blank" rel="noreferrer">{c.verifying_contract.slice(0, 10)}…</a> : '—'}</td><td>{c.verdict}</td><td>{c.reason ?? '—'}</td></tr>)}</tbody>
       </table></div>}
     </section>
     {error && <p role="alert">{error}</p>}

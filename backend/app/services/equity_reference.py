@@ -52,6 +52,9 @@ class EquityReferenceService:
         age = (self.clock() - observed).total_seconds()
         if not -5 <= age <= MAX_AGE_SECONDS:
             raise ProviderError("BINANCE_INDEX", "STALE")
+        # Binance stamps the index slightly ahead of local receipt; an observation can never
+        # be later than when we received it, so clamp to receipt time (keeps age >= 0).
+        observed = min(observed, received)
         with localcontext() as ctx:
             ctx.prec = 34
             usd = price / usdt_per_usd

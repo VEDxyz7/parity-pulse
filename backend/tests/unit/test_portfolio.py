@@ -1200,3 +1200,30 @@ def test_wallet_inventory_sells_down_from_held_balance_without_positions():
     assert sell.side == "SELL" and sell.position_id is None
     assert int(sell.quantity_base_units) <= 600000
     assert sell.inventory_source == "WALLET_BALANCE"
+
+
+def test_closed_underlying_swaps_only_with_explicit_wallet_policy():
+    from app.models.routing import RoutePolicy
+
+    w = wallet_service("400000")
+    w.source.inputs = change(
+        w.source.inputs, routes=(change(w.source.inputs.routes[0], market_state="offhours"),)
+    )
+    assert evaluate(w).status == "BLOCKED"  # policy off by default
+    allowed = wallet_service("400000")
+    allowed.source.inputs = w.source.inputs
+    allowed.allow_closed_underlying = True
+    plan = evaluate(allowed)
+    assert plan.status == "REBALANCE_REQUIRED"
+    assert "UNDERLYING_MARKET_CLOSED" in plan.actions[0].route.selected_candidate.limitations
+    with pytest.raises(ValueError):
+        PortfolioService(
+            PortfolioStore(None), w.positions, Source(), clock=lambda: NOW,
+            allow_closed_underlying=True,
+        )
+    with pytest.raises(ValueError):
+        RoutePolicy(
+            purpose="OPPORTUNITY", require_costs=True, require_liquidity=True,
+            require_trust=True, require_risk=True, min_liquidity_usd="1",
+            max_slippage_bps="1", allow_closed_underlying=True,
+        )

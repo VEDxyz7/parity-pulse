@@ -139,3 +139,43 @@ class AgenticWalletSigner:
         if not isinstance(tx_hash, str) or not TX_HASH.fullmatch(tx_hash):
             raise AgenticWalletError("EXECUTE_TX_HASH_MISSING")
         return tx_hash.lower()
+
+    rfq_signing_scheme = "eip712"
+
+    def sign_typed_data(self, typed):
+        """`baw sign-message` (EIP712, eth_signTypedData_v4) per binance-skills-hub
+        references/external-sign.md. Requires Developer Mode enabled in the Binance App."""
+        settings = self.reader.read("settings")[0]
+        dev = _find(settings, ("devMode",))
+        if not isinstance(dev, dict) or dev.get("enabled") is not True:
+            raise AgenticWalletError("AGENTIC_WALLET_DEV_MODE_REQUIRED")
+        message = json.dumps(
+            {"method": "eth_signTypedData_v4", "params": [self.address, json.dumps(typed)]},
+            separators=(",", ":"),
+        )
+        preview = self._run(
+            (
+                "sign-message",
+                "preview",
+                "--binanceChainId",
+                "56",
+                "--message",
+                message,
+                "--signType",
+                "EIP712",
+                "--json",
+            )
+        )
+        if _find(preview, ("requireConfirmation",)) is True and not self.allow_app_confirmation:
+            raise AgenticWalletError("WALLET_REQUIRES_APP_CONFIRMATION")
+        request_id = _find(preview, ("requestId",))
+        if not isinstance(request_id, str) or not REQUEST_ID.match(request_id):
+            raise AgenticWalletError("PREVIEW_REQUEST_ID_MISSING")
+        result = self._run(("sign-message", "execute", "--requestId", request_id, "--json"))
+        status = _find(result, ("status",))
+        signature = _find(result, ("signature",))
+        if status not in (None, "COMPLETED") or not isinstance(signature, str):
+            raise AgenticWalletError("WALLET_SIGNATURE_UNAVAILABLE_" + str(status))
+        if not re.fullmatch(r"0x[0-9a-fA-F]{130}", signature):
+            raise AgenticWalletError("WALLET_SIGNATURE_MALFORMED")
+        return signature

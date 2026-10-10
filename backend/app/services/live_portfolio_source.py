@@ -24,6 +24,7 @@ from app.models.execution import (
 from app.models.portfolio import AssetRisk, PortfolioInputs
 from app.models.risk import OpportunityRiskContext
 from app.models.routing import RouteIdentity, RouteInput
+from app.services.routing import CLOSED_STATES
 
 USDT = "0x55d398326f99059ff775485246999027b3197955"
 USDT_DECIMALS = 18
@@ -82,12 +83,16 @@ class LivePortfolioSource:
         limits,
         activity=no_activity,
         clock=lambda: datetime.now(UTC),
+        capture_rfq=None,
     ):
         self.rwa, self.trading, self.market, self.equity = rwa, trading, market, equity
         self.rpc, self.wallet, self.limits = rpc, wallet.lower(), limits
         self.activity, self.clock = activity, clock
+        self.capture_rfq = capture_rfq
+        self._captured = set()  # one planning capture per (vendor, token pair) per process
         self._decimals = {}
         self.last_capture = {}
+        self.notes = []
 
     def decimals(self, contract):
         return self._decimals.get(contract)
@@ -113,10 +118,26 @@ class LivePortfolioSource:
             userWalletAddress=self.wallet,
         )
         quotes = self.trading.quote(request, mode="LIVE_READ_ONLY")
+        self._capture_rfq_payloads(quotes)
         best = [q for q in quotes if q.route.executionMode == "SWAP"]
         if not best:
             return None
         return min(best, key=lambda q: -int(q.route.toTokenAmount))
+
+    def _capture_rfq_payloads(self, quotes):
+        """Planning-time capture: record real RFQ /swap payloads even in read-only mode."""
+        if self.capture_rfq is None:
+            return
+        for q in quotes:
+            key = (q.route.vendorName, q.request.fromTokenAddress, q.request.toTokenAddress)
+            if q.route.executionMode != "RFQ" or key in self._captured:
+                continue
+            self._captured.add(key)
+            try:
+                raw = self.trading.build_rfq(q, slippage_bps=self.limits.max_slippage_bps)
+                self.capture_rfq(raw, verdict="PLANNING_CAPTURE")
+            except (ProviderError, ValueError):
+                continue
 
     def _liquidity(self, token, now):
         try:
@@ -155,6 +176,7 @@ class LivePortfolioSource:
     # -- capture -----------------------------------------------------------------------------
     def capture(self, config):
         now = self.clock()
+        self.notes = []
         usdt_usd, bnb_usd, rate_at = self._usd_rates()
         native = self.rpc.native_balance(self.wallet)
         usdt_balance = self.rpc.erc20_balance(USDT, self.wallet)
@@ -276,7 +298,7 @@ class LivePortfolioSource:
             )
         if not tokens:
             blockers.append("NO_CONFIGURED_TOKENIZED_STOCK_DISCOVERED")
-        self.last_capture = dict(at=now, rates_at=rate_at, wallet=self.wallet)
+        self.last_capture = dict(at=now, rates_at=rate_at, wallet=self.wallet, notes=self.notes)
         return PortfolioInputs(
             data_mode="LIVE_READ_ONLY",
             captured_at=now,
@@ -342,6 +364,12 @@ class LivePortfolioSource:
             funding.unit_price_usd
         )
         lim = self.limits
+        # Conservative: if any priced representation is closed the router may pick it.
+        closed = any(r.market_state in CLOSED_STATES for r, _ in priced)
+        if closed:
+            blockers_note = "UNDERLYING_MARKET_CLOSED_" + ticker
+            self.notes.append(blockers_note)
+        cap = lim.max_notional_usd / 2 if closed else lim.max_notional_usd
         context = OpportunityRiskContext(
             data_mode="LIVE_READ_ONLY",
             observed_at=now,
@@ -354,7 +382,7 @@ class LivePortfolioSource:
             last_trade_at=last,
             system_resolved=True,
             wallet_allowed=True,
-            max_position_usd=lim.max_notional_usd,
+            max_position_usd=cap,
             max_portfolio_exposure_usd=lim.max_portfolio_exposure_usd,
             max_daily_loss_usd=lim.max_daily_loss_usd,
             max_risk_budget_usd=lim.max_portfolio_exposure_usd,
@@ -373,9 +401,9 @@ class LivePortfolioSource:
                 decision_id="portfolio_template",
                 data_mode="LIVE_READ_ONLY",
                 purpose="DIRECT_EXPOSURE",
-                budget_usd=lim.max_notional_usd,
-                risk_budget_usd=lim.max_notional_usd,
-                notional_usd=lim.max_notional_usd,
+                budget_usd=cap,
+                risk_budget_usd=cap,
+                notional_usd=cap,
                 costs_usd=Decimal(0),
                 conversion_cost_usd=Decimal(0),
                 slippage_bps=route.slippage_bps or Decimal(0),

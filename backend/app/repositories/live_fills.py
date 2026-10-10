@@ -37,7 +37,63 @@ class LiveFillStore:
                 updated_at TEXT NOT NULL
             )"""
         )
+        self.db.execute(
+            """CREATE TABLE IF NOT EXISTS rfq_captures (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                captured_at TEXT NOT NULL,
+                vendor TEXT,
+                primary_type TEXT,
+                domain TEXT,
+                verifying_contract TEXT,
+                verdict TEXT NOT NULL,
+                reason TEXT,
+                payload TEXT NOT NULL
+            )"""
+        )
         self.db.commit()
+
+    def capture_rfq(self, raw, *, verdict, reason=None):
+        """Keep every RFQ /swap payload (accepted or refused) so real vendor formats are known."""
+        rfq = raw.get("rfq") if isinstance(raw, dict) else None
+        typed = rfq.get("typedDataToSign") if isinstance(rfq, dict) else None
+        if isinstance(typed, str):
+            try:
+                typed = json.loads(typed)
+            except ValueError:
+                typed = None
+        typed = typed if isinstance(typed, dict) else {}
+        domain = typed.get("domain") if isinstance(typed.get("domain"), dict) else {}
+        text = json.dumps(raw, default=str, sort_keys=True)[:262144]
+        with self.lock:
+            self.db.execute(
+                "INSERT INTO rfq_captures (captured_at, vendor, primary_type, domain, "
+                "verifying_contract, verdict, reason, payload) VALUES (?,?,?,?,?,?,?,?)",
+                (
+                    datetime.now(UTC).isoformat(),
+                    rfq.get("vendor") if isinstance(rfq, dict) else None,
+                    typed.get("primaryType"),
+                    json.dumps(domain, default=str, sort_keys=True),
+                    domain.get("verifyingContract"),
+                    verdict,
+                    reason,
+                    text,
+                ),
+            )
+            self.db.commit()
+
+    def rfq_captures(self, limit=50):
+        with self.lock:
+            rows = self.db.execute(
+                "SELECT captured_at, vendor, primary_type, domain, verifying_contract, verdict, "
+                "reason, payload FROM rfq_captures ORDER BY id DESC LIMIT ?",
+                (int(limit),),
+            ).fetchall()
+        keys = "captured_at vendor primary_type domain verifying_contract verdict reason payload"
+        return [
+            {**dict(zip(keys.split(), r, strict=True)), "domain": json.loads(r[3]),
+             "payload": json.loads(r[7])}
+            for r in rows
+        ]
 
     def close(self):
         self.db.close()

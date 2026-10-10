@@ -25,6 +25,8 @@ class RoutePolicy(DataModel):
     require_liquidity: bool = Field(default=False, strict=True)
     require_trust: bool = Field(default=False, strict=True)
     require_risk: bool = Field(default=False, strict=True)
+    # SWAP-only wallet rebalancing may trade on-chain pools while the underlying is closed.
+    allow_closed_underlying: bool = Field(default=False, strict=True)
     min_liquidity_usd: Amount | None = None
     max_slippage_bps: Amount | None = Field(default=None, le=10000)
     max_age_seconds: Literal[120] = 120
@@ -38,6 +40,8 @@ class RoutePolicy(DataModel):
 
     @model_validator(mode="after")
     def strict_opportunity(self):
+        if self.purpose == "OPPORTUNITY" and self.allow_closed_underlying:
+            raise ValueError("Opportunity routing never trades a closed underlying")
         if self.purpose == "OPPORTUNITY" and not (
             self.require_costs
             and self.require_liquidity
