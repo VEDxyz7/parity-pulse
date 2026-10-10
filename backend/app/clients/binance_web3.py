@@ -114,8 +114,8 @@ class BinanceWeb3Client(ReadTransport):
             {
                 "X-OC-APIKEY": self.api_key.get_secret_value(),
                 "X-OC-TIMESTAMP": timestamp,
-                "X-OC-SIGN": sign_request(
-                    self.secret_key, timestamp, method, request.url.raw_path.decode(), raw
+                "X-OC-SIGN": self.request_signature(
+                    timestamp, method, request.url.raw_path.decode(), raw
                 ),
                 "X-OC-RECV-WINDOW": str(self.recv_window),
                 "Content-Type": "application/json",
@@ -124,6 +124,9 @@ class BinanceWeb3Client(ReadTransport):
         if self.nonce:
             request.headers["X-OC-NONCE"] = str(uuid4())
         return request
+
+    def request_signature(self, timestamp, method, wire_path, raw):
+        return sign_request(self.secret_key, timestamp, method, wire_path, raw)
 
     def sensitive_values(self, request):
         return (

@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     postopen_exit_minutes: int = Field(default=10, ge=1, le=120)
 
+    execution_worker_token: SecretStr | None = Field(default=None, exclude=True, repr=False)
+
     binance_web3_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     binance_web3_secret_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     massive_data_quality: Literal["UNKNOWN", "DELAYED", "REALTIME"] = "UNKNOWN"
@@ -67,6 +69,7 @@ class Settings(BaseSettings):
         raise ValueError("Boolean settings must be true or false")
 
     @field_validator(
+        "execution_worker_token",
         "binance_web3_api_key",
         "binance_web3_secret_key",
         "massive_api_key",
@@ -128,6 +131,7 @@ class Settings(BaseSettings):
     def redaction_values(self) -> tuple[str, ...]:
         """Only for the log redactor. Never serialize this return value."""
         values = (
+            self.execution_worker_token,
             self.binance_web3_api_key,
             self.binance_web3_secret_key,
             self.massive_api_key,

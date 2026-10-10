@@ -57,10 +57,11 @@ try {
         '/api/demo/trust/scenarios/supported-move', '/api/demo/opportunity', '/api/demo/risk',
         '/api/demo/quote', '/api/demo/prepare', '/api/demo/simulate']
       const evaluation = ['TERMINAL','WORKSPACE'].includes(originPhase) && (path === '/api/scorecard' || /^\/api\/audit\/decisions\/[A-Za-z0-9_.:-]{1,160}$/.test(path));
+      const liveStatus = originPhase === 'LIVE_STATUS' && path === '/api/live/fills' && request.method === 'GET';
       const terminal = path === '/api/terminal'
       const portfolio = originPhase === 'PORTFOLIO_API_SMOKE' && ['/api/autopilot', '/api/portfolio', '/api/portfolio/plans', '/api/portfolio/audit'].includes(path)
       const workspace = originPhase === 'WORKSPACE' && (['/api/workspace','/api/exposure/quote','/api/opportunities/scan','/api/autopilot','/api/portfolio/plans','/api/audit'].includes(path) || /^\/api\/opportunities\/[a-f0-9]{64}$/.test(path) || /^\/api\/assets\/(AAPL|NVDA)\/trust$/.test(path));
-      assert(workspace || (originPhase === 'AGENT_API' && path === '/api/agent/tools') || evaluation || terminal || portfolio || paper || analytical.includes(path) || (originPhase === 'ORDINARY_OVERVIEW' && path === '/api/assets/NVDA/trust'))
+      assert(liveStatus || workspace || (originPhase === 'AGENT_API' && path === '/api/agent/tools') || evaluation || terminal || portfolio || paper || analytical.includes(path) || (originPhase === 'ORDINARY_OVERVIEW' && path === '/api/assets/NVDA/trust'))
       const post = paper ? !path.endsWith('/scorecard') : ['/api/demo/opportunity', '/api/demo/risk', '/api/demo/quote', '/api/demo/prepare', '/api/demo/simulate', '/api/exposure/quote', '/api/opportunities/scan', '/api/autopilot', '/api/portfolio/plans'].includes(path)
       assert.equal(request.method, portfolio ? (['/api/autopilot', '/api/portfolio/plans'].includes(path) ? 'POST' : 'GET') : post ? 'POST' : 'GET')
       const response = await localFetch('http://127.0.0.1:' + originBackend + path + new URL(request.url).search, {
@@ -79,7 +80,7 @@ try {
         assert.equal(value.live_trading_enabled, false)
         assert.equal(value.require_simulation, true)
         for (const gate of ['SWAP_LIVE_GATE', 'RFQ_LIVE_GATE', 'AGENTIC_WALLET_LIVE_GATE']) assert.equal(value.gates[gate], 'BLOCKED')
-        if (originBackend !== 8056 && (originPhase.startsWith('DEMO') || originPhase === 'TERMINAL' || originPhase === 'AGENT_API' || originPhase === 'WORKSPACE')) assert.equal(value.runtime_mode, 'DEMO')
+        if (originBackend !== 8056 && (originPhase.startsWith('DEMO') || originPhase === 'TERMINAL' || originPhase === 'AGENT_API' || originPhase === 'WORKSPACE' || originPhase === 'LIVE_STATUS')) assert.equal(value.runtime_mode, 'DEMO')
         else {
           assert.equal(value.runtime_mode, undefined)
           assert.equal(value.data_mode, 'DEMO') // Ordinary runtime, synthetic read-only inputs.
@@ -339,9 +340,22 @@ try {
   assert((await text()).includes(agentDecision));
   await mark('mobile','Encoded original agent/scan decision → audit trace',{encoded_colon_contract:true});
 
+  // PR #1 merge regression: current premium dashboard + read-only execution page.
+  for(const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',width:390,height:844}]) {
+    phase='LIVE_STATUS';backendPort=8054;
+    await call('Emulation.setDeviceMetricsOverride',{width:viewport.width,height:viewport.height,mobile:viewport.name==='mobile',deviceScaleFactor:1});
+    await navigate('#live',viewport.name+'-execution-status');
+    await wait('document.body.innerText.includes("Execution worker diagnostics are not configured")',true);
+    assert(await evaluate('document.querySelector(".primary-navigation")!==null'));
+    assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b=>!b.disabled&&/execute|sign|approve|retire/i.test(b.textContent))'),false);
+    for(const gate of ['SWAP_LIVE_GATE','RFQ_LIVE_GATE','AGENTIC_WALLET_LIVE_GATE'])assert((await text()).includes(gate));
+    await shot(viewport.name+'-execution-status');
+    await mark(viewport.name,'Merged execution status / unconfigured worker',{read_only:true,gates_blocked:true});
+  }
+
   if(errors.length) await writeFile(join(outputDir,'request-errors.json'),JSON.stringify({errors,requests},null,2));
   assert.equal(errors.length, 0)
-  assert(requests.every(r => r.status === 200 || ['TERMINAL','AGENT_API','WORKSPACE'].includes(r.phase) && r.status === 503 && r.injected))
+  assert(requests.every(r => r.status === 200 || r.phase === 'LIVE_STATUS' && r.path === '/api/live/fills' && r.status === 404 || ['TERMINAL','AGENT_API','WORKSPACE'].includes(r.phase) && r.status === 503 && r.injected))
   const report = {
     milestone: 'EMERALD_FRONTEND_REDESIGN', forwarding_serialized:false, api_timings:apiTimings, load_timings:loadTimings, verified_at_utc: new Date().toISOString(), status: 'PASS',
     browser: 'Disposable headless Google Chrome', frontend: 'Built UI at localhost:5178',

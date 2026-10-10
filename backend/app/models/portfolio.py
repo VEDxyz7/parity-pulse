@@ -202,6 +202,7 @@ class RebalanceAction(ExecutionModel):
     estimated_share_delta: Signed
     target_share_exposure: Nonnegative
     position_id: UUID | None = None
+    inventory_source: Literal["PHASE10_POSITION", "WALLET_BALANCE"] = "PHASE10_POSITION"
     route: RouteDecision
     risk: ExecutionRiskDecision
     risk_inputs: ExecutionRiskEvidence
@@ -222,7 +223,10 @@ class RebalanceAction(ExecutionModel):
 
         if self.risk.evidence_digest != risk_digest(self.risk_inputs):
             raise ValueError("Risk decision is not bound to the action inputs")
-        if (self.side == "SELL") != (self.position_id is not None):
+        if self.inventory_source == "WALLET_BALANCE":
+            if self.position_id is not None:
+                raise ValueError("Wallet-balance actions cannot claim Phase 10 position ownership")
+        elif (self.side == "SELL") != (self.position_id is not None):
             raise ValueError("Reductions require an identified owned position")
         if (
             self.risk_inputs.decision_id != self.execution_decision_id

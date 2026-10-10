@@ -157,10 +157,15 @@ class QuoteToken(ExecutionModel):
 class SegmentToken(ExecutionModel):
     tokenContractAddress: Address
     tokenSymbol: Identifier
+    # Informational descriptors are excluded from the established route fingerprint.
+    tokenUnitPrice: Positive | None = Field(default=None, exclude=True)
+    decimal: Units | None = Field(default=None, exclude=True)
+    isHoneyPot: bool | None = Field(default=None, strict=True, exclude=True)
+    taxRate: Nonnegative | None = Field(default=None, le=1, exclude=True)
 
 
 class DexProtocol(ExecutionModel):
-    dexName: Identifier
+    dexName: str = Field(strict=True, pattern=r"^[A-Za-z0-9 ._()-]{1,128}$")
     percent: Nonnegative = Field(le=100)
 
 
@@ -223,6 +228,7 @@ class QuoteRoute(RouterResult):
     quoteId: Identifier
     executionMode: ExecutionMode
     approveTarget: Address | None = None
+    isBest: bool | None = Field(default=None, strict=True, exclude=True)
 
 
 class ProviderQuote(ExecutionModel):

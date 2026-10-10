@@ -23,13 +23,18 @@ SECRET_NAMES = (
     "TWELVE_DATA_API_KEY",
     "FINNHUB_API_KEY",
     "LLM_API_KEY",
+    "EXECUTION_WORKER_TOKEN",
+    "LIVE_SIGNER_PRIVATE_KEY",
+    "SIDECAR_TOKEN",
+    "ALTANA_OWNER_PRIVATE_KEY",
+    "X402_FACILITATOR_KEY",
 )
 configured = dotenv_values(ROOT / ".env") if (ROOT / ".env").is_file() else {}
 secrets = [os.environ.get(key) or configured.get(key) for key in SECRET_NAMES]
 secrets = [value.encode() for value in secrets if value]
 
 source_files = []
-for folder in ["backend", "frontend/src", "frontend/dist", "scripts", "docs", "data"]:
+for folder in ["backend", "frontend/src", "frontend/dist", "scripts", "docs", "data", "sidecar"]:
     for candidate in (ROOT / folder).rglob("*"):
         if candidate.is_file() and not any(
             part in {"__pycache__", "node_modules", ".venv"} for part in candidate.parts

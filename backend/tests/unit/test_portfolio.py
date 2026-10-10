@@ -1128,3 +1128,101 @@ def test_confirmed_buy_uses_phase10_filled_units_and_immutable_drift_policy():
     assert s.register_confirmed_entry(plan.plan_id, action.action_id, instrument()) == owned
     assert s.complete(plan.plan_id).status == "COMPLETED"
     assert s.positions.store.count(mode="DEMO") == 2
+
+
+def test_rebalance_without_trust_is_refused_and_other_controls_remain():
+    s, _, _ = setup()
+    with pytest.raises(ValueError, match="Trust cannot be disabled"):
+        PortfolioService(s.store, s.positions, s.source, clock=s.clock, trust_required=False)
+    for updates in (
+        {"trust_state": "INSUFFICIENT_EVIDENCE"},
+        {"trust_state": "LIKELY_NOISE"},
+        {"liquidity_usd": "1"},
+        {"tradable": False},
+    ):
+        s.source.inputs = change(
+            s.source.inputs, routes=(change(s.source.inputs.routes[0], **updates),)
+        )
+        assert evaluate(s).status == "BLOCKED"
+
+
+def test_opportunity_evidence_cannot_disable_trust():
+    s, _, _ = setup()
+    evidence = evaluate(s).actions[0].risk_inputs
+    with pytest.raises(ValueError):
+        change(evidence, purpose="OPPORTUNITY", trust_required=False)
+
+
+def wallet_service(balance):
+    s, _, time = setup()
+    w = PortfolioService(
+        PortfolioStore(None), s.positions, Source(), clock=lambda: time[0], inventory="WALLET"
+    )
+    w.recover()
+    w.configure(rules(), expected_version=0, request_id=uuid4(), correlation_id=uuid4())
+    token = w.source.inputs.token_funding[0]
+    w.source.inputs = change(
+        w.source.inputs, token_funding=(change(token, balance_base_units=balance),)
+    )
+    return w
+
+
+def test_wallet_inventory_values_onchain_balance_and_buys_the_gap():
+    plan = evaluate(wallet_service("400000"))
+    assert plan.status == "REBALANCE_REQUIRED"
+    nvda = next(r for r in plan.rows if r.asset == "NVDA")
+    assert nvda.current_value_usd == D("40") and nvda.current_share_exposure == D("0.004")
+    action = plan.actions[0]
+    assert action.side == "BUY" and action.inventory_source == "WALLET_BALANCE"
+    assert action.position_id is None and action.current_representation_base_units == "400000"
+
+
+def test_wallet_inventory_at_target_is_no_action_not_a_second_buy():
+    # 0.7001 NVDA x $100 = $70.01 = half of $140.02 after a filled buy.
+    w = wallet_service("700100")
+    f = w.source.inputs.funding
+    w.source.inputs = change(w.source.inputs, funding=change(f, balance_base_units="70010000"))
+    plan = evaluate(w)
+    assert plan.status == "NO_ACTION" and not plan.actions
+
+
+def test_wallet_inventory_sells_down_from_held_balance_without_positions():
+    w = wallet_service("600000")  # $60 NVDA vs ~$20 cash -> sell toward 50/50
+    f = w.source.inputs.funding
+    w.source.inputs = change(w.source.inputs, funding=change(f, balance_base_units="20000000"))
+    plan = evaluate(w)
+    assert plan.status == "REBALANCE_REQUIRED"
+    sell = plan.actions[0]
+    assert sell.side == "SELL" and sell.position_id is None
+    assert int(sell.quantity_base_units) <= 600000
+    assert sell.inventory_source == "WALLET_BALANCE"
+
+
+def test_closed_underlying_cannot_be_unlocked_by_wallet_policy():
+    from app.models.routing import RoutePolicy
+
+    w = wallet_service("400000")
+    w.source.inputs = change(
+        w.source.inputs, routes=(change(w.source.inputs.routes[0], market_state="offhours"),)
+    )
+    assert evaluate(w).status == "BLOCKED"
+    with pytest.raises(ValueError, match="equivalence remains unverified"):
+        PortfolioService(
+            PortfolioStore(None),
+            w.positions,
+            Source(),
+            clock=lambda: NOW,
+            inventory="WALLET",
+            allow_closed_underlying=True,
+        )
+    with pytest.raises(ValueError):
+        RoutePolicy(
+            purpose="OPPORTUNITY",
+            require_costs=True,
+            require_liquidity=True,
+            require_trust=True,
+            require_risk=True,
+            min_liquidity_usd="1",
+            max_slippage_bps="1",
+            allow_closed_underlying=True,
+        )

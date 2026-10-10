@@ -85,7 +85,8 @@ class SearchResult(WireModel):
 class Status(WireModel):
     openState: StrictBool
     marketStatus: (
-        Literal["premarket", "regular", "postmarket", "overnight", "closed", "pause"] | None
+        Literal["premarket", "regular", "postmarket", "overnight", "offhours", "closed", "pause"]
+        | None
     )
     reasonCode: (
         Literal[

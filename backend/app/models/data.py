@@ -149,7 +149,7 @@ class TokenMetadata(Provenance):
     token_to_share_ratio: Positive
     decimals: StrictInt | None = Field(default=None, ge=0, le=255)
     market_state: Literal[
-        "premarket", "regular", "postmarket", "overnight", "closed", "pause", "UNKNOWN"
+        "premarket", "regular", "postmarket", "overnight", "offhours", "closed", "pause", "UNKNOWN"
     ]
     open_state: StrictBool | None = None
     next_open: datetime | None = None
@@ -178,7 +178,7 @@ class TokenObservation(Provenance):
     volume_unit: Literal["USD", "TOKEN", "UNKNOWN"] = "UNKNOWN"
     trade_count: StrictInt | None = Field(default=None, ge=0)
     market_state: Literal[
-        "premarket", "regular", "postmarket", "overnight", "closed", "pause", "UNKNOWN"
+        "premarket", "regular", "postmarket", "overnight", "offhours", "closed", "pause", "UNKNOWN"
     ] = "UNKNOWN"
     next_open: datetime | None = None
     next_close: datetime | None = None

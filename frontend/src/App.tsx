@@ -20,6 +20,8 @@ const PortfolioView = lazy(() => import('./components/WorkspaceViews').then(m =>
 const SystemView = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.SystemView })))
 const AuditEvents = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.AuditEvents })))
 
+const LiveRebalance = lazy(() => import('./components/LiveRebalance').then(m => ({ default: m.LiveRebalance })))
+
 const gates: { key: GateName; label: string; description: string }[] = [
   { key: 'DATA_GATE', label: 'Data & read-only', description: 'Verified read-only source access' },
   { key: 'DRY_RUN_GATE', label: 'Dry-run workflow', description: 'Non-live proposals require verified workflow coverage' },
@@ -53,8 +55,8 @@ export function App() {
     const decoded = decodeURIComponent(hash.slice('#audit/'.length))
     if (hash.startsWith('#audit/') && /^[A-Za-z0-9_.:-]{1,160}$/.test(decoded)) decisionId = decoded
   } catch { /* Invalid URI never becomes an API identifier. */ }
-  const showAsk = hash === '#ask'
-  const additional = showOpportunity || showPortfolio || showAutopilot || showSettings || showAudit || showAsk
+  const showAsk = hash === '#ask', showLive = hash === '#live'
+  const additional = showOpportunity || showPortfolio || showAutopilot || showSettings || showAudit || showAsk || showLive
   useEffect(() => {
     if (!['#ask', '#system', '#capabilities', '#trust'].includes(hash)) return
     const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }))
@@ -78,10 +80,10 @@ export function App() {
       <a className="header-action" href="#ask">Compare exposure <ArrowUpRight size={14} /></a>
     </header>
     <div className="app-layout"><div className="workspace">
-      <header className="topbar"><nav id="workspace-tools" aria-label="Workspace tools"><a href="#agent-api" aria-current={showAgentApi ? 'page' : undefined}>Agent API</a><a href="#settings" aria-current={showSettings ? 'page' : undefined}>Data Sources</a><a href="#autopilot" aria-current={showAutopilot ? 'page' : undefined}>Autopilot status</a><a href="#audit" aria-current={showAudit ? 'page' : undefined}>Scorecard / Audit</a></nav><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
+      <header className="topbar"><nav id="workspace-tools" aria-label="Workspace tools"><a href="#agent-api" aria-current={showAgentApi ? 'page' : undefined}>Agent API</a><a href="#settings" aria-current={showSettings ? 'page' : undefined}>Data Sources</a><a href="#autopilot" aria-current={showAutopilot ? 'page' : undefined}>Autopilot status</a><a href="#live" aria-current={showLive ? 'page' : undefined}>Execution status</a><a href="#audit" aria-current={showAudit ? 'page' : undefined}>Scorecard / Audit</a></nav><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
       <main id="main-content" tabIndex={-1}>
         {additional ? (system ? <Suspense fallback={<p role="status">Loading page…</p>}><div key={`${hash}:${system.run_id}:${system.data_mode}`}>
-          {showOpportunity ? <OpportunityView mode={system.data_mode} sandbox={system.runtime_mode === 'DEMO'} scanId={scanId} /> : showPortfolio || showAutopilot ? <PortfolioView mode={system.data_mode} autopilot={showAutopilot} /> : showSettings ? <SystemView mode={system.data_mode} /> : showAudit ? <div className="workspace-view"><h1>Scorecard / Audit</h1><ScorecardAudit mode={system.data_mode} initialDecision={decisionId ? decisionId : undefined} /><AuditEvents mode={system.data_mode} /></div> : <><h1>Buy a Stock</h1><AskFlow mode={system.data_mode} /><TrustPanel mode={system.data_mode} /></>}
+          {showLive ? <LiveRebalance gates={system.gates} /> : showOpportunity ? <OpportunityView mode={system.data_mode} sandbox={system.runtime_mode === 'DEMO'} scanId={scanId} /> : showPortfolio || showAutopilot ? <PortfolioView mode={system.data_mode} autopilot={showAutopilot} /> : showSettings ? <SystemView mode={system.data_mode} /> : showAudit ? <div className="workspace-view"><h1>Scorecard / Audit</h1><ScorecardAudit mode={system.data_mode} initialDecision={decisionId ? decisionId : undefined} /><AuditEvents mode={system.data_mode} /></div> : <><h1>Buy a Stock</h1><AskFlow mode={system.data_mode} /><TrustPanel mode={system.data_mode} /></>}
         </div></Suspense> : <section className="panel demo-unavailable"><h1>Backend state unavailable</h1><p role="status">A verified backend is required. No financial values or cached healthy state are substituted.</p><button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Retry backend status</button></section>) : showAgentApi ? <AgentApi /> : showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
           <section className="page-heading" aria-label="Research Lab"><div><div className="eyebrow">PARITY PULSE / SCENARIO RESEARCH</div><h1>Research Lab</h1><p>Explore how evidence becomes a decision, from Trust to a paper position.</p></div><a className="refresh-button" href="#overview">Return to Overview</a></section>
           <DataContext mode="DEMO" />

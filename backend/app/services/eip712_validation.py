@@ -43,7 +43,8 @@ def validate_typed_data(typed):
             for field in fields:
                 validate(field["type"], value[field["name"]], depth + 1)
         elif kind == "address":
-            address(value)
+            if value != "0x" + "0" * 40:
+                address(value)
         elif kind == "bool":
             if type(value) is not bool:
                 raise ValueError("Invalid EIP712 bool")

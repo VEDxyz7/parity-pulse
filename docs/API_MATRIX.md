@@ -338,3 +338,28 @@ GET /api/assets exposes mode, dynamic stock assets, validated representations an
 Existing health/status/assets endpoints remain. Legacy status phase:2 means the completed engineering Data Layer, never canonical Trust Layer. Its DRY_RUN_GATE now reports PASS for this tested Ask scope. Trust/Opportunity gates remain documentation-level; no classification or opportunity capability is advertised.
 
 No external operation, signer, provider permission or read allowlist was changed. No Trading/Transaction/Wallet endpoint is called. LIVE_READ_ONLY uses existing dynamic stock/RWA discovery/profile/price and independent snapshot reads only; the actual current-equity403 is an explicit limitation. Binance referencePrice is never an independent equity reference. Token prices must be fresh at selection, issuer market state/open status known and allowed, metadata/observation identities and ratios consistent, decimals known, and quantities rounded down. Invalid critical inputs abort the entire proposal; unknown fees/liquidity/trust/funding/vendor-route/simulation keep execution blocked. [Automated evidence](evidence/CANONICAL_PHASE_1_GATE.json).
+
+## Execution remediation boundaries — 2026-10-11
+
+These local worker interfaces are mounted only when `EXECUTION_WORKER_TOKEN` is configured;
+the default DEMO/DRY_RUN API inventory is unchanged (worker paths return 404). Configuring
+the token does not attach a worker or pass any gate. They are not provider entitlements. No genuine
+RFQ payload or deployed-contract compatibility was established by this increment.
+
+| Local interface | Authorization | Behavior |
+|---|---|---|
+| GET `/api/live/status` | Local status view | Seven independent gates; startup worker absent; DRY_RUN/PROPOSE_ONLY/false/required simulation |
+| GET `/api/live/fills` and `/api/live/plans/{plan_id}/fills` | Same local status-view exposure as existing API | Positive `PublicFill` allowlist; no evidence, raw signatures, private keys or signed transactions, including legacy rows |
+| GET `/api/live/rfq/captures` | Loopback client + valid Host/Origin + `X-Execution-Worker-Token`; no forwarded identity/query credentials | Bounded versioned metadata and integrity only; unsigned protocol payload is host-internal |
+| POST `/api/live/plans/{plan_id}/execute` | Same protected worker boundary | Server-prepared payload required, exact expiring single-use consent binding, independent route/wallet gate enforcement; currently blocked |
+| POST `/api/live/actions/{action_id}/reconcile` | Same protected worker boundary | Read-only settlement observation; no signing or retransmission; no runtime attached by default |
+| POST `/api/live/plans/{plan_id}/retire` | Same protected worker boundary | Refuses all unresolved legs including SUBMISSION_UNKNOWN and RECONCILIATION_REQUIRED; uses existing PortfolioService policy |
+
+`EXECUTION_WORKER_TOKEN` is optional backend-only configuration and does not pass a gate.
+No frontend receives it. Ordinary BinanceSafetyClient remains read-only. RFQ submission
+uses a single HTTP attempt and bypasses the read-response cache; ambiguous errors cannot
+trigger automatic transport retries. The additional
+LiveTradingClient checks RFQ_LIVE_GATE even through raw transport authorization; BSC
+RPC checks SWAP_LIVE_GATE before `eth_sendRawTransaction`. Existing Alpaca, Finnhub,
+Massive, Binance data and Hyperliquid admissions/permissions are unchanged. No quote,
+wallet, trading or submission provider endpoint was called during offline remediation.

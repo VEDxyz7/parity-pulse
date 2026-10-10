@@ -71,3 +71,27 @@ def test_settings_cannot_be_mutated_or_injected_to_bypass_safety():
     unsafe = Settings.model_construct(execution_mode="LIVE", live_trading_enabled=True)
     with pytest.raises(RuntimeError, match="startup refused"):
         create_app(unsafe)
+
+
+LIVE_OPT_IN = dict(
+    execution_mode="LIVE",
+    live_trading_enabled=True,
+    runtime_mode="LIVE",
+    data_mode="LIVE_READ_ONLY",
+    live_max_notional_usd="25",
+    portfolio_inventory="WALLET",
+    live_signer_private_key="0x" + "11" * 32,
+)
+
+
+def test_live_opt_in_flags_do_not_override_independent_blocked_gates():
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, **LIVE_OPT_IN)
+    for missing in set(LIVE_OPT_IN):
+        with pytest.raises(ValidationError):
+            Settings(_env_file=None, **{k: v for k, v in LIVE_OPT_IN.items() if k != missing})
+
+
+def test_default_settings_never_enable_live_execution():
+    settings = Settings(_env_file=None)
+    assert settings.execution_mode == "DRY_RUN" and not settings.live_trading_enabled

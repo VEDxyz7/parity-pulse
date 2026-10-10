@@ -322,3 +322,43 @@ Schema revision3 adds only exposure_proposals beside the existing data tables, p
 The Ask form makes a proposal POST only on explicit submission, bounds/cancels pending requests, validates safe response flags and mode, discards failed/replaced results, displays server strings without financial calculation, and hides expired selected quantities. Opportunity and Autopilot navigation remain disabled. Real vendor quotes, liquidity/fees, risk authorization, funding/wallet checks and transaction simulation remain unsupported; simulation=UNAVAILABLE, execution_ready=false and REQUIRE_SIMULATION=true.
 
 DRY_RUN_GATE=PASS proves the indicative exposure/proposal workflow only. No simulation success, execution equivalence, RFQ safety, Trust, agent or Opportunity functionality is claimed. [Current report](PHASE_1_REPORT.md#canonical-phase-1--working-ask-flow). All master safety requirements and LIVE blockers remain unchanged.
+
+## Execution audit remediation — 2026-10-11
+
+The selectively integrated execution components operate below the existing deterministic
+PortfolioService, RoutingService, RiskEngine, ExecutionRouteBuilder and
+ExecutionSimulationService. There is no replacement data/Trust pipeline. Portfolio
+planning defaults to Phase 10 positions; optional host-selected WALLET inventory reuses
+those services, requires verified fresh holdings/marks and labels its actions
+`inventory_source=WALLET_BALANCE`. Trust cannot be disabled. Closed-market execution
+remains unsupported pending its original equivalence requirements.
+
+`execution_gates.LIVE_GATES` is the server authority, checked independently at API,
+worker, signer and submission transports. `LiveRuntime` starts with a journal and no
+executor, signer or write provider. Existing strict non-live configuration and UI remain.
+A server-prepared leg binds risk evidence, exact route, simulation, minimum output and
+verified order to an expiring single-use confirmation fingerprint.
+
+`LiveFillStore` uses SQLite transactions and unique action/wallet/submission identities
+across processes. Signed transaction hash/nonce or RFQ request identity is durable before
+submission; raw signed bytes/signatures remain in memory. A lost response records an
+unknown outcome and locks retirement/replanning; recovery never re-signs or resubmits.
+Explicit state transitions prevent an unknown action being reset to preparation.
+
+`live_settlement` decodes raw transaction logs and verifies wallet/token amounts against
+bounded intent plus stored pre-balances. RFQ settlement additionally requires the exact
+CoW UID/Trade, 1inch order hash/OrderFilled or PancakeSwap witness hash/Fill nonce.
+Receipt status or provider FILLED alone is insufficient. Three canonical-block
+confirmations are a local confirmation policy, not absolute finality. Explicit read-only
+reconciliation rechecks a stored terminal block and reopens/locks a noncanonical result.
+Automatic finality monitoring and deployed compatibility are not claimed.
+
+Public fill models expose only status/identity fields. Protected worker operations reuse
+loopback/Host/Origin/forwarding controls with a backend-only credential; browsers have no
+execution credentials or live controls. Worker routes are absent unless the backend worker
+credential is configured; configuring it does not attach a signer or pass a gate. RFQ
+submission disables read retries and caching, and rejects echoed signature material.
+RFQ capture stores bounded parseable unsigned
+protocol evidence with provenance, version and integrity; public diagnostics see metadata
+only. Synthetic fixtures establish regression behavior, not real deployment evidence.
+See [remediation report](EXECUTION_REMEDIATION.md) for independent blockers and tests.

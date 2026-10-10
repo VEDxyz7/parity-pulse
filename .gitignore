@@ -24,3 +24,7 @@ data/execution/
 .DS_Store
 playwright-report/
 test-results/
+
+# Agent Studio sidecar secrets and deps
+sidecar/agent-studio/node_modules/
+sidecar/agent-studio/altana-session*.json

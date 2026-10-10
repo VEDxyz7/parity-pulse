@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 
 from app.models.execution import ExecutionAttempt, ExecutionControls, UserConfirmation, fingerprint
 from app.services.execution_builders import current_quote
+from app.services.execution_gates import LIVE_GATES, LiveExecutionError
 from app.services.execution_simulation import ExecutionSimulationService
 from app.services.funding import FundingService
 from app.services.risk import RiskEngine
@@ -116,11 +117,10 @@ class DryRunExecutionGateway(ExecutionGateway):
                 confirmation = attempt.user_confirmation
                 if confirmation is None or not self.confirmation_valid(confirmation, attempt, now):
                     reasons.append("EXPLICIT_USER_CONFIRMATION_REQUIRED")
-            reasons.append(
-                "RFQ_LIVE_GATE_BLOCKED"
-                if quote.route.executionMode == "RFQ"
-                else "SWAP_LIVE_GATE_BLOCKED"
-            )
+            try:
+                LIVE_GATES.require(quote.route.executionMode, wallet=True)
+            except LiveExecutionError as error:
+                reasons.append(error.code)
         # A config toggle or successful fixture can never reach a transport.
         reasons.extend(
             (
