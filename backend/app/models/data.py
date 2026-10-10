@@ -212,6 +212,10 @@ class EquityObservation(Provenance):
     kind: Literal["SNAPSHOT", "QUOTE", "BAR", "REGULAR_CLOSE"]
     interval: StrictStr | None = None
     adjusted: StrictBool | None = None
+    # Additive JSON fields; old stored observations remain readable without migration.
+    feed: Literal["iex", "sip", "delayed_sip", "boats", "overnight"] | None = None
+    is_delayed: StrictBool | None = None
+    quality_flags: tuple[StrictStr, ...] = ()
 
     @model_validator(mode="after")
     def prices(self):

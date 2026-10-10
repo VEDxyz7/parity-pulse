@@ -1,5 +1,42 @@
 # API matrix — contracts and implementation through Phase 2
 
+## Finnhub event/calendar adapter — October 10, 2026
+
+`FINNHUB_API_KEY` is now a typed, excluded/redacted secret in existing Settings. The shared
+`FinnhubClient` permits only GET `/company-news`, `/calendar/earnings`, `/stock/market-status`
+and `/stock/market-holiday` on `https://finnhub.io/api/v1`, with header authentication.
+The event provider has no equity quote/candle or execution interface. The older multi-provider
+diagnostic reuses this client through an explicitly diagnostic-only quote/candle extension;
+its Hyperliquid behavior and earlier evidence are preserved.
+
+Actual isolated verification: **8 requests, all HTTP 200/business OK**, producing 740 normalized
+news records, 3 earnings events and 62 calendar entries. Five calendar records retain INVALID
+quality for malformed post-market hours; collection coverage and historical publication/revision
+availability remain unverified. The status response describes a closed Saturday market.
+[Typed contracts, limitations and exact reproduction](FINNHUB_EVENTS_REPORT.md),
+[actual event-only evidence](evidence/FINNHUB_EVENTS_20261010.json).
+
+Explicit research reads are available through `DataLayer.events` only in LIVE_READ_ONLY with
+a configured key. No startup fetch, automatic persistence, source fallback, Trust-news/calendar
+replacement, reference-policy change or gate amendment occurs. Earlier dated reports remain
+historical evidence.
+
+## Alpaca independent-data adapter — October 10, 2026
+
+Added explicit `EQUITY_PROVIDER=ALPACA` selection; existing Massive/DEMO paths preserved.
+Only GET `https://data.alpaca.markets/v2/stocks/quotes/latest` and GET `/v2/stocks/bars`
+are allowed. Header authentication uses APCA-API-KEY-ID / APCA-API-SECRET-KEY;
+no trading/account/wallet capability is exposed. Quote feed is explicit, historical feed is
+limited to documented iex/sip/boats and 1m/5m bars, raw adjustment, fixed query context
+and bounded opaque-token pagination. UNKNOWN quality is the default.
+
+Official [quotes](https://docs.alpaca.markets/us/reference/stocklatestquotes-1),
+[bars](https://docs.alpaca.markets/us/reference/stockbars) and
+[feed/access FAQ](https://docs.alpaca.markets/us/docs/market-data-faq) reviewed;
+actual quote/1m/5m checks were NOT_CONFIGURED with zero HTTP requests, not runtime PASS.
+[Report, exact scope and reproduction](SESSION_AWARE_DATA_REPORT.md).
+No production gate/source eligibility changed; historical ledgers below remain evidence.
+
 ## Master Phase 9 — Agentic Wallet read adapter, October 8, 2026
 
 The current official Skills Hub mechanism is `binance-agentic-wallet` / `baw`, separate from
@@ -301,3 +338,28 @@ GET /api/assets exposes mode, dynamic stock assets, validated representations an
 Existing health/status/assets endpoints remain. Legacy status phase:2 means the completed engineering Data Layer, never canonical Trust Layer. Its DRY_RUN_GATE now reports PASS for this tested Ask scope. Trust/Opportunity gates remain documentation-level; no classification or opportunity capability is advertised.
 
 No external operation, signer, provider permission or read allowlist was changed. No Trading/Transaction/Wallet endpoint is called. LIVE_READ_ONLY uses existing dynamic stock/RWA discovery/profile/price and independent snapshot reads only; the actual current-equity403 is an explicit limitation. Binance referencePrice is never an independent equity reference. Token prices must be fresh at selection, issuer market state/open status known and allowed, metadata/observation identities and ratios consistent, decimals known, and quantities rounded down. Invalid critical inputs abort the entire proposal; unknown fees/liquidity/trust/funding/vendor-route/simulation keep execution blocked. [Automated evidence](evidence/CANONICAL_PHASE_1_GATE.json).
+
+## Execution remediation boundaries — 2026-10-11
+
+These local worker interfaces are mounted only when `EXECUTION_WORKER_TOKEN` is configured;
+the default DEMO/DRY_RUN API inventory is unchanged (worker paths return 404). Configuring
+the token does not attach a worker or pass any gate. They are not provider entitlements. No genuine
+RFQ payload or deployed-contract compatibility was established by this increment.
+
+| Local interface | Authorization | Behavior |
+|---|---|---|
+| GET `/api/live/status` | Local status view | Seven independent gates; startup worker absent; DRY_RUN/PROPOSE_ONLY/false/required simulation |
+| GET `/api/live/fills` and `/api/live/plans/{plan_id}/fills` | Same local status-view exposure as existing API | Positive `PublicFill` allowlist; no evidence, raw signatures, private keys or signed transactions, including legacy rows |
+| GET `/api/live/rfq/captures` | Loopback client + valid Host/Origin + `X-Execution-Worker-Token`; no forwarded identity/query credentials | Bounded versioned metadata and integrity only; unsigned protocol payload is host-internal |
+| POST `/api/live/plans/{plan_id}/execute` | Same protected worker boundary | Server-prepared payload required, exact expiring single-use consent binding, independent route/wallet gate enforcement; currently blocked |
+| POST `/api/live/actions/{action_id}/reconcile` | Same protected worker boundary | Read-only settlement observation; no signing or retransmission; no runtime attached by default |
+| POST `/api/live/plans/{plan_id}/retire` | Same protected worker boundary | Refuses all unresolved legs including SUBMISSION_UNKNOWN and RECONCILIATION_REQUIRED; uses existing PortfolioService policy |
+
+`EXECUTION_WORKER_TOKEN` is optional backend-only configuration and does not pass a gate.
+No frontend receives it. Ordinary BinanceSafetyClient remains read-only. RFQ submission
+uses a single HTTP attempt and bypasses the read-response cache; ambiguous errors cannot
+trigger automatic transport retries. The additional
+LiveTradingClient checks RFQ_LIVE_GATE even through raw transport authorization; BSC
+RPC checks SWAP_LIVE_GATE before `eth_sendRawTransaction`. Existing Alpaca, Finnhub,
+Massive, Binance data and Hyperliquid admissions/permissions are unchanged. No quote,
+wallet, trading or submission provider endpoint was called during offline remediation.

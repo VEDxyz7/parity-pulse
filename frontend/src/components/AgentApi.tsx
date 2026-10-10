@@ -1,3 +1,4 @@
+import { dataLabel } from './DataContext'
 import { useEffect, useState } from 'react'
 import { getCatalog, type ToolCatalog } from '../services/agentApi'
 
@@ -18,7 +19,7 @@ export function AgentApi() {
     <p><strong>PROPOSE ONLY · SIMULATION REQUIRED · NO REAL FUNDS WILL MOVE</strong></p>
     <p>Inspection and examples only. Tool calls cannot sign, broadcast, submit RFQs, or modify wallet and portfolio rules.</p>
     {error ? <div role="alert"><p>The tool catalog is unavailable or could not be verified.</p><button className="refresh-button" onClick={() => setAttempt(n => n + 1)}>Retry catalog</button></div> : !catalog ? <p role="status">Loading tool schemas…</p> : <>
-      <p>Backend: {catalog.ready ? 'Ready' : 'Unavailable'} · {catalog.data_mode} · MCP stdio + bounded HTTP JSON</p>
+      <p>Backend: {catalog.ready ? 'Ready' : 'Unavailable'} · {dataLabel(catalog.data_mode)} · MCP stdio + bounded HTTP JSON</p>
       <pre>{'PYTHONPATH=backend .venv/bin/python -m app.mcp_server --port 8000'}</pre>
       <p>Proposal calls require an explicit risk budget and a stable idempotency key. A retry uses the same key; an uncertain response never authorizes another order.</p>
       <pre>{JSON.stringify({ tool: 'buy_stock_exposure', arguments: { ticker: 'NVDA', amount_usd: '50', risk_budget_usd: '5', mode: 'PROPOSE_ONLY', idempotency_key: '00000000-0000-4000-8000-000000000001' } }, null, 2)}</pre>

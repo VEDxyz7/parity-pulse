@@ -43,8 +43,6 @@ def validate_typed_data(typed):
             for field in fields:
                 validate(field["type"], value[field["name"]], depth + 1)
         elif kind == "address":
-            # Zero is a meaningful value in vendor orders (e.g. "receiver = owner"); semantic
-            # checks belong to the vendor verifier, not to this structural pass.
             if value != "0x" + "0" * 40:
                 address(value)
         elif kind == "bool":

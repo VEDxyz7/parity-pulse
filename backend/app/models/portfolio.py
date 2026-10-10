@@ -225,7 +225,7 @@ class RebalanceAction(ExecutionModel):
             raise ValueError("Risk decision is not bound to the action inputs")
         if self.inventory_source == "WALLET_BALANCE":
             if self.position_id is not None:
-                raise ValueError("Wallet-balance actions are not bound to Phase 10 positions")
+                raise ValueError("Wallet-balance actions cannot claim Phase 10 position ownership")
         elif (self.side == "SELL") != (self.position_id is not None):
             raise ValueError("Reductions require an identified owned position")
         if (
@@ -259,10 +259,7 @@ class RebalancePlan(ExecutionModel):
     rows: tuple[DriftRow, ...]
     actions: tuple[RebalanceAction, ...] = Field(max_length=100)
     route_decisions: tuple[RouteDecision, ...] = Field(default=(), max_length=100)
-    # EXECUTED: every leg of a wallet-inventory plan settled on-chain (see live fill journal).
-    status: Literal[
-        "NO_ACTION", "BLOCKED", "REBALANCE_REQUIRED", "RETIRED", "COMPLETED", "EXECUTED"
-    ]
+    status: Literal["NO_ACTION", "BLOCKED", "REBALANCE_REQUIRED", "RETIRED", "COMPLETED"]
     reasons: tuple[Identifier, ...]
     preparations: tuple[PreparationRecord, ...] = Field(default=(), max_length=100)
     completion_snapshot: PortfolioSnapshot | None = None
@@ -272,9 +269,9 @@ class RebalancePlan(ExecutionModel):
     correlation_id: UUID
     created_at: datetime
     updated_at: datetime
-    execution_mode: Literal["DRY_RUN", "LIVE"] = "DRY_RUN"
-    live_trading_enabled: bool = Field(default=False, strict=True)
-    broadcast: bool = Field(default=False, strict=True)
+    execution_mode: Literal["DRY_RUN"] = "DRY_RUN"
+    live_trading_enabled: Literal[False] = False
+    broadcast: Literal[False] = False
     authority: Literal["DETERMINISTIC_BACKEND"] = "DETERMINISTIC_BACKEND"
 
     @model_validator(mode="after")

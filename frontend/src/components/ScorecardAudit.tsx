@@ -1,3 +1,4 @@
+import { DataContext } from './DataContext'
 import { readRefresh } from '../hooks/readRefresh'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -18,7 +19,7 @@ export function ScorecardAudit({ mode, initialDecision }: { initialDecision?: st
   const trail = trace.isError || trace.isFetching ? null : trace.data
   return <section className="panel scorecard-audit" aria-label="Scorecard and audit">
     <h2>Scorecard &amp; audit</h2><p>Persisted backend evaluations. Policy consistency, prediction quality and settlement evidence stay separate.</p>
-    <p>{mode === 'DEMO' ? 'SIMULATED DATA — NOT LIVE MARKET DATA' : 'LIVE READ ONLY — PERSISTED EVIDENCE'} · NO REAL FUNDS WILL MOVE</p>
+    <DataContext mode={mode} />
     <form className="terminal-filter" onSubmit={e => { e.preventDefault(); setOffset(0); setDecision(''); setFilter(new URLSearchParams({ ...(kind ? { scorecard_type: kind } : {}), ...(ticker ? { ticker: ticker.trim().toUpperCase() } : {}), ...(outcome ? { outcome } : {}) }).toString()) }}>
       <label>Evaluation type <select value={kind} onChange={e => setKind(e.target.value)}><option value="">All types</option>{['OPPORTUNITY','DIRECT_EXPOSURE','AUTOPILOT'].map(k => <option key={k}>{k}</option>)}</select></label>
       <label>Scorecard ticker <input value={ticker} maxLength={15} onChange={e => setTicker(e.target.value)} /></label>
@@ -44,7 +45,7 @@ export function ScorecardAudit({ mode, initialDecision }: { initialDecision?: st
         <p>Classification correctness unavailable: {c.prediction.label_status}. Noise suppression recorded: {c.prediction.noise_suppressed ? 'Yes' : 'No'}; outcome correctness unknown.</p>
         <details><summary>Route cost efficiency</summary><p>Recorded ranking basis {c.route.basis} · Selected {money(c.route.selected_cost_per_share_usd)} per share · Minimum eligible {money(c.route.minimum_eligible_cost_per_share_usd)} · Excess {money(c.route.excess_cost_per_share_usd)}</p><p>Token price {money(c.route.token_price_usd)} · Shares/token {value(c.route.shares_per_token)} · Normalized cost {money(c.route.effective_cost_per_share_usd)} per share</p><p>Liquidity {c.route.liquidity_state} / {money(c.route.liquidity_usd)} · Source {value(c.route.liquidity_source)} · Trust {value(c.route.trust_state)} · Tradability {value(c.route.tradability)}</p><p>Estimated cost {money(c.route.estimated_costs_usd)} · Fees {money(c.route.estimated_fees_usd)} · Gas {money(c.route.estimated_gas_usd)} · Slippage {value(c.route.estimated_slippage_bps)} bps</p><p>Actual total USD cost {money(c.route.actual_total_cost_usd)} · Simulated USD cost {money(c.route.simulated_cost_usd)} · Actual native fee units {value(c.route.actual_fees_native_base_units)}</p><p>Provider {value(c.route.provider)} · Quote {value(c.route.provider_quote_id)}</p>{Object.entries(c.route.alternative_costs_per_share_usd).map(([id,cost]) => <p key={id}>{id}: {money(cost)} per share</p>)}</details>
         {!c.executions.length ? <p>No execution evidence. A proposal, local simulation or paper fill does not establish a real investment outcome.</p> : c.executions.map(e => <p key={e.execution_id}>{e.category} / {e.lifecycle_state} · Actual completed trade: {e.actual_completed_trade ? 'Yes' : 'No'} · Filled {value(e.filled_base_units)} · Remaining {value(e.remaining_base_units)} · Position {value(e.position_state)} · {codes(e.reasons)}</p>)}
-        {c.paper_pnl && <details><summary>Existing DEMO paper accounting</summary><pre>{JSON.stringify(c.paper_pnl, null, 2)}</pre></details>}
+        {c.paper_pnl && <details><summary>Existing illustrative paper accounting</summary><pre>{JSON.stringify(c.paper_pnl, null, 2)}</pre></details>}
         {!!c.allocations.length && <details><summary>Autopilot allocation / drift / proposed actions</summary><pre>{JSON.stringify({ allocations: c.allocations, proposed_actions: c.proposed_actions }, null, 2)}</pre></details>}
         <p>Decision reference {c.decision_id}</p><button className="refresh-button" onClick={() => { setDecision(c.decision_id); if (decision === c.decision_id) void trace.refetch() }}>Trace decision {c.decision_id}</button>
       </article>)}

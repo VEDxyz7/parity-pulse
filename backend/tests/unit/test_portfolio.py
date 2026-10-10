@@ -1130,20 +1130,16 @@ def test_confirmed_buy_uses_phase10_filled_units_and_immutable_drift_policy():
     assert s.positions.store.count(mode="DEMO") == 2
 
 
-def test_rebalance_without_trust_keeps_every_other_control():
+def test_rebalance_without_trust_is_refused_and_other_controls_remain():
     s, _, _ = setup()
-    s.trust_required = False
-    s.source.inputs = change(
-        s.source.inputs,
-        routes=(change(s.source.inputs.routes[0], trust_state="INSUFFICIENT_EVIDENCE"),),
-    )
-    plan = evaluate(s)
-    assert plan.status == "REBALANCE_REQUIRED"
-    action = plan.actions[0]
-    assert action.risk.status == "PASS" and action.risk_inputs.trust_required is False
-    assert "TRUST_NOT_EVALUATED" in action.route.selected_candidate.limitations
-    s.retire(plan.plan_id)
-    for updates in ({"trust_state": "LIKELY_NOISE"}, {"liquidity_usd": "1"}, {"tradable": False}):
+    with pytest.raises(ValueError, match="Trust cannot be disabled"):
+        PortfolioService(s.store, s.positions, s.source, clock=s.clock, trust_required=False)
+    for updates in (
+        {"trust_state": "INSUFFICIENT_EVIDENCE"},
+        {"trust_state": "LIKELY_NOISE"},
+        {"liquidity_usd": "1"},
+        {"tradable": False},
+    ):
         s.source.inputs = change(
             s.source.inputs, routes=(change(s.source.inputs.routes[0], **updates),)
         )
@@ -1202,28 +1198,31 @@ def test_wallet_inventory_sells_down_from_held_balance_without_positions():
     assert sell.inventory_source == "WALLET_BALANCE"
 
 
-def test_closed_underlying_swaps_only_with_explicit_wallet_policy():
+def test_closed_underlying_cannot_be_unlocked_by_wallet_policy():
     from app.models.routing import RoutePolicy
 
     w = wallet_service("400000")
     w.source.inputs = change(
         w.source.inputs, routes=(change(w.source.inputs.routes[0], market_state="offhours"),)
     )
-    assert evaluate(w).status == "BLOCKED"  # policy off by default
-    allowed = wallet_service("400000")
-    allowed.source.inputs = w.source.inputs
-    allowed.allow_closed_underlying = True
-    plan = evaluate(allowed)
-    assert plan.status == "REBALANCE_REQUIRED"
-    assert "UNDERLYING_MARKET_CLOSED" in plan.actions[0].route.selected_candidate.limitations
-    with pytest.raises(ValueError):
+    assert evaluate(w).status == "BLOCKED"
+    with pytest.raises(ValueError, match="equivalence remains unverified"):
         PortfolioService(
-            PortfolioStore(None), w.positions, Source(), clock=lambda: NOW,
+            PortfolioStore(None),
+            w.positions,
+            Source(),
+            clock=lambda: NOW,
+            inventory="WALLET",
             allow_closed_underlying=True,
         )
     with pytest.raises(ValueError):
         RoutePolicy(
-            purpose="OPPORTUNITY", require_costs=True, require_liquidity=True,
-            require_trust=True, require_risk=True, min_liquidity_usd="1",
-            max_slippage_bps="1", allow_closed_underlying=True,
+            purpose="OPPORTUNITY",
+            require_costs=True,
+            require_liquidity=True,
+            require_trust=True,
+            require_risk=True,
+            min_liquidity_usd="1",
+            max_slippage_bps="1",
+            allow_closed_underlying=True,
         )

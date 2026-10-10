@@ -4,6 +4,7 @@ from pydantic import SecretStr
 from app.clients.binance_trading import BinanceSafetyClient, LiveTradingClient, provider_reason
 from app.clients.binance_web3 import sign_request
 from app.clients.common import ProviderError
+from app.services.execution_gates import LiveExecutionError
 
 KEYS = (SecretStr("k"), SecretStr("s"))
 SUBMIT = "/api/v1/dex/aggregator/order/submit"
@@ -12,17 +13,19 @@ SUBMIT = "/api/v1/dex/aggregator/order/submit"
 def test_only_live_client_may_submit_rfq_orders():
     with pytest.raises(ProviderError):
         BinanceSafetyClient(*KEYS).authorize("POST", SUBMIT)
-    LiveTradingClient(*KEYS).authorize("POST", SUBMIT)
+    with pytest.raises(LiveExecutionError, match="RFQ_LIVE_GATE_BLOCKED"):
+        LiveTradingClient(*KEYS).authorize("POST", SUBMIT)
     with pytest.raises(ProviderError):
         LiveTradingClient(*KEYS).authorize("POST", "/api/v1/dex/transaction/broadcast")
-    with pytest.raises(ProviderError):
+    with pytest.raises(LiveExecutionError):
         LiveTradingClient(None, None).authorize("POST", SUBMIT)
 
 
 def test_submit_signing_requires_explicit_live_writes():
     with pytest.raises(ValueError):
         sign_request(KEYS[1], "t", "POST", "/build" + SUBMIT, b"{}")
-    assert sign_request(KEYS[1], "t", "POST", "/build" + SUBMIT, b"{}", live_writes=True)
+    with pytest.raises(TypeError):
+        sign_request(KEYS[1], "t", "POST", "/build" + SUBMIT, b"{}", live_writes=True)
 
 
 def test_business_codes_map_to_journal_reasons():

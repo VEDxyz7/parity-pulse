@@ -125,9 +125,7 @@ def test_uncompleted_and_upper_boundary_candles_are_never_saved():
 
 
 def test_pool_read_does_not_expand_production_allowlist_or_allow_execution():
-    # Live liquidity evidence reads pool reserves: GET only, never a write or POST.
-    assert "token/top-liquidity" in READ_OPERATIONS["GET"]
-    assert "token/top-liquidity" not in READ_OPERATIONS["POST"]
+    assert "token/top-liquidity" not in READ_OPERATIONS["GET"]
     client = audit.DiagnosticBinance(SecretStr("synthetic-key"), SecretStr("synthetic-secret"))
     try:
         client.authorize("GET", "/api/v1/dex/market/token/top-liquidity")

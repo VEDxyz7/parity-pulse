@@ -1,3 +1,10 @@
+> **Historical teammate proposal — superseded by the PR #1 merge resolution (2026-10-11).**
+> The original text below is preserved as history, not as an operational runbook or
+> verified capability evidence. LIVE flags, Trust-disable configuration, weekend
+> exceptions, Binance-index independent references, signed-bounds-only RFQ admission,
+> blind retries and Altana/x402/session grants described below are NOT enabled.
+> Current gates, commands and limitations: [PR_1_MERGE_RESOLUTION.md](PR_1_MERGE_RESOLUTION.md).
+
 # Blocker solutions research — 2026-10-09
 
 Web research across Binance Web3 / Agentic Wallet docs, binance-skills-hub, BNB Chain docs, Ondo docs, Pyth/Chainlink docs and live read-only probes. Tags: [DOC] quoted from docs, [LIVE] verified by a read-only call, [INF] inference. Nothing here was executed against a wallet; no funds moved.

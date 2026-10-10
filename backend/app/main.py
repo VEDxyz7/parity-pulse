@@ -22,11 +22,11 @@ from app.api.demo_paper import router as demo_paper_router
 from app.api.demo_preparation import router as demo_preparation_router
 from app.api.demo_sandbox import router as demo_sandbox_router
 from app.api.exposure import router as exposure_router
+from app.api.live import router as live_router
 from app.api.middleware import RequestContextMiddleware
 from app.api.opportunity_scan import router as opportunity_scan_router
 from app.api.portfolio import autopilot_router
 from app.api.portfolio import router as portfolio_router
-from app.api.live import router as live_router
 from app.api.positions import router as positions_router
 from app.api.scorecard import router as scorecard_router
 from app.api.system import router
@@ -42,6 +42,7 @@ from app.demo import load_demo_fixture
 from app.models.execution import ExecutionControls
 from app.repositories.agent_api import ToolReceipts
 from app.repositories.execution import ExecutionStore
+from app.repositories.live_fills import LiveFillStore
 from app.repositories.opportunity_scan import OpportunityScanStore
 from app.repositories.portfolio import PortfolioStore
 from app.repositories.position import PositionStore
@@ -56,6 +57,7 @@ from app.services.demo_preparation import DemoPreparationFlow
 from app.services.demo_sandbox import DemoTrustSandbox
 from app.services.execution import SafetyExecutionService
 from app.services.exposure import ExposureService
+from app.services.live_wiring import LiveRuntime
 from app.services.opportunity_scan import OpportunityScanService
 from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
 from app.services.portfolio import PortfolioService
@@ -199,27 +201,21 @@ def create_app(
                 / configured.data_mode
             )
             app.state.portfolio_store = PortfolioStore(portfolio_directory)
-            app.state.live = None
-            source = portfolio_source
-            if configured.portfolio_inventory == "WALLET" and source is None:
-                from app.services.live_wiring import LiveRuntime
-
-                app.state.live = LiveRuntime(configured, app.state.data_layer, portfolio_directory)
-                source = app.state.live.source
             app.state.portfolio = PortfolioService(
                 app.state.portfolio_store,
                 app.state.positions,
-                source
+                portfolio_source
                 or CachedPortfolioSource(app.state.data_layer, clock=lambda: datetime.now(UTC)),
                 clock=lambda: datetime.now(UTC),
-                trust_required=configured.trust_required_for_rebalance,
-                inventory=configured.portfolio_inventory,
-                allow_closed_underlying=configured.portfolio_inventory == "WALLET"
-                and configured.closed_market_swap,
             )
+            app.state.live = LiveRuntime(
+                LiveFillStore(
+                    portfolio_directory / "live_fills.sqlite" if portfolio_directory else None,
+                    redaction_values=configured.redaction_values(),
+                )
+            )
+            app.state.portfolio.live_journal = app.state.live.journal
             app.state.portfolio.recover()
-            if app.state.live is not None:
-                app.state.live.attach(app.state.portfolio)
             app.state.positions.portfolio_exit_guard = app.state.portfolio.can_reduce
             app.state.terminal = TerminalService(
                 app.state.data_layer,
@@ -394,8 +390,9 @@ def create_app(
     app.include_router(opportunity_scan_router)
     app.include_router(positions_router)
     app.include_router(portfolio_router)
-    if configured.portfolio_inventory == "WALLET":
-        # Live wallet routes exist only when wallet inventory is configured.
+    # Preserve the ordinary/demo API surface. Worker interfaces are deliberately
+    # absent until a local operator configures authorization; that never passes a gate.
+    if configured.execution_worker_token is not None:
         app.include_router(live_router)
     app.include_router(autopilot_router)
     app.include_router(terminal_router)

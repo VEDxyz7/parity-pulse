@@ -91,9 +91,10 @@ class TrustService:
                 articles = []
                 complete = False
                 news_unavailable = False
+                news_provider = getattr(self.layer, "news", self.layer.equity)
                 try:
-                    articles = self.layer.equity.get_news(resolved, max_pages=1)
-                    complete = getattr(self.layer.equity, "last_page_complete", True)
+                    articles = news_provider.get_news(resolved, max_pages=1)
+                    complete = getattr(news_provider, "last_page_complete", True)
                     self.layer.repository.save(articles)
                 except ProviderError as error:
                     news_unavailable = True
@@ -124,7 +125,7 @@ class TrustService:
                             evaluated,
                             complete=complete,
                             news_unavailable=news_unavailable,
-                            news_prefix_start=getattr(self.layer.equity, "news_prefix_start", None),
+                            news_prefix_start=getattr(news_provider, "news_prefix_start", None),
                         )
                     )
         except ProviderError as error:

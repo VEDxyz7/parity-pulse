@@ -1,0 +1,1 @@
+Synthetic Finnhub protocol fixtures. These are deterministic test inputs, not real events, market evidence or qualifying Trust samples. No credentials are included. The malformed post-market format models the ambiguity observed in the earlier actual diagnostic.

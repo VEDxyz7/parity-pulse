@@ -9,11 +9,8 @@ export function parseSystemStatus(value: unknown): SystemStatus {
   if (!object(value) || !object(value.gates) ||
     !['development', 'test', 'production'].includes(String(value.environment)) ||
     !['DEMO', 'LIVE_READ_ONLY'].includes(String(value.data_mode)) ||
-    // Either the default non-live pair, or the explicit live opt-in on real data only.
-    !((value.execution_mode === 'DRY_RUN' && value.live_trading_enabled === false && value.approval_mode === 'PROPOSE_ONLY') ||
-      (value.execution_mode === 'LIVE' && value.live_trading_enabled === true && value.data_mode === 'LIVE_READ_ONLY' &&
-        ['PROPOSE_ONLY', 'AUTONOMOUS'].includes(String(value.approval_mode)))) ||
-    value.require_simulation !== true ||
+    value.execution_mode !== 'DRY_RUN' || value.approval_mode !== 'PROPOSE_ONLY' ||
+    value.live_trading_enabled !== false || value.require_simulation !== true ||
     !['connected', 'unavailable'].includes(String(value.database_status)) ||
     typeof value.service_version !== 'string' || typeof value.run_id !== 'string' ||
     (value.phase !== 1 && value.phase !== 2) || value.gates.DATA_GATE !== 'PASS' ||

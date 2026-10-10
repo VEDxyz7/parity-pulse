@@ -19,10 +19,6 @@ from app.models.routing import RouteCandidate, RouteDecision, RouteInput, RouteP
 from app.services.normalization import effective_price_per_share
 
 
-SESSION_STATES = {"regular", "premarket", "postmarket", "open"}
-CLOSED_STATES = {"offhours", "overnight", "closed"}
-
-
 def digest(value):
     if hasattr(value, "model_dump"):
         value = value.model_dump(mode="json")
@@ -73,14 +69,12 @@ class RoutingService:
                 reasons.append("UNSUPPORTED_OR_INVALID_NORMALIZATION")
             if row.token_price_usd is None:
                 reasons.append("TOKEN_PRICE_UNAVAILABLE")
-            # "open": issuer reports openState=True/TRADING without a session (24/7 AMM tokens).
-            # Closed-underlying states trade only on on-chain pools and only when the policy
-            # explicitly allows it (live wallet rebalancing over weekends/off-hours).
-            states = SESSION_STATES | (CLOSED_STATES if policy.allow_closed_underlying else set())
-            if row.tradable is not True or row.market_state not in states:
+            if row.tradable is not True or row.market_state not in {
+                "regular",
+                "premarket",
+                "postmarket",
+            }:
                 reasons.append("REPRESENTATION_NOT_TRADABLE")
-            elif row.market_state in CLOSED_STATES:
-                limitations.append("UNDERLYING_MARKET_CLOSED")
             if row.route_available is False or row.route_support == "UNAVAILABLE":
                 reasons.append("ROUTE_UNAVAILABLE")
             if policy.purpose == "OPPORTUNITY" and (
@@ -153,8 +147,6 @@ class RoutingService:
                 reasons.append("TRUST_REQUIREMENT_FAILED")
             if row.trust_state == "UNKNOWN" or not trust_fresh:
                 limitations.append("TRUST_NOT_CURRENTLY_VERIFIED")
-            if not policy.require_trust and policy.purpose != "OPPORTUNITY":
-                limitations.append("TRUST_NOT_EVALUATED")
             risk_fresh = (
                 self._fresh(row.risk_timestamp, now)
                 and bool(row.risk_source)
@@ -210,9 +202,7 @@ class RoutingService:
                     trust_state=row.trust_state,
                     tradability="TRADABLE"
                     if row.tradable is True
-                    and row.market_state
-                    in SESSION_STATES
-                    | (CLOSED_STATES if policy.allow_closed_underlying else set())
+                    and row.market_state in {"regular", "premarket", "postmarket"}
                     else "UNKNOWN"
                     if row.tradable is None
                     else "NOT_TRADABLE",

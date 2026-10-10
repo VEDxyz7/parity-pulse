@@ -48,7 +48,7 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
       }
     } catch {
       if (pending.current === controller) {
-        setError('Demo analysis unavailable, expired or invalid. No action was approved. Run the scenario again if needed.')
+        setError('Scenario analysis unavailable, expired or invalid. No action was approved. Run the scenario again if needed.')
         pipeline.report(stage === 'opportunity' ? 'OPPORTUNITY' : 'RISK', 'failed', 'API result unavailable, expired or invalid; no action approved')
       }
     } finally {
@@ -58,10 +58,10 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
   }
   const decision = opportunity?.opportunity
   const economics = decision?.economics
-  return <section className="demo-opportunity-flow" aria-label="Demo Opportunity and Risk">
+  return <section className="demo-opportunity-flow" aria-label="Scenario Opportunity and Risk">
     <h3>Trust → Opportunity → Risk</h3>
-    <p>DEMO SANDBOX · SIMULATED DATA — NOT LIVE MARKET DATA</p>
-    <p>Economic targets, costs and risk limits are explicitly synthetic assumptions. Trust confidence remains uncalibrated. DEMO quotes, unsigned requests and local constraint checks grant no execution authority.</p>
+    <p>Illustrative data · synthetic inputs, not live market data</p>
+    <p>Economic targets, costs and risk limits are explicitly synthetic assumptions. Trust confidence remains uncalibrated. Illustrative quotes, unsigned requests and local constraint checks grant no execution authority.</p>
     <button className="refresh-button" disabled={busy !== null} onClick={() => { void analyze('opportunity') }}>
       {busy === 'opportunity' ? 'Analyzing opportunity…' : 'Analyze Opportunity'}
     </button>

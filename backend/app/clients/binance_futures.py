@@ -1,4 +1,4 @@
-"""Public, keyless Binance index reads used as an independent equity reference.
+"""Public, keyless Binance index reads for non-authoritative index corroboration only.
 
 Binance USD-M "TRADIFI_PERPETUAL" contracts publish a multi-vendor equity index
 (databento, dxfeed, kaiko, massive, pyth) with a millisecond source timestamp. Only the

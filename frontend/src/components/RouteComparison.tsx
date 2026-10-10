@@ -3,7 +3,7 @@ import type { RouteDecision } from '../services/routing'
 export function RouteComparison({ route, expired = false }: { route: RouteDecision; expired?: boolean }) {
   return <section className="route-comparison" aria-label="Route Decision">
     <h4>Route Decision: <strong>{expired ? 'EXPIRED' : route.status}</strong></h4>
-    <p>{route.data_mode === 'DEMO' ? 'SYNTHETIC DEMO ROUTING — NOT LIVE MARKET DATA' : 'LIVE READ-ONLY ROUTING — NO EXECUTION'}</p>
+    <p>{route.data_mode === 'DEMO' ? 'Illustrative routing — synthetic inputs, not live market data' : 'Read-only routing — no execution'}</p>
     <p>{route.explanation}</p>
     <p>Purpose: {route.policy.purpose} · Ranking: {route.ranking_basis} · No weighted score; exact cost, then issuer/chain/contract/token.</p>
     {!expired && route.selected_representation && <p><strong>Selected route:</strong> {route.selected_representation.issuer} / {route.selected_representation.token} · {route.selected_representation.chain_id} / {route.selected_representation.contract}</p>}

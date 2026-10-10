@@ -29,9 +29,9 @@ describe('foundation shell', () => {
     vi.stubGlobal('fetch', fetchMock)
     mount()
     expect(await screen.findByText('Backend connected')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Your workspace, ready to grow.' })).toBeInTheDocument()
-    expect(screen.getByText('DRY RUN')).toBeInTheDocument()
-    expect(screen.getByText('DEMO')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Markets move. Evidence matters.' })).toBeInTheDocument()
+    expect(screen.getByText('Disabled · proposals only')).toBeInTheDocument()
+    expect(screen.getByText('Illustrative data')).toBeInTheDocument()
     for (const name of ['Direct Exposure', 'Opportunity', 'Autopilot']) {
       expect(screen.getByRole('button', { name })).toBeDisabled()
     }
@@ -49,7 +49,7 @@ describe('foundation shell', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Refresh status' }))
     expect(await screen.findByRole('alert')).toHaveTextContent('couldn’t reach a healthy backend')
     expect(screen.queryByText('Backend connected')).not.toBeInTheDocument()
-    expect(screen.queryByText('DEMO')).not.toBeInTheDocument()
+    expect(screen.queryByText('Illustrative data')).not.toBeInTheDocument()
     expect(screen.getAllByText('Unknown').length).toBeGreaterThan(0)
     fetchMock.mockImplementation(successfulFetch())
     await userEvent.click(screen.getByRole('button', { name: 'Refresh status' }))
@@ -81,7 +81,8 @@ describe('status boundary', () => {
     ), { status: 200 })))
     mount()
     await screen.findByText('Backend connected')
-    expect(screen.getByText('Phase 2 · Data layer')).toBeInTheDocument()
+    expect(screen.getByText('Illustrative data')).toBeInTheDocument()
+    expect(screen.queryByText(/Phase 2/)).not.toBeInTheDocument()
     expect(screen.getAllByText('blocked')).toHaveLength(3)
   })
 

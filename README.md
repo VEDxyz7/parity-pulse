@@ -230,9 +230,28 @@ Defaults work without an environment file. Optional settings can be supplied thr
 | BINANCE_WEB3_API_KEY / BINANCE_WEB3_SECRET_KEY | Required only for Binance LIVE_READ_ONLY reads |
 | MASSIVE_API_KEY | Required only for independent LIVE_READ_ONLY equity/news reads |
 | MASSIVE_DATA_QUALITY | UNKNOWN; UNKNOWN/DELAYED/REALTIME, subject to verified entitlement; a missing source time is never a fresh quote |
+| EQUITY_PROVIDER | MASSIVE for existing installations; explicitly select ALPACA as the primary equity reader; no automatic fallback |
+| ALPACA_API_KEY / ALPACA_SECRET_KEY | Local read-only market-data credentials, never exposed to the frontend |
+| ALPACA_FEED | iex; explicit iex/sip/delayed_sip/boats/overnight selection, not proof of entitlement |
+| ALPACA_DATA_QUALITY | UNKNOWN; keep UNKNOWN until actual feed/freshness verification; REALTIME is an operator assertion and does not pass Trust |
 | LLM_API_KEY | Reserved for explicitly injected LLM transport; excluded from agent inputs/output; CLI does not load it |
 
 Boolean settings use `true` or `false`. Invalid enum values, malformed database URLs and unsafe combinations refuse startup with a sanitized error. LIVE_READ_ONLY enables reviewed provider reads when configured. It never loads DEMO fixtures or enables execution. Credential absence, permission failure or invalid data returns an explicit limitation/error, not substitute data. Keep MASSIVE_DATA_QUALITY=UNKNOWN unless an entitlement is independently verified; this account currently rejects current snapshots/NBBO.
+
+The new [Alpaca read-only adapter and gap report](docs/SESSION_AWARE_DATA_REPORT.md) documents
+the staged independent-equity migration. Existing news still uses Massive. Alpaca credentials are
+currently absent; no actual entitlement/price/history is verified and Trust still rejects the new
+source pending evidence-driven reference-policy integration. The isolated diagnostic makes only
+quote/1m/5m data reads and writes no market observations:
+
+```sh
+PYTHONPATH=backend .venv/bin/python scripts/verify-alpaca-readonly.py --live \
+  --start 2026-10-08T13:30:00Z --end 2026-10-08T14:00:00Z
+```
+
+Keep DRY_RUN, PROPOSE_ONLY, LIVE_TRADING_ENABLED=false and REQUIRE_SIMULATION=true.
+Finnhub, optional HIP-3 and broader session-aware reference selection remain subsequent work;
+no Trust/Opportunity/LIVE gate is advanced by provider selection.
 
 ## Architecture through Canonical Phase 2
 

@@ -84,21 +84,14 @@ LIVE_OPT_IN = dict(
 )
 
 
-def test_live_execution_requires_every_flag_and_a_notional_cap():
-    settings = Settings(_env_file=None, **LIVE_OPT_IN)
-    assert settings.live_execution is True
-    assert settings.require_simulation is True
-    for missing in set(LIVE_OPT_IN) - {"runtime_mode"}:  # runtime_mode defaults to LIVE
-        partial = {k: v for k, v in LIVE_OPT_IN.items() if k != missing}
+def test_live_opt_in_flags_do_not_override_independent_blocked_gates():
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, **LIVE_OPT_IN)
+    for missing in set(LIVE_OPT_IN):
         with pytest.raises(ValidationError):
-            Settings(_env_file=None, **partial)
-    with pytest.raises(ValidationError):
-        Settings(_env_file=None, **{**LIVE_OPT_IN, "runtime_mode": "DEMO"})
-    with pytest.raises(ValidationError):
-        Settings(_env_file=None, **{**LIVE_OPT_IN, "live_max_notional_usd": "5000"})
-    with pytest.raises(ValidationError):
-        Settings(_env_file=None, **{**LIVE_OPT_IN, "require_simulation": False})
+            Settings(_env_file=None, **{k: v for k, v in LIVE_OPT_IN.items() if k != missing})
 
 
 def test_default_settings_never_enable_live_execution():
-    assert Settings(_env_file=None).live_execution is False
+    settings = Settings(_env_file=None)
+    assert settings.execution_mode == "DRY_RUN" and not settings.live_trading_enabled

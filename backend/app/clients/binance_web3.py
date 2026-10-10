@@ -22,7 +22,6 @@ READ_OPERATIONS = {
         "rwa/underlying-profile",
         "rwa/tokens",
         "rwa/underlying-market",
-        "token/top-liquidity",
     },
     "POST": {"price", "price-info", "token/basic-info"},
 }
@@ -41,18 +40,8 @@ SAFETY_PATHS = {
 }
 
 
-# The only write: RFQ order submission, signable solely by the live trading client.
-LIVE_WRITE_PATHS = {"POST": {"/api/v1/dex/aggregator/order/submit"}}
-
-
 def sign_request(
-    secret: SecretStr,
-    timestamp: str,
-    method: str,
-    wire_path: str,
-    body: bytes,
-    *,
-    live_writes: bool = False,
+    secret: SecretStr, timestamp: str, method: str, wire_path: str, body: bytes
 ) -> str:
     import re
 
@@ -68,10 +57,7 @@ def sign_request(
         and re.fullmatch(r"/build/api/v1/dex/aggregator/order/[A-Za-z0-9_-]{1,128}", path)
         and not path.endswith("/submit")
     )
-    live = live_writes and path.startswith("/build/") and path.removeprefix(
-        "/build"
-    ) in LIVE_WRITE_PATHS.get(method.upper(), set())
-    if not (market or safety or status or live):
+    if not (market or safety or status):
         raise ValueError("Signing requires an explicitly reviewed /build operation")
     message = (timestamp + method.upper() + wire_path).encode() + body
     return base64.b64encode(
@@ -128,13 +114,8 @@ class BinanceWeb3Client(ReadTransport):
             {
                 "X-OC-APIKEY": self.api_key.get_secret_value(),
                 "X-OC-TIMESTAMP": timestamp,
-                "X-OC-SIGN": sign_request(
-                    self.secret_key,
-                    timestamp,
-                    method,
-                    request.url.raw_path.decode(),
-                    raw,
-                    live_writes=getattr(self, "live_writes", False),
+                "X-OC-SIGN": self.request_signature(
+                    timestamp, method, request.url.raw_path.decode(), raw
                 ),
                 "X-OC-RECV-WINDOW": str(self.recv_window),
                 "Content-Type": "application/json",
@@ -143,6 +124,9 @@ class BinanceWeb3Client(ReadTransport):
         if self.nonce:
             request.headers["X-OC-NONCE"] = str(uuid4())
         return request
+
+    def request_signature(self, timestamp, method, wire_path, raw):
+        return sign_request(self.secret_key, timestamp, method, wire_path, raw)
 
     def sensitive_values(self, request):
         return (

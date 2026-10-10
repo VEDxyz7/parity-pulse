@@ -1,9 +1,8 @@
-"""Independent current equity reference from the Binance multi-vendor equity index.
+"""Optional Binance index corroboration; never an independent equity reference.
 
-The index is published in USDT; it is converted to USD with the live USDC/USDT spot rate
-(USDC treated as the USD proxy). `observed_at` is Binance's index publication time, not an
-underlying exchange trade time: outside US sessions the index can be fresh while the stock
-itself is closed, so callers must combine it with market status.
+Preserves the teammate's read-only index client/conversion without admitting a
+Binance-published derivative index into production Trust or portfolio risk.
+Publication time is preserved exactly, including small provider clock skew.
 """
 
 from datetime import UTC, datetime
@@ -28,6 +27,7 @@ class EquityReference(BaseModel):
     observed_at: datetime
     received_at: datetime
     source: str = "BINANCE_USDM_EQUITY_INDEX"
+    independent_equity_admitted: bool = False
     timestamp_semantics: str = "INDEX_PUBLICATION_TIME_NOT_LAST_TRADE"
 
 
@@ -35,7 +35,10 @@ class EquityReferenceService:
     def __init__(self, client, *, clock=lambda: datetime.now(UTC)):
         self.client, self.clock = client, clock
 
-    def reference(self, ticker):
+    def reference(self, _ticker):
+        raise ProviderError("BINANCE_INDEX", "INDEPENDENT_EQUITY_REFERENCE_NOT_ADMITTED")
+
+    def corroboration(self, ticker):
         symbol = ticker.upper().replace(".", "") + "USDT"
         index, received, _ = self.client.read("GET", "/fapi/v1/premiumIndex", {"symbol": symbol})
         usdc, _, _ = self.client.read("GET", "/api/v3/ticker/price", {"symbol": "USDCUSDT"})
@@ -45,16 +48,19 @@ class EquityReferenceService:
             observed = datetime.fromtimestamp(int(index["time"]) / 1000, UTC)
         except (KeyError, TypeError, ValueError, ArithmeticError):
             raise ProviderError("BINANCE_INDEX", "SCHEMA_INVALID") from None
-        if index.get("symbol") != symbol or price <= 0 or usdt_per_usd <= 0:
+        if (
+            index.get("symbol") != symbol
+            or not price.is_finite()
+            or not usdt_per_usd.is_finite()
+            or price <= 0
+            or usdt_per_usd <= 0
+        ):
             raise ProviderError("BINANCE_INDEX", "SCHEMA_INVALID")
         if abs(usdt_per_usd - 1) > MAX_USDT_DEPEG:
             raise ProviderError("BINANCE_INDEX", "USDT_USD_CONVERSION_OUT_OF_RANGE")
         age = (self.clock() - observed).total_seconds()
         if not -5 <= age <= MAX_AGE_SECONDS:
             raise ProviderError("BINANCE_INDEX", "STALE")
-        # Binance stamps the index slightly ahead of local receipt; an observation can never
-        # be later than when we received it, so clamp to receipt time (keeps age >= 0).
-        observed = min(observed, received)
         with localcontext() as ctx:
             ctx.prec = 34
             usd = price / usdt_per_usd

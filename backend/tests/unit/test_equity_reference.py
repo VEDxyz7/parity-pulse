@@ -26,7 +26,7 @@ class FakeClient:
 
 
 def test_converts_usdt_index_to_usd_with_source_time():
-    ref = EquityReferenceService(FakeClient(), clock=lambda: NOW).reference("NVDA")
+    ref = EquityReferenceService(FakeClient(), clock=lambda: NOW).corroboration("NVDA")
     assert ref.symbol == "NVDAUSDT" and ref.observed_at == NOW
     assert abs(ref.price_usd - Decimal("235.00") / Decimal("1.0005")) < Decimal("1e-20")
     assert ref.timestamp_semantics == "INDEX_PUBLICATION_TIME_NOT_LAST_TRADE"
@@ -43,7 +43,7 @@ def test_converts_usdt_index_to_usd_with_source_time():
 )
 def test_stale_depegged_invalid_or_mismatched_index_fails_closed(client):
     with pytest.raises(ProviderError):
-        EquityReferenceService(client, clock=lambda: NOW).reference("NVDA")
+        EquityReferenceService(client, clock=lambda: NOW).corroboration("NVDA")
 
 
 @pytest.mark.parametrize(
@@ -63,7 +63,13 @@ def test_client_is_read_only_closed_grammar(path, params):
         client.authorize("POST", "/fapi/v1/premiumIndex")
 
 
-def test_future_stamped_index_is_clamped_to_receipt_time():
+def test_provider_timestamp_is_preserved_without_clamping():
     ahead = FakeClient(index_time=NOW + timedelta(seconds=2))
-    ref = EquityReferenceService(ahead, clock=lambda: NOW).reference("NVDA")
-    assert ref.observed_at == NOW  # FakeClient receipt time
+    ref = EquityReferenceService(ahead, clock=lambda: NOW).corroboration("NVDA")
+    assert ref.observed_at == NOW + timedelta(seconds=2)
+    assert ref.received_at == NOW and ref.independent_equity_admitted is False
+
+
+def test_binance_index_never_becomes_an_independent_equity_reference():
+    with pytest.raises(ProviderError, match="INDEPENDENT_EQUITY_REFERENCE_NOT_ADMITTED"):
+        EquityReferenceService(FakeClient(), clock=lambda: NOW).reference("NVDA")

@@ -63,7 +63,12 @@ class DataRepository:
                         record,
                         (models.TokenObservation, models.EquityObservation, models.NewsEvent),
                     ):
-                        old = json.loads(existing.payload)
+                        # Normalize additive defaults in older JSON records before comparison.
+                        old = (
+                            type(record)
+                            .model_validate_json(existing.payload)
+                            .model_dump(mode="json")
+                        )
                         excluded = {"ingestion_timestamp", "data_quality"}
                         if {k: v for k, v in old.items() if k not in excluded} != {
                             k: v for k, v in payload.items() if k not in excluded

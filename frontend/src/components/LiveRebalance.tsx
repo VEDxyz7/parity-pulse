@@ -1,101 +1,43 @@
 import { useEffect, useState } from 'react'
 import { apiRequest, ApiError } from '../services/api'
+import type { GateName, GateState } from '../types/system'
 
-type Status = { wallet: string; signer: string | null; live_execution: boolean; max_notional_usd: string; max_slippage_bps: string; trust_required: boolean; equity_reference: string; rfq_enabled?: boolean; closed_market_swap?: boolean; rfq_settlements?: Record<string, string[]> }
-type Capture = { captured_at: string; vendor: string | null; primary_type: string | null; verifying_contract: string | null; verdict: string; reason: string | null }
-type Representation = { issuer: string; token: string; contract: string; token_price_usd: string; shares_per_token: string; price_per_share_usd: string; deviation_bps: string; market_state: string }
-type Parity = { ticker: string; equity_reference_usd: string; equity_observed_at: string; representations: Representation[] }
-type Action = { action_id: string; side: string; asset: string; notional_usd: string; eligible_for_preparation: boolean; reasons: string[]; route: { selected_representation: { token: string } | null } }
-type Row = { asset: string; current_value_usd: string | null; target_value_usd: string | null; current_weight: string | null; target_weight: string; state: string }
-type Plan = { plan_id: string; status: string; reasons: string[]; total_value_usd: string | null; rows: Row[]; actions: Action[] }
-type Leg = { action_id: string; side: string; asset: string; token: string; status: string; notional_usd: string; approve_tx: string | null; swap_tx: string | null; reasons: string[]; realized_cost_usd: string | null; evidence: Record<string, string | null> }
+type Fill = { action_id: string; plan_id: string; asset: string; side: 'BUY' | 'SELL'; status: string; notional_usd: string; approve_tx: string | null; swap_tx: string | null; reasons: string[]; created_at: string; updated_at: string }
+const liveNames = ['SWAP_LIVE_GATE', 'RFQ_LIVE_GATE', 'AGENTIC_WALLET_LIVE_GATE'] as const
+const states = new Set(['PREPARING', 'QUOTED', 'APPROVING', 'SIGNED', 'SUBMITTING', 'SUBMITTED', 'SUBMISSION_UNKNOWN', 'RECONCILIATION_REQUIRED', 'CONFIRMED', 'FAILED', 'REJECTED', 'NOT_FILLED'])
+function parseFills(value: unknown): Fill[] {
+  if (!Array.isArray(value) || value.length > 100) throw new Error('Invalid journal')
+  return value.map(item => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('Invalid fill')
+    const row = item as Record<string, unknown>
+    if (!['action_id', 'plan_id', 'asset', 'status', 'notional_usd', 'created_at', 'updated_at'].every(key => typeof row[key] === 'string') ||
+      !/^[A-Za-z0-9_.:-]{1,128}$/.test(String(row.action_id)) || !['BUY', 'SELL'].includes(String(row.side)) || !states.has(String(row.status)) ||
+      !/^\d+(?:\.\d+)?$/.test(String(row.notional_usd)) ||
+      !['created_at', 'updated_at'].every(key => /(?:Z|[+-]\d\d:\d\d)$/.test(String(row[key])) && Number.isFinite(Date.parse(String(row[key])))) ||
+      !['approve_tx', 'swap_tx'].every(key => row[key] === null || (typeof row[key] === 'string' && /^0x[0-9a-fA-F]{64}$/.test(row[key]))) ||
+      !Array.isArray(row.reasons) || !row.reasons.every(reason => typeof reason === 'string')) throw new Error('Invalid fill')
+    // Positive display allowlist. Legacy raw signatures/evidence never enter component state.
+    return { action_id: String(row.action_id), plan_id: String(row.plan_id), asset: String(row.asset), side: row.side as Fill['side'], status: String(row.status), notional_usd: String(row.notional_usd), approve_tx: row.approve_tx as string | null, swap_tx: row.swap_tx as string | null, reasons: row.reasons as string[], created_at: String(row.created_at), updated_at: String(row.updated_at) }
+  })
+}
+const transaction = (hash: string | null) => hash ? <a href={`https://bscscan.com/tx/${hash}`} target="_blank" rel="noreferrer">{hash.slice(0, 12)}…</a> : 'Unavailable'
 
-const object = (value: unknown) => { if (!value || typeof value !== 'object') throw new Error('invalid'); return value }
-const parse = <T,>(value: unknown) => object(value) as T
-const parseList = <T,>(value: unknown) => { if (!Array.isArray(value)) throw new Error('invalid'); return value as T[] }
-const money = (v: string | null | undefined) => v == null ? '—' : Number(v).toLocaleString(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 })
-const scan = (hash: string | null) => hash ? <a href={`https://bscscan.com/tx/${hash}`} target="_blank" rel="noreferrer">{hash.slice(0, 10)}…</a> : '—'
-const message = (error: unknown) => error instanceof ApiError ? error.message : 'Request failed. No fallback data was substituted.'
-
-export function LiveRebalance() {
-  const [status, setStatus] = useState<Status | null>(null)
-  const [ticker, setTicker] = useState('NVDA')
-  const [parity, setParity] = useState<Parity | null>(null)
-  const [plan, setPlan] = useState<Plan | null>(null)
-  const [legs, setLegs] = useState<Leg[]>([])
-  const [captures, setCaptures] = useState<Capture[]>([])
-  const [busy, setBusy] = useState<string | null>(null)
+/** Read-only diagnostics only. Browser credentials and execution actions are absent. */
+export function LiveRebalance({ gates }: { gates: Record<GateName, GateState> }) {
+  const [fills, setFills] = useState<Fill[] | null>(null)
   const [error, setError] = useState<string | null>(null)
-
-  const run = async (label: string, work: (signal: AbortSignal) => Promise<void>) => {
-    setBusy(label); setError(null)
-    const controller = new AbortController()
-    try { await work(controller.signal) } catch (e) { if (!(e instanceof DOMException)) setError(message(e)) } finally { setBusy(null) }
-  }
-  const refreshFills = (signal: AbortSignal) => Promise.all([
-    apiRequest('/api/live/fills', parseList<Leg>, { signal }).then(setLegs),
-    apiRequest('/api/live/rfq/captures', parseList<Capture>, { signal }).then(setCaptures),
-  ]).then(() => undefined)
   useEffect(() => {
     const controller = new AbortController()
-    apiRequest('/api/live/status', parse<Status>, { signal: controller.signal }).then(setStatus).catch(e => { if (!(e instanceof DOMException)) setError(message(e)) })
-    refreshFills(controller.signal).catch(() => undefined)
+    apiRequest('/api/live/fills', parseFills, { signal: controller.signal }).then(setFills).catch((cause: unknown) => {
+      if (controller.signal.aborted) return
+      setFills(null)
+      setError(cause instanceof ApiError && cause.status === 404 ? 'Execution worker diagnostics are not configured. Live execution remains blocked.' : 'Journal unavailable or invalid. No fallback evidence was substituted.')
+    })
     return () => controller.abort()
   }, [])
-
-  return <section className="workspace-view" aria-label="Live wallet rebalance">
-    <h1>Live rebalance</h1>
-    <section className="panel">
-      <h2>Wallet</h2>
-      {status ? <>
-        <p><strong>{status.live_execution ? 'LIVE EXECUTION ENABLED — real BSC mainnet transactions' : 'Read-only wallet planning — no transactions are sent'}</strong></p>
-        <p>Wallet <a href={`https://bscscan.com/address/${status.wallet}`} target="_blank" rel="noreferrer"><code>{status.wallet}</code></a> · Signer: {status.signer ?? 'none'} · Per-trade cap {money(status.max_notional_usd)} · Slippage cap {status.max_slippage_bps} bps · Trust: {status.trust_required ? 'required' : 'not evaluated (classifier parked)'} · Equity reference: {status.equity_reference}</p>
-        <p>RFQ: {status.rfq_enabled ? 'enabled — orders verified against signed bounds (settlement not simulable)' : 'disabled'} · Weekend / off-hours pool swaps: {status.closed_market_swap ? 'allowed at half cap, SWAP only' : 'off'}{status.rfq_settlements ? ` · RFQ settlements: ${Object.entries(status.rfq_settlements).map(([v, a]) => `${v} ${a.length ? a.map(x => x.slice(0, 8) + '…').join('/') : 'none (capture first)'}`).join(' · ')}` : ''}</p>
-      </> : <p role="status">{error ?? 'Loading wallet status…'}</p>}
-    </section>
-
-    <section className="panel">
-      <h2>Parity: token price per share vs equity index</h2>
-      <form onSubmit={event => { event.preventDefault(); void run('parity', signal => apiRequest(`/api/live/parity/${ticker}`, parse<Parity>, { signal, timeout: 20000 }).then(setParity)) }}>
-        <label>Ticker <input value={ticker} maxLength={15} onChange={e => setTicker(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))} /></label>
-        <button className="refresh-button" disabled={busy !== null || !ticker}>Check parity</button>
-      </form>
-      {parity && <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Parity table"><table>
-        <caption>{parity.ticker} equity index {money(parity.equity_reference_usd)} at {parity.equity_observed_at}</caption>
-        <thead><tr><th>Issuer</th><th>Token</th><th>Token price</th><th>Shares/token</th><th>Price per share</th><th>Deviation (bps)</th><th>Market</th></tr></thead>
-        <tbody>{parity.representations.map(r => <tr key={r.contract}><td>{r.issuer}</td><td>{r.token}</td><td>{money(r.token_price_usd)}</td><td>{Number(r.shares_per_token).toFixed(6)}</td><td>{money(r.price_per_share_usd)}</td><td>{r.deviation_bps}</td><td>{r.market_state}</td></tr>)}</tbody>
-      </table></div>}
-    </section>
-
-    <section className="panel">
-      <h2>Drift plan</h2>
-      <p>Configure targets on the <a href="#autopilot">Autopilot</a> page. Plans read on-chain balances and fresh Binance quotes; every action is risk-checked and capped.</p>
-      <button className="refresh-button" disabled={busy !== null} onClick={() => void run('plan', signal => apiRequest('/api/portfolio/plans', parse<Plan>, { signal, body: { idempotency_key: crypto.randomUUID() }, timeout: 60000 }).then(setPlan))}>{busy === 'plan' ? 'Planning…' : 'Evaluate drift now'}</button>
-      {plan && <>
-        <p>Status <strong>{plan.status}</strong> · Portfolio value {money(plan.total_value_usd)} · {plan.reasons.join(', ')}</p>
-        <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Drift rows"><table><thead><tr><th>Asset</th><th>Current</th><th>Target</th><th>Weight</th><th>Target weight</th><th>State</th></tr></thead>
-          <tbody>{plan.rows.map(r => <tr key={r.asset}><td>{r.asset}</td><td>{money(r.current_value_usd)}</td><td>{money(r.target_value_usd)}</td><td>{r.current_weight ? (Number(r.current_weight) * 100).toFixed(2) + '%' : '—'}</td><td>{(Number(r.target_weight) * 100).toFixed(2)}%</td><td>{r.state}</td></tr>)}</tbody></table></div>
-        {plan.actions.length > 0 && <ul>{plan.actions.map(a => <li key={a.action_id}>{a.side} {money(a.notional_usd)} {a.asset} via {a.route.selected_representation?.token ?? '—'} · {a.eligible_for_preparation ? 'risk approved' : 'blocked: ' + a.reasons.join(', ')}</li>)}</ul>}
-        {plan.status === 'REBALANCE_REQUIRED' && legs.some(l => ['NOT_FILLED', 'REJECTED', 'FAILED', 'RECONCILIATION_REQUIRED'].includes(l.status)) && <button className="refresh-button" disabled={busy !== null} onClick={() => void run('retire', signal => apiRequest(`/api/live/plans/${plan.plan_id}/retire`, parse<{ plan_status: string }>, { signal, method: 'POST' }).then(r => setPlan({ ...plan, status: r.plan_status })))}>Retire plan (a leg did not fill)</button>}
-        {status?.live_execution && plan.status === 'REBALANCE_REQUIRED' && <button className="refresh-button" disabled={busy !== null} onClick={() => void run('execute', signal => apiRequest(`/api/live/plans/${plan.plan_id}/execute`, parse<{ plan_status: string; legs: Leg[] }>, { signal, method: 'POST', timeout: 240000 }).then(r => { setPlan({ ...plan, status: r.plan_status }); return refreshFills(signal) }))}>{busy === 'execute' ? 'Executing on BSC…' : 'Execute plan on BSC mainnet'}</button>}
-      </>}
-    </section>
-
-    <section className="panel">
-      <h2>Execution journal</h2>
-      {legs.length === 0 ? <p>No live legs yet.</p> : <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Fills"><table>
-        <thead><tr><th>Side</th><th>Asset</th><th>Notional</th><th>Route</th><th>Verification</th><th>Status</th><th>Approve tx</th><th>Settlement tx</th><th>RFQ order</th><th>Execution cost vs mark</th><th>Reasons</th></tr></thead>
-        <tbody>{legs.map(l => <tr key={l.action_id}><td>{l.side}</td><td>{l.asset}</td><td>{money(l.notional_usd)}</td><td>{l.evidence.route ?? 'SWAP'}{l.evidence.vendor ? ` · ${l.evidence.vendor}` : ''}</td><td>{l.evidence.verification ?? '—'}</td><td>{l.status}</td><td>{scan(l.approve_tx)}</td><td>{scan(l.swap_tx)}</td><td>{l.evidence.rfq_status_order_id ?? l.evidence.rfq_order_id ?? '—'}</td><td>{money(l.realized_cost_usd)}</td><td>{l.reasons.join(', ')}</td></tr>)}</tbody>
-      </table></div>}
-    </section>
-    <section className="panel">
-      <h2>RFQ payload captures</h2>
-      <p>Every RFQ order Binance returns is recorded (accepted or refused) so real vendor formats and settlement contracts can be confirmed before they are allowlisted.</p>
-      {captures.length === 0 ? <p>No RFQ payloads captured yet (RFQ market makers quote during issuer sessions).</p> : <div className="comparison-scroll" tabIndex={0} role="region" aria-label="RFQ captures"><table>
-        <thead><tr><th>Captured</th><th>Vendor</th><th>Order type</th><th>Settlement contract</th><th>Verdict</th><th>Reason</th></tr></thead>
-        <tbody>{captures.map((c, i) => <tr key={i}><td>{c.captured_at}</td><td>{c.vendor ?? '—'}</td><td>{c.primary_type ?? '—'}</td><td>{c.verifying_contract ? <a href={`https://bscscan.com/address/${c.verifying_contract}`} target="_blank" rel="noreferrer">{c.verifying_contract.slice(0, 10)}…</a> : '—'}</td><td>{c.verdict}</td><td>{c.reason ?? '—'}</td></tr>)}</tbody>
-      </table></div>}
-    </section>
-    {error && <p role="alert">{error}</p>}
+  return <section className="workspace-view" aria-label="Execution status">
+    <h1>Execution status</h1>
+    <section className="panel"><h2>Independent execution gates</h2><p>Read-only diagnostics. DRY_RUN · PROPOSE_ONLY · simulation required. No real funds will move.</p><dl>{liveNames.map(name => <div key={name}><dt>{name}</dt><dd>{gates[name]}</dd></div>)}</dl><p>Trust remains mandatory. Closed-market execution and settlement equivalence remain unverified.</p><button className="refresh-button" disabled>Live rebalance unavailable</button><p>Review non-live drift proposals in <a href="#autopilot">Autopilot status</a>. Independent equity references remain separate from Binance index corroboration.</p></section>
+    <section className="panel"><h2>Execution journal</h2>{error ? <p role="status">{error}</p> : fills === null ? <p role="status">Reading execution journal…</p> : fills.length === 0 ? <p>No recorded live legs.</p> : <div className="comparison-scroll" role="region" tabIndex={0} aria-label="Execution journal records"><table><thead><tr><th>Asset</th><th>Side</th><th>Notional USD</th><th>Status</th><th>Approval</th><th>Settlement</th><th>Reasons</th></tr></thead><tbody>{fills.map(fill => <tr key={fill.action_id}><td>{fill.asset}</td><td>{fill.side}</td><td>{fill.notional_usd}</td><td>{fill.status}</td><td>{transaction(fill.approve_tx)}</td><td>{transaction(fill.swap_tx)}</td><td>{fill.reasons.join(', ')}</td></tr>)}</tbody></table></div>}</section>
   </section>
 }

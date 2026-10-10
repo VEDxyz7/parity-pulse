@@ -11,6 +11,7 @@ import re
 import httpx
 
 from app.clients.common import ProviderError
+from app.services.execution_gates import LIVE_GATES
 
 DEFAULT_RPC = "https://bsc-dataseed.bnbchain.org"
 READ_METHODS = {
@@ -22,6 +23,8 @@ READ_METHODS = {
     "eth_getTransactionReceipt",
     "eth_blockNumber",
     "eth_getCode",
+    "eth_getTransactionByHash",
+    "eth_getBlockByNumber",
 }
 ADDRESS = re.compile(r"^0x[0-9a-fA-F]{40}$")
 HASH = re.compile(r"^0x[0-9a-fA-F]{64}$")
@@ -45,10 +48,12 @@ def approve_calldata(spender, amount):
 class BscRpcClient:
     provider = "BSC_RPC"
 
-    def __init__(self, url=DEFAULT_RPC, *, allow_send=False, http=None, timeout=10):
+    def __init__(
+        self, url=DEFAULT_RPC, *, allow_send=False, http=None, timeout=10, gates=LIVE_GATES
+    ):
         if not url.startswith("https://"):
             raise ValueError("HTTPS RPC endpoint required")
-        self.url, self.allow_send = url, allow_send
+        self.url, self.allow_send, self.gates = url, allow_send, gates
         self.http = http or httpx.Client(timeout=timeout, follow_redirects=False, trust_env=False)
         self.ids = itertools.count(1)
 
@@ -56,10 +61,17 @@ class BscRpcClient:
         self.http.close()
 
     def _rpc(self, method, params):
+        if method == "eth_sendRawTransaction":
+            self.gates.require("SWAP")
+            if not self.allow_send:
+                raise ProviderError(self.provider, "LIVE_SEND_DISABLED")
+        elif method not in READ_METHODS:
+            raise ProviderError(self.provider, "READ_ONLY_OPERATION_REQUIRED")
+        request_id = next(self.ids)
         try:
             response = self.http.post(
                 self.url,
-                json={"jsonrpc": "2.0", "id": next(self.ids), "method": method, "params": params},
+                json={"jsonrpc": "2.0", "id": request_id, "method": method, "params": params},
             )
         except httpx.RequestError:
             raise ProviderError(self.provider, "TRANSPORT_UNAVAILABLE") from None
@@ -69,10 +81,15 @@ class BscRpcClient:
             body = response.json()
         except ValueError:
             raise ProviderError(self.provider, "SCHEMA_INVALID") from None
-        if not isinstance(body, dict) or "error" in body:
-            message = body.get("error", {}).get("message", "") if isinstance(body, dict) else ""
-            # Keep a bounded, credential-free reason (e.g. "nonce too low", "reverted").
-            raise ProviderError(self.provider, "RPC_ERROR", 200, str(message)[:160])
+        if (
+            not isinstance(body, dict)
+            or body.get("id") != request_id
+            or body.get("jsonrpc") != "2.0"
+        ):
+            raise ProviderError(self.provider, "SCHEMA_INVALID")
+        if "error" in body:
+            # Never expose a provider's potentially credential-bearing error text.
+            raise ProviderError(self.provider, "RPC_ERROR", 200)
         return body.get("result")
 
     def read(self, method, *params):
@@ -88,12 +105,19 @@ class BscRpcClient:
         return int(self.read("eth_getBalance", owner, "latest"), 16)
 
     def erc20_balance(self, token, owner):
+        word(token)
         result = self.read("eth_call", {"to": token, "data": BALANCE_OF + word(owner)}, "latest")
-        return int(result or "0x0", 16)
+        return self._uint256(result)
 
     def allowance(self, token, owner, spender):
+        word(token)
         data = ALLOWANCE + word(owner) + word(spender)
-        return int(self.read("eth_call", {"to": token, "data": data}, "latest") or "0x0", 16)
+        return self._uint256(self.read("eth_call", {"to": token, "data": data}, "latest"))
+
+    def _uint256(self, result):
+        if not isinstance(result, str) or not re.fullmatch(r"0x[0-9a-fA-F]{64}", result):
+            raise ProviderError(self.provider, "ERC20_RESULT_MISSING_OR_INVALID")
+        return int(result, 16)
 
     def has_code(self, address):
         word(address)
@@ -112,6 +136,7 @@ class BscRpcClient:
         return self.read("eth_getTransactionReceipt", tx_hash)
 
     def send_raw_transaction(self, raw_hex):
+        self.gates.require("SWAP")
         if not self.allow_send:
             raise ProviderError(self.provider, "LIVE_SEND_DISABLED")
         if not re.fullmatch(r"0x[0-9a-fA-F]+", raw_hex):

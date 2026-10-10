@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1001,
+    "datetime": 1791558000,
+    "headline": "Synthetic NVDA fixture announcement",
+    "source": "Synthetic Publisher",
+    "url": "https://example.com/synthetic/nvda/1001",
+    "related": "NVDA,TSLA",
+    "category": "company"
+  },
+  {
+    "id": 1002,
+    "datetime": 1791561600,
+    "headline": "Synthetic second fixture event",
+    "source": "Synthetic Publisher",
+    "url": "https://example.com/synthetic/nvda/1002",
+    "related": "NVDA",
+    "category": "company"
+  }
+]

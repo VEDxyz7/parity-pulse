@@ -19,4 +19,22 @@ uvicorn==0.54.0
 certifi==2026.7.22
 httpcore==1.0.9
 httpx==0.28.1
+
+# Audited execution verifier/signature dependency and resolved lock (2026-10-11).
 eth-account==0.13.7
+eth-abi==6.0.0
+eth-keyfile==0.8.1
+eth-keys==0.8.0
+eth-rlp==3.0.0
+eth-utils==6.0.0
+eth-typing==6.0.0
+eth-hash==0.8.0
+hexbytes==2.0.0
+rlp==5.0.0
+ckzg==2.1.8
+bitarray==3.12.0
+pycryptodome==3.24.0
+parsimonious==0.10.0
+regex==2026.9.29
+cytoolz==1.2.0
+toolz==1.2.0

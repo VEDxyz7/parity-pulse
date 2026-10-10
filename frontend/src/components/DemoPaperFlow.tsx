@@ -45,10 +45,10 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
     } finally { clearTimeout(timer); if (pending.current === controller) setBusy(false) }
   }
   if (simulation.simulation.status !== 'SIMULATION_PASS') return null
-  return <section className="demo-paper-flow" aria-label="Demo Paper Position and Scorecard">
+  return <section className="demo-paper-flow" aria-label="Paper Position and Scorecard">
     <h4>PAPER EXECUTION → Position → Monitor → Exit → Scorecard</h4>
     <p><strong>SIMULATED DATA — NOT LIVE TRADING</strong><br />NO REAL FUNDS MOVED</p>
-    <p>Session-only DEMO ledger; restarting the DEMO backend clears paper records. Production databases are untouched.</p>
+    <p>Session-only paper ledger; restarting the isolated backend clears paper records. Production databases are untouched.</p>
     <button className="refresh-button" disabled={busy || (!row && expired)} onClick={() => { void run('fill') }}>
       {row ? 'Retrieve Paper Fill' : 'Create Paper Fill'}
     </button>
@@ -58,7 +58,7 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
       <h4>Paper execution: <strong>{row.order.status}</strong></h4>
       <p>SYNTHETIC_QUOTE_FILL · No real funds moved · Fill ID: <code>{row.fill.fill_id}</code></p>
       <h4>Position: <strong>{row.position.state}</strong></h4>
-      <p>{row.position.ticker} / {row.position.issuer} · DEMO/PAPER · Position ID: <code>{row.position.position_id}</code></p>
+      <p>{row.position.ticker} / {row.position.issuer} · Illustrative paper position · Position ID: <code>{row.position.position_id}</code></p>
       <dl className="trust-facts">
         <div><dt>Entry quantity / tokens</dt><dd>{row.fill.quantity}</dd></div>
         <div><dt>Entry price / USD per token, including slippage</dt><dd>{row.fill.price_usd}</dd></div>
@@ -97,7 +97,7 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
         <p>Opportunity: {score.opportunity_status} · Risk: {score.risk_status} · Local simulation: {score.simulation_status} · Paper result: {score.execution_status}</p>
         <p>Net PAPER P&amp;L: {score.pnl.net_pnl_usd} USD · Return: {score.pnl.return_pct}%</p>
         <p>Ledger-derived reasons: {score.reason_codes.join(' · ')}</p>
-        <p>Production TRUST_GATE=BLOCKED · OPPORTUNITY_GATE=BLOCKED_BY_TRUST · All LIVE execution gates remain BLOCKED.</p>
+        <p>Production Trust and Opportunity remain blocked. All live execution remains blocked.</p>
       </>}
       <details><summary>Paper lifecycle and scorecard audit records</summary><pre>{JSON.stringify({ row, score }, null, 2)}</pre></details>
     </>}

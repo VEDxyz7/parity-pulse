@@ -52,11 +52,11 @@ try {
   await call('Page.navigate', { url: 'http://127.0.0.1:5173/' })
   const initial = await waitText('Backend connected')
   assert(initial.includes('Trust Layer'))
-  assert(initial.includes('TRUST_GATE blocked'))
+  assert(initial.includes('production Trust blocked'))
   assert.equal(apiRequests.filter(r => r.path.endsWith('/trust')).length, 0)
   await evaluate('Array.from(document.querySelectorAll("button")).find(b => b.textContent === "Assess trust").click()')
   const assessment = await waitText('INSUFFICIENT_EVIDENCE')
-  for (const value of ['NVDA', 'DEMO', 'Market regime:', 'Baseline episodes', '0 / 30', 'Missing evidence:', 'No real transaction was broadcast.']) assert(assessment.includes(value), value)
+  for (const value of ['NVDA', 'Illustrative data', 'Market regime:', 'Baseline episodes', '0 / 30', 'Missing evidence:', 'No real transaction was broadcast.']) assert(assessment.includes(value), value)
   assert.equal(errors.length, 0)
   assert(apiRequests.filter(r => r.path.endsWith('/trust')).every(r => r.method === 'GET'))
   assert.equal(apiRequests.filter(r => r.method === 'POST').length, 0)
@@ -72,7 +72,7 @@ try {
   const failure = await waitText('Unsupported stock')
   assert(failure.includes('UNAVAILABLE')); assert(failure.includes('NO_VERIFIED_MATCH'))
   assert(!failure.includes('INSUFFICIENT_EVIDENCE'))
-  const deferred = await evaluate('Array.from(document.querySelectorAll("button.deferred")).map(b => b.disabled)')
+  const deferred = await evaluate('Array.from(document.querySelectorAll(".execution-controls button[disabled]")).map(b => b.disabled)')
   assert.deepEqual(deferred, [true, true])
   const report = {
     timestamp: new Date().toISOString(), url: 'http://127.0.0.1:5173/', result: 'PASS',

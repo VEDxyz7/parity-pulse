@@ -1,0 +1,309 @@
+{
+  "api_requests": 0,
+  "coverage": {
+    "equity_bar_count": 2143,
+    "equity_end": "2026-10-05T23:59:00+00:00",
+    "equity_interval_counts": {
+      "1minute": 1921,
+      "5minute": 222
+    },
+    "equity_start": "2026-03-06T20:59:00+00:00",
+    "loaded_at": null,
+    "malformed_rows": {},
+    "persisted_real_baseline_episodes": 0,
+    "persisted_real_trust_samples": 0,
+    "representations": {
+      "bstock": {
+        "end": "2026-10-06T10:00:00+00:00",
+        "historical_candles": 2805,
+        "historical_ratio": "UNAVAILABLE",
+        "interval_counts": {
+          "1d": 107,
+          "1h": 2388,
+          "1m": 310
+        },
+        "start": "2026-06-12T00:00:00+00:00"
+      },
+      "ondo": {
+        "end": "2026-10-05T23:00:00+00:00",
+        "historical_candles": 4546,
+        "historical_ratio": "UNAVAILABLE",
+        "interval_counts": {
+          "1d": 174,
+          "1h": 4102,
+          "1m": 270
+        },
+        "start": "2026-03-03T07:00:00+00:00"
+      }
+    },
+    "unique_existing_token_records": 122,
+    "unique_primary_raw_bars": 7336
+  },
+  "current_offline_replay": {
+    "candidate_representation_windows": 48,
+    "decision_quality_counts": {
+      "REJECTED": 48
+    },
+    "distinct_openings": 31,
+    "eligible_decisions": 0,
+    "issuer_counts": {
+      "bstock": 17,
+      "ondo": 31
+    },
+    "loaded_point_in_time_proofs": 0,
+    "proof_limitation": "Existing candidate_frames loader supplies no proof ledger",
+    "rejection_counts": {
+      "ASOF_TOKEN_SHARE_RATIO_UNAVAILABLE": 48,
+      "CALENDAR_VERSION_NOT_YET_VERIFIED": 48,
+      "KNOWN_PREVIOUS_REGULAR_CLOSE_UNAVAILABLE": 48,
+      "KNOWN_TOKEN_PRICE_OR_METADATA_UNAVAILABLE": 48,
+      "REQUIRED_FEATURES_UNAVAILABLE": 48
+    },
+    "target_status_counts": {
+      "POSTHOC_ONLY": 48
+    },
+    "verified_targets": 0
+  },
+  "database_bytes_unchanged": true,
+  "database_sha256": {
+    "data/parity-pulse.db": "8f661051ee473dd9868ef851b930085794a933a2323913890c8ea7889f062648",
+    "data/phase1-demo-verification.db": "b789b4b4dedcac9ba7de8d5335e713426c0369064ba0f4f51b0d5fb4b912edf2",
+    "data/phase1-live-verification.db": "f2b7e86848f7b62f1668d7eb407da925e4dee2eecd93a1410ea832a60374a4d0",
+    "data/phase2-trust-demo-verification.db": "9580f74ed8d5993bfa98265f3fa2259f8549d4707aae8bf99fb1df70454c2835",
+    "data/phase2-trust-history-investigation.db": "8d90dafeaad215787fe94ec8cac54141afa324a82e49a5314cf50aef6e07ea24",
+    "data/phase2-trust-live-verification.db": "67b702ee4419223f27e94f214005f9972bec2abecc68db9986683c65a3d3647c",
+    "data/phase2-trust-remediation-verification.db": "d0333f1344b4a871f3f89d4eb522f8b047cc1c566bee020533be10cde3496131",
+    "data/phase2-verification.db": "f4366e5f09058e882ad8fef121afd3c7640adddc6f82be25751be5abca1ac4ac"
+  },
+  "execution_calls": 0,
+  "gate_contract": {
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED",
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "TRUST_GATE": "BLOCKED"
+  },
+  "gates_modified": false,
+  "holiday_replay": {
+    "endpoint": "/stock/market-holiday",
+    "invalid_records": [
+      {
+        "data_mode": "LIVE",
+        "data_quality": "INVALID",
+        "endpoint": "/stock/market-holiday",
+        "event_date": "2025-11-28",
+        "event_date_timezone": "America/New_York",
+        "exchange": "US",
+        "ingestion_timestamp": "2026-10-10T07:38:11.532338Z",
+        "kind": "EARLY_CLOSE",
+        "name": "Thanksgiving Day",
+        "postmarket_close": null,
+        "postmarket_open": null,
+        "provider_identifier": "HOLIDAY:US:2025-11-28",
+        "published_timestamp": null,
+        "quality_flags": [
+          "MALFORMED_POSTMARKET_HOURS",
+          "PUBLICATION_TIME_UNAVAILABLE",
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+        ],
+        "raw_postmarket_hours": "13:00:17:00",
+        "raw_source_timestamp": null,
+        "raw_trading_hours": "09:30-13:00",
+        "regular_close": "2025-11-28T18:00:00Z",
+        "regular_open": "2025-11-28T14:30:00Z",
+        "schema_version": "2",
+        "source": "FINNHUB_EVENTS",
+        "source_timestamp": null,
+        "timestamp_unit": "UNKNOWN"
+      },
+      {
+        "data_mode": "LIVE",
+        "data_quality": "INVALID",
+        "endpoint": "/stock/market-holiday",
+        "event_date": "2025-12-24",
+        "event_date_timezone": "America/New_York",
+        "exchange": "US",
+        "ingestion_timestamp": "2026-10-10T07:38:11.532338Z",
+        "kind": "EARLY_CLOSE",
+        "name": "Christmas",
+        "postmarket_close": null,
+        "postmarket_open": null,
+        "provider_identifier": "HOLIDAY:US:2025-12-24",
+        "published_timestamp": null,
+        "quality_flags": [
+          "MALFORMED_POSTMARKET_HOURS",
+          "PUBLICATION_TIME_UNAVAILABLE",
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+        ],
+        "raw_postmarket_hours": "13:00:17:00",
+        "raw_source_timestamp": null,
+        "raw_trading_hours": "09:30-13:00",
+        "regular_close": "2025-12-24T18:00:00Z",
+        "regular_open": "2025-12-24T14:30:00Z",
+        "schema_version": "2",
+        "source": "FINNHUB_EVENTS",
+        "source_timestamp": null,
+        "timestamp_unit": "UNKNOWN"
+      },
+      {
+        "data_mode": "LIVE",
+        "data_quality": "INVALID",
+        "endpoint": "/stock/market-holiday",
+        "event_date": "2026-11-27",
+        "event_date_timezone": "America/New_York",
+        "exchange": "US",
+        "ingestion_timestamp": "2026-10-10T07:38:11.532338Z",
+        "kind": "EARLY_CLOSE",
+        "name": "Thanksgiving Day",
+        "postmarket_close": null,
+        "postmarket_open": null,
+        "provider_identifier": "HOLIDAY:US:2026-11-27",
+        "published_timestamp": null,
+        "quality_flags": [
+          "MALFORMED_POSTMARKET_HOURS",
+          "PUBLICATION_TIME_UNAVAILABLE",
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+        ],
+        "raw_postmarket_hours": "13:00:17:00",
+        "raw_source_timestamp": null,
+        "raw_trading_hours": "09:30-13:00",
+        "regular_close": "2026-11-27T18:00:00Z",
+        "regular_open": "2026-11-27T14:30:00Z",
+        "schema_version": "2",
+        "source": "FINNHUB_EVENTS",
+        "source_timestamp": null,
+        "timestamp_unit": "UNKNOWN"
+      },
+      {
+        "data_mode": "LIVE",
+        "data_quality": "INVALID",
+        "endpoint": "/stock/market-holiday",
+        "event_date": "2026-12-24",
+        "event_date_timezone": "America/New_York",
+        "exchange": "US",
+        "ingestion_timestamp": "2026-10-10T07:38:11.532338Z",
+        "kind": "EARLY_CLOSE",
+        "name": "Christmas",
+        "postmarket_close": null,
+        "postmarket_open": null,
+        "provider_identifier": "HOLIDAY:US:2026-12-24",
+        "published_timestamp": null,
+        "quality_flags": [
+          "MALFORMED_POSTMARKET_HOURS",
+          "PUBLICATION_TIME_UNAVAILABLE",
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+        ],
+        "raw_postmarket_hours": "13:00:17:00",
+        "raw_source_timestamp": null,
+        "raw_trading_hours": "09:30-13:00",
+        "regular_close": "2026-12-24T18:00:00Z",
+        "regular_open": "2026-12-24T14:30:00Z",
+        "schema_version": "2",
+        "source": "FINNHUB_EVENTS",
+        "source_timestamp": null,
+        "timestamp_unit": "UNKNOWN"
+      },
+      {
+        "data_mode": "LIVE",
+        "data_quality": "INVALID",
+        "endpoint": "/stock/market-holiday",
+        "event_date": "2027-11-26",
+        "event_date_timezone": "America/New_York",
+        "exchange": "US",
+        "ingestion_timestamp": "2026-10-10T07:38:11.532338Z",
+        "kind": "EARLY_CLOSE",
+        "name": "Thanksgiving Day",
+        "postmarket_close": null,
+        "postmarket_open": null,
+        "provider_identifier": "HOLIDAY:US:2027-11-26",
+        "published_timestamp": null,
+        "quality_flags": [
+          "MALFORMED_POSTMARKET_HOURS",
+          "PUBLICATION_TIME_UNAVAILABLE",
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+        ],
+        "raw_postmarket_hours": "13:00:17:00",
+        "raw_source_timestamp": null,
+        "raw_trading_hours": "09:30-13:00",
+        "regular_close": "2027-11-26T18:00:00Z",
+        "regular_open": "2027-11-26T14:30:00Z",
+        "schema_version": "2",
+        "source": "FINNHUB_EVENTS",
+        "source_timestamp": null,
+        "timestamp_unit": "UNKNOWN"
+      }
+    ],
+    "original_receipt": "2026-10-10T07:38:11.532338+00:00",
+    "quality_counts": {
+      "INVALID": 5,
+      "UNKNOWN": 57
+    }
+  },
+  "input_provenance": [
+    "data/parity-pulse.db:d73c85230e64fca984fc54c6338cd8a56a74219b83ea5c736b47b971b6fa25f1",
+    "data/phase1-demo-verification.db:2d47aa8bd5ffe30a681e88a8f40018bd2e4c56d052a2ab7ad1df568a6574afca",
+    "data/phase1-live-verification.db:59e3a1ff8ef53ff1f41b788f54f01dc8a4bfae96261a546db333a59f835ba5e6",
+    "data/phase2-trust-demo-verification.db:d73c85230e64fca984fc54c6338cd8a56a74219b83ea5c736b47b971b6fa25f1",
+    "data/phase2-trust-history-investigation.db:56648a9460dcb5f85ed6e611ea2d593b6362c7c3d9f42cae74155d543f82c3e1",
+    "data/phase2-trust-live-verification.db:fcbe1a80d157d1c2017b2dbb88a8a54d96a3951e133f97c4e40ee40d6d44cd6b",
+    "data/phase2-trust-remediation-verification.db:c28b1ad7109971fd0a1cb187d3af97a32c92dfbf4bb24964cf1d78a57e26b961",
+    "data/phase2-verification.db:c83536a7f574ce6ba85a928779f3e73a8909545450f4619249640e2d88d32534",
+    "docs/evidence/TRUST_BLOCKER_HISTORICAL_BACKFILL.json:e0cda8960ff6ee25626b8ecf433c72717eac29e4fd6da267c3537aceded4643b"
+  ],
+  "observation_inventory": {
+    "equity_observations": {
+      "count": 2144,
+      "missing_source_timestamp": 0,
+      "quality_counts": {
+        "HISTORICAL": 2144
+      },
+      "source_counts": {
+        "MASSIVE": 2144
+      }
+    },
+    "news_events": {
+      "count": 126,
+      "missing_source_timestamp": 0,
+      "quality_counts": {
+        "HISTORICAL": 126
+      },
+      "source_counts": {
+        "MASSIVE_NEWS": 126
+      }
+    },
+    "token_metadata": {
+      "count": 16,
+      "missing_source_timestamp": 16,
+      "quality_counts": {
+        "UNKNOWN": 16
+      },
+      "source_counts": {
+        "BINANCE_RWA": 16
+      }
+    },
+    "token_observations": {
+      "count": 122,
+      "missing_source_timestamp": 0,
+      "quality_counts": {
+        "CONFLICTING": 10,
+        "HISTORICAL": 80,
+        "LIVE": 32
+      },
+      "source_counts": {
+        "BINANCE_MARKET": 108,
+        "BINANCE_RWA": 14
+      }
+    }
+  },
+  "production_writes": 0,
+  "scope": "OFFLINE_READ_ONLY_TRUST_BLOCKER_AUDIT",
+  "system_status_gate_subset": {
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED",
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "SWAP_LIVE_GATE": "BLOCKED"
+  }
+}

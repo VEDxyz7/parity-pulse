@@ -51,13 +51,17 @@ class PortfolioService:
         self.inventory = inventory
         if allow_closed_underlying and inventory != "WALLET":
             raise ValueError("Closed-underlying trading is wallet rebalancing only")
-        self.allow_closed_underlying = allow_closed_underlying
-        # Configured rebalancing may run on cost/liquidity/risk/freshness alone when the
-        # operator disables Trust; routes are then labelled TRUST_NOT_EVALUATED.
-        self.trust_required = trust_required
+        if allow_closed_underlying:
+            raise ValueError("Closed-market live execution equivalence remains unverified")
+        self.allow_closed_underlying = False
+        # The existing Trust and risk controls apply to both inventory authorities.
+        if trust_required is not True:
+            raise ValueError("Trust cannot be disabled for rebalance preparation")
+        self.trust_required = True
         self.mode = positions.mode
         self.router, self.risk, self.funding = RoutingService(), RiskEngine(), FundingService()
         self.lock = threading.RLock()
+        self.live_journal = None
         self.recovery_complete = False
 
     def configure(self, rules, *, expected_version, request_id, correlation_id):
@@ -113,17 +117,16 @@ class PortfolioService:
         config = self.store.config(mode=self.mode)
         plan = self.store.pending(mode=self.mode)
         count = self.positions.store.count(mode=self.mode, active=True)
-        live = getattr(self, "live_execution", False)
         return dict(
             data_mode=self.mode,
-            execution_mode="LIVE" if live else "DRY_RUN",
+            execution_mode="DRY_RUN",
             config=config,
             pending_plan=plan,
             latest_decision=self.store.latest(mode=self.mode),
             active_positions=self.positions.store.list(mode=self.mode, active=True, limit=100),
             position_coverage_complete=count <= 100,
             recovery_complete=self.recovery_complete,
-            live_trading_enabled=live,
+            live_trading_enabled=False,
         )
 
     def capture(self, config):
@@ -173,6 +176,35 @@ class PortfolioService:
         ):
             reasons.append("FUNDING_IDENTITY_OR_FRESHNESS_INVALID")
         route_map = {r.identity.contract: r for r in i.routes}
+        if self.inventory == "WALLET":
+            seen = set()
+            for holding in i.token_funding:
+                contract = holding.asset.contract
+                mark = route_map.get(contract)
+                if contract in seen:
+                    reasons.append("DUPLICATE_WALLET_HOLDING")
+                seen.add(contract)
+                if (
+                    not holding.identity_verified
+                    or funding is None
+                    or holding.wallet != funding.wallet
+                    or holding.asset.chain_id != funding.asset.chain_id
+                    or not all(
+                        fresh(t, now)
+                        for t in (
+                            holding.asset.observed_at,
+                            holding.balance_observed_at,
+                            holding.price_observed_at,
+                        )
+                    )
+                    or self.mode != "DEMO"
+                    and holding.source.startswith("TEST")
+                ):
+                    reasons.append("WALLET_HOLDING_IDENTITY_OR_FRESHNESS_INVALID")
+                if int(holding.balance_base_units) > 0 and (
+                    mark is None or mark.token_price_usd != holding.unit_price_usd
+                ):
+                    reasons.append("WALLET_HOLDING_MARK_UNAVAILABLE_OR_CONFLICTING")
         targets = {t.asset: t for t in config.targets}
         for t in config.targets:
             if t.kind == "TOKENIZED_STOCK" and not any(
@@ -244,6 +276,8 @@ class PortfolioService:
         return tuple(dict.fromkeys(reasons))
 
     def evaluate(self, *, idempotency_key, request_id, correlation_id, persist=True):
+        if self.live_journal is not None and self.live_journal.unresolved():
+            raise ValueError("WALLET_EXECUTION_UNRESOLVED")
         with self.lock, localcontext() as ctx:
             ctx.prec = 256
             config = self.store.config(mode=self.mode)
@@ -675,7 +709,6 @@ class PortfolioService:
             require_liquidity=True,
             require_trust=self.trust_required,
             require_risk=True,
-            allow_closed_underlying=self.allow_closed_underlying,
             min_liquidity_usd=context.min_liquidity_usd,
             max_slippage_bps=context.max_slippage_bps,
         )
@@ -778,9 +811,7 @@ class PortfolioService:
             estimated_share_delta=delta,
             target_share_exposure=max(Decimal(0), drift.current_share_exposure + delta),
             position_id=position.position_id if position else None,
-            inventory_source="WALLET_BALANCE"
-            if self.inventory == "WALLET"
-            else "PHASE10_POSITION",
+            inventory_source="WALLET_BALANCE" if self.inventory == "WALLET" else "PHASE10_POSITION",
             route=routing,
             risk=risk,
             risk_inputs=e,
@@ -829,6 +860,8 @@ class PortfolioService:
 
     def prepare(self, plan_id, action_id, *, allowance):
         """Host-only fresh preparation, through the original services. Never an API trade."""
+        if self.live_journal is not None and self.live_journal.unresolved():
+            raise ValueError("WALLET_EXECUTION_UNRESOLVED")
         with self.lock:
             plan = self.store.get(plan_id, mode=self.mode)
             action = next((a for a in plan.actions if a.action_id == action_id), None)
@@ -1071,27 +1104,10 @@ class PortfolioService:
                 expected_version=plan.version,
             )
 
-    def mark_executed(self, plan_id):
-        """Wallet-inventory plans only: the live executor confirmed every leg on-chain."""
-        with self.lock:
-            plan = self.store.get(plan_id, mode=self.mode)
-            if self.inventory != "WALLET" or plan.status != "REBALANCE_REQUIRED":
-                raise ValueError("Only a pending wallet-inventory plan can be marked executed")
-            return self.store.save(
-                change(
-                    plan,
-                    version=plan.version + 1,
-                    status="EXECUTED",
-                    execution_mode="LIVE",
-                    live_trading_enabled=True,
-                    broadcast=True,
-                    updated_at=self.clock(),
-                ),
-                expected_version=plan.version,
-            )
-
     def retire(self, plan_id):
         with self.lock:
+            if self.live_journal is not None and self.live_journal.unresolved(str(plan_id)):
+                raise ValueError("LEG_UNRESOLVED_RECONCILE_FIRST")
             plan = self.store.get(plan_id, mode=self.mode)
             if plan.status != "REBALANCE_REQUIRED":
                 raise ValueError("Only a pending rebalance proposal may be retired")

@@ -1,6 +1,13 @@
 from typing import Protocol
 
 from app.models.data import EquityObservation, Issuer, NewsEvent, TokenMetadata
+from app.models.events import (
+    CompanyNewsEvent,
+    EarningsCalendarEvent,
+    EventBatch,
+    MarketHoliday,
+    USMarketStatus,
+)
 
 
 class RWADataProvider(Protocol):
@@ -29,3 +36,14 @@ class CalendarProvider(Protocol):
     def status(self, at): ...
     def session(self, day): ...
     def previous_session(self, at): ...
+
+
+class EventContextProvider(Protocol):
+    def get_company_news(
+        self, ticker: str, start: str, end: str
+    ) -> EventBatch[CompanyNewsEvent]: ...
+    def get_earnings_calendar(
+        self, ticker: str, start: str, end: str
+    ) -> EventBatch[EarningsCalendarEvent]: ...
+    def get_market_status(self) -> USMarketStatus: ...
+    def get_market_holidays(self) -> EventBatch[MarketHoliday]: ...

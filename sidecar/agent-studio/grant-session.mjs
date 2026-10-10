@@ -1,3 +1,11 @@
+// Experimental teammate SDK implementation retained behind a non-configurable gate.
+// No environment variable, token, CLI flag or session can enable this entry point.
+import { pathToFileURL } from "node:url";
+import { requireLiveCapabilities } from "./execution-gates.mjs";
+import { writeFileSync } from "node:fs";
+
+export async function grantSession() {
+  requireLiveCapabilities();
 // One-time setup: create (or reuse) the operator's Altana wallet on BSC mainnet and grant
 // Parity Pulse a scoped session key. Optional: mint an ERC-8004 agent identity.
 //
@@ -7,15 +15,14 @@
 // The session may only: call the Binance LiquidMesh router (swaps), call approve() on USDT
 // and the configured stock tokens, spend at most SESSION_DAILY_USDT USDT/day and
 // SESSION_DAILY_BNB/day for relay gas, until expiry. Revoke any time from the owner key.
-import { writeFileSync } from "node:fs";
-import {
+const {
   BNB,
   createClient,
   createPrivateKeySigner,
   registerErc8004Agent,
   serializeSession,
   signerFromPrivateKey,
-} from "@altananetwork/sdk";
+} = await import("@altananetwork/sdk");
 
 const env = process.env;
 const ROUTER = (env.SWAP_ROUTER ?? "0xb44446b0c8e56988c34f7ff73ae904982b5fdda5").toLowerCase();
@@ -93,4 +100,13 @@ if (process.argv.includes("--register-agent")) {
     "data:application/json;base64," + Buffer.from(JSON.stringify(card)).toString("base64");
   const result = await registerErc8004Agent(wallet, owner, { agentUri }, { network: BNB });
   console.log(JSON.stringify({ event: "ERC8004_REGISTERED", agentId: result.agentId.toString(), tx: result.transactionHash ?? null }));
+}
+
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  grantSession().catch(() => {
+    console.error("AGENTIC_WALLET_LIVE_GATE_BLOCKED: no SDK action performed");
+    process.exitCode = 2;
+  });
 }

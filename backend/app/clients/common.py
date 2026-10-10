@@ -104,6 +104,8 @@ class ReadTransport:
 
     def read(self, method, path, params=None, body=None, *, ttl=None):
         self.authorize(method, path)
+        attempts = self.request_attempts(method, path)
+        cacheable = self.cache_request(method, path)
         key = (
             method,
             path,
@@ -111,12 +113,12 @@ class ReadTransport:
             json.dumps(body, sort_keys=True),
         )
         with self.lock:  # Single-flight and bounded request deduplication; one local owner.
-            cached = self.cache.get(key)
+            cached = self.cache.get(key) if cacheable else None
             if cached and self.monotonic() < cached[0]:
                 return cached[1]
             if self.monotonic() < self.cooldown:
                 raise ProviderError(self.provider, "RATE_LIMIT_OR_CIRCUIT_OPEN")
-            for attempt in range(self.attempts):
+            for attempt in range(attempts):
                 self.sleep(max(0, self.min_interval - (self.monotonic() - self.last_request)))
                 request = self.build_request(method, path, params, body)
                 self.trace = {
@@ -170,9 +172,10 @@ class ReadTransport:
                         if response.headers.get("X-OC-RateLimit-Remaining") == "0":
                             self.cooldown = self.monotonic() + 60
                         lifetime = self.cache_ttl if ttl is None else ttl
-                        if len(self.cache) >= 256:
-                            self.cache.pop(next(iter(self.cache)))
-                        self.cache[key] = (self.monotonic() + lifetime, result)
+                        if cacheable:
+                            if len(self.cache) >= 256:
+                                self.cache.pop(next(iter(self.cache)))
+                            self.cache[key] = (self.monotonic() + lifetime, result)
                         return result
                 except httpx.RequestError:
                     error = ProviderError(self.provider, "TRANSPORT_UNAVAILABLE")
@@ -192,7 +195,7 @@ class ReadTransport:
                 delay = self._retry_delay(response, attempt) if transient else None
                 if error.http_status == 429 and delay is not None:
                     self.cooldown = max(self.cooldown, self.monotonic() + delay)
-                if transient and attempt + 1 < self.attempts:
+                if transient and attempt + 1 < attempts:
                     if delay is not None:
                         self.sleep(delay)
                         continue
@@ -200,6 +203,12 @@ class ReadTransport:
                 if self.failures >= 3:
                     self.cooldown = max(self.cooldown, self.monotonic() + 30)
                 raise error from None
+
+    def request_attempts(self, method, path):
+        return self.attempts
+
+    def cache_request(self, method, path):
+        return True
 
     def record(self, path, method, status, business, capability, start):
         item = {

@@ -1,3 +1,13 @@
+// Experimental teammate SDK implementation retained behind a non-configurable gate.
+// No environment variable, token, CLI flag or session can enable this entry point.
+import { pathToFileURL } from "node:url";
+import { requireLiveCapabilities } from "./execution-gates.mjs";
+import { createServer } from "node:http";
+import { readFileSync } from "node:fs";
+import { timingSafeEqual } from "node:crypto";
+
+export async function startSidecar() {
+  requireLiveCapabilities();
 // Parity Pulse x BNB Agent Studio sidecar (localhost only).
 //
 // 1. Altana execution: POST /altana/execute runs one call batch through a scoped Altana
@@ -6,19 +16,16 @@
 // 2. x402 selling: GET /x402/parity/:ticker is a paid endpoint (B402 v2 wire, USDT/U on BSC)
 //    payable by Agent Studio buyers (`bag x402 buy`) and Altana `fetchWithX402`. It proxies the
 //    Parity Pulse tokenized-stock vs equity-index parity signal.
-import { createServer } from "node:http";
-import { readFileSync } from "node:fs";
-import { timingSafeEqual } from "node:crypto";
-import { BNB, createClient, deserializeSession, signerFromPrivateKey } from "@altananetwork/sdk";
-import { createX402Merchant, U_TOKEN, USDT_BSC } from "@altananetwork/x402-server";
-import { privateKeyToAccount } from "viem/accounts";
-import { bsc } from "viem/chains";
+const { BNB, createClient, deserializeSession, signerFromPrivateKey } = await import("@altananetwork/sdk");
+const { createX402Merchant, U_TOKEN, USDT_BSC } = await import("@altananetwork/x402-server");
+const { privateKeyToAccount } = await import("viem/accounts");
+const { bsc } = await import("viem/chains");
 
 const env = process.env;
 const PORT = Number(env.SIDECAR_PORT ?? 8787);
 const PARITY_API = env.PARITY_API ?? "http://127.0.0.1:8000";
 const TOKEN = env.SIDECAR_TOKEN ?? "";
-const PERMIT2 = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
+const PERMIT2 = "0x31c2F6FcFF4F8759b3Bd5Bf0e1084A055615c768";
 
 const client = createClient({ chains: [BNB] });
 
@@ -136,11 +143,20 @@ async function handle(req, res) {
 }
 
 createServer((req, res) => {
-  handle(req, res).catch((error) =>
-    json(res, 500, { error: "SIDECAR_ERROR", detail: String(error?.shortMessage ?? error?.message ?? error).slice(0, 200) }),
+  handle(req, res).catch(() =>
+    json(res, 500, { error: "SIDECAR_ERROR", detail: "Provider failure; details suppressed" }),
   );
 }).listen(PORT, "127.0.0.1", () => {
   console.log(
     JSON.stringify({ event: "SIDECAR_READY", port: PORT, altana: Boolean(session), x402: Boolean(merchant) }),
   );
 });
+
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  startSidecar().catch(() => {
+    console.error("AGENTIC_WALLET_LIVE_GATE_BLOCKED: no SDK action performed");
+    process.exitCode = 2;
+  });
+}

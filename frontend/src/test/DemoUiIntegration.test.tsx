@@ -7,6 +7,7 @@ import { demoStages } from '../components/DemoPipeline'
 import type { ScenarioId } from '../services/demoSandbox'
 import { healthFixture, systemFixture } from './fixtures'
 import fixtures from './demoUiFixtures.json'
+import terminal from './terminalFixtures.json'
 
 const json = (value: unknown) => new Response(JSON.stringify(value), { status: 200 })
 const hero = fixtures.scenarios['supported-move']
@@ -15,6 +16,7 @@ function setup(runtime: 'DEMO' | 'LIVE' = 'DEMO') {
   const fetchMock = vi.fn(async (url: string, options?: RequestInit) => {
     if (url === '/api/health') return json(healthFixture)
     if (url === '/api/system-status') return json({ ...systemFixture, ...(runtime === 'DEMO' ? { runtime_mode: 'DEMO' } : {}), gates: { ...systemFixture.gates, DRY_RUN_GATE: 'PASS' } })
+    if (url === '/api/terminal?limit=25&offset=0') return json(terminal)
     if (url === '/api/demo/trust/scenarios') return json(fixtures.catalog)
     if (url.startsWith('/api/demo/trust/scenarios/')) {
       selected = url.split('/').at(-1) as ScenarioId
@@ -46,22 +48,22 @@ function setup(runtime: 'DEMO' | 'LIVE' = 'DEMO') {
   return fetchMock
 }
 function progress(stage: string) {
-  return Array.from(screen.getByRole('region', { name: 'Demo pipeline status' }).querySelectorAll('li')).find(row => row.dataset.stage === stage)!
+  return Array.from(screen.getByRole('region', { name: 'Decision pipeline status' }).querySelectorAll('li')).find(row => row.dataset.stage === stage)!
 }
 async function openSandbox() {
   await screen.findByText('Backend connected')
-  await userEvent.click(screen.getByRole('link', { name: 'Open DEMO SANDBOX' }))
+  await userEvent.click(screen.getByRole('link', { name: 'Open Research Lab' }))
   await screen.findByRole('option', { name: 'LIKELY INFORMATION' })
 }
 async function runScenario(label: string) {
   await userEvent.click(screen.getByRole('button', { name: label }))
-  await userEvent.click(screen.getByRole('button', { name: 'Run demo scenario' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Run scenario' }))
   await screen.findByRole('button', { name: 'Analyze Opportunity' })
   await userEvent.click(screen.getByRole('button', { name: 'Analyze Opportunity' }))
 }
 function assertDemoOnly(mock: ReturnType<typeof setup>) {
   for (const [url, options] of mock.mock.calls) {
-    expect(['/api/health', '/api/system-status'].includes(url) || url.startsWith('/api/demo/')).toBe(true)
+    expect(['/api/health', '/api/system-status', '/api/terminal?limit=25&offset=0'].includes(url) || url.startsWith('/api/demo/')).toBe(true)
     expect(url).not.toMatch(/\/api\/assets\//)
     expect(url).not.toMatch(/wallet|rfq|swap|broadcast|execute/)
     if (options?.method === 'POST') expect(url.startsWith('/api/demo/')).toBe(true)
@@ -74,12 +76,12 @@ it('opens the dedicated labeled sandbox with every stage pending and no automati
   const mock = setup()
   await openSandbox()
   expect(window.location.hash).toBe('#demo-sandbox')
-  expect(screen.getByRole('heading', { name: 'DEMO SANDBOX', level: 1 })).toBeInTheDocument()
-  expect(screen.getByRole('region', { name: 'Synthetic sandbox mode' })).toHaveTextContent('SIMULATED DATA — NOT LIVE MARKET DATA')
+  expect(screen.getByRole('heading', { name: 'Research Lab', level: 1 })).toBeInTheDocument()
+  expect(screen.getByRole('region', { name: 'Research Lab' })).toHaveTextContent('Explore how evidence becomes a decision')
   expect(screen.getAllByText('NO REAL FUNDS WILL MOVE').length).toBeGreaterThan(0)
   for (const stage of demoStages) expect(progress(stage)).toHaveAttribute('data-status', 'pending')
   expect(mock.mock.calls.map(([url]) => url)).toEqual(expect.arrayContaining(['/api/health', '/api/system-status', '/api/demo/trust/scenarios']))
-  expect(mock.mock.calls).toHaveLength(3)
+  expect(mock.mock.calls).toHaveLength(4)
   expect(screen.getByRole('button', { name: 'Opportunity' })).toBeDisabled()
   await userEvent.click(screen.getByRole('link', { name: 'Skip to main content' }))
   expect(window.location.hash).toBe('#demo-sandbox')
@@ -108,8 +110,8 @@ it('runs LIKELY_INFORMATION through routing, quote, simulation, paper exit and s
   await screen.findByRole('heading', { name: 'Opportunity: ACTIONABLE' })
   expect(progress('ROUTING')).toHaveAttribute('data-status', 'pass')
   for (const [button, heading] of [
-    ['Analyze Risk', 'Risk: PASS'], ['Generate DEMO Quote', 'Quote: QUOTED'],
-    ['Prepare DEMO Transaction', 'Transaction: PREPARED'], ['Run DEMO Simulation', 'Simulation: SIMULATION_PASS'],
+    ['Analyze Risk', 'Risk: PASS'], ['Generate Illustrative Quote', 'Quote: QUOTED'],
+    ['Prepare Unsigned Request', 'Transaction: PREPARED'], ['Run Local Simulation', 'Simulation: SIMULATION_PASS'],
     ['Create Paper Fill', 'Position: OPEN'], ['Monitor Synthetic Opening Observation', 'Monitor: explicit synthetic observation'],
     ['Exit Paper Position', 'Position: EXITED'], ['View Paper Scorecard', 'Scorecard: EXITED'],
   ]) {
@@ -118,14 +120,14 @@ it('runs LIKELY_INFORMATION through routing, quote, simulation, paper exit and s
   }
   for (const stage of demoStages) expect(progress(stage)).toHaveAttribute('data-status', 'pass')
   expect(progress('P&L')).toHaveTextContent(hero.exited.pnl!.net_pnl_usd)
-  expect(screen.getByRole('region', { name: 'Demo Paper Position and Scorecard' })).toHaveTextContent(`Net PAPER P&L: ${hero.scorecard.pnl.net_pnl_usd} USD`)
+  expect(screen.getByRole('region', { name: 'Paper Position and Scorecard' })).toHaveTextContent(`Net PAPER P&L: ${hero.scorecard.pnl.net_pnl_usd} USD`)
   expect(screen.getByRole('button', { name: 'Opportunity' })).toBeDisabled()
   assertDemoOnly(mock)
 })
 
 it('reports running/failed requests and safely clears downstream status when retrying', async () => {
   const mock = setup(); await openSandbox()
-  await userEvent.click(screen.getByRole('button', { name: 'Run demo scenario' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Run scenario' }))
   await screen.findByRole('button', { name: 'Analyze Opportunity' })
   let reject!: (error: Error) => void
   mock.mockImplementationOnce(() => new Promise<Response>((_resolve, r) => { reject = r }))
@@ -144,7 +146,7 @@ it('resets all status and cancels a late scenario response on scenario selection
   const mock = setup(); await openSandbox()
   let resolve!: (response: Response) => void
   mock.mockImplementationOnce(() => new Promise<Response>(r => { resolve = r }))
-  await userEvent.click(screen.getByRole('button', { name: 'Run demo scenario' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Run scenario' }))
   expect(progress('TRUST')).toHaveAttribute('data-status', 'running')
   const options = mock.mock.calls.at(-1)![1]!
   await userEvent.click(screen.getByRole('button', { name: 'LIKELY INFORMATION' }))
@@ -157,15 +159,15 @@ it('resets all status and cancels a late scenario response on scenario selection
 it('keeps canonical Overview Assess trust unchanged and makes sandbox availability explicit in the ordinary runtime', async () => {
   const mock = setup('LIVE')
   await screen.findByText('Backend connected')
-  expect(mock.mock.calls).toHaveLength(2)
+  expect(mock.mock.calls).toHaveLength(3)
   await userEvent.click(screen.getByRole('button', { name: 'Assess trust' }))
   const panel = screen.getByRole('region', { name: 'Trust Layer' })
   expect(await within(panel).findByText('INSUFFICIENT_EVIDENCE')).toBeInTheDocument()
   expect(mock.mock.calls.at(-1)![0]).toBe('/api/assets/NVDA/trust')
-  await userEvent.click(screen.getByRole('link', { name: 'Open DEMO SANDBOX' }))
-  await screen.findByText('The connected backend has the sandbox disabled.')
-  expect(mock.mock.calls).toHaveLength(3)
-  expect(screen.queryByRole('button', { name: 'Run demo scenario' })).not.toBeInTheDocument()
+  await userEvent.click(screen.getByRole('link', { name: 'Open Research Lab' }))
+  await screen.findByText('Scenario research is disabled on this backend.')
+  expect(mock.mock.calls).toHaveLength(4)
+  expect(screen.queryByRole('button', { name: 'Run scenario' })).not.toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Opportunity' })).toBeDisabled()
   await userEvent.click(screen.getByRole('link', { name: 'Return to Overview' }))
   await screen.findByRole('button', { name: 'Assess trust' })
@@ -177,10 +179,10 @@ it('supports a sandbox deep link and aborts analysis when returning to Overview'
   const mock = setup()
   await screen.findByRole('option', { name: 'NORMAL' })
   mock.mockImplementationOnce(() => new Promise<Response>(() => {}))
-  await userEvent.click(screen.getByRole('button', { name: 'Run demo scenario' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Run scenario' }))
   const signal = mock.mock.calls.at(-1)![1]!.signal!
   await userEvent.click(screen.getByRole('link', { name: 'Return to Overview' }))
   await waitFor(() => expect(screen.getByRole('button', { name: 'Assess trust' })).toBeInTheDocument())
   expect(signal.aborted).toBe(true)
-  expect(screen.queryByRole('region', { name: 'Demo pipeline status' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('region', { name: 'Decision pipeline status' })).not.toBeInTheDocument()
 })

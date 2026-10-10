@@ -3,6 +3,10 @@
 Not installed as an agent tool or public route. Submit and broadcast are impossible.
 """
 
+import base64
+import hashlib
+import hmac
+import json
 import re
 from datetime import timedelta
 
@@ -126,33 +130,6 @@ class BinanceSafetyClient(BinanceWeb3Client):
             raise ProviderError("BINANCE_SAFETY", "AMBIGUOUS_APPROVAL")
         return result[0]
 
-    def rfq_approval(self, *, token, amount, vendor):
-        params = dict(
-            binanceChainId="56",
-            tokenContractAddress=token,
-            approveAmount=str(int(amount)),
-            vendor=vendor,
-        )
-        data, _, _ = self.read("GET", AGGREGATOR + "approve-transaction", params, ttl=0)
-        result = validate(list[ApprovalBuild], data)
-        if len(result) != 1:
-            raise ProviderError("BINANCE_SAFETY", "AMBIGUOUS_APPROVAL")
-        return result[0]
-
-    def build_rfq(self, quote, *, slippage_bps):
-        """`/swap` for an RFQ quote. Returns the raw payload; the caller captures it first and
-        only then validates (`BuildResponse`) and verifies (`rfq_orders`)."""
-        from decimal import Decimal
-
-        params = {
-            **quote.request.model_dump(),
-            "quoteId": quote.route.quoteId,
-            "slippagePercent": format(Decimal(slippage_bps) / Decimal(100), "f"),
-            "autoSlippage": "false",
-        }
-        data, _, _ = self.read("GET", AGGREGATOR + "swap", params, ttl=0)
-        return data
-
     def simulate(self, tx, *, mode):
         if mode != "LIVE_READ_ONLY":
             raise ProviderError("BINANCE_SAFETY", "REAL_PROVIDER_MODE_REQUIRED")
@@ -193,7 +170,64 @@ class BinanceSafetyClient(BinanceWeb3Client):
         raise ProviderError("BINANCE_SAFETY", "SWAP_LIVE_GATE_BLOCKED")
 
 
-# Business codes worth a precise journal reason (Binance Trading API error-codes page).
+class LiveTradingClient(BinanceSafetyClient):
+    """Central gate checked even through inherited raw transport authorization.
+
+    No automatic runtime constructs this write-capable client. Existing SafetyClient
+    stays read-only. RFQ requires exact final-settlement equivalence independently.
+    """
+
+    live_writes = True
+
+    def request_attempts(self, method, path):
+        return 1 if method == "POST" and path == AGGREGATOR + "order/submit" else self.attempts
+
+    def cache_request(self, method, path):
+        return not (method == "POST" and path == AGGREGATOR + "order/submit")
+
+    def sensitive_values(self, request):
+        values = super().sensitive_values(request)
+        if request.method == "POST" and request.url.path == "/build" + AGGREGATOR + "order/submit":
+            signature = json.loads(request.content).get("userSignature")
+            if isinstance(signature, str):
+                return (*values, signature)
+        return values
+
+    def request_signature(self, timestamp, method, wire_path, raw):
+        if method == "POST" and wire_path == "/build" + AGGREGATOR + "order/submit":
+            # Keep the market/safety signer's operation allowlist unchanged. The one
+            # separate submission operation always checks the server gate itself.
+            self.authorize(method, AGGREGATOR + "order/submit")
+            message = (timestamp + method + wire_path).encode() + raw
+            return base64.b64encode(
+                hmac.new(
+                    self.secret_key.get_secret_value().encode(), message, hashlib.sha256
+                ).digest()
+            ).decode()
+        return super().request_signature(timestamp, method, wire_path, raw)
+
+    def authorize(self, method, path):
+        if method == "POST" and path == AGGREGATOR + "order/submit":
+            from app.services.execution_gates import LIVE_GATES
+
+            LIVE_GATES.require("RFQ")
+            if not self.api_key or not self.secret_key:
+                raise ProviderError("BINANCE_SAFETY", "NOT_CONFIGURED")
+            return
+        super().authorize(method, path)
+
+    def submit_rfq(self, request):
+        from app.services.execution_gates import LIVE_GATES
+
+        LIVE_GATES.require("RFQ")
+        method, path, body = request.wire_request()
+        data, _, _ = self.read(method, path, body=body, ttl=0)
+        order_id = data.get("orderId") if isinstance(data, dict) else None
+        if not isinstance(order_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", order_id):
+            raise ProviderError("BINANCE_SAFETY", "SUBMISSION_OUTCOME_UNKNOWN")
+        return order_id
+
+
 RFQ_CODES = {
     40365: "ONDO_TOKEN_PAIR_NOT_SUPPORTED",
     40366: "ONDO_MAX_SINGLE_ORDER_LIMIT",
@@ -217,28 +251,3 @@ def provider_reason(error):
     except (TypeError, ValueError):
         return getattr(error, "kind", "PROVIDER_ERROR")
     return RFQ_CODES.get(code, getattr(error, "kind", "PROVIDER_ERROR"))
-
-
-class LiveTradingClient(BinanceSafetyClient):
-    """Safety client plus the single live write: RFQ `/order/submit`.
-
-    Constructed only by the live wiring under the full live opt-in. Every other client keeps
-    refusing submission (see BinanceSafetyClient.submit_rfq).
-    """
-
-    live_writes = True
-
-    def authorize(self, method, path):
-        if method == "POST" and path == AGGREGATOR + "order/submit":
-            if not self.api_key or not self.secret_key:
-                raise ProviderError("BINANCE_SAFETY", "NOT_CONFIGURED")
-            return
-        super().authorize(method, path)
-
-    def submit_rfq(self, request):
-        method, path, body = request.wire_request()
-        data, _, _ = self.read(method, path, body=body, ttl=0)
-        order_id = data.get("orderId") if isinstance(data, dict) else data
-        if not isinstance(order_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", order_id):
-            raise ProviderError("BINANCE_SAFETY", "SUBMIT_RESPONSE_INVALID")
-        return order_id

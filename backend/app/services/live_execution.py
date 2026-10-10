@@ -1,50 +1,80 @@
-"""Live rebalance execution for wallet-inventory plans (BSC mainnet).
+"""Remediated host-only execution worker. Public configuration cannot enable it.
 
-Per action, in plan priority order (sales before purchases), the best of two route kinds:
-
-SWAP (verification=EXACT_SIMULATION):
-  fresh quote -> bound checks vs plan -> exact approval (simulated, sent, confirmed)
-  -> build -> provider simulation must SUCCEED with the expected balance changes
-  -> native gas check -> sign + send -> receipt status 1 -> on-chain balance reconciliation.
-
-RFQ (verification=SIGNED_ORDER_BOUND; never while the underlying market is closed):
-  fresh quote -> exact approval to the vendor's known spender -> /swap payload captured
-  -> EIP-712 order verified against plan bounds (rfq_orders) -> sign -> signature recovered
-  -> requestId journaled before submit -> /order/submit -> poll -> receipt + balance diff must
-  satisfy the signed bounds.
-
-Hard limits enforced here independently of planning: per-action notional cap (half when the
-underlying is closed), slippage cap, wallet identity, settlement allowlist, journal idempotency
-(a journaled leg is reconciled, never re-sent or re-signed). Any failed check stops the plan.
+Reuses the established route builder, simulation and RiskEngine. Application wiring
+keeps every live gate blocked; no derived perpetual quote or disabled Trust fallback.
+Uncertain submission recovery is observation-only and never automatically re-signs.
 """
 
-import threading
-import time
-from datetime import UTC, datetime
-from decimal import Decimal, localcontext
-
-import json
+from dataclasses import dataclass
+from decimal import ROUND_CEILING, Decimal, localcontext
 from uuid import uuid4
 
-from app.clients.bsc_rpc import approve_calldata
 from app.clients.common import ProviderError
-from app.models.execution import BuildResponse, EvmTransaction, QuoteRequest, RFQSubmission
-from app.services.live_portfolio_source import USDT, USDT_DECIMALS
-from app.services.routing import CLOSED_STATES
-
-APPROVE_GAS = 80000
-RECEIPT_TIMEOUT_SECONDS = 90
-MAX_PLAN_AGE_SECONDS = 600
-ORDER_POLL_SECONDS = 120
-RESUBMIT_WINDOW_SECONDS = 1800  # Binance: requestId idempotent for 30 minutes
-RFQ_VENDORS = {"CowSwap", "InchFusion", "PcsXRfq"}
-NOT_FILLED = {"FAILED", "EXPIRED", "CANCELLED"}
+from app.models.execution import AllowanceState, fingerprint, parse_object
+from app.models.live import TERMINAL, ExecutionConsent
+from app.services.execution_builders import ExecutionRouteBuilder, current_quote
+from app.services.execution_gates import LIVE_GATES, LiveExecutionError
+from app.services.execution_simulation import ExecutionSimulationService
+from app.services.live_settlement import verify_rfq, verify_swap
+from app.services.risk import RiskEngine
 
 
-class LiveExecutionError(Exception):
-    def __init__(self, code):
-        self.code = code
-        super().__init__(code)
+@dataclass(frozen=True)
+class PreparedLeg:
+    action_id: str
+    route: object
+    simulation: object
+    risk_digest: str
+    minimum_out: int
+    order: object | None = None
+
+    @property
+    def digest(self):
+        return fingerprint(
+            {
+                "action_id": self.action_id,
+                "route": self.route.fingerprint,
+                "simulation": self.simulation.payload_digest,
+                "risk": self.risk_digest,
+                "minimum_out": self.minimum_out,
+                "order": self.order.summary() if self.order else None,
+            }
+        )
+
+
+def validate_swap_effects(route, simulation, *, now):
+    """Exact prepared identity + complete bounded wallet effects, not just SUCCESS."""
+    if not ExecutionSimulationService.matches(simulation, route, now=now, mode="LIVE_READ_ONLY"):
+        raise LiveExecutionError("EXACT_SIMULATION_REQUIRED")
+    wallet = route.quote.request.userWalletAddress
+    sell, buy = route.quote.request.fromTokenAddress, route.quote.request.toTokenAddress
+    spent = gained = 0
+    changes = simulation.response.balanceChanges
+    if not changes:
+        raise LiveExecutionError("SIMULATION_BALANCE_EVIDENCE_MISSING")
+    seen = set()
+    for change in changes:
+        key = (change.owner, change.contractAddress.lower())
+        if key in seen:
+            raise LiveExecutionError("DUPLICATE_SIMULATION_BALANCE_CHANGE")
+        seen.add(key)
+        if change.owner != wallet:
+            continue
+        token = change.contractAddress.lower()
+        amount = int(change.change)
+        if change.tokenType != "ERC20":
+            raise LiveExecutionError("SIMULATION_ASSET_TYPE_UNVERIFIED")
+        if amount < 0:
+            if token != sell:
+                raise LiveExecutionError("SIMULATION_UNEXPECTED_WALLET_DEBIT")
+            spent -= amount
+        if amount > 0 and token == buy:
+            gained += amount
+    if not 0 < spent <= int(route.quote.request.amount):
+        raise LiveExecutionError("SIMULATION_MAX_SPEND_VIOLATED")
+    if gained < int(route.build.tx.minReceiveAmount):
+        raise LiveExecutionError("SIMULATION_MIN_OUTPUT_VIOLATED")
+    return spent, gained
 
 
 class LiveRebalanceExecutor:
@@ -59,130 +89,94 @@ class LiveRebalanceExecutor:
         max_notional_usd,
         max_slippage_bps,
         gas_reserve_wei,
-        clock=lambda: datetime.now(UTC),
-        sleep=time.sleep,
+        clock,
+        gates=LIVE_GATES,
         rfq_allowlist=None,
+        market_status_reader=None,
     ):
-        if portfolio.inventory != "WALLET":
-            raise ValueError("Live execution requires wallet-inventory planning")
+        if getattr(portfolio, "inventory", None) != "WALLET":
+            raise ValueError("Verified wallet-inventory planning required")
         self.portfolio, self.trading, self.rpc = portfolio, trading, rpc
-        self.signer, self.journal = signer, journal
+        self.signer, self.journal, self.gates = signer, journal, gates
         self.max_notional = Decimal(str(max_notional_usd))
         self.max_slippage_bps = Decimal(str(max_slippage_bps))
-        self.gas_reserve_wei = int(gas_reserve_wei)
-        self.clock, self.sleep = clock, sleep
-        self.lock = threading.Lock()
-        self._usdt_price = None
-        # RFQ needs: a settlement allowlist, a client that can submit, a typed-data signer.
-        self.rfq_allowlist = rfq_allowlist
-        self.rfq_enabled = bool(
-            rfq_allowlist is not None
-            and hasattr(trading, "submit_rfq")
-            and getattr(trading, "live_writes", False)
-            and hasattr(signer, "sign_typed_data")
-        )
+        self.gas_reserve_wei, self.clock = int(gas_reserve_wei), clock
+        self.rfq_allowlist = rfq_allowlist or {}
+        self.market_status_reader = market_status_reader
+        self.risk = RiskEngine()
+        portfolio.live_journal = journal
 
-    # -- public --------------------------------------------------------------------------
-    def execute(self, plan_id):
-        if not self.lock.acquire(blocking=False):
-            raise LiveExecutionError("LIVE_EXECUTION_ALREADY_RUNNING")
-        try:
-            plan = self.portfolio.store.get(plan_id, mode=self.portfolio.mode)
-            if plan.status != "REBALANCE_REQUIRED":
-                raise LiveExecutionError("PLAN_NOT_ACTIONABLE")
-            age = (self.clock() - plan.created_at).total_seconds()
-            if not 0 <= age <= MAX_PLAN_AGE_SECONDS and not any(
-                self.journal.get(a.action_id) for a in plan.actions
-            ):
-                raise LiveExecutionError("PLAN_TOO_OLD_REEVALUATE")
-            if plan.snapshot.inputs.funding.wallet != self.signer.address:
-                raise LiveExecutionError("PLAN_WALLET_IS_NOT_SIGNER_WALLET")
-            results = []
-            for action in sorted(plan.actions, key=lambda a: a.priority):
-                record = self._leg(plan, action)
-                results.append(record)
-                if record["status"] != "CONFIRMED":
-                    break
-            if results and all(r["status"] == "CONFIRMED" for r in results) and len(
-                results
-            ) == len(plan.actions):
-                self.portfolio.mark_executed(plan_id)
-            return results
-        finally:
-            self.lock.release()
-
-    # -- one leg -------------------------------------------------------------------------
-    def _leg(self, plan, action):
-        existing = self.journal.get(action.action_id)
-        if existing is not None:
-            return self._reconcile(existing)
-        token = action.route.selected_representation.contract
-        base = dict(
-            plan_id=plan.plan_id,
-            asset=action.asset,
-            side=action.side,
-            token=token,
-            notional_usd=action.notional_usd,
-            signer=self.signer.kind,
-        )
-        record = self.journal.upsert(action.action_id, status="PREPARING", **base)
-        self._usdt_price = plan.snapshot.inputs.funding.unit_price_usd
-        try:
-            return self._run(action, token, record)
-        except (LiveExecutionError, ProviderError, ValueError, ArithmeticError) as error:
-            if isinstance(error, ProviderError):
-                from app.clients.binance_trading import provider_reason
-
-                code = provider_reason(error)
-            else:
-                code = getattr(error, "code", None) or type(error).__name__.upper()
-            current = self.journal.get(action.action_id)
-            evidence = current["evidence"]
-            if evidence.get("rfq_request_id") and not evidence.get("rfq_status_order_id"):
-                # Signed but submission not acknowledged: stay SIGNED; the next run resubmits
-                # the identical idempotent body (same requestId), never a new signature.
-                return self.journal.upsert(action.action_id, status="SIGNED", reasons=[str(code)])
-            if current.get("swap_tx") or evidence.get("rfq_request_id"):
-                # Something was sent: never call it rejected; settle it from chain/provider.
-                current = self.journal.upsert(
-                    action.action_id, status="SUBMITTED", reasons=[str(code)]
-                )
-                return self._reconcile(current)
-            return self.journal.upsert(action.action_id, status="REJECTED", reasons=[str(code)])
-
-    def _run(self, action, token, record):
-        closed = action.route.selected_candidate.inputs.market_state in CLOSED_STATES
-        cap = self.max_notional / 2 if closed else self.max_notional
-        if action.notional_usd > cap:
-            raise LiveExecutionError("LIVE_NOTIONAL_CAP")
+    def _risk(self, plan, action):
+        now = self.clock()
+        if not 0 <= (now - plan.created_at).total_seconds() <= 120:
+            raise LiveExecutionError("PLAN_TOO_OLD_REEVALUATE")
         if not action.eligible_for_preparation or action.risk.status != "PASS":
             raise LiveExecutionError("ACTION_NOT_RISK_APPROVED")
-        wallet = self.signer.address
+        risk = self.risk.evaluate_execution(action.risk_inputs, now=now)
+        if risk.status != "PASS" or risk.evidence_digest != action.risk.evidence_digest:
+            raise LiveExecutionError("RISK_REVALIDATION_FAILED")
+        if action.risk_inputs.data_mode != "LIVE_READ_ONLY":
+            raise LiveExecutionError("DEMO_EXECUTION_FORBIDDEN")
+        if action.notional_usd > self.max_notional:
+            raise LiveExecutionError("LIVE_NOTIONAL_CAP")
         mark = action.route.selected_candidate.inputs
-        slip = min(self.max_slippage_bps, action.risk_inputs.slippage_bps + Decimal(50))
-        if action.side == "BUY":
-            with localcontext() as ctx:
-                ctx.prec = 72
-                usdt_price = self.portfolio_usdt_price()
-                amount = int(action.notional_usd / usdt_price * 10**USDT_DECIMALS)
-            sell, buy = USDT, token
-            minimum_out = int(
-                Decimal(action.quantity_base_units) * (1 - slip / Decimal(10000))
+        if (
+            mark.tradable is not True
+            or mark.route_available is not True
+            or not 0 <= (now - mark.price_timestamp).total_seconds() <= 120
+        ):
+            raise LiveExecutionError("MARKET_STATUS_OR_ROUTE_STALE")
+        # Preserve main's conservative closed-market behavior. No new weekend exemption.
+        from app.models.data import MarketStatus
+
+        if self.market_status_reader is None:
+            raise LiveExecutionError("FRESH_MARKET_STATUS_REQUIRED")
+        status = MarketStatus.model_validate_json(
+            self.market_status_reader(action.asset).model_dump_json()
+        )
+        if (
+            status.data_mode != "LIVE"
+            or status.data_quality != "LIVE"
+            or status.source_timestamp is None
+            or not 0 <= (now - status.source_timestamp).total_seconds() <= 120
+            or status.ticker not in {action.asset, "US_EQUITY"}
+        ):
+            raise LiveExecutionError("MARKET_STATUS_OR_ROUTE_STALE")
+        if status.state not in {"regular", "OPEN"} or mark.market_state not in {"regular", "OPEN"}:
+            raise LiveExecutionError("UNDERLYING_MARKET_NOT_OPEN")
+        return risk
+
+    def prepare(self, plan, action):
+        """Read-only construction. A result is not permission to sign or submit."""
+        from app.models.execution import QuoteRequest
+        from app.services.rfq_orders import Expected, verify
+
+        risk = self._risk(plan, action)
+        funding = plan.snapshot.inputs.funding
+        wallet = self.signer.address
+        token = action.route.selected_representation.contract
+        if funding.wallet != wallet or funding.asset.chain_id != "56":
+            raise LiveExecutionError("PLAN_WALLET_OR_CHAIN_MISMATCH")
+        if self.rpc.chain_id() != 56:
+            raise LiveExecutionError("RPC_CHAIN_MISMATCH")
+        with localcontext() as ctx:
+            ctx.prec = 256
+            cash_units = int(
+                action.notional_usd / funding.unit_price_usd * Decimal(10) ** funding.asset.decimals
             )
-        else:
-            amount = int(action.quantity_base_units)
-            sell, buy = token, USDT
-            with localcontext() as ctx:
-                ctx.prec = 72
-                minimum_out = int(
-                    action.notional_usd
-                    * (1 - slip / Decimal(10000))
-                    / self.portfolio_usdt_price()
-                    * 10**USDT_DECIMALS
-                )
-        held = self.rpc.erc20_balance(sell, wallet)
-        if held < amount:
-            raise LiveExecutionError("INSUFFICIENT_ON_CHAIN_BALANCE")
+            amount = cash_units if action.side == "BUY" else int(action.quantity_base_units)
+            out = int(action.quantity_base_units) if action.side == "BUY" else cash_units
+            slip = action.risk_inputs.slippage_bps
+            minimum = int(
+                (out * (1 - slip / Decimal(10000))).to_integral_value(rounding=ROUND_CEILING)
+            )
+        if slip > self.max_slippage_bps:
+            raise LiveExecutionError("SLIPPAGE_LIMIT")
+        sell, buy = (
+            (funding.asset.contract, token)
+            if action.side == "BUY"
+            else (token, funding.asset.contract)
+        )
         request = QuoteRequest(
             binanceChainId="56",
             amount=str(amount),
@@ -191,404 +185,329 @@ class LiveRebalanceExecutor:
             userWalletAddress=wallet,
         )
         offered = self.trading.quote(request, mode="LIVE_READ_ONLY")
-        swaps = [q for q in offered if q.route.executionMode == "SWAP" and q.route.approveTarget]
-        rfqs = (
-            [
-                q
-                for q in offered
-                if q.route.executionMode == "RFQ" and q.route.vendorName in RFQ_VENDORS
-            ]
-            if self.rfq_enabled and not closed
-            else []
-        )
-        best_swap = max(swaps, key=lambda q: int(q.route.toTokenAmount), default=None)
-        best_rfq = max(rfqs, key=lambda q: int(q.route.toTokenAmount), default=None)
-        # Exact simulation beats a signed-order bound: RFQ only when strictly better.
-        if best_rfq is not None and (
-            best_swap is None
-            or int(best_rfq.route.toTokenAmount) > int(best_swap.route.toTokenAmount)
-        ):
-            return self._rfq_leg(action, sell, buy, amount, minimum_out, slip, best_rfq, mark)
-        if best_swap is None:
-            raise LiveExecutionError("NO_SIMULATABLE_SWAP_ROUTE")
-        quote = best_swap
-        impact = abs(quote.route.priceImpactPercent or Decimal(0)) * 10000
-        if impact > self.max_slippage_bps:
+        # Explicit economics and stable tie break. Mode comes from provider, not issuer.
+        quotes = sorted(offered, key=lambda q: (-int(q.route.toTokenAmount), q.route.quoteId))
+        if not quotes:
+            raise LiveExecutionError("NO_ROUTE")
+        quote = quotes[0]
+        current_quote(quote, self.clock())
+        if quote.route.priceImpactPercent is None:
+            raise LiveExecutionError("PRICE_IMPACT_UNAVAILABLE")
+        if abs(quote.route.priceImpactPercent) * 100 > self.max_slippage_bps:
             raise LiveExecutionError("PRICE_IMPACT_LIMIT")
-        if int(quote.route.toTokenAmount) < minimum_out:
+        if int(quote.route.toTokenAmount) < minimum:
             raise LiveExecutionError("QUOTE_BELOW_PLAN_MINIMUM")
         spender = quote.route.approveTarget
-        evidence = dict(
-            quote_id=quote.route.quoteId,
-            vendor=quote.route.vendorName,
-            amount_in=str(amount),
-            quoted_out=quote.route.toTokenAmount,
-            minimum_out=str(minimum_out),
-            price_impact_bps=str(impact),
+        if spender is None or not self.rpc.has_code(spender):
+            raise LiveExecutionError("SPENDER_CONTRACT_UNVERIFIED")
+        held = self.rpc.erc20_balance(sell, wallet)
+        if held < amount:
+            raise LiveExecutionError("INSUFFICIENT_ON_CHAIN_BALANCE")
+        allowed = self.rpc.allowance(sell, wallet, spender)
+        # Broad existing allowances cannot silently authorize a new plan. Existing
+        # ApprovalService prepares exact scoped approvals as separate confirmed operations.
+        if allowed != amount:
+            raise LiveExecutionError("EXACT_ALLOWANCE_REPREPARATION_REQUIRED")
+        allowance = AllowanceState(
+            data_mode="LIVE_READ_ONLY",
+            token=sell,
+            owner=wallet,
             spender=spender,
-            plan_mark_usd=str(mark.token_price_usd),
-            route="SWAP",
-            verification="EXACT_SIMULATION",
+            amount=str(allowed),
+            observed_at=self.clock(),
+            source="BSC_RPC",
         )
-        record = self.journal.upsert(action.action_id, status="QUOTED", evidence=evidence)
-        self._approve(action.action_id, sell, spender, amount)
-        # Requote after approval if the 30s quote lifetime is close to expiry.
-        if (quote.expires_at - self.clock()).total_seconds() < 10:
-            quote = max(
-                (
-                    q
-                    for q in self.trading.quote(request, mode="LIVE_READ_ONLY")
-                    if q.route.executionMode == "SWAP" and q.route.approveTarget == spender
-                ),
-                key=lambda q: int(q.route.toTokenAmount),
-                default=None,
+        response = self.trading.build(quote, slippage_bps=slip)
+        if response.executionMode == "RFQ":
+            self.journal.capture_rfq(
+                response.model_dump(mode="json"),
+                verdict="INCOMPLETE",
+                reason="PROVIDER_PAYLOAD_DEPLOYMENT_NOT_VERIFIED",
             )
-            if quote is None or int(quote.route.toTokenAmount) < minimum_out:
-                raise LiveExecutionError("REQUOTE_BELOW_PLAN_MINIMUM")
-        build = self.trading.build(quote, slippage_bps=slip)
-        tx = build.tx
-        if build.executionMode != "SWAP" or tx is None:
-            raise LiveExecutionError("BUILD_NOT_SWAP")
-        if tx.sender != wallet or tx.to != spender or int(tx.value) != 0:
-            raise LiveExecutionError("BUILD_IDENTITY_MISMATCH")
-        if tx.minReceiveAmount is None or int(tx.minReceiveAmount) < minimum_out:
-            raise LiveExecutionError("BUILD_MIN_RECEIVE_BELOW_PLAN_MINIMUM")
-        sim, _ = self.trading.simulate(tx, mode="LIVE_READ_ONLY")
-        if sim.status != "SUCCESS":
-            raise LiveExecutionError("SWAP_SIMULATION_FAILED")
-        gained = sum(
-            int(c.change)
-            for c in sim.balanceChanges
-            if c.owner == wallet and c.contractAddress.lower() == buy
+        route = ExecutionRouteBuilder().build(
+            quote, response, slippage_bps=slip, allowance=allowance, now=self.clock()
         )
-        if sim.balanceChanges and gained < int(tx.minReceiveAmount):
-            raise LiveExecutionError("SIMULATED_RECEIVE_BELOW_MINIMUM")
-        evidence = dict(
-            evidence,
-            build_min_receive=tx.minReceiveAmount,
-            simulated_receive=str(gained) if sim.balanceChanges else None,
-            simulation="SUCCESS",
-        )
-        self._gas(tx)
-        before_in = self.rpc.erc20_balance(sell, wallet)
-        before_out = self.rpc.erc20_balance(buy, wallet)
-        swap_hash = self._send(tx)
-        record = self.journal.upsert(
-            action.action_id, status="SUBMITTED", swap_tx=swap_hash, evidence=evidence
-        )
-        receipt = self._wait(swap_hash)
-        if receipt is None:
-            return self.journal.upsert(action.action_id, status="SUBMITTED")
-        if receipt.get("status") != "0x1":
-            return self.journal.upsert(
-                action.action_id, status="FAILED", reasons=["SWAP_REVERTED_ON_CHAIN"]
-            )
-        spent = before_in - self.rpc.erc20_balance(sell, wallet)
-        received = self.rpc.erc20_balance(buy, wallet) - before_out
-        evidence = dict(
-            evidence,
-            spent=str(spent),
-            received=str(received),
-            gas_used=str(int(receipt.get("gasUsed", "0x0"), 16)),
-            block=str(int(receipt.get("blockNumber", "0x0"), 16)),
-        )
-        return self.journal.upsert(
-            action.action_id,
-            status="CONFIRMED",
-            evidence=evidence,
-            realized_cost_usd=self._cost(action, spent, received),
-        )
-
-    # -- RFQ ---------------------------------------------------------------------------------
-    def _rfq_leg(self, action, sell, buy, amount, minimum_out, slip, quote, mark):
-        from app.services.rfq_orders import DEFAULT_SPENDERS, Expected, RFQRejected, verify
-
-        wallet, vendor = self.signer.address, quote.route.vendorName
-        if self.signer.rfq_signing_scheme == "eip1271" and vendor != "CowSwap":
-            raise LiveExecutionError("RFQ_VENDOR_REQUIRES_EOA")
-        impact = abs(quote.route.priceImpactPercent or Decimal(0)) * 10000
-        if impact > self.max_slippage_bps:
-            raise LiveExecutionError("PRICE_IMPACT_LIMIT")
-        if int(quote.route.toTokenAmount) < minimum_out:
-            raise LiveExecutionError("QUOTE_BELOW_PLAN_MINIMUM")
-        spender = DEFAULT_SPENDERS[vendor]
-        # Cross-check Binance's vendor approval against the vendor's known spender.
-        approval = self.trading.rfq_approval(token=sell, amount=amount, vendor=vendor)
-        offered_spender = approval.data[34:74] if approval.data.startswith("0x095ea7b3") else ""
-        if "0x" + offered_spender.lower() != spender:
-            raise LiveExecutionError("RFQ_APPROVAL_SPENDER_MISMATCH")
-        evidence = dict(
-            route="RFQ",
-            verification="SIGNED_ORDER_BOUND",
-            vendor=vendor,
-            quote_id=quote.route.quoteId,
-            amount_in=str(amount),
-            quoted_out=quote.route.toTokenAmount,
-            minimum_out=str(minimum_out),
-            price_impact_bps=str(impact),
-            spender=spender,
-            plan_mark_usd=str(mark.token_price_usd),
-        )
-        self.journal.upsert(action.action_id, status="QUOTED", evidence=evidence)
-        self._approve(action.action_id, sell, spender, amount)
-        raw = self.trading.build_rfq(quote, slippage_bps=slip)
-        try:
-            build = BuildResponse.model_validate(raw)
-            if build.executionMode != "RFQ" or build.rfq is None or build.rfq.vendor != vendor:
-                raise LiveExecutionError("RFQ_BUILD_SHAPE_MISMATCH")
-            typed = json.loads(build.rfq.typedDataToSign)
+        simulation = ExecutionSimulationService(self.trading).simulate(route, now=self.clock())
+        order = None
+        if quote.route.executionMode == "SWAP":
+            if int(route.build.tx.minReceiveAmount) < minimum:
+                raise LiveExecutionError("BUILD_MINIMUM_BELOW_PLAN_BOUND")
+            validate_swap_effects(route, simulation, now=self.clock())
+        else:
             order = verify(
-                vendor,
-                typed,
-                Expected(
-                    wallet=wallet,
-                    sell_token=sell,
-                    sell_max=amount,
-                    buy_token=buy,
-                    min_buy=minimum_out,
-                    now=int(self.clock().timestamp()),
-                ),
+                quote.route.vendorName,
+                parse_object(route.build.rfq.typedDataToSign),
+                Expected(wallet, sell, amount, buy, minimum, int(self.clock().timestamp())),
                 self.rfq_allowlist,
             )
             if order.spender != spender:
-                raise LiveExecutionError("RFQ_ORDER_SPENDER_MISMATCH")
-        except (RFQRejected, LiveExecutionError, ValueError) as error:
-            code = getattr(error, "code", None) or "RFQ_BUILD_INVALID"
-            self.journal.capture_rfq(raw, verdict="REJECTED", reason=code)
-            self._revoke(sell, spender)  # the exact approval is no longer needed
-            raise LiveExecutionError(code) from None
-        self.journal.capture_rfq(raw, verdict="ACCEPTED")
-        signature = self.signer.sign_typed_data(typed)
-        scheme = build.rfq.signingScheme or self.signer.rfq_signing_scheme
-        if scheme.lower() != self.signer.rfq_signing_scheme:
-            raise LiveExecutionError("RFQ_SIGNING_SCHEME_MISMATCH")
-        if self.signer.rfq_signing_scheme == "eip712" and not self._recovers(typed, signature):
-            raise LiveExecutionError("RFQ_SIGNATURE_NOT_FROM_WALLET")
-        request_id = uuid4()
-        evidence = dict(
-            evidence,
-            order=order.summary(),
-            rfq_order_id=build.rfq.orderId,
-            rfq_request_id=str(request_id),
-            rfq_signature=signature,
-            rfq_signing_scheme=scheme,
-            rfq_signed_at=self.clock().isoformat(),
+                raise LiveExecutionError("RFQ_SPENDER_MISMATCH")
+        self._risk(plan, action)  # reads/build/simulation can consume evidence lifetime
+        return PreparedLeg(
+            action.action_id, route, simulation, risk.evidence_digest, minimum, order
         )
-        # Journal the requestId and signature before the POST: a crash can only resubmit the
-        # identical idempotent body, never sign a second order.
-        self.journal.upsert(action.action_id, status="SIGNED", evidence=evidence)
-        before = (self.rpc.erc20_balance(sell, wallet), self.rpc.erc20_balance(buy, wallet))
-        evidence = dict(evidence, balances_before=[str(before[0]), str(before[1])])
-        self.journal.upsert(action.action_id, evidence=evidence)
-        order_id = self._submit(evidence, vendor)
-        evidence = dict(evidence, rfq_status_order_id=order_id)
-        record = self.journal.upsert(action.action_id, status="SUBMITTED", evidence=evidence)
-        return self._settle_rfq(record, poll=True)
 
-    def _recovers(self, typed, signature):
+    def execute(self, plan_id, *, prepared, confirmations):
+        """Host-only prepared objects. HTTP accepts consent, never execution safety facts."""
+        plan = self.portfolio.store.get(plan_id, mode=self.portfolio.mode)
+        if plan.status != "REBALANCE_REQUIRED":
+            raise LiveExecutionError("PLAN_NOT_ACTIONABLE")
+        if len(prepared) != len(plan.actions) or len(confirmations) != len(plan.actions):
+            raise LiveExecutionError("EXACT_PREPARED_PLAN_CONFIRMATIONS_REQUIRED")
+        results = []
+        for action in sorted(plan.actions, key=lambda a: a.priority):
+            leg = next((p for p in prepared if p.action_id == action.action_id), None)
+            consent = next((c for c in confirmations if c.action_id == action.action_id), None)
+            if leg is None or consent is None:
+                raise LiveExecutionError("EXACT_PREPARED_PLAN_CONFIRMATIONS_REQUIRED")
+            self.gates.require(
+                leg.route.quote.route.executionMode, wallet=self.signer.kind != "LOCAL_KEY"
+            )
+            result = self._leg(plan, action, leg, consent)
+            results.append(result)
+            if result["status"] != "CONFIRMED":
+                break
+        return results
+
+    def _leg(self, plan, action, leg, consent):
+        mode = leg.route.quote.route.executionMode
+        self.gates.require(mode, wallet=self.signer.kind != "LOCAL_KEY")
+        old = self.journal.get(action.action_id)
+        if old is not None:
+            return old  # use explicit read-only reconcile; never restart a live leg
+        record, owner = self.journal.claim(
+            action.action_id,
+            wallet=self.signer.address,
+            intent_digest=leg.digest,
+            plan_id=str(plan.plan_id),
+            asset=action.asset,
+            side=action.side,
+            token=action.route.selected_representation.contract,
+            notional_usd=action.notional_usd,
+            signer=self.signer.kind,
+        )
+        if owner is None:
+            return record
+        try:
+            risk = self._risk(plan, action)
+            if risk.evidence_digest != leg.risk_digest:
+                raise LiveExecutionError("PREPARED_RISK_EVIDENCE_CHANGED")
+            current_quote(leg.route.quote, self.clock())
+            consent = ExecutionConsent.model_validate_json(consent.model_dump_json())
+            if consent.expires_at > leg.route.quote.expires_at:
+                raise LiveExecutionError("CONFIRMATION_OUTLIVES_QUOTE")
+            self.journal.consume_consent(consent, payload_digest=leg.digest, now=self.clock())
+            request = leg.route.quote.request
+            if self.rpc.chain_id() != 56 or request.userWalletAddress != self.signer.address:
+                raise LiveExecutionError("SUBMISSION_WALLET_OR_CHAIN_CHANGED")
+            if self.rpc.allowance(
+                request.fromTokenAddress, self.signer.address, leg.route.quote.route.approveTarget
+            ) != int(request.amount):
+                raise LiveExecutionError("EXACT_ALLOWANCE_REPREPARATION_REQUIRED")
+            if self.rpc.erc20_balance(request.fromTokenAddress, self.signer.address) < int(
+                request.amount
+            ):
+                raise LiveExecutionError("INSUFFICIENT_ON_CHAIN_BALANCE")
+            if mode == "RFQ":
+                return self._submit_rfq(action, leg)
+            validate_swap_effects(leg.route, leg.simulation, now=self.clock())
+            # Current provider only simulates from/to/value/data. Explicitly preserve this
+            # blocker; neither a mock result nor signed-order bound proves equivalence.
+            if not leg.simulation.live_equivalence_verified:
+                raise LiveExecutionError("SWAP_GAS_SENSITIVE_EQUIVALENCE_UNVERIFIED")
+            tx = leg.route.build.tx
+            if self.rpc.native_balance(self.signer.address) < (
+                int(tx.gas) * int(tx.gasPrice) + int(tx.value) + self.gas_reserve_wei
+            ):
+                raise LiveExecutionError("INSUFFICIENT_NATIVE_GAS_AND_RESERVE")
+            evidence = {
+                "route": "SWAP",
+                "transaction": tx.model_dump(mode="json", by_alias=True),
+                "sell": leg.route.quote.request.fromTokenAddress,
+                "buy": leg.route.quote.request.toTokenAddress,
+                "amount_in": leg.route.quote.request.amount,
+                "minimum_out": str(leg.minimum_out),
+                "payload_digest": leg.digest,
+                "route_fingerprint": leg.route.fingerprint,
+                "balances_before": [
+                    str(
+                        self.rpc.erc20_balance(
+                            leg.route.quote.request.fromTokenAddress, self.signer.address
+                        )
+                    ),
+                    str(
+                        self.rpc.erc20_balance(
+                            leg.route.quote.request.toTokenAddress, self.signer.address
+                        )
+                    ),
+                ],
+            }
+            self.journal.upsert(action.action_id, status="QUOTED", evidence=evidence)
+            return self._broadcast(action.action_id, tx)
+        except (LiveExecutionError, ProviderError, ValueError, ArithmeticError) as error:
+            attempted = self.journal.submission(action.action_id, "SWAP") or (
+                self.journal.submission(action.action_id, "RFQ")
+            )
+            return self.journal.upsert(
+                action.action_id,
+                status="SUBMISSION_UNKNOWN" if attempted else "REJECTED",
+                reasons=[
+                    "SUBMISSION_OUTCOME_UNKNOWN_RECONCILE"
+                    if attempted
+                    else getattr(error, "code", None)
+                    or getattr(error, "kind", None)
+                    or "EXECUTION_PREREQUISITES_FAILED"
+                ],
+            )
+
+    def _broadcast(self, action_id, tx):
+        self.gates.require("SWAP", wallet=self.signer.kind != "LOCAL_KEY")
+        prepared = self.signer.prepare(tx)
+        self.journal.begin_submission(
+            action_id,
+            kind="SWAP",
+            identity=prepared.tx_hash,
+            nonce=prepared.nonce,
+            payload_digest=prepared.payload_digest,
+        )
+        self.journal.upsert(action_id, swap_tx=prepared.tx_hash)
+        try:
+            self.signer.broadcast(prepared, journal=self.journal, action_id=action_id, kind="SWAP")
+        except Exception:
+            # After the boundary all exceptions are ambiguous, even malformed RPC success.
+            return self.journal.upsert(
+                action_id,
+                status="SUBMISSION_UNKNOWN",
+                reasons=["BROADCAST_OUTCOME_UNKNOWN_RECONCILE"],
+            )
+        return self.journal.upsert(action_id, status="SUBMITTED")
+
+    def _submit_rfq(self, action, leg):
+        self.gates.require("RFQ", wallet=self.signer.kind != "LOCAL_KEY")
+        if not leg.simulation.live_equivalence_verified:
+            raise LiveExecutionError("RFQ_SETTLEMENT_EQUIVALENCE_UNVERIFIED")
+        from app.models.execution import RFQSubmission
+        from app.services.rfq_orders import order_hash
+
+        typed = parse_object(leg.route.build.rfq.typedDataToSign)
+        digest, _ = order_hash(typed)
+        if leg.order is None or digest != leg.order.order_hash:
+            raise LiveExecutionError("RFQ_SIGNING_PAYLOAD_CHANGED")
+        if self.signer.rfq_signing_scheme != "eip712":
+            raise LiveExecutionError("RFQ_CONTRACT_WALLET_SUBMIT_RUNTIME_UNVERIFIED")
+        current_quote(leg.route.quote, self.clock())
+        if int(self.clock().timestamp()) >= leg.order.deadline:
+            raise LiveExecutionError("RFQ_ORDER_EXPIRED")
+        signature = self.signer.sign_typed_data(typed, order=leg.order)
         from eth_account import Account
         from eth_account.messages import encode_typed_data
 
-        from app.services.rfq_orders import order_hash
-
         _, full = order_hash(typed)
-        recovered = Account.recover_message(encode_typed_data(full_message=full), signature=signature)
-        return recovered.lower() == self.signer.address
-
-    def _submit(self, evidence, vendor):
-        from pydantic import SecretStr
-
+        try:
+            recovered = Account.recover_message(
+                encode_typed_data(full_message=full), signature=signature.get_secret_value()
+            ).lower()
+        except (ValueError, TypeError, AttributeError):
+            raise LiveExecutionError("RFQ_SIGNATURE_MALFORMED") from None
+        if recovered != self.signer.address:
+            raise LiveExecutionError("RFQ_SIGNATURE_NOT_FROM_WALLET")
         submission = RFQSubmission(
-            requestId=evidence["rfq_request_id"],
-            userSignature=SecretStr(evidence["rfq_signature"]),
-            vendor=vendor,
-            quoteId=evidence["rfq_order_id"],
-            signingScheme=evidence["rfq_signing_scheme"],
+            requestId=uuid4(),
+            userSignature=signature,
+            vendor=leg.order.vendor,
+            quoteId=leg.route.build.rfq.orderId,
+            signingScheme="EIP712",
         )
-        return self.trading.submit_rfq(submission)
-
-    def _settle_rfq(self, record, *, poll):
-        evidence = record["evidence"]
-        order = evidence["order"]
-        order_id = evidence.get("rfq_status_order_id") or evidence["rfq_order_id"]
-        deadline = time.monotonic() + (ORDER_POLL_SECONDS if poll else 0)
-        while True:
-            status, _ = self.trading.order_status(order_id)
-            if status.status == "FILLED" or status.status in NOT_FILLED:
-                break
-            if time.monotonic() >= deadline:
-                return self.journal.upsert(record["action_id"], status="SUBMITTED")
-            self.sleep(2)
-        if status.status in NOT_FILLED:
-            # Nothing moved; drop the leftover exact allowance best-effort.
-            self._revoke(record["token"] if record["side"] == "SELL" else USDT, order["spender"])
-            return self.journal.upsert(
-                record["action_id"], status="NOT_FILLED", reasons=["RFQ_" + status.status]
-            )
-        receipt = self.rpc.receipt(status.txHash) if status.txHash else None
-        if not receipt or receipt.get("status") != "0x1":
-            return self.journal.upsert(
-                record["action_id"],
-                status="RECONCILIATION_REQUIRED",
-                reasons=["RFQ_FILLED_WITHOUT_SUCCESSFUL_RECEIPT"],
-            )
         wallet = self.signer.address
-        sell, buy = order["sell_token"], order["buy_token"]
-        before = evidence.get("balances_before")
-        if before:
-            spent = int(before[0]) - self.rpc.erc20_balance(sell, wallet)
-            received = self.rpc.erc20_balance(buy, wallet) - int(before[1])
-        else:  # restarted before balances were journaled: fall back to the provider amounts
-            spent, received = int(status.fromAmount or 0), int(status.toAmount or 0)
-        evidence = dict(
-            evidence,
-            swap_tx=status.txHash,
-            spent=str(spent),
-            received=str(received),
-            gas_used=str(int(receipt.get("gasUsed", "0x0"), 16)),
-            block=str(int(receipt.get("blockNumber", "0x0"), 16)),
+        evidence = {
+            "route": "RFQ",
+            "order": leg.order.summary(),
+            "rfq_request_id": str(submission.requestId),
+            "rfq_order_id": submission.quoteId,
+            "balances_before": [
+                str(self.rpc.erc20_balance(leg.order.sell_token, wallet)),
+                str(self.rpc.erc20_balance(leg.order.buy_token, wallet)),
+            ],
+        }
+        self.journal.upsert(action.action_id, status="SIGNED", evidence=evidence)
+        self.journal.begin_submission(
+            action.action_id,
+            kind="RFQ",
+            identity=str(submission.requestId),
+            nonce=None,
+            payload_digest=leg.digest,
         )
-        within = spent <= int(order["sell_amount"]) and received >= int(order["min_buy_to_wallet"])
+        try:
+            order_id = self.trading.submit_rfq(submission)
+        except Exception:
+            return self.journal.upsert(
+                action.action_id,
+                status="SUBMISSION_UNKNOWN",
+                reasons=["RFQ_SUBMISSION_OUTCOME_UNKNOWN_RECONCILE"],
+            )
         return self.journal.upsert(
-            record["action_id"],
-            status="CONFIRMED" if within else "RECONCILIATION_REQUIRED",
-            swap_tx=status.txHash,
-            evidence=evidence,
-            reasons=[] if within else ["RFQ_FILL_OUTSIDE_SIGNED_BOUNDS"],
+            action.action_id,
+            status="SUBMITTED",
+            evidence={**evidence, "rfq_status_order_id": order_id},
         )
 
-    def _reconcile_rfq(self, record):
-        evidence = record["evidence"]
-        if record["status"] in {"CONFIRMED", "FAILED", "NOT_FILLED", "RECONCILIATION_REQUIRED"}:
-            return record
-        if record["status"] == "SIGNED":
-            signed = datetime.fromisoformat(evidence["rfq_signed_at"])
-            if (self.clock() - signed).total_seconds() > RESUBMIT_WINDOW_SECONDS:
-                return self.journal.upsert(
-                    record["action_id"],
-                    status="RECONCILIATION_REQUIRED",
-                    reasons=["RFQ_SUBMIT_OUTCOME_UNKNOWN_PAST_IDEMPOTENCY_WINDOW"],
-                )
-            try:
-                order_id = self._submit(evidence, evidence["vendor"])  # same requestId and body
-            except ProviderError as error:
-                from app.clients.binance_trading import provider_reason
-
-                return self.journal.upsert(
-                    record["action_id"], status="SIGNED", reasons=[provider_reason(error)]
-                )
-            record = self.journal.upsert(
-                record["action_id"],
-                status="SUBMITTED",
-                evidence=dict(evidence, rfq_status_order_id=order_id),
-            )
-        try:
-            return self._settle_rfq(record, poll=False)
-        except ProviderError:
-            return record
-
-    # -- helpers -------------------------------------------------------------------------
-    def _approve(self, action_id, token, spender, amount):
-        """Exact approval for this leg only; never unlimited. Simulated, sent, confirmed."""
-        wallet = self.signer.address
-        if self.rpc.allowance(token, wallet, spender) >= amount:
-            return
-        approve_tx = EvmTransaction.model_validate(
-            {
-                "from": wallet,
-                "to": token,
-                "data": approve_calldata(spender, amount),
-                "value": "0",
-                "gas": str(APPROVE_GAS),
-                "gasPrice": str(self.rpc.gas_price()),
-            }
-        )
-        sim, _ = self.trading.simulate(approve_tx, mode="LIVE_READ_ONLY")
-        if sim.status != "SUCCESS":
-            raise LiveExecutionError("APPROVAL_SIMULATION_FAILED")
-        self._gas(approve_tx)
-        approve_hash = self._send(approve_tx)
-        self.journal.upsert(action_id, status="APPROVING", approve_tx=approve_hash)
-        if not self._confirmed(approve_hash):
-            raise LiveExecutionError("APPROVAL_NOT_CONFIRMED")
-        if self.rpc.allowance(token, wallet, spender) < amount:
-            raise LiveExecutionError("APPROVAL_NOT_OBSERVED")
-
-    def _revoke(self, token, spender):
-        try:
-            if self.rpc.allowance(token, self.signer.address, spender) == 0:
-                return
-            self.signer.send(
-                to=token,
-                data=approve_calldata(spender, 0),
-                value=0,
-                gas=APPROVE_GAS,
-                gas_price=self.rpc.gas_price(),
-            )
-        except (LiveExecutionError, ProviderError, ValueError):
-            pass  # best effort: the order expired, an exact leftover allowance is bounded
-
-
-    def portfolio_usdt_price(self):
-        return self._usdt_price
-
-    def _cost(self, action, spent, received):
-        """Realized execution cost vs plan mark (positive = worse than mark)."""
-        usdt = self.portfolio_usdt_price()
-        mark = action.route.selected_candidate.inputs.token_price_usd
-        dec = action.decimals
-        with localcontext() as ctx:
-            ctx.prec = 72
-            if action.side == "BUY":
-                paid = Decimal(spent) / 10**USDT_DECIMALS * usdt
-                value = Decimal(received) / Decimal(10) ** dec * mark
-                return paid - value
-            sold = Decimal(spent) / Decimal(10) ** dec * mark
-            got = Decimal(received) / 10**USDT_DECIMALS * usdt
-            return sold - got
-
-    def _gas(self, tx):
-        need = int(tx.gas) * int(tx.gasPrice) + self.gas_reserve_wei
-        if self.rpc.native_balance(self.signer.address) < need:
-            raise LiveExecutionError("INSUFFICIENT_NATIVE_GAS_AND_RESERVE")
-
-    def _send(self, tx):
-        return self.signer.send(
-            to=tx.to, data=tx.data, value=tx.value, gas=tx.gas, gas_price=tx.gasPrice
-        )
-
-    def _wait(self, tx_hash):
-        deadline = time.monotonic() + RECEIPT_TIMEOUT_SECONDS
-        while time.monotonic() < deadline:
-            receipt = self.rpc.receipt(tx_hash)
-            if receipt:
-                return receipt
-            self.sleep(1.5)
-        return None
-
-    def _confirmed(self, tx_hash):
-        receipt = self._wait(tx_hash)
-        return bool(receipt) and receipt.get("status") == "0x1"
-
-    def _reconcile(self, record):
-        """Never resend a journaled leg; only observe its submitted transaction."""
-        if record["evidence"].get("route") == "RFQ" and record["evidence"].get("rfq_request_id"):
-            return self._reconcile_rfq(record)
+    def reconcile(self, action_id):
+        """Read-only, same complete verification on first settlement and every recovery."""
+        record = self.journal.get(action_id)
+        if record is None:
+            raise LookupError("Execution action unavailable")
         if record["status"] in {"CONFIRMED", "FAILED"}:
+            # Recheck the original block, not today's mutable account balances. A
+            # temporary RPC outage retains a wallet lock until this is established.
+            settlement = record["evidence"].get("settlement", {})
+            try:
+                if self.rpc.chain_id() != 56:
+                    raise LiveExecutionError("RPC_CHAIN_MISMATCH")
+                block = self.rpc.read("eth_getBlockByNumber", settlement["block_number"], False)
+                if not isinstance(block, dict) or block.get("hash") != settlement["block_hash"]:
+                    raise LiveExecutionError("SETTLEMENT_BLOCK_REORG")
+            except (LiveExecutionError, ProviderError, ValueError, TypeError, KeyError):
+                return self.journal.reopen_reorg(action_id)
+        if record["status"] in TERMINAL:
             return record
-        if not record.get("swap_tx"):
-            if record["status"] != "REJECTED":
-                return self.journal.upsert(
-                    record["action_id"], status="REJECTED", reasons=["INTERRUPTED_BEFORE_SEND"]
-                )
-            return record
+        evidence = record["evidence"]
         try:
-            receipt = self.rpc.receipt(record["swap_tx"])
-        except ProviderError:
-            return record
-        if not receipt:
-            return record
-        return self.journal.upsert(
-            record["action_id"],
-            status="CONFIRMED" if receipt.get("status") == "0x1" else "FAILED",
-        )
+            if evidence.get("route") == "RFQ":
+                order_id = evidence.get("rfq_status_order_id")
+                if not order_id:
+                    raise LiveExecutionError("RFQ_SUBMISSION_ID_UNKNOWN_NO_RESUBMIT")
+                status, _ = self.trading.order_status(order_id)
+                # Cancellation/expiry can race with a fill. Provider terminal state alone
+                # proves neither NOT_FILLED nor absence of a prior settlement.
+                if status.status != "FILLED" or not status.txHash:
+                    raise LiveExecutionError("RFQ_TERMINAL_NONFILL_REQUIRES_CHAIN_RECONCILIATION")
+                result = verify_rfq(
+                    self.rpc, status.txHash, evidence["order"], evidence.get("balances_before")
+                )
+                result["status"] = "CONFIRMED"
+            else:
+                attempt = self.journal.submission(action_id, "SWAP")
+                if not attempt:
+                    raise LiveExecutionError("EXECUTION_INTERRUPTED_RECONCILE_IDENTITY")
+                if record.get("swap_tx") and attempt["identity"] != record["swap_tx"]:
+                    raise LiveExecutionError("SUBMISSION_HASH_CONFLICT")
+                # A crash can occur immediately after the durable attempt, before the
+                # presentation field is updated or the RPC is invoked. Observe that
+                # signed identity only; absence on chain is never permission to retry.
+                if not record.get("swap_tx"):
+                    self.journal.upsert(action_id, swap_tx=attempt["identity"])
+                result = verify_swap(self.rpc, attempt["identity"], evidence)
+                if result is None:
+                    return record
+            return self.journal.upsert(
+                action_id,
+                status=result["status"],
+                evidence={**evidence, "settlement": result},
+                reasons=[result["reason"]] if result.get("reason") else [],
+            )
+        except (LiveExecutionError, ProviderError, ValueError, TypeError, KeyError):
+            return self.journal.upsert(
+                action_id,
+                status="RECONCILIATION_REQUIRED",
+                reasons=["INCOMPLETE_OR_CONFLICTING_SETTLEMENT_EVIDENCE"],
+            )

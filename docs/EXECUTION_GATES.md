@@ -1,5 +1,23 @@
 # Development and execution capability gates
 
+## Alpaca adapter increment — October 10, 2026
+
+Adapter software verification does not pass external feed entitlement, reference eligibility or
+any production gate. Actual quote/1m/5m checks stopped NOT_CONFIGURED before HTTP; the existing
+Trust source allowlist still excludes Alpaca. [Scope and evidence](SESSION_AWARE_DATA_REPORT.md).
+All definitions, 120-second freshness / 30-second alignment, 30/30/3 safeguards and LIVE
+prerequisites remain unchanged. Current states remain:
+
+```text
+DATA_GATE=PASS
+DRY_RUN_GATE=PASS
+TRUST_GATE=BLOCKED
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST
+SWAP_LIVE_GATE=BLOCKED
+RFQ_LIVE_GATE=BLOCKED
+AGENTIC_WALLET_LIVE_GATE=BLOCKED
+```
+
 ## Master Phase 9 — Agentic Wallet, October 8, 2026
 
 **PHASE_9_IMPLEMENTATION=PASS** verifies the typed read adapter, unavailable-state handling,
@@ -268,3 +286,26 @@ The 12 requested deterministic/safety checks are documented in the [formal gate 
 To pass TRUST_GATE: verify the mandatory independent reference in the supported regime without a Binance/historical-current fallback; obtain contemporaneous verified-unit liquidity/activity; demonstrate complete bounded news coverage; collect at least30 qualifying completed episodes in each supported exact stock/representation/regime/ratio/reference scope and at least3 eligible analogues, preserving source/available times and uncertainty. Re-run the full automated, API/browser, security and read-only capability checks. Current regular-session Massive403 and unavailable actual history/metrics keep the gate BLOCKED. Closed-session historical-close support is explicit and does not unlock current-equity comparison. No confidence, fixture, research prior or accepted DATA_GATE overrides this gate.
 
 OPPORTUNITY_GATE remains BLOCKED_BY_TRUST; no Phase 3 development is authorized. DRY_RUN_GATE remains PASS in the prior Ask scope, not a transaction-simulation certificate. All LIVE gates remain BLOCKED. Configuration and every existing risk/simulation/wallet/confirmation/equivalence/RFQ/fail-closed rule remain unchanged.
+
+## 2026-10-11 execution audit remediation (no gate advancement)
+
+The local remediation introduces centralized server-owned checks at the worker, signer,
+RPC broadcast, RFQ submission and authenticated API boundaries. Configuration flags,
+prepared payloads, signatures and mocked receipts cannot change these gates. Startup
+constructs a status/journal runtime only, with no signer or write-capable provider client.
+
+| Gate | Current state | Additional local evidence | Remaining requirement |
+|---|---|---|---|
+| DATA_GATE | PASS | Existing provider/discovery regression coverage retained | PASS applies to the previously admitted scope; it is not universal entitlement or source admission |
+| DRY_RUN_GATE | PASS | Existing proposal, sandbox, shared routing/risk/preparation/simulation regressions retained | No live authorization follows |
+| TRUST_GATE | BLOCKED | No Trust, reference selection, freshness/alignment or 30/30/3 rule changed | Admitted current independent equity, authoritative liquidity, historical as-of ratios and qualifying real episodes/analogues remain required |
+| OPPORTUNITY_GATE | BLOCKED_BY_TRUST | Production Trust prerequisite unchanged | Independent Trust completion and Opportunity acceptance |
+| SWAP_LIVE_GATE | BLOCKED | Exact simulation effects, durable action/wallet claims, unknown-broadcast recovery, raw transfer/transaction settlement checks tested offline | Genuine exact simulation including gas-sensitive fields, deployment/route compatibility, installed signer runtime and per-operation confirmation/approval evidence |
+| RFQ_LIVE_GATE | BLOCKED | Constrained canonical schemas/hashes and vendor-specific event/UID checks tested offline | Genuine provider payloads, deployed contract/hash evidence and actual settlement simulation/equivalence; signed bounds alone are insufficient |
+| AGENTIC_WALLET_LIVE_GATE | BLOCKED | Missing preview/status rejects, recovery-byte validation and ERC-1271 checks tested offline | Installed CLI/runtime, inspected preview/explicit confirmation, exact gas/nonce/request binding and contract-wallet submission compatibility |
+
+Defaults remain `EXECUTION_MODE=DRY_RUN`, `LIVE_TRADING_ENABLED=false`,
+`APPROVAL_MODE=PROPOSE_ONLY`, `REQUIRE_SIMULATION=true`. No execution operation was
+performed. Full finding matrix, exact commands and evidence limitations are recorded in
+[EXECUTION_REMEDIATION.md](EXECUTION_REMEDIATION.md). This amendment does not change
+any prior gate acceptance criterion, authorize phase advancement or claim live readiness.

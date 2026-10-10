@@ -1,3 +1,10 @@
+> **Historical teammate proposal — superseded by the PR #1 merge resolution (2026-10-11).**
+> The original text below is preserved as history, not as an operational runbook or
+> verified capability evidence. LIVE flags, Trust-disable configuration, weekend
+> exceptions, Binance-index independent references, signed-bounds-only RFQ admission,
+> blind retries and Altana/x402/session grants described below are NOT enabled.
+> Current gates, commands and limitations: [PR_1_MERGE_RESOLUTION.md](PR_1_MERGE_RESOLUTION.md).
+
 # Implementation plan: weekend SWAP + RFQ execution
 
 Status: IMPLEMENTED (2026-10-10) except the Monday rollout (§6). Nothing has been executed against

@@ -157,8 +157,7 @@ class QuoteToken(ExecutionModel):
 class SegmentToken(ExecutionModel):
     tokenContractAddress: Address
     tokenSymbol: Identifier
-    # Current API repeats the full token descriptor per route segment (informational only).
-    # Excluded from dumps so route fingerprints keep their established canonical form.
+    # Informational descriptors are excluded from the established route fingerprint.
     tokenUnitPrice: Positive | None = Field(default=None, exclude=True)
     decimal: Units | None = Field(default=None, exclude=True)
     isHoneyPot: bool | None = Field(default=None, strict=True, exclude=True)
@@ -278,17 +277,11 @@ class EvmTransaction(ExecutionModel):
     computeUnitPrice: None = None
     computeUnitLimit: None = None
 
-    @field_validator("signatureData", mode="before")
-    @classmethod
-    def empty_signatures(cls, value):
-        return () if value is None else value
-
     @model_validator(mode="after")
     def gas_valid(self):
         if int(self.gas) <= 0 or int(self.gasPrice) <= 0:
             raise ValueError("Explicit positive gas fields required")
-        # BSC builds repeat gasPrice as the priority fee; that is an unambiguous legacy price.
-        if self.maxPriorityFeePerGas is not None and self.maxPriorityFeePerGas != self.gasPrice:
+        if self.maxPriorityFeePerGas is not None:
             raise ValueError("Ambiguous mixed legacy/EIP1559 fees require verified rebuild")
         return self
 
@@ -297,40 +290,12 @@ class EvmTransaction(ExecutionModel):
         return {"from": self.sender, "to": self.to, "value": self.value, "data": self.data}
 
 
-SIGNING_SCHEMES = {"eip712", "ethsign", "eip1271"}
-
-
-def signing_scheme(value):
-    if value is None:
-        return None
-    if not isinstance(value, str) or value.lower() not in SIGNING_SCHEMES:
-        raise ValueError("Unsupported RFQ signing scheme")
-    return value  # provider casing is preserved on the wire
-
-
-def typed_text(value):
-    # The live API shape is unconfirmed: accept an object or a JSON string, keep one canonical text.
-    if isinstance(value, dict):
-        return json.dumps(value, separators=(",", ":"), sort_keys=True)
-    return value
-
-
 class RFQPayload(ExecutionModel):
-    # Unknown extra provider fields are tolerated here; the raw payload is captured separately and
-    # every safety decision is made by the vendor verifier (services/rfq_orders.py).
-    model_config = ConfigDict(extra="ignore", frozen=True, hide_input_in_errors=True)
     vendor: Literal["InchFusion", "CowSwap", "PcsXRfq"]
-    txType: Literal["EIP712"] = "EIP712"
-    typedDataToSign: Annotated[str, BeforeValidator(typed_text)] = Field(
-        min_length=2, max_length=262144
-    )
-    signingScheme: Annotated[str | None, BeforeValidator(signing_scheme)] = None
+    txType: Literal["EIP712"]
+    typedDataToSign: str = Field(strict=True, min_length=2, max_length=262144)
+    signingScheme: Literal["EIP712"]
     signatureData: tuple[str, ...] = Field(default=(), max_length=10)
-
-    @field_validator("signatureData", mode="before")
-    @classmethod
-    def no_signatures(cls, value):
-        return () if value is None else value
     # Documented by order/submit prose, omitted from published /swap properties. Required safely.
     orderId: Identifier
 
@@ -377,16 +342,14 @@ class RFQPayload(ExecutionModel):
 
 
 class BuildResponse(ExecutionModel):
-    routerResult: RouterResult | None = None  # required for SWAP; RFQ shape unconfirmed
+    routerResult: RouterResult
     executionMode: ExecutionMode
     tx: EvmTransaction | None = None
     rfq: RFQPayload | None = None
 
     @model_validator(mode="after")
     def branch(self):
-        if self.executionMode == "SWAP" and (
-            self.tx is None or self.rfq is not None or self.routerResult is None
-        ):
+        if self.executionMode == "SWAP" and (self.tx is None or self.rfq is not None):
             raise ValueError("SWAP requires exactly one EVM transaction")
         if self.executionMode == "RFQ" and (self.rfq is None or self.tx is not None):
             raise ValueError("RFQ requires exactly one RFQ payload")
@@ -539,10 +502,8 @@ class ExecutionRiskEvidence(ExecutionModel):
 
     @model_validator(mode="after")
     def trust_mandatory(self):
-        # Only a configured portfolio rebalance (direct exposure) may run without Trust;
-        # Opportunity selection is a Trust-derived signal and keeps it mandatory.
-        if not self.trust_required and self.purpose != "DIRECT_EXPOSURE":
-            raise ValueError("Trust cannot be disabled for opportunity execution preparation")
+        if not self.trust_required:
+            raise ValueError("Trust cannot be disabled for execution preparation")
         if self.context is not None and self.context.data_mode != self.data_mode:
             raise ValueError("Mixed risk evidence modes")
         return self
@@ -573,24 +534,22 @@ class RFQSubmission(ExecutionModel):
     userSignature: SecretStr = Field(exclude=True, repr=False)
     vendor: Literal["InchFusion", "CowSwap", "PcsXRfq"]
     quoteId: Identifier
-    signingScheme: Annotated[str | None, BeforeValidator(signing_scheme)] = None
+    signingScheme: Literal["EIP712"]
 
     @model_validator(mode="after")
     def valid(self):
-        signature = self.userSignature.get_secret_value()
-        # EOA signatures are exactly 65 bytes; EIP-1271 smart-wallet signatures are longer.
-        width = r"[0-9a-fA-F]{130}" if (self.signingScheme or "").lower() != "eip1271" else r"[0-9a-fA-F]{130,2048}"
-        if self.requestId.version != 4 or not re.fullmatch("0x" + width, signature):
-            raise ValueError("UUIDv4 attempt and a well-formed signature required")
+        if self.requestId.version != 4 or not re.fullmatch(
+            r"0x[0-9a-fA-F]{130}", self.userSignature.get_secret_value()
+        ):
+            raise ValueError("UUIDv4 attempt and exact 65-byte signature required")
         return self
 
     def wire_body(self):
         # Only the execution gateway may pass this ephemeral body to a future verified transport.
-        body = {
-            **self.model_dump(mode="json", exclude_none=True),
+        return {
+            **self.model_dump(mode="json"),
             "userSignature": self.userSignature.get_secret_value(),
         }
-        return body
 
     def wire_request(self):
         """Ephemeral contract representation; never logged/persisted or sent in Phase 8."""

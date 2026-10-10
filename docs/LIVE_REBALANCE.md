@@ -1,3 +1,10 @@
+> **Historical teammate proposal — superseded by the PR #1 merge resolution (2026-10-11).**
+> The original text below is preserved as history, not as an operational runbook or
+> verified capability evidence. LIVE flags, Trust-disable configuration, weekend
+> exceptions, Binance-index independent references, signed-bounds-only RFQ admission,
+> blind retries and Altana/x402/session grants described below are NOT enabled.
+> Current gates, commands and limitations: [PR_1_MERGE_RESOLUTION.md](PR_1_MERGE_RESOLUTION.md).
+
 # Live wallet rebalancing on BSC mainnet
 
 Parity Pulse rebalances a wallet of tokenized US stocks (Ondo Global Markets and bStocks on BSC)

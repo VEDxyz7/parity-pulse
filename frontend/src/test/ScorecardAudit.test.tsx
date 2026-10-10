@@ -27,7 +27,7 @@ describe('Phase 13 backend-authoritative presentation', () => {
     const { mock } = api(); mount()
     await screen.findAllByText(/No execution evidence/)
     expect(screen.getAllByText('REJECTED')).toHaveLength(2)
-    expect(screen.getByText(/NO REAL FUNDS WILL MOVE/)).toBeInTheDocument()
+    expect(screen.getByText(/No real funds will move/)).toBeInTheDocument()
     expect(screen.getAllByText(/CORRECT_ABSTENTION/).length).toBeGreaterThan(0)
     expect(screen.getAllByText(/No execution evidence/)).toHaveLength(2)
     expect(screen.getAllByText(/SYNTHETIC EVALUATION/)).toHaveLength(2)

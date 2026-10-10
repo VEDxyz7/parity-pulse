@@ -1,8 +1,12 @@
+from app.clients.alpaca import AlpacaClient
 from app.clients.binance_web3 import BinanceWeb3Client
 from app.clients.common import ProviderError
+from app.clients.finnhub import FinnhubClient
 from app.clients.massive import MassiveClient
+from app.providers.alpaca import AlpacaProvider
 from app.providers.binance import BinanceMarketProvider, BinanceRWAProvider
 from app.providers.demo import DemoEquityProvider, DemoRWAProvider, load_data_fixture
+from app.providers.finnhub import FinnhubEventProvider
 from app.providers.massive import MassiveProvider
 from app.repositories.data import DataRepository
 from app.services.asset_discovery import AssetDiscoveryService
@@ -13,12 +17,14 @@ class DataLayer:
     def __init__(self, settings, database):
         self.repository = DataRepository(database)
         self.clients = []
+        self.events = None  # Explicit research reads only; never replaces self.news/calendar.
         self.mode = "DEMO" if settings.data_mode == "DEMO" else "LIVE"
         if self.mode == "DEMO":
             records = load_data_fixture()
             self.repository.save([r for rows in records.values() for r in rows])
             self.rwa, self.equity = DemoRWAProvider(records), DemoEquityProvider(records)
             self.market = None
+            self.news = self.equity
         else:
             client = BinanceWeb3Client(
                 settings.binance_web3_api_key, settings.binance_web3_secret_key
@@ -30,6 +36,17 @@ class DataLayer:
                 BinanceMarketProvider(client),
                 MassiveProvider(independent, freshness=settings.massive_data_quality),
             )
+            self.news = self.equity
+            if settings.equity_provider == "ALPACA":
+                alpaca = AlpacaClient(settings.alpaca_api_key, settings.alpaca_secret_key)
+                self.clients.append(alpaca)
+                self.equity = AlpacaProvider(
+                    alpaca, feed=settings.alpaca_feed, freshness=settings.alpaca_data_quality
+                )
+            if settings.finnhub_api_key:
+                events = FinnhubClient(settings.finnhub_api_key)
+                self.clients.append(events)
+                self.events = FinnhubEventProvider(events)
         self.discovery = AssetDiscoveryService(
             self.rwa, self.market, mode=self.mode, chain="DEMO" if self.mode == "DEMO" else "56"
         )
@@ -75,7 +92,7 @@ class DataLayer:
         news = []
         for capability, fetch in [
             ("equity", lambda: [self.equity.get_snapshot(asset.ticker)]),
-            ("news", lambda: self.equity.get_news(asset.ticker, max_pages=1)),
+            ("news", lambda: self.news.get_news(asset.ticker, max_pages=1)),
         ]:
             try:
                 rows = fetch()
@@ -84,7 +101,7 @@ class DataLayer:
                     equities = rows
                 else:
                     news = rows
-                    if getattr(self.equity, "last_page_complete", True) is False:
+                    if getattr(self.news, "last_page_complete", True) is False:
                         limitations["news_history"] = "PAGINATION_BOUND_REACHED"
             except ProviderError as error:
                 limitations[capability] = error.kind
