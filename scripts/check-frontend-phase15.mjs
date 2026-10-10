@@ -33,7 +33,7 @@ try {
   ws = new WebSocket(target.webSocketDebuggerUrl)
   await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = reject })
   let sequence = 0
-  const pending = new Map(), requests = [], errors = [], observations = [], networkOrigins = new Set()
+  const pending = new Map(), requests = [], errors = [], observations = [], networkOrigins = new Set(), cancelledNetwork = new Set(), cancelledReads = []
   const call = (method, params = {}) => new Promise((resolve, reject) => {
     const id = ++sequence
     const deadline=setTimeout(()=>{pending.delete(id);reject(new Error('Browser command timeout: '+method))},30000)
@@ -45,9 +45,10 @@ try {
     const message = JSON.parse(event.data)
     if (message.id) { pending.get(message.id)?.(message); pending.delete(message.id) }
     if (message.method === 'Network.requestWillBeSent') { const url=new URL(message.params.request.url);if(['http:','https:'].includes(url.protocol)){networkOrigins.add(url.origin);if(url.origin!=='http://127.0.0.1:5178')errors.push('EXTERNAL_BROWSER_REQUEST')} }
-    if (message.method === 'Runtime.exceptionThrown') errors.push('BROWSER_RUNTIME_EXCEPTION')
+    if (message.method === 'Network.loadingFailed' && message.params.canceled) cancelledNetwork.add(message.params.requestId)
+    if (message.method === 'Runtime.exceptionThrown') errors.push({code:'BROWSER_RUNTIME_EXCEPTION',phase:originPhase,detail:message.params.exceptionDetails.text})
     if (message.method !== 'Fetch.requestPaused') return
-    const { requestId, request } = message.params
+    const { requestId, request, networkId } = message.params
     const path = decodeURIComponent(new URL(request.url).pathname)
     try {
       const paper = /^\/api\/demo\/paper\/(fills|positions\/[0-9a-f-]{36}\/(monitor|exit|scorecard))$/.test(path)
@@ -56,7 +57,7 @@ try {
         '/api/demo/trust/scenarios/supported-move', '/api/demo/opportunity', '/api/demo/risk',
         '/api/demo/quote', '/api/demo/prepare', '/api/demo/simulate']
       const evaluation = ['TERMINAL','WORKSPACE'].includes(originPhase) && (path === '/api/scorecard' || /^\/api\/audit\/decisions\/[A-Za-z0-9_.:-]{1,160}$/.test(path));
-      const terminal = ['TERMINAL','WORKSPACE'].includes(originPhase) && path === '/api/terminal'
+      const terminal = path === '/api/terminal'
       const portfolio = originPhase === 'PORTFOLIO_API_SMOKE' && ['/api/autopilot', '/api/portfolio', '/api/portfolio/plans', '/api/portfolio/audit'].includes(path)
       const workspace = originPhase === 'WORKSPACE' && (['/api/workspace','/api/exposure/quote','/api/opportunities/scan','/api/autopilot','/api/portfolio/plans','/api/audit'].includes(path) || /^\/api\/opportunities\/[a-f0-9]{64}$/.test(path) || /^\/api\/assets\/(AAPL|NVDA)\/trust$/.test(path));
       assert(workspace || (originPhase === 'AGENT_API' && path === '/api/agent/tools') || evaluation || terminal || portfolio || paper || analytical.includes(path) || (originPhase === 'ORDINARY_OVERVIEW' && path === '/api/assets/NVDA/trust'))
@@ -87,8 +88,15 @@ try {
       requests.push({ phase:originPhase, method: request.method, path, status: response.status })
       await call('Fetch.fulfillRequest', { requestId, responseCode: response.status,
         responseHeaders: [{ name: 'Content-Type', value: 'application/json' }], body: Buffer.from(body).toString('base64') })
-    } catch {
-      errors.push('UNEXPECTED_OR_FAILED_LOCAL_API_REQUEST')
+    } catch (error) {
+      // React Query cancels a read when navigation unmounts its view. Chrome
+      // invalidates that intercepted request; only a confirmed cancelled GET
+      // snapshot is accepted here. Writes and other interception failures fail.
+      await pause(50)
+      if (request.method === 'GET' && path === '/api/terminal' && error.message.includes('Invalid InterceptionId') && cancelledNetwork.has(networkId)) {
+        cancelledReads.push({phase:originPhase,path,reason:'CLIENT_CANCELLED_SNAPSHOT_READ'}); return
+      }
+      errors.push({code:'UNEXPECTED_OR_FAILED_LOCAL_API_REQUEST',phase:originPhase,path,detail:error.message})
       await call('Fetch.failRequest', { requestId, errorReason: 'Failed' }).catch(error => errors.push(error.message))
     }
   }
@@ -116,14 +124,14 @@ try {
     backendPort = viewport.backend; phase = 'DEMO_' + viewport.name.toUpperCase()
     await call('Emulation.setDeviceMetricsOverride', { width: viewport.width, height: viewport.height, mobile: viewport.mobile, deviceScaleFactor: 1 })
     await call('Page.navigate', { url: 'http://127.0.0.1:5178/#overview' })
-    await wait('Array.from(document.querySelectorAll("a")).some(a => a.textContent === "Open DEMO SANDBOX")', true)
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent === "Open DEMO SANDBOX").click()')
+    await wait('Array.from(document.querySelectorAll("a")).some(a => a.textContent.trim() === "Open Research Lab")', true)
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Open Research Lab").click()')
     await wait('document.querySelector("#demo-scenario")?.options.length', 3)
     assert.equal(await evaluate('window.location.hash'), '#demo-sandbox')
     await evaluate('document.querySelector(".skip-link").click()')
     assert.equal(await evaluate('window.location.hash'), '#demo-sandbox')
     assert.equal(await evaluate('document.activeElement.id'), 'main-content')
-    for (const label of ['DEMO SANDBOX', 'SIMULATED DATA — NOT LIVE MARKET DATA', 'NO REAL FUNDS WILL MOVE']) assert((await evaluate('document.body.innerText')).includes(label))
+    for (const label of ['Research Lab', 'Illustrative data', 'NO REAL FUNDS WILL MOVE']) assert((await evaluate('document.body.innerText')).includes(label))
     assert.equal(await evaluate('Array.from(document.querySelectorAll(".demo-pipeline li")).every(row => row.dataset.status === "pending")'), true)
     await evaluate('document.querySelector("h1").scrollIntoView()')
     await shot(viewport.name + '-entry')
@@ -133,7 +141,7 @@ try {
     ]) {
       await click(label)
       assert.equal(await evaluate('Array.from(document.querySelectorAll(".demo-pipeline li")).every(row => row.dataset.status === "pending")'), true)
-      await click('Run demo scenario')
+      await click('Run scenario')
       await wait('document.querySelector("#demo-sandbox .trust-representation strong")?.textContent', classification)
       await wait(stage('TRUST'), 'pass')
       await click('Analyze Opportunity')
@@ -143,18 +151,18 @@ try {
       await wait(stage('RISK'), scenario === 'supported-move' ? 'pass' : 'rejected')
       if (scenario !== 'supported-move') {
         assert((await evaluate('document.querySelector(".pipeline-stop").innerText')).includes('Pipeline stopped at OPPORTUNITY'))
-        assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b => b.textContent === "Generate DEMO Quote")'), false)
+        assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b => b.textContent === "Generate Illustrative Quote")'), false)
         await wait(stage('PAPER EXECUTION'), 'pending')
       } else {
         for (const [button, name] of [
-          ['Generate DEMO Quote', 'QUOTE'], ['Prepare DEMO Transaction', 'PREPARATION'],
-          ['Run DEMO Simulation', 'SIMULATION'], ['Create Paper Fill', 'PAPER EXECUTION'],
+          ['Generate Illustrative Quote', 'QUOTE'], ['Prepare Unsigned Request', 'PREPARATION'],
+          ['Run Local Simulation', 'SIMULATION'], ['Create Paper Fill', 'PAPER EXECUTION'],
           ['Monitor Synthetic Opening Observation', 'MONITOR'], ['Exit Paper Position', 'EXIT'],
           ['View Paper Scorecard', 'SCORECARD'],
         ]) { await click(button); await wait(stage(name), 'pass') }
         assert.equal(await evaluate('Array.from(document.querySelectorAll(".demo-pipeline li")).every(row => row.dataset.status === "pass")'), true)
         assert((await evaluate('document.querySelector(".demo-paper-flow").innerText')).includes('1.45335603303197526425600'))
-        assert((await evaluate('document.querySelector(".demo-paper-flow").innerText')).includes('Production TRUST_GATE=BLOCKED'))
+        assert((await evaluate('document.querySelector(".demo-paper-flow").innerText')).includes('Production Trust and Opportunity remain blocked'))
         await evaluate('document.querySelector(".demo-pipeline").scrollIntoView()')
         await shot(viewport.name + '-pipeline')
         await evaluate('Array.from(document.querySelectorAll(".demo-paper-flow h4")).at(-1).scrollIntoView()')
@@ -165,8 +173,8 @@ try {
         opportunity: scenario === 'supported-move' ? 'ACTIONABLE' : scenario === 'steady' ? 'NO_OPPORTUNITY' : 'REJECTED_BY_TRUST',
         full_hero_flow: scenario === 'supported-move', stand_down: scenario !== 'supported-move', status: 'PASS' })
     }
-    assert.deepEqual(await evaluate('Array.from(document.querySelectorAll("button.deferred")).map(b => b.disabled)'), [true, true])
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent === "Return to Overview").click()')
+    assert.deepEqual(await evaluate('Array.from(document.querySelectorAll(".execution-controls button[disabled]")).map(b => b.disabled)'), [true, true])
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Return to Overview").click()')
     await wait('Array.from(document.querySelectorAll("button")).some(b => b.textContent === "Assess trust")', true)
   }
   assert.equal(requests.filter(r => r.phase.startsWith('DEMO') && r.path === '/api/assets/NVDA/trust').length, 0)
@@ -176,8 +184,8 @@ try {
   await wait('Array.from(document.querySelectorAll(".status-badge")).some(b => b.textContent === "Backend connected")', true)
   await click('Assess trust')
   await wait('document.querySelector("#trust .trust-representation strong")?.textContent', 'INSUFFICIENT_EVIDENCE')
-  await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent === "Open DEMO SANDBOX").click()')
-  await wait('document.querySelector(".demo-unavailable h2")?.textContent', 'The connected backend has the sandbox disabled.')
+  await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Open Research Lab").click()')
+  await wait('document.querySelector(".demo-unavailable h2")?.textContent', 'Scenario research is disabled on this backend.')
   assert.equal(requests.filter(r => r.phase === 'ORDINARY_OVERVIEW' && r.path.startsWith('/api/demo/')).length, 0)
   const smoke = {superseded_by: 'actual_frontend_mandate_and_drift_journey'}
   for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',width:390,height:844}]) {
@@ -186,9 +194,9 @@ try {
     await call('Page.navigate',{url:'http://127.0.0.1:5178/?terminal='+viewport.name+'#terminal'});
     await wait('document.querySelector(".terminal h2")?.textContent','Issuer spread board / normalized prices');
     const text = await evaluate('document.querySelector(".terminal").innerText');
-    for (const expected of ['SIMULATED DATA — NOT LIVE MARKET DATA','$102','2.00%','STALE','INSUFFICIENT_EVIDENCE','Agent evidence','SYNTHETIC FIXTURE — NOT A REAL TRADE','Historical episodes','Opening outcome AVAILABLE']) assert(text.includes(expected),expected);
+    for (const expected of ['Synthetic inputs, not live market data.','$102','2.00%','STALE','INSUFFICIENT_EVIDENCE','Agent evidence','SYNTHETIC FIXTURE — NOT A REAL TRADE','Historical episodes','Opening outcome AVAILABLE']) assert(text.includes(expected),expected);
     assert(await evaluate('document.documentElement.scrollWidth <= window.innerWidth'));
-    assert.deepEqual(await evaluate('Array.from(document.querySelectorAll("button.deferred")).map(b=>b.disabled)'),[true,true]);
+    assert.deepEqual(await evaluate('Array.from(document.querySelectorAll(".execution-controls button[disabled]")).map(b=>b.disabled)'),[true,true]);
     await shot(viewport.name+'-terminal');
     // React-controlled input uses the native setter to simulate actual typing.
     await evaluate('Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value").set.call(document.querySelector("#terminal-ticker"),"ZZZZ"); document.querySelector("#terminal-ticker").dispatchEvent(new Event("input",{bubbles:true}))');
@@ -207,7 +215,7 @@ try {
     assert((await evaluate('document.querySelector(".scorecard-audit").innerText')).includes('CORRECT_ABSTENTION'));
     await evaluate('Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,"value").set.call(document.querySelectorAll(".scorecard-audit select")[1],"PAPER_EXITED"); document.querySelectorAll(".scorecard-audit select")[1].dispatchEvent(new Event("change",{bubbles:true}))');
     await click('Filter evaluations');
-    await wait('Array.from(document.querySelectorAll(".scorecard-audit article")).some(a=>a.textContent.includes("PAPER_EXITED"))',true);
+    await wait('Array.from(document.querySelectorAll(".scorecard-audit article")).some(a=>a.textContent.trim().includes("PAPER_EXITED"))',true);
     const score = await evaluate('document.querySelector(".scorecard-audit").innerText');
     for (const label of ['SYNTHETIC EVALUATION — NOT A REAL TRADE','No execution evidence','PAPER_EXITED','Composite score unavailable']) assert(score.includes(label),label);
     await evaluate('Array.from(document.querySelectorAll(".scorecard-audit article")).find(a=>a.innerText.includes("PAPER_EXITED")).querySelector("button").click()');
@@ -234,14 +242,14 @@ try {
     phase='AGENT_API'; backendPort=8054;
     await call('Emulation.setDeviceMetricsOverride',{width:viewport.width,height:viewport.height,deviceScaleFactor:1,mobile:viewport.name==='mobile'});
     await call('Page.navigate',{url:'http://127.0.0.1:5178/?agent='+viewport.name+'#overview'});
-    await wait('Array.from(document.querySelectorAll("a")).some(a=>a.textContent==="Agent API")',true);
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent==="Agent API").click()');
+    await wait('Array.from(document.querySelectorAll("a")).some(a=>a.textContent.trim()==="Agent API")',true);
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent.trim()==="Agent API").click()');
     await wait('document.querySelector(".agent-api-inspection")?.innerText.includes("Backend: Ready")',true);
     const text=await evaluate('document.querySelector(".agent-api-inspection").innerText');
     for(const label of ['NO REAL FUNDS WILL MOVE','buy_stock_exposure','find_opportunity','get_route','get_portfolio','get_autopilot_status','get_stock_trust','compare_stock_tokens','SIMULATION REQUIRED']) assert(text.includes(label),label);
     await evaluate('document.querySelector(".agent-api-inspection details").open=true');
     assert(await evaluate('document.documentElement.scrollWidth <= innerWidth'));
-    assert(await evaluate('Array.from(document.querySelectorAll("button.deferred")).every(b=>b.disabled)'));
+    assert(await evaluate('Array.from(document.querySelectorAll(".execution-controls button[disabled]")).every(b=>b.disabled)'));
     assert.equal(await evaluate('document.querySelectorAll(".agent-api-inspection button").length'),0);
     await shot(viewport.name+'-phase14-agent-api');
     agentFailure=true;
@@ -261,7 +269,7 @@ try {
     phase='WORKSPACE';backendPort=viewport.backend;
     await call('Emulation.setDeviceMetricsOverride',{width:viewport.width,height:viewport.height,mobile:viewport.name==='mobile',deviceScaleFactor:1});
     await navigate('#overview',viewport.name+'-home');await wait('document.querySelector(".home-actions")!==null',true);
-    assert((await text()).includes('Invest in Global Stocks, Smarter.'));assert.equal(await evaluate('document.querySelectorAll(".home-actions a").length'),3);
+    assert((await text()).includes('MARKETS MOVE.'));await wait('document.querySelector(".snapshot-table")!==null',true);await shot(viewport.name+'-overview');if(viewport.name==='mobile'){await click('Menu');assert(await evaluate('document.querySelector(".mobile-menu").getAttribute("aria-expanded")=="true"'));assert(await evaluate('getComputedStyle(document.querySelector(".primary-navigation")).display!=="none"'));await shot('mobile-navigation');await click('Menu');}await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});assert.equal(await evaluate('getComputedStyle(document.querySelector(".refresh-button")).transitionDuration'),'0s');await call('Emulation.setEmulatedMedia',{features:[]});assert((await text()).includes('Illustrative data'));assert((await text()).includes('stale'));assert(await evaluate('document.querySelector(".snapshot-table").tabIndex===0'));assert(!(await text()).includes('DEMO SANDBOX'));assert(!(await text()).includes('DATA_MODE='));assert.equal(await evaluate('document.querySelectorAll(".home-actions a").length'),3);
     await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Tab',code:'Tab',windowsVirtualKeyCode:9});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Tab',code:'Tab',windowsVirtualKeyCode:9});
     assert.equal(await evaluate('document.activeElement.className'),'skip-link');await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
     assert.equal(await evaluate('document.activeElement.id'),'main-content');await mark(viewport.name,'Home / keyboard navigation',{keyboard_skip_link:true});
@@ -270,13 +278,13 @@ try {
     await evaluate(`(()=>{const i=document.querySelector('#stock-request');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(i,'Buy $50 Apple');i.dispatchEvent(new Event('input',{bubbles:true}));})()`);
     // Match the existing frozen backend fixture clock only for this synthetic journey.
     await evaluate("Date.now=()=>Date.parse('2026-10-08T15:00:00Z')");
-    await click('Create dry-run proposal');await wait('document.querySelector(".ask-result")?.innerText.includes("DRY_RUN")',true);
+    await click('Create exposure proposal');await wait('document.querySelector(".ask-result")?.innerText.includes("Indicative proposal")',true);
     assert((await text()).includes('AAPL'));assert((await text()).includes('No real transaction was broadcast.'));assert((await text()).includes('Route Comparison'));
     await click('Review proposal');await wait('document.querySelector(".ask-result")?.innerText.includes("Independent assessment as of")',true);
-    for(const label of ['INSUFFICIENT_EVIDENCE','PUBLIC_APPROVAL_UNAVAILABLE','LIVE_BLOCKED','Simulation: UNAVAILABLE'])assert((await text()).includes(label),label);
+    for(const label of ['INSUFFICIENT_EVIDENCE','PUBLIC_APPROVAL_UNAVAILABLE','live execution blocked','Simulation: UNAVAILABLE'])assert((await text()).includes(label),label);
     assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b=>!b.disabled&&/^(execute|approve|sign)/i.test(b.textContent))'),false);
     await shot(viewport.name+'-direct-review');await mark(viewport.name,'Direct / routing / Trust-blocked / dry-run review',{backend_proposal:true,approval_unavailable:true});
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent==="Inspect proposal audit").click()');
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent.trim()==="Inspect proposal audit").click()');
     await wait('document.querySelector(".decision-audit")!==null',true);await wait('document.querySelector(".decision-audit")?.innerText.includes("INDICATIVE_ONLY")',true);
     await mark(viewport.name,'Direct proposal → decision audit');
     await navigate('#opportunity',viewport.name+'-opportunity');await wait('document.querySelector(".workspace-form")!==null',true);
@@ -286,7 +294,7 @@ try {
     await evaluate('Array.from(document.querySelectorAll("button")).find(b=>/^Inspect .* evidence$/.test(b.textContent)).click()');await wait('document.querySelector(".workspace-view section[aria-label]")!==null',true);
     assert((await text()).includes('Historical scan snapshot'));assert((await text()).includes('Simulation: unavailable for this scan. Approval/execution: blocked.'));
     await shot(viewport.name+'-opportunity');await mark(viewport.name,'Opportunity scan / detail',{ranked_by_backend:true});
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent==="Open persisted scan").click()');await wait('document.querySelector(".workspace-view table")!==null',true);
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent.trim()==="Open persisted scan").click()');await wait('document.querySelector(".workspace-view table")!==null',true);
     assert.equal(await evaluate('document.querySelectorAll(".workspace-form").length'),0);await mark(viewport.name,'Persisted scan GET');
     await navigate('#portfolio',viewport.name+'-portfolio');await wait('document.querySelector(".workspace-view")?.innerText.includes("Persistent positions")',true);
     for(const label of ['Backend allocation / drift snapshot','historical planning snapshot','NVDA','OPEN','USDT'])assert((await text()).includes(label),label);
@@ -313,9 +321,9 @@ try {
   // Actual unchanged simulation service rejects changed synthetic wallet budget.
   phase='DEMO_SIMULATION_FAILURE';backendPort=8057;
   await navigate('#demo-sandbox','simulation-failure');await wait('document.querySelector("#demo-scenario")?.options.length',3);
-  await click('LIKELY INFORMATION');await click('Run demo scenario');await wait(stage('TRUST'),'pass');
-  for(const [button,name] of [['Analyze Opportunity','OPPORTUNITY'],['Analyze Risk','RISK'],['Generate DEMO Quote','QUOTE'],['Prepare DEMO Transaction','PREPARATION']]){await click(button);await wait(stage(name),'pass')}
-  await click('Run DEMO Simulation');await wait(stage('SIMULATION'),'rejected');
+  await click('LIKELY INFORMATION');await click('Run scenario');await wait(stage('TRUST'),'pass');
+  for(const [button,name] of [['Analyze Opportunity','OPPORTUNITY'],['Analyze Risk','RISK'],['Generate Illustrative Quote','QUOTE'],['Prepare Unsigned Request','PREPARATION']]){await click(button);await wait(stage(name),'pass')}
+  await click('Run Local Simulation');await wait(stage('SIMULATION'),'rejected');
   assert((await text()).includes('Simulation: SIMULATION_FAIL'));assert((await text()).includes('FAIL · RISK_REVALIDATION')); 
   assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b=>b.textContent==="Create Paper Fill")'),false);
   await shot('mobile-simulation-failure');await mark('mobile','Actual simulation failure',{risk_revalidation:true,no_paper_fill:true});
@@ -331,10 +339,11 @@ try {
   assert((await text()).includes(agentDecision));
   await mark('mobile','Encoded original agent/scan decision → audit trace',{encoded_colon_contract:true});
 
+  if(errors.length) await writeFile(join(outputDir,'request-errors.json'),JSON.stringify({errors,requests},null,2));
   assert.equal(errors.length, 0)
   assert(requests.every(r => r.status === 200 || ['TERMINAL','AGENT_API','WORKSPACE'].includes(r.phase) && r.status === 503 && r.injected))
   const report = {
-    milestone: 'PHASE_16_HARDENING_BROWSER', forwarding_serialized:false, api_timings:apiTimings, load_timings:loadTimings, verified_at_utc: new Date().toISOString(), status: 'PASS',
+    milestone: 'EMERALD_FRONTEND_REDESIGN', forwarding_serialized:false, api_timings:apiTimings, load_timings:loadTimings, verified_at_utc: new Date().toISOString(), status: 'PASS',
     browser: 'Disposable headless Google Chrome', frontend: 'Built UI at localhost:5178',
     dataset_type: 'DEMO_FIXTURE', synthetic: true, production_eligible: false,
     actual_local_backends: { desktop: 8054, mobile: 8055, ordinary_runtime_with_synthetic_data: 8056, simulation_failure:8057 },
@@ -342,7 +351,7 @@ try {
     dedicated_navigation: '#demo-sandbox', pipeline_statuses_verified: true,
     production_trust_calls_from_demo_sandbox: 0, ordinary_overview_trust: 'INSUFFICIENT_EVIDENCE',
     ordinary_runtime_demo_requests: 0, production_opportunity_navigation_disabled: true,
-    network_origins:[...networkOrigins], external_browser_requests:0, live_provider_calls: 0, live_execution_calls: 0, runtime_errors: errors, request_log: requests,
+    cancelled_snapshot_reads:cancelledReads, network_origins:[...networkOrigins], external_browser_requests:0, live_provider_calls: 0, live_execution_calls: 0, runtime_errors: errors, request_log: requests,
   }
   await writeFile(join(outputDir, 'browser-evidence.json'), JSON.stringify(report, null, 2) + '\n')
   console.log(JSON.stringify({ status: 'PASS', scenarios: observations.length, local_api_requests: requests.length, production_trust_calls_from_demo: 0, live_execution_calls: 0 }))

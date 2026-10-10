@@ -41,7 +41,7 @@ try {
     const path = new URL(request.url).pathname
     try {
       const paper = /^\/api\/demo\/paper\/(fills|positions\/[0-9a-f-]{36}\/(monitor|exit|scorecard))$/.test(path)
-      const analytical = ['/api/health', '/api/system-status', '/api/demo/trust/scenarios',
+      const analytical = ['/api/health', '/api/system-status', '/api/terminal', '/api/demo/trust/scenarios',
         '/api/demo/trust/scenarios/steady', '/api/demo/trust/scenarios/thin-move',
         '/api/demo/trust/scenarios/supported-move', '/api/demo/opportunity', '/api/demo/risk',
         '/api/demo/quote', '/api/demo/prepare', '/api/demo/simulate']
@@ -96,14 +96,15 @@ try {
     backendPort = viewport.backend; phase = 'DEMO_' + viewport.name.toUpperCase()
     await call('Emulation.setDeviceMetricsOverride', { width: viewport.width, height: viewport.height, mobile: viewport.mobile, deviceScaleFactor: 1 })
     await call('Page.navigate', { url: 'http://127.0.0.1:5174/#overview' })
-    await wait('Array.from(document.querySelectorAll("a")).some(a => a.textContent === "Open DEMO SANDBOX")', true)
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent === "Open DEMO SANDBOX").click()')
+    await wait('Array.from(document.querySelectorAll("a")).some(a => a.textContent.trim() === "Open Research Lab")', true)
+    await wait('document.querySelector(".snapshot-table")!==null', true)
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Open Research Lab").click()')
     await wait('document.querySelector("#demo-scenario")?.options.length', 3)
     assert.equal(await evaluate('window.location.hash'), '#demo-sandbox')
     await evaluate('document.querySelector(".skip-link").click()')
     assert.equal(await evaluate('window.location.hash'), '#demo-sandbox')
     assert.equal(await evaluate('document.activeElement.id'), 'main-content')
-    for (const label of ['DEMO SANDBOX', 'SIMULATED DATA — NOT LIVE MARKET DATA', 'NO REAL FUNDS WILL MOVE']) assert((await evaluate('document.body.innerText')).includes(label))
+    for (const label of ['Research Lab', 'Illustrative data', 'NO REAL FUNDS WILL MOVE']) assert((await evaluate('document.body.innerText')).includes(label))
     assert.equal(await evaluate('Array.from(document.querySelectorAll(".demo-pipeline li")).every(row => row.dataset.status === "pending")'), true)
     await evaluate('document.querySelector("h1").scrollIntoView()')
     await shot(viewport.name + '-entry')
@@ -113,7 +114,7 @@ try {
     ]) {
       await click(label)
       assert.equal(await evaluate('Array.from(document.querySelectorAll(".demo-pipeline li")).every(row => row.dataset.status === "pending")'), true)
-      await click('Run demo scenario')
+      await click('Run scenario')
       await wait('document.querySelector("#demo-sandbox .trust-representation strong")?.textContent', classification)
       await wait(stage('TRUST'), 'pass')
       await click('Analyze Opportunity')
@@ -123,18 +124,18 @@ try {
       await wait(stage('RISK'), scenario === 'supported-move' ? 'pass' : 'rejected')
       if (scenario !== 'supported-move') {
         assert((await evaluate('document.querySelector(".pipeline-stop").innerText')).includes('Pipeline stopped at OPPORTUNITY'))
-        assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b => b.textContent === "Generate DEMO Quote")'), false)
+        assert.equal(await evaluate('Array.from(document.querySelectorAll("button")).some(b => b.textContent === "Generate Illustrative Quote")'), false)
         await wait(stage('PAPER EXECUTION'), 'pending')
       } else {
         for (const [button, name] of [
-          ['Generate DEMO Quote', 'QUOTE'], ['Prepare DEMO Transaction', 'PREPARATION'],
-          ['Run DEMO Simulation', 'SIMULATION'], ['Create Paper Fill', 'PAPER EXECUTION'],
+          ['Generate Illustrative Quote', 'QUOTE'], ['Prepare Unsigned Request', 'PREPARATION'],
+          ['Run Local Simulation', 'SIMULATION'], ['Create Paper Fill', 'PAPER EXECUTION'],
           ['Monitor Synthetic Opening Observation', 'MONITOR'], ['Exit Paper Position', 'EXIT'],
           ['View Paper Scorecard', 'SCORECARD'],
         ]) { await click(button); await wait(stage(name), 'pass') }
         assert.equal(await evaluate('Array.from(document.querySelectorAll(".demo-pipeline li")).every(row => row.dataset.status === "pass")'), true)
         assert((await evaluate('document.querySelector(".demo-paper-flow").innerText')).includes('1.45335603303197526425600'))
-        assert((await evaluate('document.querySelector(".demo-paper-flow").innerText')).includes('Production TRUST_GATE=BLOCKED'))
+        assert((await evaluate('document.querySelector(".demo-paper-flow").innerText')).includes('Production Trust and Opportunity remain blocked'))
         await evaluate('document.querySelector(".demo-pipeline").scrollIntoView()')
         await shot(viewport.name + '-pipeline')
         await evaluate('Array.from(document.querySelectorAll(".demo-paper-flow h4")).at(-1).scrollIntoView()')
@@ -145,9 +146,10 @@ try {
         opportunity: scenario === 'supported-move' ? 'ACTIONABLE' : scenario === 'steady' ? 'NO_OPPORTUNITY' : 'REJECTED_BY_TRUST',
         full_hero_flow: scenario === 'supported-move', stand_down: scenario !== 'supported-move', status: 'PASS' })
     }
-    assert.deepEqual(await evaluate('Array.from(document.querySelectorAll("button.deferred")).map(b => b.disabled)'), [true, true])
-    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent === "Return to Overview").click()')
+    assert.deepEqual(await evaluate('Array.from(document.querySelectorAll(".execution-controls button[disabled]")).map(b => b.disabled)'), [true, true])
+    await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Return to Overview").click()')
     await wait('Array.from(document.querySelectorAll("button")).some(b => b.textContent === "Assess trust")', true)
+    await wait('document.querySelector(".snapshot-table")!==null', true)
   }
   assert.equal(requests.filter(r => r.phase.startsWith('DEMO') && r.path === '/api/assets/NVDA/trust').length, 0)
   phase = 'ORDINARY_OVERVIEW'; backendPort = 8013
@@ -156,8 +158,8 @@ try {
   await wait('Array.from(document.querySelectorAll(".status-badge")).some(b => b.textContent === "Backend connected")', true)
   await click('Assess trust')
   await wait('document.querySelector("#trust .trust-representation strong")?.textContent', 'INSUFFICIENT_EVIDENCE')
-  await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent === "Open DEMO SANDBOX").click()')
-  await wait('document.querySelector(".demo-unavailable h2")?.textContent', 'The connected backend has the sandbox disabled.')
+  await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Open Research Lab").click()')
+  await wait('document.querySelector(".demo-unavailable h2")?.textContent', 'Scenario research is disabled on this backend.')
   assert.equal(requests.filter(r => r.phase === 'ORDINARY_OVERVIEW' && r.path.startsWith('/api/demo/')).length, 0)
   assert.equal(errors.length, 0)
   assert(requests.every(r => r.status === 200))

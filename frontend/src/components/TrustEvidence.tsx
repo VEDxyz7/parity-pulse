@@ -1,8 +1,9 @@
+import { dataLabel } from './DataContext'
 import type { TrustResult } from '../services/trust'
 
 export function TrustEvidence({ result }: { result: TrustResult }) {
   return <div aria-live="polite" className="trust-results">
-      <p><strong>{result.ticker ?? 'Unsupported stock'} · {result.status}</strong> · {result.data_mode}</p>
+      <p><strong>{result.ticker ?? 'Unsupported stock'} · {result.status}</strong> · {dataLabel(result.data_mode)}</p>
       <p>Evaluated at: <time>{result.evaluated_at}</time></p>
       <p>Market regime: {result.regime?.state ?? 'UNAVAILABLE'} · {result.regime?.baseline_bucket ?? 'No verified schedule'}</p>
       {result.regime && <p>Previous actual regular close: {result.regime.previous_regular_close}</p>}

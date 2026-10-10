@@ -1,5 +1,31 @@
 # Capability gaps and closure evidence
 
+## Finnhub event adapter increment — October 10, 2026
+
+Typed, bounded company-news, earnings, US status and holiday reads are implemented and
+authenticated in an isolated eight-request diagnostic. Raw event access is available; exhaustive
+coverage, schedule publication/revisions and historical first availability remain unverified.
+Five returned holiday entries have malformed post-market hours and remain INVALID.
+The adapter is an explicit research reader, not a replacement for existing Trust news/calendar
+consumers. There is no production persistence or new qualifying history.
+
+Current equity freshness/alignment, historical economic ratios/as-of features, authoritative
+liquidity and real 30/30/3 evidence remain unresolved. Finnhub quotes/candles are excluded from
+this adapter. All production gates are unchanged. See [implementation report](FINNHUB_EVENTS_REPORT.md)
+and the preserved [multi-provider diagnostic](MULTI_PROVIDER_DATA_DIAGNOSTIC.md).
+
+## Session-aware continuation — October 10, 2026
+
+The missing Alpaca adapter is now implemented and independently selectable; external access
+remains NOT_VERIFIED because credentials are absent. This does not close G03 or any Trust/LIVE
+blocker. Current default/legacy Massive behavior and historical evidence remain intact.
+New open dependencies: actual Alpaca feed/account entitlement/freshness/alignment and licensing;
+reference-policy integration (unchanged Trust source allowlist currently rejects Alpaca);
+official close/extended-session support and provider-independent resumable backfill;
+Finnhub events/session integration; optional runtime-verified HIP-3 corroboration.
+Historical ratio/as-of, liquidity and qualifying 30/30/3 evidence gaps remain unchanged.
+See [the gap analysis and diagnostic evidence](SESSION_AWARE_DATA_REPORT.md).
+
 ## Latest read-only data investigation — 2026-10-06T17:56Z
 
 **TRUST_GATE=BLOCKED.** Fresh current Snapshot/NBBO reads return403 with explicit entitlement-denial categories; historical aggregates/news return200 with the same key. Exact account plan is UNKNOWN. A qualifying real-time Snapshot is sufficient for the existing analytical reference; NBBO is optional. The minimum listed individual plan is Advanced USD199/month, subject to individual/nonprofessional licensing and actual returned-data freshness. Fifteen-minute delay does not meet current120s age/30s skew requirements. No upgrade or alternate data substitution occurred. [Current pricing](https://massive.com/stocks).

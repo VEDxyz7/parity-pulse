@@ -75,6 +75,9 @@ class HistoricalIngestion:
         return {"inserted": inserted, "pages": max_pages, "complete": False, "cursor": cursor}
 
     def equity_bars(self, ticker, start, end, *, max_pages=3, resume=True):
+        # This legacy checkpoint is Massive-specific; never send its paths to Alpaca.
+        if getattr(self.equity.client, "provider", None) != "MASSIVE":
+            raise ProviderError("INGESTION", "PROVIDER_CHECKPOINT_NOT_SUPPORTED")
         if not 1 <= max_pages <= 10:
             raise ValueError("Bounded requests required")
         ticker = ticker_path(ticker)

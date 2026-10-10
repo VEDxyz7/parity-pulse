@@ -33,13 +33,13 @@ export function TrustPanel({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
     }
   }
   return <section className="panel trust-panel" aria-label="Trust Layer" id="trust">
-    <div className="panel-heading"><div><h2>Trust Layer</h2><p>Canonical Phase 2 · analytical only · TRUST_GATE blocked</p></div></div>
+    <div className="panel-heading"><div><h2>Trust Layer</h2><p>Independent evidence · analytical only · production Trust blocked</p></div></div>
     <form onSubmit={event => { void assess(event) }} className="trust-form">
       <label htmlFor="trust-ticker">Stock ticker</label>
       <input id="trust-ticker" value={ticker} maxLength={15} onChange={event => setTicker(event.target.value)} required />
       <button type="submit" className="refresh-button" disabled={busy}>{busy ? 'Assessing evidence…' : 'Assess trust'}</button>
     </form>
-    <p className="trust-note">{mode === 'DEMO' ? 'Synthetic DEMO inputs stay separate from real provider data.' : 'Read-only provider evidence; unavailable current equity data fails closed.'} Confidence is an uncalibrated heuristic. This assessment does not authorize execution or alter an Ask proposal.</p>
+    <p className="trust-note">{mode === 'DEMO' ? 'Illustrative synthetic inputs stay separate from real provider data.' : 'Read-only provider evidence; unavailable current equity data fails closed.'} Confidence is an uncalibrated heuristic. This assessment does not authorize execution or alter an Ask proposal.</p>
     {error && <p role="alert">{error}</p>}
     {result && <TrustEvidence result={result} />}
   </section>

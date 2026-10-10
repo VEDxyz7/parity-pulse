@@ -37,7 +37,7 @@ it('shows explicit all-in estimated costs and chooses the cheaper total rather t
 it('integrates the shared route contract into the existing Ask form without extra requests',async()=>{
   const fetch=vi.fn(async(_url:string,_init:RequestInit)=>new Response(JSON.stringify(f.proposal),{status:200}))
   vi.stubGlobal('fetch',fetch);render(<AskFlow mode="DEMO" />)
-  await userEvent.click(screen.getByRole('button',{name:'Create dry-run proposal'}))
+  await userEvent.click(screen.getByRole('button',{name:'Create exposure proposal'}))
   expect(await screen.findByRole('heading',{name:'Route Decision: ROUTE_SELECTED'})).toBeInTheDocument()
   expect(fetch).toHaveBeenCalledTimes(1)
   expect(JSON.parse(fetch.mock.calls[0][1].body as string)).toEqual({text:'I have $50 of Nvidia'})
@@ -67,7 +67,7 @@ it('displays a routed Information result and retains manual downstream checks',a
   expect(await screen.findByRole('heading',{name:'Route Decision: ROUTE_SELECTED'})).toBeInTheDocument()
   await userEvent.click(screen.getByRole('button',{name:'Analyze Risk'}))
   expect(await screen.findByRole('heading',{name:'Risk: PASS'})).toBeInTheDocument()
-  expect(screen.getByRole('button',{name:'Generate DEMO Quote'})).toBeInTheDocument()
+  expect(screen.getByRole('button',{name:'Generate Illustrative Quote'})).toBeInTheDocument()
   expect(fetch).toHaveBeenCalledTimes(2)
 })
 

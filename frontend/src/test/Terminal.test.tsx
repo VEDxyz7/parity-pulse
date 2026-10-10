@@ -19,7 +19,7 @@ describe('backend-authoritative Terminal', () => {
     vi.stubGlobal('fetch', mock)
     mount()
     await screen.findByRole('heading', { name: 'Issuer spread board / normalized prices' })
-    expect(screen.getByText('SIMULATED DATA — NOT LIVE MARKET DATA')).toBeInTheDocument()
+    expect(screen.getByText(/Synthetic inputs, not live market data/)).toBeInTheDocument()
     expect(screen.getAllByText('$102').length).toBeGreaterThan(0)
     expect(screen.getByText('2.00%')).toBeInTheDocument()
     for (const name of ['Trust monitor','Agent evidence','Execution analytics','Historical episodes','Portfolio / Autopilot context']) expect(screen.getByRole('heading', { name })).toBeInTheDocument()

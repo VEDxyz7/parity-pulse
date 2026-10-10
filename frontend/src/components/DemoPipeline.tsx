@@ -17,8 +17,8 @@ export const useDemoPipeline = () => useContext(DemoPipelineContext)
 
 export function DemoPipelineStatus({ progress }: { progress: PipelineProgress }) {
   const stopped = demoStages.find(stage => ['rejected', 'failed'].includes(progress[stage].status))
-  return <section className="demo-pipeline" aria-label="Demo pipeline status">
-    <h3>Demo pipeline</h3>
+  return <section className="demo-pipeline" aria-label="Decision pipeline status">
+    <h3>Decision pipeline</h3>
     <p>Statuses report completed API outcomes, not production gate approval. Routing is returned by the existing Opportunity and Quote APIs.</p>
     <ol>{demoStages.map(stage => <li key={stage} data-stage={stage} data-status={progress[stage].status}>
       <div><strong>{stage}</strong><span className={`pipeline-status ${progress[stage].status}`}>{progress[stage].status}</span></div>

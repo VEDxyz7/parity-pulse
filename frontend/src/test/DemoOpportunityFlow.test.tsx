@@ -37,7 +37,7 @@ async function trustScenario(id: ScenarioId) {
   render(<DemoTrustSandbox />)
   await screen.findByRole('option', { name: 'LIKELY INFORMATION' })
   await userEvent.selectOptions(screen.getByRole('combobox'), id)
-  await userEvent.click(screen.getByRole('button', { name: 'Run demo scenario' }))
+  await userEvent.click(screen.getByRole('button', { name: 'Run scenario' }))
   await screen.findByRole('button', { name: 'Analyze Opportunity' })
 }
 afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers() })
@@ -54,11 +54,11 @@ it.each([
   await userEvent.click(screen.getByRole('button', { name: 'Analyze Risk' }))
   expect(await screen.findByRole('heading', { name: `Risk: ${risk}` })).toBeInTheDocument()
   expect(mock).toHaveBeenCalledTimes(4)
-  const panel = screen.getByRole('region', { name: 'Demo Opportunity and Risk' })
-  expect(within(panel).getByText(/SIMULATED DATA — NOT LIVE MARKET DATA/)).toBeInTheDocument()
+  const panel = screen.getByRole('region', { name: 'Scenario Opportunity and Risk' })
+  expect(within(panel).getByText(/Illustrative data · synthetic inputs, not live market data/)).toBeInTheDocument()
   expect(within(panel).getByText(/Analytical approval only. Execution remains blocked/)).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /execute|broadcast|submit order|buy/i })).not.toBeInTheDocument()
-  expect(screen.getByText(/Production TRUST_GATE/)).toHaveTextContent('BLOCKED_BY_TRUST')
+  expect(screen.getByText(/Production Trust and Opportunity remain blocked/)).toHaveTextContent('All live execution remains blocked')
   if (id === 'supported-move') {
     expect(within(panel).getByText('1.610784313725490196')).toBeInTheDocument()
     expect(within(panel).getByText('1.350000000000000000')).toBeInTheDocument()
@@ -145,7 +145,7 @@ it.each(['opportunity', 'risk'] as const)('aborts a pending %s when scenario sel
   await userEvent.selectOptions(screen.getByRole('combobox'), 'steady')
   expect(signal!.aborted).toBe(true)
   await act(async () => { finish!(json(fixtures['supported-move'][stage])) })
-  expect(screen.queryByRole('region', { name: 'Demo Opportunity and Risk' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('region', { name: 'Scenario Opportunity and Risk' })).not.toBeInTheDocument()
 })
 
 it('expires analytical authority without labeling a frozen synthetic clock as live', async () => {

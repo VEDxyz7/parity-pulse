@@ -1,0 +1,727 @@
+{
+  "checks": [
+    {
+      "check": "US:status",
+      "endpoint": "GET /stock/market-status",
+      "status": "PASS",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "provider_identifier": "US:MARKET_STATUS",
+        "source_timestamp": "2026-10-10T08:06:45Z",
+        "raw_source_timestamp": "1791619605",
+        "timestamp_unit": "s",
+        "ingestion_timestamp": "2026-10-10T08:06:45.435510Z",
+        "data_mode": "LIVE",
+        "data_quality": "UNKNOWN",
+        "schema_version": "2",
+        "endpoint": "/stock/market-status",
+        "quality_flags": [],
+        "exchange": "US",
+        "market_timezone": "America/New_York",
+        "is_open": false,
+        "session": "UNKNOWN",
+        "provider_session": null,
+        "holiday": null
+      },
+      "requests": [
+        {
+          "endpoint": "GET /stock/market-status",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:45.435516+00:00",
+          "response_ms": 10814.26,
+          "parameters": {
+            "exchange": "US"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "59",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "US:holidays",
+      "endpoint": "GET /stock/market-holiday",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/stock/market-holiday",
+        "ticker": null,
+        "requested_start": null,
+        "requested_end": null,
+        "ingestion_timestamp": "2026-10-10T08:06:45.689006Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 62,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 62,
+        "quality_counts": {
+          "UNKNOWN": 57,
+          "INVALID": 5
+        },
+        "quality_flags": {
+          "PUBLICATION_TIME_UNAVAILABLE": 62,
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED": 62,
+          "MALFORMED_POSTMARKET_HOURS": 5
+        },
+        "earliest_publication": null,
+        "latest_publication": null,
+        "earliest_event_date": "2023-01-02",
+        "latest_event_date": "2027-12-24",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "HOLIDAY:US:2023-01-02",
+            "source_timestamp": null,
+            "raw_source_timestamp": null,
+            "timestamp_unit": "UNKNOWN",
+            "ingestion_timestamp": "2026-10-10T08:06:45.689006Z",
+            "data_mode": "LIVE",
+            "data_quality": "UNKNOWN",
+            "schema_version": "2",
+            "endpoint": "/stock/market-holiday",
+            "quality_flags": [
+              "PUBLICATION_TIME_UNAVAILABLE",
+              "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+            ],
+            "exchange": "US",
+            "event_date": "2023-01-02",
+            "event_date_timezone": "America/New_York",
+            "name": "New Year's Day",
+            "published_timestamp": null,
+            "kind": "CLOSED",
+            "regular_open": null,
+            "regular_close": null,
+            "postmarket_open": null,
+            "postmarket_close": null,
+            "raw_trading_hours": "",
+            "raw_postmarket_hours": ""
+          },
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "HOLIDAY:US:2027-12-24",
+            "source_timestamp": null,
+            "raw_source_timestamp": null,
+            "timestamp_unit": "UNKNOWN",
+            "ingestion_timestamp": "2026-10-10T08:06:45.689006Z",
+            "data_mode": "LIVE",
+            "data_quality": "UNKNOWN",
+            "schema_version": "2",
+            "endpoint": "/stock/market-holiday",
+            "quality_flags": [
+              "PUBLICATION_TIME_UNAVAILABLE",
+              "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+            ],
+            "exchange": "US",
+            "event_date": "2027-12-24",
+            "event_date_timezone": "America/New_York",
+            "name": "Christmas",
+            "published_timestamp": null,
+            "kind": "CLOSED",
+            "regular_open": null,
+            "regular_close": null,
+            "postmarket_open": null,
+            "postmarket_close": null,
+            "raw_trading_hours": "",
+            "raw_postmarket_hours": ""
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /stock/market-holiday",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:45.689012+00:00",
+          "response_ms": 253.21,
+          "parameters": {
+            "exchange": "US"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "58",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "TSLA:news",
+      "endpoint": "GET /company-news",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/company-news",
+        "ticker": "TSLA",
+        "requested_start": "2026-10-03",
+        "requested_end": "2026-10-10",
+        "ingestion_timestamp": "2026-10-10T08:06:46.890704Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 244,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 244,
+        "quality_counts": {
+          "HISTORICAL": 244
+        },
+        "quality_flags": {},
+        "earliest_publication": "2026-10-05T10:39:29+00:00",
+        "latest_publication": "2026-10-10T03:15:00+00:00",
+        "earliest_event_date": "2026-10-05",
+        "latest_event_date": "2026-10-10",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "NEWS:142633162",
+            "source_timestamp": "2026-10-05T10:39:29Z",
+            "raw_source_timestamp": "1791196769",
+            "timestamp_unit": "s",
+            "ingestion_timestamp": "2026-10-10T08:06:46.890704Z",
+            "data_mode": "LIVE",
+            "data_quality": "HISTORICAL",
+            "schema_version": "2",
+            "endpoint": "/company-news",
+            "quality_flags": [],
+            "ticker": "TSLA",
+            "related_tickers": [
+              "TSLA"
+            ],
+            "ticker_mapping": "PROVIDER_CONFIRMED",
+            "publisher": "Yahoo",
+            "published_timestamp": "2026-10-05T10:39:29Z",
+            "event_date": "2026-10-05",
+            "event_date_timezone": "UTC",
+            "categories": [
+              "company"
+            ]
+          },
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "NEWS:142780335",
+            "source_timestamp": "2026-10-10T03:15:00Z",
+            "raw_source_timestamp": "1791602100",
+            "timestamp_unit": "s",
+            "ingestion_timestamp": "2026-10-10T08:06:46.890704Z",
+            "data_mode": "LIVE",
+            "data_quality": "HISTORICAL",
+            "schema_version": "2",
+            "endpoint": "/company-news",
+            "quality_flags": [],
+            "ticker": "TSLA",
+            "related_tickers": [
+              "TSLA"
+            ],
+            "ticker_mapping": "PROVIDER_CONFIRMED",
+            "publisher": "SeekingAlpha",
+            "published_timestamp": "2026-10-10T03:15:00Z",
+            "event_date": "2026-10-10",
+            "event_date_timezone": "UTC",
+            "categories": [
+              "company"
+            ]
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /company-news",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:46.890709+00:00",
+          "response_ms": 344.71,
+          "parameters": {
+            "symbol": "TSLA",
+            "from": "2026-10-03",
+            "to": "2026-10-10"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "57",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "TSLA:earnings",
+      "endpoint": "GET /calendar/earnings",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/calendar/earnings",
+        "ticker": "TSLA",
+        "requested_start": "2026-10-10",
+        "requested_end": "2027-01-08",
+        "ingestion_timestamp": "2026-10-10T08:06:47.909757Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 1,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 1,
+        "quality_counts": {
+          "UNKNOWN": 1
+        },
+        "quality_flags": {
+          "PUBLICATION_TIME_UNAVAILABLE": 1,
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED": 1
+        },
+        "earliest_publication": null,
+        "latest_publication": null,
+        "earliest_event_date": "2026-10-20",
+        "latest_event_date": "2026-10-20",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "EARNINGS:TSLA:2026-10-20",
+            "source_timestamp": null,
+            "raw_source_timestamp": null,
+            "timestamp_unit": "UNKNOWN",
+            "ingestion_timestamp": "2026-10-10T08:06:47.909757Z",
+            "data_mode": "LIVE",
+            "data_quality": "UNKNOWN",
+            "schema_version": "2",
+            "endpoint": "/calendar/earnings",
+            "quality_flags": [
+              "PUBLICATION_TIME_UNAVAILABLE",
+              "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+            ],
+            "ticker": "TSLA",
+            "event_date": "2026-10-20",
+            "event_date_timezone": "America/New_York",
+            "published_timestamp": null,
+            "fiscal_year": 2026,
+            "fiscal_quarter": 3,
+            "timing": "AFTER_CLOSE",
+            "provider_hour": "amc"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /calendar/earnings",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:47.909761+00:00",
+          "response_ms": 256.27,
+          "parameters": {
+            "symbol": "TSLA",
+            "from": "2026-10-10",
+            "to": "2027-01-08"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "56",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "NVDA:news",
+      "endpoint": "GET /company-news",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/company-news",
+        "ticker": "NVDA",
+        "requested_start": "2026-10-03",
+        "requested_end": "2026-10-10",
+        "ingestion_timestamp": "2026-10-10T08:06:49.057664Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 249,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 249,
+        "quality_counts": {
+          "HISTORICAL": 249
+        },
+        "quality_flags": {},
+        "earliest_publication": "2026-10-08T17:20:00+00:00",
+        "latest_publication": "2026-10-10T05:20:00+00:00",
+        "earliest_event_date": "2026-10-08",
+        "latest_event_date": "2026-10-10",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "NEWS:142727133",
+            "source_timestamp": "2026-10-08T18:30:00Z",
+            "raw_source_timestamp": "1791484200",
+            "timestamp_unit": "s",
+            "ingestion_timestamp": "2026-10-10T08:06:49.057664Z",
+            "data_mode": "LIVE",
+            "data_quality": "HISTORICAL",
+            "schema_version": "2",
+            "endpoint": "/company-news",
+            "quality_flags": [],
+            "ticker": "NVDA",
+            "related_tickers": [
+              "NVDA"
+            ],
+            "ticker_mapping": "PROVIDER_CONFIRMED",
+            "publisher": "Yahoo",
+            "published_timestamp": "2026-10-08T18:30:00Z",
+            "event_date": "2026-10-08",
+            "event_date_timezone": "UTC",
+            "categories": [
+              "company"
+            ]
+          },
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "NEWS:142780335",
+            "source_timestamp": "2026-10-10T03:15:00Z",
+            "raw_source_timestamp": "1791602100",
+            "timestamp_unit": "s",
+            "ingestion_timestamp": "2026-10-10T08:06:49.057664Z",
+            "data_mode": "LIVE",
+            "data_quality": "HISTORICAL",
+            "schema_version": "2",
+            "endpoint": "/company-news",
+            "quality_flags": [],
+            "ticker": "NVDA",
+            "related_tickers": [
+              "NVDA"
+            ],
+            "ticker_mapping": "PROVIDER_CONFIRMED",
+            "publisher": "SeekingAlpha",
+            "published_timestamp": "2026-10-10T03:15:00Z",
+            "event_date": "2026-10-10",
+            "event_date_timezone": "UTC",
+            "categories": [
+              "company"
+            ]
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /company-news",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:49.057668+00:00",
+          "response_ms": 297.5,
+          "parameters": {
+            "symbol": "NVDA",
+            "from": "2026-10-03",
+            "to": "2026-10-10"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "55",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "NVDA:earnings",
+      "endpoint": "GET /calendar/earnings",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/calendar/earnings",
+        "ticker": "NVDA",
+        "requested_start": "2026-10-10",
+        "requested_end": "2027-01-08",
+        "ingestion_timestamp": "2026-10-10T08:06:50.118205Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 1,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 1,
+        "quality_counts": {
+          "UNKNOWN": 1
+        },
+        "quality_flags": {
+          "PUBLICATION_TIME_UNAVAILABLE": 1,
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED": 1
+        },
+        "earliest_publication": null,
+        "latest_publication": null,
+        "earliest_event_date": "2026-11-17",
+        "latest_event_date": "2026-11-17",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "EARNINGS:NVDA:2026-11-17",
+            "source_timestamp": null,
+            "raw_source_timestamp": null,
+            "timestamp_unit": "UNKNOWN",
+            "ingestion_timestamp": "2026-10-10T08:06:50.118205Z",
+            "data_mode": "LIVE",
+            "data_quality": "UNKNOWN",
+            "schema_version": "2",
+            "endpoint": "/calendar/earnings",
+            "quality_flags": [
+              "PUBLICATION_TIME_UNAVAILABLE",
+              "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+            ],
+            "ticker": "NVDA",
+            "event_date": "2026-11-17",
+            "event_date_timezone": "America/New_York",
+            "published_timestamp": null,
+            "fiscal_year": 2027,
+            "fiscal_quarter": 3,
+            "timing": "AFTER_CLOSE",
+            "provider_hour": "amc"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /calendar/earnings",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:50.118209+00:00",
+          "response_ms": 251.73,
+          "parameters": {
+            "symbol": "NVDA",
+            "from": "2026-10-10",
+            "to": "2027-01-08"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "54",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "GOOGL:news",
+      "endpoint": "GET /company-news",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/company-news",
+        "ticker": "GOOGL",
+        "requested_start": "2026-10-03",
+        "requested_end": "2026-10-10",
+        "ingestion_timestamp": "2026-10-10T08:06:51.315296Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 247,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 247,
+        "quality_counts": {
+          "HISTORICAL": 247
+        },
+        "quality_flags": {},
+        "earliest_publication": "2026-10-07T11:38:56+00:00",
+        "latest_publication": "2026-10-10T06:02:32+00:00",
+        "earliest_event_date": "2026-10-07",
+        "latest_event_date": "2026-10-10",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "NEWS:142693785",
+            "source_timestamp": "2026-10-07T11:53:00Z",
+            "raw_source_timestamp": "1791373980",
+            "timestamp_unit": "s",
+            "ingestion_timestamp": "2026-10-10T08:06:51.315296Z",
+            "data_mode": "LIVE",
+            "data_quality": "HISTORICAL",
+            "schema_version": "2",
+            "endpoint": "/company-news",
+            "quality_flags": [],
+            "ticker": "GOOGL",
+            "related_tickers": [
+              "GOOGL"
+            ],
+            "ticker_mapping": "PROVIDER_CONFIRMED",
+            "publisher": "Yahoo",
+            "published_timestamp": "2026-10-07T11:53:00Z",
+            "event_date": "2026-10-07",
+            "event_date_timezone": "UTC",
+            "categories": [
+              "company"
+            ]
+          },
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "NEWS:142780335",
+            "source_timestamp": "2026-10-10T03:15:00Z",
+            "raw_source_timestamp": "1791602100",
+            "timestamp_unit": "s",
+            "ingestion_timestamp": "2026-10-10T08:06:51.315296Z",
+            "data_mode": "LIVE",
+            "data_quality": "HISTORICAL",
+            "schema_version": "2",
+            "endpoint": "/company-news",
+            "quality_flags": [],
+            "ticker": "GOOGL",
+            "related_tickers": [
+              "GOOGL"
+            ],
+            "ticker_mapping": "PROVIDER_CONFIRMED",
+            "publisher": "SeekingAlpha",
+            "published_timestamp": "2026-10-10T03:15:00Z",
+            "event_date": "2026-10-10",
+            "event_date_timezone": "UTC",
+            "categories": [
+              "company"
+            ]
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /company-news",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:51.315302+00:00",
+          "response_ms": 339.16,
+          "parameters": {
+            "symbol": "GOOGL",
+            "from": "2026-10-03",
+            "to": "2026-10-10"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "53",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    },
+    {
+      "check": "GOOGL:earnings",
+      "endpoint": "GET /calendar/earnings",
+      "status": "PARTIAL",
+      "result": {
+        "source": "FINNHUB_EVENTS",
+        "endpoint": "/calendar/earnings",
+        "ticker": "GOOGL",
+        "requested_start": "2026-10-10",
+        "requested_end": "2027-01-08",
+        "ingestion_timestamp": "2026-10-10T08:06:52.359706Z",
+        "data_mode": "LIVE",
+        "status": "PARTIAL",
+        "coverage_complete": false,
+        "coverage_flags": [
+          "EXHAUSTIVE_COVERAGE_NOT_VERIFIED"
+        ],
+        "received_count": 1,
+        "duplicate_count": 0,
+        "rejections": [],
+        "normalized_count": 1,
+        "quality_counts": {
+          "UNKNOWN": 1
+        },
+        "quality_flags": {
+          "PUBLICATION_TIME_UNAVAILABLE": 1,
+          "SCHEDULE_REVISION_ASOF_UNVERIFIED": 1
+        },
+        "earliest_publication": null,
+        "latest_publication": null,
+        "earliest_event_date": "2026-10-27",
+        "latest_event_date": "2026-10-27",
+        "samples": [
+          {
+            "source": "FINNHUB_EVENTS",
+            "provider_identifier": "EARNINGS:GOOGL:2026-10-27",
+            "source_timestamp": null,
+            "raw_source_timestamp": null,
+            "timestamp_unit": "UNKNOWN",
+            "ingestion_timestamp": "2026-10-10T08:06:52.359706Z",
+            "data_mode": "LIVE",
+            "data_quality": "UNKNOWN",
+            "schema_version": "2",
+            "endpoint": "/calendar/earnings",
+            "quality_flags": [
+              "PUBLICATION_TIME_UNAVAILABLE",
+              "SCHEDULE_REVISION_ASOF_UNVERIFIED"
+            ],
+            "ticker": "GOOGL",
+            "event_date": "2026-10-27",
+            "event_date_timezone": "America/New_York",
+            "published_timestamp": null,
+            "fiscal_year": 2026,
+            "fiscal_quarter": 3,
+            "timing": "AFTER_CLOSE",
+            "provider_hour": "amc"
+          }
+        ]
+      },
+      "requests": [
+        {
+          "endpoint": "GET /calendar/earnings",
+          "http_status": 200,
+          "business_status": "OK",
+          "schema_validation": "ENVELOPE_PASS",
+          "capability_result": "PASS",
+          "timestamp": "2026-10-10T08:06:52.359710+00:00",
+          "response_ms": 273.34,
+          "parameters": {
+            "symbol": "GOOGL",
+            "from": "2026-10-10",
+            "to": "2027-01-08"
+          },
+          "rate_limit_headers": {
+            "x-ratelimit-limit": "60",
+            "x-ratelimit-remaining": "52",
+            "x-ratelimit-reset": "1791619665"
+          }
+        }
+      ]
+    }
+  ],
+  "request_count": 8,
+  "started_at": "2026-10-10T08:06:34.595510+00:00",
+  "completed_at": "2026-10-10T08:06:52.360646+00:00",
+  "credential_status": "CONFIGURED",
+  "scope": "READ_ONLY_EVENT_CONTEXT_NO_DATABASE_WRITES",
+  "execution_mode": "DRY_RUN",
+  "live_trading_enabled": false,
+  "gates_changed": false,
+  "equity_quotes_requested": false,
+  "historical_candles_requested": false,
+  "production_persistence": false,
+  "transaction_broadcast": false
+}

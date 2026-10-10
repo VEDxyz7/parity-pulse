@@ -1,5 +1,23 @@
 # Development and execution capability gates
 
+## Alpaca adapter increment — October 10, 2026
+
+Adapter software verification does not pass external feed entitlement, reference eligibility or
+any production gate. Actual quote/1m/5m checks stopped NOT_CONFIGURED before HTTP; the existing
+Trust source allowlist still excludes Alpaca. [Scope and evidence](SESSION_AWARE_DATA_REPORT.md).
+All definitions, 120-second freshness / 30-second alignment, 30/30/3 safeguards and LIVE
+prerequisites remain unchanged. Current states remain:
+
+```text
+DATA_GATE=PASS
+DRY_RUN_GATE=PASS
+TRUST_GATE=BLOCKED
+OPPORTUNITY_GATE=BLOCKED_BY_TRUST
+SWAP_LIVE_GATE=BLOCKED
+RFQ_LIVE_GATE=BLOCKED
+AGENTIC_WALLET_LIVE_GATE=BLOCKED
+```
+
 ## Master Phase 9 — Agentic Wallet, October 8, 2026
 
 **PHASE_9_IMPLEMENTATION=PASS** verifies the typed read adapter, unavailable-state handling,

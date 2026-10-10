@@ -1,3 +1,4 @@
+import { dataLabel, DataContext } from './DataContext'
 import { useQuery } from '@tanstack/react-query'
 import { getWorkspace, getAudit, readRefresh, type Mode, type WorkspaceState } from '../services/workspace'
 import { useEffect, useRef, useState } from 'react'
@@ -16,11 +17,11 @@ function Inspection({ mode, children }: { mode: Mode; children: (data: Workspace
     <button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Refresh workspace state</button>
     {query.isFetching && <p role="status">Loading authoritative workspace state…</p>}
     {query.isError && <p role="alert">Workspace unavailable. Holdings, wallet and financial values remain unknown. No cached healthy result is substituted.</p>}
-    {!query.isError && !query.isFetching && query.data && <><p>Observed <time>{query.data.generated_at}</time> · {query.data.data_mode} · {query.data.source}</p>{children(query.data)}</>}
+    {!query.isError && !query.isFetching && query.data && <><p>Observed <time>{query.data.generated_at}</time> · {dataLabel(query.data.data_mode)} · {query.data.source}</p>{children(query.data)}</>}
   </>
 }
 export function SafetyNotice({ mode }: { mode: Mode }) {
-  return <p className="mode-notice"><strong>{mode === 'DEMO' ? 'SIMULATED DATA — NOT LIVE MARKET DATA' : 'LIVE READ ONLY — PROVIDER DATA MAY BE UNAVAILABLE'}</strong><br />DRY_RUN · PROPOSE_ONLY · NO REAL FUNDS WILL MOVE</p>
+  return <DataContext mode={mode} />
 }
 export function PortfolioView({ mode, autopilot = false }: { mode: Mode; autopilot?: boolean }) {
   const workspace = useWorkspace(mode)

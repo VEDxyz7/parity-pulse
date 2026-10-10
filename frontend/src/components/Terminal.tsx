@@ -1,3 +1,4 @@
+import { dataLabel, DataContext } from './DataContext'
 import { readRefresh } from '../hooks/readRefresh'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -18,7 +19,7 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
   const data = query.isError || query.isFetching ? null : query.data
   return <section className="terminal" aria-label="Terminal analytics">
     <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / ANALYTICS</div><h1>Terminal</h1><p>Backend-authoritative evidence. Observation only; no trading actions.</p></div><button className="refresh-button" disabled={query.isFetching} onClick={() => { void query.refetch() }}>Refresh Terminal</button></div>
-    <div className="connection-alert"><div><strong>{mode === 'DEMO' ? 'SIMULATED DATA — NOT LIVE MARKET DATA' : 'LIVE READ ONLY — CACHED PROVIDER DATA'}</strong><p>NO REAL FUNDS WILL MOVE · Production Trust and live execution remain blocked.</p></div></div>
+    <DataContext mode={mode} />
     <button className="refresh-button" aria-expanded={evaluationOpen} onClick={() => setEvaluationOpen(v => !v)}>Scorecard &amp; audit</button>
     {evaluationOpen && <ScorecardAudit key={mode} mode={mode} />}
     <form className="terminal-filter" onSubmit={e => { e.preventDefault(); setOffset(0); setTicker(input.trim().toUpperCase()) }}>
@@ -27,10 +28,10 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
     {query.isFetching && <p role="status">Loading Terminal evidence…</p>}
     {query.isError && <div role="alert" className="connection-alert">Terminal unavailable. No fallback values are displayed. Refresh or revise the ticker filter.</div>}
     {data && <>
-      <p className="terminal-asof">Snapshot generated {data.generated_at} · {data.data_mode} · Request {data.request_id}</p>
+      <p className="terminal-asof">Snapshot generated {data.generated_at} · {dataLabel(data.data_mode)} · Request {data.request_id}</p>
       <p className="terminal-note">{reasons(data.limitations)}. Cached rows are not a live refresh. Missing values stay unavailable.</p>
       <section className="panel"><h2>Issuer spread board / normalized prices</h2><p>Token price, share ratio, independent reference and normalized share cost are supplied by backend services.</p>
-        {!data.issuers.items.length ? <p>No cached representations match this filter.</p> : <div className="terminal-table-wrap"><table><thead><tr>{['Stock / issuer','Token / ratio','Token price','Effective $/share','Independent equity','Spread / deviation','Liquidity','Trust / market','Evidence'].map(h => <th key={h}>{h}</th>)}</tr></thead><tbody>{data.issuers.items.map(row => <tr key={`${row.ticker}:${row.chain_id}:${row.contract}`}>
+        {!data.issuers.items.length ? <p>No cached representations match this filter.</p> : <div className="terminal-table-wrap" tabIndex={0} role="region" aria-label="Issuer spread table"><table><thead><tr>{['Stock / issuer','Token / ratio','Token price','Effective $/share','Independent equity','Spread / deviation','Liquidity','Trust / market','Evidence'].map(h => <th key={h}>{h}</th>)}</tr></thead><tbody>{data.issuers.items.map(row => <tr key={`${row.ticker}:${row.chain_id}:${row.contract}`}>
           <td><strong>{row.ticker}</strong><small>{row.company}</small>{row.issuer}<small>{row.chain_id} · {row.contract}</small></td>
           <td>{row.token}<small>{row.token_to_share_ratio} shares/token</small><small>Ratio observed {row.ratio_observed_at}</small><small>Source as-of {value(row.ratio_source_timestamp)}</small></td>
           <td>{money(row.token_price_usd)}</td><td>{money(row.effective_price_per_share_usd)}</td><td>{money(row.independent_equity_price_usd)}<small>{row.reference.status}</small><small>{value(row.reference.reference_asof)}</small></td>

@@ -1,0 +1,24 @@
+{
+  "exchange": "US",
+  "timezone": "America/New_York",
+  "data": [
+    {
+      "atDate": "2026-11-26",
+      "eventName": "Synthetic closure",
+      "tradingHour": "",
+      "postMarket": ""
+    },
+    {
+      "atDate": "2026-11-27",
+      "eventName": "Synthetic early close",
+      "tradingHour": "09:30-13:00",
+      "postMarket": "13:00-17:00"
+    },
+    {
+      "atDate": "2026-12-24",
+      "eventName": "Synthetic malformed postmarket",
+      "tradingHour": "09:30-13:00",
+      "postMarket": "13:00:17:00"
+    }
+  ]
+}

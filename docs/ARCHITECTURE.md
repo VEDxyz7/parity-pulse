@@ -1,5 +1,48 @@
 # Architecture decision record — through Phase 2
 
+## Finnhub event context boundary — October 10, 2026
+
+`FinnhubEventProvider` implements the separate `EventContextProvider` protocol over the shared
+bounded `ReadTransport`. Four event/calendar GET endpoints are allowed; quotes, candles,
+execution and alternate hosts are denied by the production client. Existing `FINNHUB_API_KEY`
+configuration is now consumed through Settings and included in credential redaction.
+
+Immutable typed company-news, earnings, status and holiday observations preserve source IDs,
+UTC retrieval/publication times, separate local schedule dates, requested/provider ticker mapping,
+raw timestamps/hours and quality flags. Batches carry requested bounds, deduplication counts,
+quarantine reasons and literal false exhaustive coverage. Identical IDs/content deduplicate;
+conflicting same-ID versions are all quarantined. Stable IDs survive repeat retrieval, while each
+new retrieval keeps its own receipt; no historical first-seen/version ledger is claimed.
+
+LIVE_READ_ONLY plus a configured key exposes `DataLayer.events` for explicit research calls.
+DEMO or missing-key installations expose no event reader. No consumer fetches events
+automatically; `DataLayer.news` remains Massive, and the existing exchange calendar, equity
+selection and Trust logic remain unchanged. The event types are intentionally separate from
+`NewsEvent`/`EquityObservation` and have no DataRepository/table mapping. There is no schema
+migration, production event ingestion, backfill or new HTTP API in this increment.
+
+Calendar hours convert through America/New_York with date-specific DST. Missing/ambiguous
+hours remain flagged; malformed `13:00:17:00` is never repaired into a usable timestamp.
+An earnings date is never a publication or exact release timestamp. See
+[implementation/verification report](FINNHUB_EVENTS_REPORT.md). All production gates and
+the existing Alpaca/Massive/Binance/Hyperliquid paths remain unchanged.
+
+## Independent Alpaca data adapter — October 10, 2026
+
+`EQUITY_PROVIDER=ALPACA` explicitly selects the read-only Alpaca adapter for equity reads;
+the existing default MASSIVE and isolated DEMO paths are preserved. `DataLayer.news` separates
+the existing Massive news dependency from equity selection without changing Trust classification.
+The new transport reuses the existing bounded read/caching/logging controls and permits only
+two market-data GET paths on a fixed Alpaca host. No fallback, signer or trading capability exists.
+
+Equity JSON records add optional feed/delay/quality flags; old records are normalized before
+immutable duplicate comparison. Feed/interval-specific identifiers prevent cross-feed collisions.
+Current source quality defaults UNKNOWN; history is raw/unadjusted with revision-as-of unverified.
+Legacy Massive resumable checkpoints reject Alpaca explicitly. Official close/session/corporate
+action support remains unavailable in the adapter. The unchanged Trust source allowlist excludes
+Alpaca pending separate verification/policy integration. See [scope and evidence](SESSION_AWARE_DATA_REPORT.md).
+No Trust/risk/session threshold, production gate, frontend or execution behavior was changed.
+
 ## Master Phase 9 — controlled wallet reads and DRY_RUN, October 8, 2026
 
 **Implementation PASS; actual CLI runtime UNAVAILABLE; production gates unchanged.**

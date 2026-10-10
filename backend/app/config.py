@@ -34,6 +34,13 @@ class Settings(BaseSettings):
     binance_web3_secret_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     massive_data_quality: Literal["UNKNOWN", "DELAYED", "REALTIME"] = "UNKNOWN"
     massive_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    # Explicit migration; existing installations retain their verified Massive path.
+    equity_provider: Literal["MASSIVE", "ALPACA"] = "MASSIVE"
+    alpaca_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    alpaca_secret_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
+    alpaca_feed: Literal["iex", "sip", "delayed_sip", "boats", "overnight"] = "iex"
+    alpaca_data_quality: Literal["UNKNOWN", "DELAYED", "REALTIME"] = "UNKNOWN"
+    finnhub_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     llm_api_key: SecretStr | None = Field(default=None, exclude=True, repr=False)
     llm_enabled: bool = False
     llm_provider: str | None = None
@@ -63,6 +70,9 @@ class Settings(BaseSettings):
         "binance_web3_api_key",
         "binance_web3_secret_key",
         "massive_api_key",
+        "alpaca_api_key",
+        "alpaca_secret_key",
+        "finnhub_api_key",
         "llm_api_key",
         mode="before",
     )
@@ -121,6 +131,9 @@ class Settings(BaseSettings):
             self.binance_web3_api_key,
             self.binance_web3_secret_key,
             self.massive_api_key,
+            self.alpaca_api_key,
+            self.alpaca_secret_key,
+            self.finnhub_api_key,
             self.llm_api_key,
         )
         return tuple(value.get_secret_value() for value in values if value is not None)

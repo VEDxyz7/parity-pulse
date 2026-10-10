@@ -30,7 +30,7 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
     const controller = new AbortController(); pending.current = controller
     setBusy(stage); setError(''); setSimulation(null)
     const label = stage === 'quote' ? 'QUOTE' : stage === 'prepare' ? 'PREPARATION' : 'SIMULATION'
-    pipeline.resetFrom(label); pipeline.report(label, 'running', 'Calling the existing DEMO service')
+    pipeline.resetFrom(label); pipeline.report(label, 'running', 'Calling the isolated scenario service')
     if (stage !== 'simulate') setPrepared(null)
     if (stage === 'quote') setQuote(null)
     const timer = setTimeout(() => controller.abort(), 60_000)
@@ -57,7 +57,7 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
       }
     } catch {
       if (pending.current === controller) {
-        setError('DEMO downstream result unavailable, expired or invalid. No execution occurred. Refresh the analysis/quote before retrying.')
+        setError('Scenario result unavailable, expired or invalid. No execution occurred. Refresh the analysis/quote before retrying.')
         pipeline.report(label, 'failed', 'API result unavailable, expired or invalid; no execution occurred')
       }
     } finally {
@@ -67,12 +67,12 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
   }
   const q = quote?.quote, transaction = prepared?.transaction, s = simulation?.simulation
   const disabled = busy !== null || expired || opportunityExpired || paperFilled
-  return <section aria-label="Demo Quote Preparation and Simulation" className="demo-preparation-flow">
+  return <section aria-label="Illustrative Quote Preparation and Simulation" className="demo-preparation-flow">
     <h4>Quote → Risk revalidation → Transaction Preparation → Simulation</h4>
-    <p><strong>DEMO SANDBOX</strong><br /><span>SIMULATED DATA</span> — <span>NOT LIVE MARKET DATA</span></p>
+    <p>Illustrative data · synthetic quote and unsigned request. Not live market data.</p>
     <p>Unsigned synthetic request only. No wallet, order, broadcast or moved funds.</p>
     <button className="refresh-button" disabled={busy !== null || opportunityExpired || paperFilled} onClick={() => { void run('quote') }}>
-      {busy === 'quote' ? 'Generating DEMO quote…' : 'Generate DEMO Quote'}
+      {busy === 'quote' ? 'Generating illustrative quote…' : 'Generate Illustrative Quote'}
     </button>
     {error && <p role="alert">{error}</p>}
     {quote && <>
@@ -81,13 +81,13 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
       <p>Quote reasons: {quote.reason_codes.join(' · ')}</p>
       <p>Risk before quote: {quote.risk_before_quote.status} · Risk after quoted economics: {quote.risk_revalidation?.status ?? 'NOT_RUN'}</p>
       {q && <>
-        <p>Source: DEMO · Synthetic economic quote · {q.ticker} / {q.symbol} · BUY · Issuer: {q.issuer}</p>
+        <p>Source: synthetic scenario · Illustrative economic quote · {q.ticker} / {q.symbol} · BUY · Issuer: {q.issuer}</p>
         <p>Quote ID: <code>{q.quote_id}</code></p>
         <dl className="trust-facts">
           <div><dt>Synthetic execution price / USD per token</dt><dd>{q.execution_price_usd}</dd></div>
           <div><dt>Output token quantity</dt><dd>{q.output_token_quantity}</dd></div>
           <div><dt>Share exposure</dt><dd>{q.share_exposure}</dd></div>
-          <div><dt>Input / DEMO USD</dt><dd>{q.input_amount_usd}</dd></div>
+          <div><dt>Input / illustrative USD</dt><dd>{q.input_amount_usd}</dd></div>
           <div><dt>Fees / USD</dt><dd>{q.fees_usd}</dd></div>
           <div><dt>Gas / USD</dt><dd>{q.gas_usd}</dd></div>
           <div><dt>Slippage assumption / bps</dt><dd>{q.slippage_bps}</dd></div>
@@ -99,9 +99,9 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
         <p>Synthetic quote time: {q.quoted_at} · Expiry: {q.valid_until}</p>
         <p>Underlying synthetic observation: {q.market_observed_at} / {q.market_observation_kind}. No live market refresh is claimed.</p>
       </>}
-      {(expired || opportunityExpired) && <p role="status">DEMO quote or Opportunity expired. Re-run analysis and obtain a fresh quote.</p>}
+      {(expired || opportunityExpired) && <p role="status">Illustrative quote or Opportunity expired. Re-run analysis and obtain a fresh quote.</p>}
       {quote.status === 'QUOTED' && <button className="refresh-button" disabled={disabled} onClick={() => { void run('prepare') }}>
-        {busy === 'prepare' ? 'Preparing DEMO request…' : 'Prepare DEMO Transaction'}
+        {busy === 'prepare' ? 'Preparing unsigned request…' : 'Prepare Unsigned Request'}
       </button>}
     </>}
     {prepared && <>
@@ -109,19 +109,19 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
       <p>Preparation reasons: {prepared.reason_codes.join(' · ')} · Revalidated Risk: {prepared.risk_revalidation.status}</p>
       {transaction && <>
         <p>Request ID: <code>{transaction.transaction_id}</code></p>
-        <p>UNSIGNED DEMO PREPARATION · NOT BROADCAST</p>
-        <p>DEMO_BUY_REQUEST · CANONICAL_JSON_DEMO_REQUEST · Not signed · Not executed · Not broadcastable</p>
-        <details><summary>Prepared DEMO request parameters</summary><pre>{JSON.stringify(transaction.parameters, null, 2)}</pre></details>
+        <p>UNSIGNED SYNTHETIC REQUEST · NOT BROADCAST</p>
+        <p>Synthetic request representation · Not signed · Not executed · Not broadcastable</p>
+        <details><summary>Prepared request parameters and provenance</summary><pre>{JSON.stringify(transaction.parameters, null, 2)}</pre></details>
         <p>Request fingerprint: <code>{transaction.fingerprint}</code></p>
         <button className="refresh-button" disabled={disabled} onClick={() => { void run('simulate') }}>
-          {busy === 'simulate' ? 'Evaluating DEMO constraints…' : 'Run DEMO Simulation'}
+          {busy === 'simulate' ? 'Evaluating local constraints…' : 'Run Local Simulation'}
         </button>
       </>}
     </>}
     {s && <>
       <h4>Simulation: <strong>{s.status}</strong>{expired || opportunityExpired ? ' (expired)' : ''}</h4>
-      <p>LOCAL DEMO SIMULATION · NOT ON-CHAIN EXECUTION</p>
-      <p>LOCAL DEMO CONSTRAINT EVALUATION — NOT A CHAIN SIMULATION</p>
+      <p>LOCAL CONSTRAINT CHECK · NOT ON-CHAIN EXECUTION</p>
+      <p>Illustrative constraint evaluation — not a chain simulation</p>
       <p>Simulation reasons: {s.reason_codes.join(' · ')}</p>
       <ul>{s.checks.map(check => <li key={check.code}>{check.passed ? 'PASS' : 'FAIL'} · {check.code}: {check.detail}</li>)}</ul>
       <p>No real transaction was broadcast. No money moved. Execution remains blocked.</p>

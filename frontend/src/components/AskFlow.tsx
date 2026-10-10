@@ -36,17 +36,17 @@ export function AskFlow({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
   }
   const selected = !expired ? result?.selected : null
   return <section className="panel ask-panel" id="ask" aria-label="Working Ask Flow">
-    <div className="panel-heading"><div><h2>Ask for stock exposure</h2><p>Compare an indicative exposure estimate. No funds move.</p></div><span className="banner-tag">{mode === 'DEMO' ? 'Synthetic demo' : 'Real read-only data'}</span></div>
+    <div className="panel-heading"><div><h2>Ask for stock exposure</h2><p>Compare an indicative exposure estimate. No funds move.</p></div><span className="banner-tag">{mode === 'DEMO' ? 'Illustrative data' : 'Real read-only data'}</span></div>
     <form onSubmit={event => { void submit(event) }} className="ask-form">
       <label htmlFor="stock-request">Stock request</label>
       <input id="stock-request" value={text} onChange={event => setText(event.target.value)} maxLength={240} required disabled={pending} autoComplete="off" />
-      <button className="refresh-button" type="submit" disabled={pending}>{pending ? 'Preparing estimate' : 'Create dry-run proposal'}</button>
+      <button className="refresh-button" type="submit" disabled={pending}>{pending ? 'Preparing estimate' : 'Create exposure proposal'}</button>
       <small>Use “Buy $50 Apple” or “I have $50 of Nvidia”. Budget is USD notional before unavailable fees.</small>
     </form>
     {error && <p role="alert" className="connection-alert">{error}</p>}
     {result && <div className="ask-result" aria-live="polite">
       <h3>{result.company_name ?? 'Request needs attention'} {result.ticker && `(${result.ticker})`}</h3>
-      <p><strong>{expired ? 'EXPIRED — request a fresh estimate' : result.status}</strong> · {result.data_mode === 'DEMO' ? 'Synthetic DEMO values; not current market prices' : 'LIVE read-only observations'}</p>
+      <p><strong>{expired ? 'EXPIRED — request a fresh estimate' : result.status === 'DRY_RUN' ? 'Indicative proposal' : result.status}</strong> · {result.data_mode === 'DEMO' ? 'Illustrative values; not current market prices' : 'Read-only provider observations'}</p>
       <p>{result.broadcast_statement}</p>
       <p>{result.route_selection_reason}</p>
       {result.route_decision && <RouteComparison route={result.route_decision} expired={expired} />}
@@ -64,7 +64,7 @@ export function AskFlow({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
         <dt>Price source / quality / time</dt><dd>{selected.price_source} / {selected.price_quality} / {selected.price_timestamp ?? 'Unavailable'}</dd>
         <dt>Chain / representation</dt><dd>{selected.chain_id} / {selected.contract}</dd>
       </dl>}
-      {!expired && result.representations.length > 0 && <div className="comparison-scroll"><table><caption>Discovered representation comparison — indicative prices only</caption><thead><tr><th>Issuer</th><th>Shares/token</th><th>USD/share</th><th>Estimate eligibility</th></tr></thead><tbody>{result.representations.map(row => <tr key={`${row.chain_id}:${row.contract}`}><td>{row.issuer}</td><td>{row.token_to_share_ratio}</td><td>{row.effective_cost_per_share_usd ?? 'Unavailable'}</td><td>{row.estimate_eligible ? 'Eligible for estimate only' : row.exclusion_reasons.join(', ')}</td></tr>)}</tbody></table></div>}
+      {!expired && result.representations.length > 0 && <div className="comparison-scroll" tabIndex={0} role="region" aria-label="Representation comparison"><table><caption>Discovered representation comparison — indicative prices only</caption><thead><tr><th>Issuer</th><th>Shares/token</th><th>USD/share</th><th>Estimate eligibility</th></tr></thead><tbody>{result.representations.map(row => <tr key={`${row.chain_id}:${row.contract}`}><td>{row.issuer}</td><td>{row.token_to_share_ratio}</td><td>{row.effective_cost_per_share_usd ?? 'Unavailable'}</td><td>{row.estimate_eligible ? 'Eligible for estimate only' : row.exclusion_reasons.join(', ')}</td></tr>)}</tbody></table></div>}
       <p>Fees, gas, funding conversion, slippage and liquidity: unknown. Independent current equity: {result.independent_equity.status}{result.independent_equity.price_usd_per_share ? ` / ${result.independent_equity.price_usd_per_share} USD/share (${result.independent_equity.source})` : ' / unavailable'}.</p>
       <p>Simulation: UNAVAILABLE. Execution readiness: BLOCKED. Trust integration: NOT ASSESSED for this proposal.</p>
       <details><summary>Execution blockers and data limitations</summary><ul>{result.execution_blockers.map(reason => <li key={reason}>{reason}</li>)}{Object.entries(result.limitations).map(([key, value]) => <li key={key}>{key}: {value}</li>)}</ul></details>
