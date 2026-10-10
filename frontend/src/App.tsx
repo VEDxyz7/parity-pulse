@@ -10,6 +10,7 @@ import { ScorecardAudit } from './components/ScorecardAudit'
 import { AgentApi } from './components/AgentApi'
 import { DemoTrustSandbox } from './components/DemoTrustSandbox'
 import { StatusBadge } from './components/StatusBadge'
+import { CapabilityOverview, FloatingWidgets, MarketOverview } from './components/DashboardVisuals'
 import type { GateName } from './types/system'
 import { lazy, Suspense, useEffect, useState } from 'react'
 
@@ -59,8 +60,16 @@ export function App() {
   }, [hash, available])
   const connection = query.isPending ? 'Checking backend' : available ? 'Backend connected' : 'Backend unavailable'
 
-  return <div className="app-layout">
+  return <div className="page">
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus() }}>Skip to main content</a>
+    <header className="product-hero">
+      <p className="hero-brand"><Activity size={18} />Parity Pulse</p>
+      <p className="hero-title"><span>Intelligence</span> for Tokenized Equities</p>
+      <p className="hero-subtitle">Independent evidence. Clearer exposure. A more informed portfolio.</p>
+    </header>
+    <div className="composition">
+    <FloatingWidgets side="left" system={system} checking={query.isPending} />
+    <div className="app-layout">
     <aside className="sidebar">
       <a className="brand" href="#main-content" aria-label="Parity Pulse home">
         <span className="brand-mark"><Activity size={23} strokeWidth={2.2} /></span>
@@ -71,7 +80,7 @@ export function App() {
         <a href="#overview" className={`nav-item ${showDemo || showTerminal || showAgentApi || additional ? '' : 'active'}`} aria-current={showDemo || showTerminal || showAgentApi || additional ? undefined : 'page'}><LayoutDashboard size={18} />Overview{!showDemo && !showTerminal && !showAgentApi && !additional && <span className="nav-dot" />}</a>
         <a href="#agent-api" className={`nav-item ${showAgentApi ? 'active' : ''}`} aria-current={showAgentApi ? 'page' : undefined}><Layers3 size={18} />Agent API</a>
         <a href="#terminal" className={`nav-item ${showTerminal ? 'active' : ''}`} aria-current={showTerminal ? 'page' : undefined}><Database size={18} />Terminal</a>
-        <a href="#settings" className="nav-item"><Activity size={18} />System status</a>
+        <a href="#settings" className={`nav-item ${showSettings ? 'active' : ''}`} aria-current={showSettings ? 'page' : undefined}><Activity size={18} />System status</a>
         <a href="#demo-sandbox" className={`nav-item demo-nav ${showDemo ? 'active' : ''}`} aria-current={showDemo ? 'page' : undefined}><ShieldCheck size={18} />DEMO SANDBOX{showDemo && <span className="nav-dot" />}</a>
         <a href="#opportunity" className={`nav-item ${showOpportunity ? 'active' : ''}`} aria-current={showOpportunity ? 'page' : undefined}><Sparkles size={18} />Opportunity analysis</a>
         <a href="#autopilot" className={`nav-item ${showAutopilot ? 'active' : ''}`} aria-current={showAutopilot ? 'page' : undefined}><Workflow size={18} />Autopilot status</a>
@@ -104,19 +113,15 @@ export function App() {
           </section>}
         </> : <>
         {system?.runtime_mode === 'DEMO' && <section className="connection-alert" aria-label="Synthetic sandbox mode"><ShieldCheck size={19} /><div><strong>DEMO SANDBOX</strong><p>SIMULATED DATA — NOT LIVE MARKET DATA</p></div></section>}
-        <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / FOUNDATION</div><h1>{askReady ? "Invest in Global Stocks, Smarter." : "Your workspace, ready to grow."}</h1><p>A clear view of your environment and the capabilities available today.</p></div><button className="refresh-button" onClick={() => { void query.refetch() }} disabled={query.isFetching}><RefreshCw size={15} className={query.isFetching ? 'spinning' : ''} />{query.isFetching ? 'Checking' : 'Refresh status'}</button></div>
-        <section className="foundation-banner" aria-label="Development scope"><div className="banner-icon"><Layers3 size={26} /></div><div><span className="banner-kicker">{askReady ? 'MASTER PHASE 15' : `ENGINEERING STAGE ${system?.phase === 2 ? '02' : '01'}`}</span><h2>A safe starting point.</h2><p>{askReady ? 'Backend-authoritative exposure, Opportunity analysis, Portfolio and Audit. Proposals and simulations remain separate from confirmed trades. Production Trust remains blocked.' : system?.phase === 2 ? 'Read-only data is available through the backend. Intelligence and execution workflows will follow in later phases.' : 'The application foundation is here. Intelligence and execution workflows will follow in later phases.'}</p></div><span className="banner-tag"><LockKeyhole size={14} />Live execution unavailable</span></section>
-        {askReady && <p className="mode-notice">Current US market status / next regular opening: unavailable on this health summary. Inspect the backend calendar and per-asset observations in <a href="#terminal">Terminal</a>. Missing market values are not inferred from the browser clock.</p>}
-        {askReady && <section className="home-actions" aria-label="Primary product actions"><a href="#ask" className="panel">Buy a Stock<small>Compare exposure and review a dry-run proposal</small></a><a href="#opportunity" className="panel">Find Opportunity<small>Analytical scans; production execution blocked</small></a><a href="#autopilot" className="panel">Autopilot<small>Inspect targets and propose drift rebalances</small></a></section>}
-        <section className="demo-entry"><div><strong>DEMO SANDBOX</strong><p>Explore the existing synthetic pipeline. No real funds will move.</p></div><a className="refresh-button" href="#demo-sandbox">Open DEMO SANDBOX</a></section>
+        <div className="page-heading"><div><div className="eyebrow">WORKSPACE / OVERVIEW</div><h1>{askReady ? "Invest in Global Stocks, Smarter." : "Your workspace, ready to grow."}</h1><p>A clear view of your environment and the capabilities available today.</p></div><button className="refresh-button" onClick={() => { void query.refetch() }} disabled={query.isFetching}><RefreshCw size={15} className={query.isFetching ? 'spinning' : ''} />{query.isFetching ? 'Checking' : 'Refresh status'}</button></div>
         {query.isError && <div role="alert" className="connection-alert"><Radio size={19} /><div><strong>We couldn’t reach a healthy backend.</strong><p>Check that the local backend is running, then refresh. Service values remain unknown until verified.</p></div></div>}
         <section className="metrics" aria-label="Operational configuration">
-          <article className="metric"><span>Environment<Layers3 size={17} /></span><strong>{system?.environment ?? 'Unknown'}</strong><small>Application environment</small></article>
-          <article className="metric"><span>Data mode<Database size={17} /></span><strong>{system?.data_mode.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>{system?.data_mode === 'DEMO' ? 'Isolated, deterministic demo data' : system?.phase === 2 ? 'Provider reads subject to account permissions' : 'No data provider connected in Phase 1'}</small></article>
-          <article className="metric"><span>Execution mode<ShieldCheck size={17} /></span><strong>{system?.execution_mode.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>Proposal only · no live execution</small></article>
+          <article className="metric"><span>Data mode<Database size={17} /></span><strong>{system?.data_mode.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>{system?.data_mode === 'DEMO' ? 'Isolated, deterministic demo data' : system ? 'Provider reads · entitlement dependent' : 'Awaiting verified source status'}</small><div className="metric-accent" aria-hidden="true" /></article>
+          <article className="metric"><span>Execution mode<ShieldCheck size={17} /></span><strong>{system?.execution_mode.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>Proposal only · no live execution</small><div className="metric-accent" aria-hidden="true" /></article>
+          <article className="metric"><span>Dry-run gate<Layers3 size={17} /></span><strong className={system?.gates.DRY_RUN_GATE === 'PASS' ? 'positive-text' : 'warning-text'}>{system?.gates.DRY_RUN_GATE.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>Verified non-live workflow scope</small><div className="metric-accent" aria-hidden="true" /></article>
+          <article className="metric"><span>Live swap gate<LockKeyhole size={17} /></span><strong className={system?.gates.SWAP_LIVE_GATE === 'PASS' ? 'positive-text' : 'warning-text'}>{system?.gates.SWAP_LIVE_GATE.replaceAll('_', ' ') ?? 'Unknown'}</strong><small>Independent execution safety gate</small><div className="metric-accent" aria-hidden="true" /></article>
         </section>
-        {askReady && system && <AskFlow key={`${system.run_id}:${system.data_mode}`} mode={system.data_mode} />}
-        {askReady && system && <TrustPanel key={`trust:${system.run_id}:${system.data_mode}`} mode={system.data_mode} />}
+        <div className="analytics-grid"><MarketOverview /><CapabilityOverview system={system} /></div>
         <div className="panels">
           <section className="panel" id="system"><div className="panel-heading"><div><h2>System health</h2><p>The essentials behind your workspace.</p></div><Activity size={19} /></div>
             <div className="health-row"><div className="row-icon"><Radio size={17} /></div><div><strong>Backend service</strong><small>FastAPI application</small></div><StatusBadge tone={available ? 'green' : 'amber'}>{query.isPending ? 'Checking' : available ? 'Healthy' : 'Unavailable'}</StatusBadge></div>
@@ -131,10 +136,19 @@ export function App() {
             })}</div>
           </section>
         </div>
+        <section className="foundation-banner" aria-label="Development scope"><div className="banner-icon"><Layers3 size={26} /></div><div><span className="banner-kicker">{askReady ? 'MASTER PHASE 15' : `ENGINEERING STAGE ${system?.phase === 2 ? '02' : '01'}`}</span><h2>A safe starting point.</h2><p>{askReady ? 'Backend-authoritative exposure, Opportunity analysis, Portfolio and Audit. Proposals and simulations remain separate from confirmed trades. Production Trust remains blocked.' : system?.phase === 2 ? 'Read-only data is available through the backend. Intelligence and execution workflows will follow in later phases.' : 'The application foundation is here. Intelligence and execution workflows will follow in later phases.'}</p></div><span className="banner-tag"><LockKeyhole size={14} />Live execution unavailable</span></section>
+        {askReady && <p className="mode-notice">Current US market status / next regular opening: unavailable on this health summary. Inspect the backend calendar and per-asset observations in <a href="#terminal">Terminal</a>. Missing market values are not inferred from the browser clock.</p>}
+        {askReady && <section className="home-actions" aria-label="Primary product actions"><a href="#ask" className="panel">Buy a Stock<small>Compare exposure and review a dry-run proposal</small></a><a href="#opportunity" className="panel">Find Opportunity<small>Analytical scans; production execution blocked</small></a><a href="#autopilot" className="panel">Autopilot<small>Inspect targets and propose drift rebalances</small></a></section>}
+        <section className="demo-entry"><div><strong>DEMO SANDBOX</strong><p>Explore the existing synthetic pipeline. No real funds will move.</p></div><a className="refresh-button" href="#demo-sandbox">Open DEMO SANDBOX</a></section>
+        {askReady && system && <AskFlow key={`${system.run_id}:${system.data_mode}`} mode={system.data_mode} />}
+        {askReady && system && <TrustPanel key={`trust:${system.run_id}:${system.data_mode}`} mode={system.data_mode} />}
         <section className="scope-note"><div><ShieldCheck size={20} /><div><strong>Built for safe development</strong><p>No funds move here. Simulation stays required, and execution remains propose-only.</p></div></div><span>{askReady ? 'ESTIMATES ONLY' : 'FOUNDATION ONLY'}</span></section>
         <footer className="page-footer"><span>Parity Pulse <span className="footer-dot">·</span> Tokenized equity intelligence</span><span>{system ? `${system.approval_mode.replaceAll('_', ' ')} · SIMULATION REQUIRED` : 'SERVICE STATUS UNVERIFIED'}</span></footer>
         </>}
       </main>
+    </div>
+    </div>
+    <FloatingWidgets side="right" system={system} checking={query.isPending} />
     </div>
   </div>
 }
