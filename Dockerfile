@@ -5,7 +5,11 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY backend ./backend
 COPY data/demo ./data/demo
-RUN mkdir -p /app/var && chown -R 10001:10001 /app/var
+COPY data/calendar ./data/calendar
+COPY data/display ./data/display
+# TerminalService initializes its research store even in the DEMO runtime.
+RUN mkdir -p /app/var /app/data/research/phase5 \
+    && chown -R 10001:10001 /app/var /app/data/research
 USER 10001:10001
 ENV DATABASE_URL=sqlite:////app/var/parity-pulse.db
 EXPOSE 8000

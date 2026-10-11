@@ -174,9 +174,39 @@ The included [Compose configuration](compose.yaml) builds the Python backend and
 docker compose up --build
 ```
 
-Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/). Keep the backend reachable by the frontend proxy and retain durable writable storage for ordinary lifecycle records. The backend image currently includes `data/demo`, but not the separate `data/display` history capture; those charts report unavailable when that capture is absent.
+Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/). Keep the backend reachable by the frontend proxy and retain durable writable storage for ordinary lifecycle records. The backend image includes the demo fixtures, market calendar and display-only historical capture, and provides a writable research directory. Offline `HistoricalSource` replay inputs under `data/historical` are not consumed by the API or included in this image.
 
 This is a local non-live deployment configuration. Docker build/run verification is not established here; remote authenticated execution deployment is not provided. `.dockerignore` excludes local credentials, and deployment configuration must retain the same execution restrictions.
+
+For a public Render demo, use a **Docker web service for the backend** and a **static site for the frontend**, both with repository root as their working/build context. The existing nginx/Compose configuration depends on the local `backend` service hostname; it is not the Render static-site configuration.
+
+Set these backend environment variables in Render:
+
+```dotenv
+APP_ENV=production
+RUNTIME_MODE=DEMO
+DATA_MODE=DEMO
+EXECUTION_MODE=DRY_RUN
+APPROVAL_MODE=PROPOSE_ONLY
+LIVE_TRADING_ENABLED=false
+REQUIRE_SIMULATION=true
+LLM_ENABLED=false
+PORT=8000
+DATABASE_URL=sqlite:////app/var/parity-pulse.db
+CORS_ORIGINS=["https://YOUR-FRONTEND-HOST"]
+```
+
+Replace the CORS placeholder with the actual frontend HTTPS origin. `CORS_ORIGINS` is a JSON array of explicit origins, defaults to `[]`, and accepts no wildcards, credentials, paths, queries or fragments. Trailing slashes and default ports normalize away. HTTP is accepted only for explicitly listed loopback development origins. CORS permits GET/POST/PUT and the transport's `Content-Type`/`X-Correlation-ID` headers, exposes `X-Request-ID`, `X-Correlation-ID` and `X-Run-ID`, and does not permit cross-origin cookies. It controls browser response access; it is not authentication and does not relax execution-worker restrictions.
+
+Use the root `Dockerfile`, retain its default command, and set the Render health-check path to `/api/health`. The command and Docker health check use port 8000, so keep `PORT=8000`. Leave all provider/wallet credentials and `EXECUTION_WORKER_TOKEN` unset for this demo.
+
+For the frontend, use build command `npm ci && npm run build`, publish directory `frontend/dist`, and a Node version satisfying the repository's `>=22.12.0` requirement. Set `VITE_API_BASE_URL` in the **frontend build environment** to the backend's actual public HTTPS origin, with no `/api` suffix. Rebuild after changing it; Vite embeds this public setting in the bundle. Configure the static site's SPA rewrite `/*` → `/index.html`; this serves frontend navigation, not an API proxy. The browser calls the backend directly, so the backend CORS allowlist must match the frontend origin exactly.
+
+When `VITE_API_BASE_URL` is unset or empty, requests remain same-origin `/api/...`, preserving Vite development and Compose. A separate local frontend configuration template is at [frontend/.env.example](frontend/.env.example); the backend root `.env` is intentionally not loaded into Vite. Configured origins are validated before requests; production builds require HTTPS. Development builds also accept explicit HTTP loopback origins. Invalid configuration fails closed without falling back to another backend. Credentials, redirect refusal, bounded timeouts and absence of automatic proposal retries remain unchanged.
+
+Render Free provides no persistent disk and loses filesystem changes on restart, redeploy or idle shutdown. Explicit `RUNTIME_MODE=DEMO` uses in-memory SQLite and a session-only paper ledger, regardless of the configured file database URL. No pre-existing database is required; fixtures reload at startup. Proposals, scans, saved scenario studies, paper positions/P&L and scorecards reset on restart. State is shared within one process rather than isolated per visitor. Ordinary lifecycle persistence requires a different storage/deployment setup; PostgreSQL is not a supported drop-in database here. [Render Free storage and idle behavior](https://render.com/docs/free).
+
+Deployment sequence: review the changes and verify an actual Docker build; deploy the backend with the settings above; build/deploy the frontend with the public API origin; then verify public health/status, allowed and rejected preflights, scenario GET/POST flows, charts and restart behavior. Free-service cold starts can exceed the client's request timeout; allow the backend to wake and use the existing Retry control. No live capability gate passes as part of deployment. [Render static frontend/API wiring](https://render.com/tutorials/web-service-vs-static-site/the-hybrid-pattern).
 
 ## Fixtures and identification assets
 

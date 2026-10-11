@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from sqlalchemy.engine import make_url
 from starlette.exceptions import HTTPException
+from starlette.middleware.cors import CORSMiddleware
 
 from app import __version__
 from app.agents.memory import AgentStore
@@ -410,4 +411,15 @@ def create_app(
         app.include_router(demo_opportunity_router)
         app.include_router(demo_preparation_router)
         app.include_router(demo_paper_router)
+    if configured.cors_origins:
+        # Wrap the complete stack, including ServerErrorMiddleware, so sanitized 500s
+        # retain browser-visible status/IDs. Preserve the FastAPI factory interface.
+        app.middleware_stack = CORSMiddleware(
+            app.build_middleware_stack(),
+            allow_origins=list(configured.cors_origins),
+            allow_credentials=False,
+            allow_methods=["GET", "POST", "PUT"],
+            allow_headers=["Accept", "Content-Type", "X-Correlation-ID"],
+            expose_headers=["X-Request-ID", "X-Correlation-ID", "X-Run-ID"],
+        )
     return app

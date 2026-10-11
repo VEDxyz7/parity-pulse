@@ -4,11 +4,29 @@ export class ApiError extends Error {
     super(`${code === 'REQUEST_TIMEOUT' ? 'Aborted: REQUEST_TIMEOUT' : code}${status === null ? '' : ` (${status})`}. No fallback data or execution was substituted.`)
   }
 }
+
+function apiOrigin(value: unknown): string {
+  if (value === undefined || value === '') return ''
+  if (typeof value !== 'string') throw new ApiError('INVALID_RESPONSE')
+  const raw = value.trim()
+  if (!raw) return ''
+  // Accept an origin only, never credentials, an API prefix, or URL parser repairs.
+  if (!/^https?:\/\/[^/?#\\%@\s]+\/?$/i.test(raw)) throw new ApiError('INVALID_RESPONSE')
+  try {
+    const url = new URL(raw)
+    const local = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
+    if (url.username || url.password || url.port === '0' || url.hostname.includes('*') || url.pathname !== '/' || url.search || url.hash || (url.protocol !== 'https:' && !(import.meta.env.DEV && local))) throw new Error()
+    return url.origin
+  } catch { throw new ApiError('INVALID_RESPONSE') }
+}
+
 export async function apiRequest<T>(path: string, parse: (value: unknown) => T, options: { signal: AbortSignal; body?: object; method?: 'GET' | 'POST' | 'PUT'; timeout?: number; correlationId?: string }): Promise<T> {
   // Service paths are local canonical paths. Refuse browser normalization,
   // encoded traversal and fragments before any request leaves the client.
   const pathname = path.split('?')[0]
   if (!/^\/api\/(?:[A-Za-z0-9_.:-]|%3[aA]|\/)+(?:\?[^#\\\s]*)?$/.test(path) || pathname.includes('//') || pathname.split('/').some(segment => segment === '.' || segment === '..')) throw new ApiError('INVALID_RESPONSE')
+  const origin = apiOrigin(import.meta.env.VITE_API_BASE_URL)
+  const target = origin ? origin + path : path
   const controller = new AbortController(), abort = () => controller.abort()
   options.signal.addEventListener('abort', abort, { once: true })
   if (options.signal.aborted) abort()
@@ -16,7 +34,7 @@ export async function apiRequest<T>(path: string, parse: (value: unknown) => T, 
   try {
     let response: Response
     try {
-      response = await fetch(path, { method: options.method ?? (options.body ? 'POST' : 'GET'), signal: controller.signal, cache: 'no-store', credentials: 'same-origin', redirect: 'error', headers: { Accept: 'application/json', 'X-Correlation-ID': options.correlationId ?? crypto.randomUUID(), ...(options.body ? { 'Content-Type': 'application/json' } : {}) }, ...(options.body ? { body: JSON.stringify(options.body) } : {}) })
+      response = await fetch(target, { method: options.method ?? (options.body ? 'POST' : 'GET'), signal: controller.signal, cache: 'no-store', credentials: 'same-origin', redirect: 'error', headers: { Accept: 'application/json', 'X-Correlation-ID': options.correlationId ?? crypto.randomUUID(), ...(options.body ? { 'Content-Type': 'application/json' } : {}) }, ...(options.body ? { body: JSON.stringify(options.body) } : {}) })
     } catch {
       // An aborted proposal may already exist. Never automatically resubmit it.
       if (options.signal.aborted) throw new DOMException('Aborted', 'AbortError')

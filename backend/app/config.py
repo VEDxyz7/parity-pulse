@@ -1,7 +1,9 @@
 """Typed startup configuration; live execution remains unavailable in every runtime."""
 
+import re
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
 from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -28,6 +30,7 @@ class Settings(BaseSettings):
     require_simulation: bool = True
     database_url: str = f"sqlite:///{ROOT_DIR / 'data' / 'parity-pulse.db'}"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+    cors_origins: tuple[str, ...] = ()
     postopen_exit_minutes: int = Field(default=10, ge=1, le=120)
 
     execution_worker_token: SecretStr | None = Field(default=None, exclude=True, repr=False)
@@ -100,6 +103,35 @@ class Settings(BaseSettings):
         ):
             raise ValueError("Phase 1 supports local SQLite only, without URL credentials/options")
         return value
+
+    @field_validator("cors_origins")
+    @classmethod
+    def explicit_cors_origins(cls, values: tuple[str, ...]) -> tuple[str, ...]:
+        normalized = []
+        for value in values:
+            raw = value.strip()
+            if not raw.isascii() or not re.fullmatch(r"https?://[^/?#\\%@\s]+/?", raw, re.I):
+                raise ValueError("CORS requires explicit HTTP(S) origins without paths")
+            try:
+                url = urlsplit(raw)
+                port = url.port
+                host = url.hostname
+                if (
+                    not host
+                    or "*" in host
+                    or url.username is not None
+                    or url.password is not None
+                    or port == 0
+                    or url.scheme == "http" and host not in {"localhost", "127.0.0.1", "::1"}
+                ):
+                    raise ValueError
+            except ValueError:
+                raise ValueError("Invalid CORS origin; public origins require HTTPS") from None
+            authority = f"[{host}]" if ":" in host else host
+            if port is not None and port != (443 if url.scheme == "https" else 80):
+                authority += f":{port}"
+            normalized.append(f"{url.scheme}://{authority}")
+        return tuple(dict.fromkeys(normalized))
 
     @field_validator("postopen_exit_minutes", mode="before")
     @classmethod
