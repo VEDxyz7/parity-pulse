@@ -1,3 +1,4 @@
+import { diagnosticOutput } from './local-outputs.mjs'
 // Built UI + actual isolated local backends. No production/provider execution requests.
 // See docs/DEMO_UI_INTEGRATION.md for the three safe backend configurations.
 import { spawn } from 'node:child_process'
@@ -174,7 +175,7 @@ try {
     ordinary_runtime_demo_requests: 0, production_opportunity_navigation_disabled: true,
     live_provider_calls: 0, live_execution_calls: 0, runtime_errors: errors, request_log: requests,
   }
-  await writeFile('docs/evidence/DEMO_UI_BROWSER.json', JSON.stringify(report, null, 2) + '\n')
+  await writeFile(await diagnosticOutput('DEMO_UI_BROWSER.json'), JSON.stringify(report, null, 2) + '\n')
   console.log(JSON.stringify({ status: 'PASS', scenarios: observations.length, local_api_requests: requests.length, production_trust_calls_from_demo: 0, live_execution_calls: 0 }))
 } finally {
   ws?.close()

@@ -18,6 +18,7 @@ from app.config import ROOT_DIR, Settings
 from app.database import Database
 from app.services.data_layer import DataLayer
 from app.services.trust import TrustService
+from app.utils.artifacts import diagnostic_output
 from app.utils.logging import configure_logging
 
 
@@ -112,7 +113,7 @@ def history_inventory():
 
 
 def main(tag):
-    output = ROOT_DIR / f"docs/evidence/CANONICAL_PHASE_2_TRUST_{tag}.json"
+    output = diagnostic_output(ROOT_DIR, f"CANONICAL_PHASE_2_TRUST_{tag}.json")
     if output.exists():
         raise ValueError("Choose a new evidence tag; existing evidence is immutable")
     settings = Settings(data_mode="LIVE_READ_ONLY")

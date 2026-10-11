@@ -14,6 +14,7 @@ from app.database import Database
 from app.models.data import EquityObservation, NewsEvent, TokenObservation
 from app.services.data_layer import DataLayer
 from app.services.ingestion import HistoricalIngestion
+from app.utils.artifacts import diagnostic_output
 from app.utils.logging import configure_logging
 
 
@@ -141,7 +142,9 @@ def main(recv_window=5000):
     finally:
         layer.close()
         db.close()
-        (ROOT_DIR / "docs/evidence/PHASE_2_PIPELINE.json").write_text(json.dumps(result, indent=2))
+        diagnostic_output(ROOT_DIR, "PHASE_2_PIPELINE.json").write_text(
+            json.dumps(result, indent=2)
+        )
     print(
         json.dumps(
             {

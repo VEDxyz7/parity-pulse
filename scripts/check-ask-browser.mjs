@@ -1,3 +1,4 @@
+import { diagnosticOutput } from './local-outputs.mjs'
 // Disposable Chrome profile; never attaches to a personal browser/session.
 import { spawn } from 'node:child_process'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
@@ -81,7 +82,7 @@ try {
     simulation_status: 'UNAVAILABLE', execution_ready: false, api_requests: apiRequests,
     runtime_exceptions: 0,
   }
-  await writeFile('docs/evidence/CANONICAL_PHASE_2_ASK_REGRESSION.json', JSON.stringify(report, null, 2) + '\n')
+  await writeFile(await diagnosticOutput('CANONICAL_PHASE_2_ASK_REGRESSION.json'), JSON.stringify(report, null, 2) + '\n')
   console.log(JSON.stringify(report))
 } finally {
   ws?.close()

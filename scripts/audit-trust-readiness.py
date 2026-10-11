@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 from app.api.schemas import GateStatus  # noqa: E402
 from app.models.demo_sandbox import DemoProductionGates  # noqa: E402
 from app.providers.finnhub import FinnhubEventProvider  # noqa: E402
+from app.repositories.historical_inputs import read_historical_input  # noqa: E402
 from app.repositories.research_source import HistoricalSource  # noqa: E402
 from app.services.calendar import USEquityCalendar  # noqa: E402
 from app.services.research_episodes import ResearchEpisodeBuilder, candidate_frames  # noqa: E402
@@ -50,7 +51,7 @@ def audit():
         episodes.append(builder.build(frame))
 
     # Re-normalize an already captured real response; no transport/client is constructed.
-    capture = json.loads((ROOT / "docs/evidence/MULTI_PROVIDER_DATA_20261010.json").read_text())
+    capture = read_historical_input(ROOT, "MULTI_PROVIDER_DATA_20261010.json")
     holiday = next(
         c["result"] for c in capture["finnhub"]["checks"] if c["label"] == "/stock/market-holiday"
     )

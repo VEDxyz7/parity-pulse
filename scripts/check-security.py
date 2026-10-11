@@ -34,7 +34,16 @@ secrets = [os.environ.get(key) or configured.get(key) for key in SECRET_NAMES]
 secrets = [value.encode() for value in secrets if value]
 
 source_files = []
-for folder in ["backend", "frontend/src", "frontend/dist", "scripts", "docs", "data", "sidecar"]:
+for folder in [
+    "backend",
+    "frontend/src",
+    "frontend/dist",
+    "scripts",
+    "docs",
+    "data",
+    "sidecar",
+    "var",
+]:
     for candidate in (ROOT / folder).rglob("*"):
         if candidate.is_file() and not any(
             part in {"__pycache__", "node_modules", ".venv"} for part in candidate.parts

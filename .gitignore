@@ -28,3 +28,6 @@ test-results/
 # Agent Studio sidecar secrets and deps
 sidecar/agent-studio/node_modules/
 sidecar/agent-studio/altana-session*.json
+
+# Local generated verification reports and browser captures; historical inputs stay tracked.
+/var/diagnostics/

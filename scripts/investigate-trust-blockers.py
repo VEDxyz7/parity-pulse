@@ -27,7 +27,9 @@ from app.clients.common import ProviderError  # noqa: E402
 from app.clients.massive import MassiveClient  # noqa: E402
 from app.models.research import OPENING_MINUTES  # noqa: E402
 from app.providers.massive import Bar, validate  # noqa: E402
+from app.repositories.historical_inputs import BACKFILL_NAME, read_historical_input  # noqa: E402
 from app.services.calendar import USEquityCalendar  # noqa: E402
+from app.utils.artifacts import diagnostic_output  # noqa: E402
 
 spec = importlib.util.spec_from_file_location(
     "free_probe", Path(__file__).with_name("diagnose-free-providers.py")
@@ -40,9 +42,18 @@ POOLS = {
     "bstock": "0x8fb4243b553ac29ba088acf00b9b7da24bd6690c",
     "ondo": "0xb90bdbfbdffd4af5a636b5805539edeafb969308",
 }
-BACKFILL = ROOT / "docs/evidence/TRUST_BLOCKER_HISTORICAL_BACKFILL.json"
-AUDIT = ROOT / "docs/evidence/TRUST_BLOCKER_HISTORICAL_AUDIT.json"
+BACKFILL = diagnostic_output(ROOT, BACKFILL_NAME)
+AUDIT = diagnostic_output(ROOT, "TRUST_BLOCKER_HISTORICAL_AUDIT.json")
 DURATIONS = {"1m": 60, "1h": 3600, "1d": 86400}
+
+
+def load_backfill():
+    # Explicitly generated local captures may be deepened/audited; never mutate the archive.
+    return (
+        json.loads(BACKFILL.read_text())
+        if BACKFILL.exists()
+        else read_historical_input(ROOT, BACKFILL_NAME)
+    )
 
 
 def now():
@@ -425,9 +436,7 @@ def collect():
                 "detail_received_at": now().isoformat(),
                 "older_hourly": [],
             }
-            prior = json.loads(
-                (ROOT / "docs/evidence/FREE_PROVIDER_FEASIBILITY_PAIRING.json").read_text()
-            )
+            prior = read_historical_input(ROOT, "FREE_PROVIDER_FEASIBILITY_PAIRING.json")
             earliest = prior["per_representation"][issuer]["historical_pool_coverage"]["hour"][
                 "earliest"
             ]
@@ -569,7 +578,7 @@ def summary(rows, timestamp="start_utc"):
 
 def deepen():
     """Append reviewed older history to this task's isolated capture; preserve all prior rows."""
-    data = json.loads(BACKFILL.read_text())
+    data = load_backfill()
     if not data.get("completed_at") or data.get("deepening_completed_at"):
         raise ValueError("One completed initial capture, not already deepened, required")
     config = {**dotenv_values(ROOT / ".env"), **os.environ}
@@ -921,7 +930,7 @@ def historical_gate(primary, secondary, equities, close, opening):
 def audit():
     if AUDIT.exists():
         raise ValueError("Existing audit must not be overwritten")
-    backfill = json.loads(BACKFILL.read_text())
+    backfill = load_backfill()
     if not backfill.get("completed_at"):
         raise ValueError("Complete the isolated capture before auditing")
     # The first capture retained the transport's third return (raw envelope).
@@ -949,7 +958,7 @@ def audit():
     equity_rows.extend(backfill["equity_bars"])
     twelve_rows = []
     for name in ["TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY", "TWELVE_DATA_NVDA_HISTORICAL_DEPTH"]:
-        data = json.loads((ROOT / f"docs/evidence/{name}.json").read_text())
+        data = read_historical_input(ROOT, f"{name}.json")
         for interval, history in data["historical"].items():
             twelve_rows.extend(
                 {
@@ -1018,7 +1027,7 @@ def audit():
             "FREE_PROVIDER_GECKOTERMINAL_FEASIBILITY",
             "FREE_PROVIDER_GECKOTERMINAL_REVERIFIED",
         ]:
-            data = json.loads((ROOT / f"docs/evidence/{name}.json").read_text())
+            data = read_historical_input(ROOT, f"{name}.json")
             for frame, history in data["geckoterminal"][issuer].get("history", {}).items():
                 if history.get("pool") != POOLS[issuer]:
                     continue
@@ -1036,11 +1045,7 @@ def audit():
                     for r in history["bars"]
                 )
         if issuer == "ondo":
-            data = json.loads(
-                (
-                    ROOT / "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_HOURLY_RECOVERY.json"
-                ).read_text()
-            )
+            data = read_historical_input(ROOT, "FREE_PROVIDER_GECKOTERMINAL_HOURLY_RECOVERY.json")
             rows = data["response"]["data"]["attributes"]["ohlcv_list"]
             secondary.extend(
                 {

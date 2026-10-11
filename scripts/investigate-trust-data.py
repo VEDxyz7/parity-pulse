@@ -21,6 +21,7 @@ from app.services.data_layer import DataLayer
 from app.services.ingestion import HistoricalIngestion
 from app.services.opening_target import opening_outcome
 from app.services.trust import TrustService
+from app.utils.artifacts import diagnostic_output
 from app.utils.logging import configure_logging
 
 spec = importlib.util.spec_from_file_location(
@@ -161,7 +162,7 @@ def leakage_summary(tokens, equities, news, decision, target):
 
 
 def main():
-    output = ROOT_DIR / "docs/evidence/CANONICAL_PHASE_2_TRUST_DATA_INVESTIGATION.json"
+    output = diagnostic_output(ROOT_DIR, "CANONICAL_PHASE_2_TRUST_DATA_INVESTIGATION.json")
     if output.exists():
         raise ValueError("Existing investigation evidence must not be overwritten")
     before = inventory(exclude_investigation=True)

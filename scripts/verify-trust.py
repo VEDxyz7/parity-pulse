@@ -14,6 +14,7 @@ from app.config import ROOT_DIR, Settings
 from app.database import Database
 from app.services.data_layer import DataLayer
 from app.services.trust import TrustService
+from app.utils.artifacts import diagnostic_output
 from app.utils.logging import configure_logging
 
 
@@ -90,7 +91,7 @@ def main(live=False):
             "trust_gate": "BLOCKED",
             "reads": reads,
         }
-        output = ROOT_DIR / f"docs/evidence/CANONICAL_PHASE_2_TRUST_{mode}.json"
+        output = diagnostic_output(ROOT_DIR, f"CANONICAL_PHASE_2_TRUST_{mode}.json")
         output.write_text(json.dumps(evidence, indent=2) + "\n")
         print(
             json.dumps(

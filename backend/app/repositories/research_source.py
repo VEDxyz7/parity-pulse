@@ -1,6 +1,5 @@
 """Bounded offline source loader: SQLite read-only and existing primary raw captures only."""
 
-import json
 import sqlite3
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -8,6 +7,12 @@ from pathlib import Path
 from app.models.data import EquityObservation, NewsEvent, TokenMetadata, TokenObservation
 from app.models.research import RawTokenBar
 from app.models.trust import TrustEpisode, TrustSample
+from app.repositories.historical_inputs import (
+    BACKFILL_NAME,
+    DIRECTORY,
+    input_metadata,
+    read_historical_input,
+)
 from app.services.research_episodes import fingerprint
 
 TABLES = {
@@ -86,9 +91,9 @@ class HistoricalSource:
             self.provenance.append(str(path.relative_to(self.root)) + ":" + fingerprint(snapshot))
         for name, rows in unique.items():
             self.records[name] = sorted(rows.values(), key=fingerprint)
-        raw_path = self.root / "docs/evidence/TRUST_BLOCKER_HISTORICAL_BACKFILL.json"
-        if raw_path.exists():
-            raw = json.loads(raw_path.read_text())
+        raw_path = self.root / DIRECTORY / BACKFILL_NAME
+        if raw_path.exists() or (self.root / DIRECTORY / "manifest.json").exists():
+            raw = read_historical_input(self.root, BACKFILL_NAME)
             if raw.get("evidence_kind") is None or raw.get("execution_calls") != 0:
                 raise ValueError("Unverified diagnostic capture")
             for bar in raw["token_bars"]:
@@ -142,7 +147,9 @@ class HistoricalSource:
                         adjusted=bar["adjusted"],
                     )
                 )
-            self.provenance.append(str(raw_path.relative_to(self.root)) + ":" + fingerprint(raw))
+            # Logical provenance identifies the original capture, not its storage location.
+            identity = input_metadata(self.root, BACKFILL_NAME)["original_path"]
+            self.provenance.append(identity + ":" + fingerprint(raw))
         # Event deduplication is independent of provider_identifier serialization differences
         # between application records and raw files. Earliest actual ingestion wins.
         for name in ("raw_token_bars", "equity_observations"):

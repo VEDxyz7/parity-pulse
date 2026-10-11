@@ -15,6 +15,8 @@ spec = importlib.util.spec_from_file_location(
 diagnostic = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(diagnostic)
 
+from app.utils.artifacts import diagnostic_output  # noqa: E402
+
 
 def age(received, observed):
     delta = received - observed
@@ -81,7 +83,9 @@ def main():
     args = parser.parse_args()
     if args.count < (5 if args.session == "active" else 3) or not 8 <= args.spacing <= 300:
         parser.error("Require at least five active or three closed reads and 8–300s spacing")
-    output = diagnostic.ROOT / f"docs/evidence/TWELVE_DATA_TIMESTAMP_{args.session.upper()}.json"
+    output = diagnostic_output(
+        diagnostic.ROOT, f"TWELVE_DATA_TIMESTAMP_{args.session.upper()}.json"
+    )
     if output.exists():
         raise ValueError("Existing evidence must not be overwritten")
     probe = diagnostic.Probe()

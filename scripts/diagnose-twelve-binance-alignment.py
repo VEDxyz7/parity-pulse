@@ -22,6 +22,7 @@ from app.clients.binance_web3 import PREFIX, BinanceWeb3Client
 from app.clients.common import ProviderError
 from app.providers.binance import Price, validate
 from app.services.calendar import USEquityCalendar
+from app.utils.artifacts import diagnostic_output
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location(
@@ -270,7 +271,7 @@ def report(evidence):
             "This short sample does not prove sustained reliability or pass the full Trust gate.",
             "Missing timestamps are unscorable, never inferred from receipt/envelope time.",
             "JSON preserves prices, market flags, observation times and separate receipt times.",
-            "[Full paired capture](evidence/TWELVE_BINANCE_NVDA_ALIGNMENT.json).",
+            "[Full paired capture](TWELVE_BINANCE_NVDA_ALIGNMENT.json).",
             "No production observations, settings, application logic or gates were changed.",
             "No execution, wallet or trading endpoint was called.",
             "Only diagnostic files; no credentials or signatures. Stop after this diagnostic.",
@@ -330,8 +331,8 @@ def main():
     if calendar.status(datetime.now(UTC)).state != "REGULAR":
         print(json.dumps({"result": "NOT_TESTED_MARKET_CLOSED", "network_calls": 0}), flush=True)
         return
-    output = ROOT / "docs/evidence/TWELVE_BINANCE_NVDA_ALIGNMENT.json"
-    markdown = ROOT / "docs/TWELVE_BINANCE_ALIGNMENT.md"
+    output = diagnostic_output(ROOT, "TWELVE_BINANCE_NVDA_ALIGNMENT.json")
+    markdown = diagnostic_output(ROOT, "TWELVE_BINANCE_ALIGNMENT.md")
     if output.exists() or markdown.exists():
         raise ValueError("Existing diagnostic evidence/report must not be overwritten")
     protected = secret_values()

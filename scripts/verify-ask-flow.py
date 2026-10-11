@@ -13,6 +13,7 @@ from app.config import ROOT_DIR, Settings
 from app.database import Database
 from app.services.data_layer import DataLayer
 from app.services.exposure import ExposureService
+from app.utils.artifacts import diagnostic_output
 from app.utils.logging import configure_logging
 
 
@@ -82,7 +83,7 @@ def main(live=False):
                 for client in layer.clients
                 for row in client.evidence
             ]
-        path = ROOT_DIR / f"docs/evidence/CANONICAL_PHASE_1_{mode}.json"
+        path = diagnostic_output(ROOT_DIR, f"CANONICAL_PHASE_1_{mode}.json")
         path.write_text(json.dumps(evidence, indent=2) + "\n")
         print(
             json.dumps(

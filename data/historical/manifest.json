@@ -1,0 +1,46 @@
+{
+  "format_version": 1,
+  "purpose": "Immutable captured inputs for offline historical replay and provider audits. No synthetic promotion or current-reference admission. Generated diagnostics are separate.",
+  "inputs": {
+    "FREE_PROVIDER_FEASIBILITY_PAIRING.json": {
+      "original_path": "docs/evidence/FREE_PROVIDER_FEASIBILITY_PAIRING.json",
+      "sha256": "73da445f37db2557d5b10eab4401a6d8ff655ef1218b4b4f4bd137926c00434a",
+      "bytes": 81803
+    },
+    "FREE_PROVIDER_GECKOTERMINAL_FEASIBILITY.json": {
+      "original_path": "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_FEASIBILITY.json",
+      "sha256": "24c1cc261096f2aee0c01b4a32a19f6d969524cec19124e63f3ae08f94f7a5e6",
+      "bytes": 549515
+    },
+    "FREE_PROVIDER_GECKOTERMINAL_HOURLY_RECOVERY.json": {
+      "original_path": "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_HOURLY_RECOVERY.json",
+      "sha256": "67095ea5369f997198b4d39a9220cde9f359a4fce6af3e7ce98984de503764fc",
+      "bytes": 199426
+    },
+    "FREE_PROVIDER_GECKOTERMINAL_REVERIFIED.json": {
+      "original_path": "docs/evidence/FREE_PROVIDER_GECKOTERMINAL_REVERIFIED.json",
+      "sha256": "8abfabf919250db4a47800d2fb55c334da8f2553f8fb549f0f4e25b2122a5e46",
+      "bytes": 1461053
+    },
+    "MULTI_PROVIDER_DATA_20261010.json": {
+      "original_path": "docs/evidence/MULTI_PROVIDER_DATA_20261010.json",
+      "sha256": "5eafb5ff851f566b85e81966e59381e0d5a02302d601431431ec9bd71b524abd",
+      "bytes": 224026
+    },
+    "TRUST_BLOCKER_HISTORICAL_BACKFILL.json": {
+      "original_path": "docs/evidence/TRUST_BLOCKER_HISTORICAL_BACKFILL.json",
+      "sha256": "6d1d1b11431f3afb3e685c166109f26f7bf497c1c32324a6a32030789e154ee5",
+      "bytes": 8869751
+    },
+    "TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY.json": {
+      "original_path": "docs/evidence/TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY.json",
+      "sha256": "101516a3d547984564938bb3a8c03e92d3aa57c2e26e342d16606f64dc110b03",
+      "bytes": 241906
+    },
+    "TWELVE_DATA_NVDA_HISTORICAL_DEPTH.json": {
+      "original_path": "docs/evidence/TWELVE_DATA_NVDA_HISTORICAL_DEPTH.json",
+      "sha256": "1b9f63cb3b2bf847d9a4c5dae9743393789ba64213fd1900ef53860e51fa4fbe",
+      "bytes": 237377
+    }
+  }
+}

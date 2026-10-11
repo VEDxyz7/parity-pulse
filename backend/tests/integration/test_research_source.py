@@ -53,7 +53,7 @@ def test_malformed_real_labeled_sql_row_is_explicitly_rejected(tmp_path):
 
 def test_raw_diagnostic_ratio_backfill_and_non_primary_source_forbidden(tmp_path):
     (tmp_path / "data").mkdir()
-    directory = tmp_path / "docs/evidence"
+    directory = tmp_path / "data/historical"
     directory.mkdir(parents=True)
     path = directory / "TRUST_BLOCKER_HISTORICAL_BACKFILL.json"
     for change in ({"historical_ratio": "0.5"}, {"source": "GECKOTERMINAL"}, {"synthetic": True}):
@@ -63,5 +63,16 @@ def test_raw_diagnostic_ratio_backfill_and_non_primary_source_forbidden(tmp_path
                 {"evidence_kind": "REAL_TEST_ENVELOPE", "execution_calls": 0, "token_bars": [row]}
             )
         )
+        manifest = {
+            "format_version": 1,
+            "inputs": {
+                path.name: {
+                    "original_path": "docs/evidence/" + path.name,
+                    "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                    "bytes": path.stat().st_size,
+                }
+            },
+        }
+        (directory / "manifest.json").write_text(json.dumps(manifest))
         with pytest.raises(ValueError, match="Unverified raw token"):
             HistoricalSource(tmp_path).load()

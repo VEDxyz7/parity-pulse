@@ -12,6 +12,8 @@ spec = importlib.util.spec_from_file_location(
 diagnostic = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(diagnostic)
 
+from app.utils.artifacts import diagnostic_output  # noqa: E402
+
 
 def age_seconds(received, observed):
     delta = received - observed
@@ -157,7 +159,7 @@ def opening_control(one, five):
 
 
 def main():
-    output = diagnostic.ROOT / "docs/evidence/TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY.json"
+    output = diagnostic_output(diagnostic.ROOT, "TWELVE_DATA_NVDA_AUTHENTICATED_FEASIBILITY.json")
     if output.exists():
         raise ValueError("Existing evidence must not be overwritten")
     probe = diagnostic.Probe()
