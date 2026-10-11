@@ -1,0 +1,197 @@
+{
+  "verified_at_utc": "2026-10-11T01:23:09.618056+00:00",
+  "scope": "Cinematic paper entrance and dashboard navigation only",
+  "backend_tests": {
+    "passed": 1768,
+    "warnings": 2,
+    "warning_scope": "Existing malformed postAmount negative fixtures"
+  },
+  "frontend_tests": {
+    "passed": 304,
+    "new_landing_tests": 12
+  },
+  "typecheck_build": "PASS",
+  "ruff": "PASS",
+  "secret_security_check": "PASS",
+  "generated_contracts": "PASS (11)",
+  "landing_browser": {
+    "status": "PASS",
+    "journeys": [
+      {
+        "viewport": "desktop",
+        "webgl": true,
+        "entry_visible": true,
+        "native_scroll": true,
+        "keyboard_entry": true,
+        "back_forward": true,
+        "dashboard_instances": 1
+      },
+      {
+        "viewport": "tablet",
+        "webgl": true,
+        "entry_visible": true,
+        "native_scroll": true,
+        "keyboard_entry": true,
+        "back_forward": true,
+        "dashboard_instances": 1
+      },
+      {
+        "viewport": "mobile",
+        "webgl": true,
+        "entry_visible": true,
+        "native_scroll": true,
+        "keyboard_entry": true,
+        "back_forward": true,
+        "dashboard_instances": 1
+      },
+      {
+        "viewport": "short-mobile",
+        "webgl": true,
+        "entry_visible": true,
+        "native_scroll": true,
+        "keyboard_entry": true,
+        "back_forward": true,
+        "dashboard_instances": 1
+      },
+      {
+        "viewport": "compact-mobile",
+        "webgl": true,
+        "entry_visible": true,
+        "native_scroll": true,
+        "keyboard_entry": true,
+        "back_forward": true,
+        "dashboard_instances": 1
+      },
+      {
+        "viewport": "landscape",
+        "webgl": true,
+        "entry_visible": true,
+        "native_scroll": true,
+        "keyboard_entry": true,
+        "back_forward": true,
+        "dashboard_instances": 1
+      }
+    ],
+    "requests": [
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      },
+      {
+        "path": "/api/presentation/workspace",
+        "method": "GET",
+        "status": 200
+      }
+    ],
+    "errors": [],
+    "screenshots": [
+      "landing-desktop.png",
+      "landing-desktop-hover.png",
+      "landing-desktop-drag.png",
+      "landing-desktop-transition.png",
+      "landing-tablet.png",
+      "landing-tablet-transition.png",
+      "landing-mobile.png",
+      "landing-mobile-touch-drag.png",
+      "landing-mobile-transition.png",
+      "landing-short-mobile.png",
+      "landing-short-mobile-transition.png",
+      "landing-compact-mobile.png",
+      "landing-compact-mobile-transition.png",
+      "landing-landscape.png",
+      "landing-landscape-transition.png",
+      "landing-reduced-motion.png",
+      "landing-context-loss.png",
+      "landing-no-webgl.png"
+    ],
+    "direct_route_refresh": true,
+    "reduced_motion_no_gpu": true,
+    "context_loss_fallback": true,
+    "webgl_unavailable_fallback": true,
+    "visibility_pause_resume": true,
+    "production_gates": {
+      "DATA_GATE": "PASS",
+      "DRY_RUN_GATE": "PASS",
+      "TRUST_GATE": "BLOCKED",
+      "OPPORTUNITY_GATE": "BLOCKED_BY_TRUST",
+      "SWAP_LIVE_GATE": "BLOCKED",
+      "RFQ_LIVE_GATE": "BLOCKED",
+      "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+    },
+    "execution_requests": 0,
+    "renderer": "Chromium SwiftShader (software WebGL2; hardware performance not measured)"
+  },
+  "existing_provider_browser": {
+    "status": "PASS",
+    "requests": 189,
+    "live_execution_calls": 0,
+    "production_trust_calls_from_demo": 0
+  },
+  "existing_product_browser": {
+    "status": "PASS",
+    "journeys": 2,
+    "requests": 15,
+    "execution_requests": 0
+  },
+  "artifacts": {
+    "full_regression_directory": "/private/var/folders/hv/m560wcmn6qg0qwwmxw5lsyzc0000gn/T/parity-phase15-browser-jk3ect6k",
+    "final_landing_directory": "/private/var/folders/hv/m560wcmn6qg0qwwmxw5lsyzc0000gn/T/parity-phase15-browser-xr2n15ym",
+    "retained_screenshots": [
+      "landing-desktop.png",
+      "landing-mobile.png"
+    ]
+  },
+  "preservation": {
+    "head_unchanged": true,
+    "preexisting_files_changed": [
+      "README.md",
+      "frontend/index.html",
+      "frontend/package.json",
+      "frontend/src/main.tsx",
+      "package-lock.json",
+      "scripts/verify-frontend-phase15.py"
+    ],
+    "backend_and_gates_byte_unchanged": true
+  },
+  "limitations": [
+    "Software WebGL2 Chromium; physical GPU/battery, Safari and Firefox not measured",
+    "Vite chunk-size warning for existing entry and optional Three.js renderer"
+  ],
+  "dashboard_native_scroll_restoration_preserved": true
+}

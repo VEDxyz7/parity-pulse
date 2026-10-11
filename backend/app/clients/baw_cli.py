@@ -34,6 +34,10 @@ def command(operation, **params):
     ):
         raise WalletReadError("COMMAND_DENIED")
     simple = {"status", "address", "chains", "settings"}
+    if operation == "help" and not params:
+        return ("--help",)
+    if operation == "contract-help" and not params:
+        return ("contract-call", "--help")
     if operation in simple and not params:
         return ("wallet", operation, "--json")
     if operation == "cli-check" and not params:
@@ -132,7 +136,17 @@ def verify_argv(args):
     """Defense in depth: even the subprocess boundary cannot accept raw write arguments."""
     if not isinstance(args, tuple) or not all(isinstance(v, str) for v in args):
         raise WalletReadError("COMMAND_DENIED")
-    for operation in ("cli-check", "status", "chains", "address", "settings", "balance", "tx-lock"):
+    for operation in (
+        "help",
+        "contract-help",
+        "cli-check",
+        "status",
+        "chains",
+        "address",
+        "settings",
+        "balance",
+        "tx-lock",
+    ):
         if args == command(operation):
             return
     if len(args) < 3 or args[-1] != "--json" or (len(args) - 3) % 2:
@@ -195,9 +209,12 @@ class BawReadOnlyClient:
         self.executable = Path(found).resolve() if found else None
         self.version_verified = False
 
+    def _verify(self, args):
+        verify_argv(args)
+
     def _run(self, args):
         try:
-            verify_argv(args)
+            self._verify(args)
         except (ValueError, TypeError, KeyError):
             raise WalletReadError("COMMAND_DENIED") from None
         if not self.enabled:

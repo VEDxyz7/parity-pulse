@@ -1,3 +1,6 @@
+import { Button, MetalLink } from './ui/Button'
+import { ReadRefresh } from './ui/ReadRefresh'
+import { useRouteMotion } from './ui/useRouteMotion'
 import {
   Activity, ArrowDownUp, ArrowUpRight, Check, Database, Layers3,
   LockKeyhole, Menu, X, Radio, RefreshCw, ShieldCheck, Sparkles, Workflow,
@@ -13,7 +16,7 @@ import { StatusBadge } from './components/StatusBadge'
 import { MarketSnapshot } from './components/MarketSnapshot'
 import { dataLabel, DataContext } from './components/DataContext'
 import type { GateName } from './types/system'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 const OpportunityView = lazy(() => import('./components/OpportunityView').then(m => ({ default: m.OpportunityView })))
 const PortfolioView = lazy(() => import('./components/WorkspaceViews').then(m => ({ default: m.PortfolioView })))
@@ -31,7 +34,9 @@ const gates: { key: GateName; label: string; description: string }[] = [
 ]
 
 export function App() {
+  const root = useRef<HTMLDivElement>(null)
   const [hash, setHash] = useState(window.location.hash)
+  useRouteMotion(hash, root)
   const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => {
     const update = () => { setHash(window.location.hash); setMenuOpen(false) }
@@ -64,11 +69,11 @@ export function App() {
   }, [hash, available])
   const connection = query.isPending ? 'Checking backend' : available ? 'Backend connected' : 'Backend unavailable'
 
-  return <div className={`page ${menuOpen ? 'menu-open' : ''}`}>
+  return <div ref={root} className={`page ${menuOpen ? 'menu-open' : ''}`}>
     <a className="skip-link" href="#main-content" onClick={event => { event.preventDefault(); document.getElementById('main-content')?.focus() }}>Skip to main content</a>
     <header className="site-header">
       <a className="brand" href="#overview" aria-label="Parity Pulse home"><Activity size={27} strokeWidth={1.4} /><span>PARITY PULSE<small>TOKENIZED EQUITY INTELLIGENCE</small></span></a>
-      <button className="mobile-menu refresh-button" aria-expanded={menuOpen} aria-controls="primary-navigation workspace-tools" onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X size={17} /> : <Menu size={17} />}Menu</button>
+      <Button className="mobile-menu refresh-button" aria-expanded={menuOpen} aria-controls="primary-navigation workspace-tools" onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X size={17} /> : <Menu size={17} />}Menu</Button>
       <nav id="primary-navigation" aria-label="Main navigation" className="primary-navigation">
         {[
           ['#overview', 'Overview', !showDemo && !showTerminal && !showAgentApi && !additional && hash !== '#trust'],
@@ -77,29 +82,29 @@ export function App() {
           ['#demo-sandbox', 'Research Lab', showDemo],
         ].map(([href, label, active]) => <a key={String(href)} href={String(href)} aria-current={active ? 'page' : undefined}>{label}</a>)}
       </nav>
-      <a className="header-action" href="#ask">Compare exposure <ArrowUpRight size={14} /></a>
+      <MetalLink className="header-action" href="#ask">Compare exposure <ArrowUpRight size={14} /></MetalLink>
     </header>
     <div className="app-layout"><div className="workspace">
       <header className="topbar"><nav id="workspace-tools" aria-label="Workspace tools"><a href="#agent-api" aria-current={showAgentApi ? 'page' : undefined}>Agent API</a><a href="#settings" aria-current={showSettings ? 'page' : undefined}>Data Sources</a><a href="#autopilot" aria-current={showAutopilot ? 'page' : undefined}>Autopilot status</a><a href="#live" aria-current={showLive ? 'page' : undefined}>Execution status</a><a href="#audit" aria-current={showAudit ? 'page' : undefined}>Scorecard / Audit</a></nav><StatusBadge tone={available ? 'green' : 'amber'}>{connection}</StatusBadge></header>
       <main id="main-content" tabIndex={-1}>
         {additional ? (system ? <Suspense fallback={<p role="status">Loading page…</p>}><div key={`${hash}:${system.run_id}:${system.data_mode}`}>
           {showLive ? <LiveRebalance gates={system.gates} /> : showOpportunity ? <OpportunityView mode={system.data_mode} sandbox={system.runtime_mode === 'DEMO'} scanId={scanId} /> : showPortfolio || showAutopilot ? <PortfolioView mode={system.data_mode} autopilot={showAutopilot} /> : showSettings ? <SystemView mode={system.data_mode} /> : showAudit ? <div className="workspace-view"><h1>Scorecard / Audit</h1><ScorecardAudit mode={system.data_mode} initialDecision={decisionId ? decisionId : undefined} /><AuditEvents mode={system.data_mode} /></div> : <><h1>Buy a Stock</h1><AskFlow mode={system.data_mode} /><TrustPanel mode={system.data_mode} /></>}
-        </div></Suspense> : <section className="panel demo-unavailable"><h1>Backend state unavailable</h1><p role="status">A verified backend is required. No financial values or cached healthy state are substituted.</p><button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Retry backend status</button></section>) : showAgentApi ? <AgentApi /> : showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
+        </div></Suspense> : <section className="panel demo-unavailable"><h1>Backend state unavailable</h1><p role="status">A verified backend is required. No financial values or cached healthy state are substituted.</p><Button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Retry backend status</Button></section>) : showAgentApi ? <AgentApi /> : showTerminal ? (system ? <Terminal key={`terminal:${system.run_id}:${system.data_mode}`} mode={system.data_mode} /> : <section className="panel"><h1>Terminal</h1><p>A verified backend is required. Analytical values remain unavailable.</p></section>) : showDemo ? <>
           <section className="page-heading" aria-label="Research Lab"><div><div className="eyebrow">PARITY PULSE / SCENARIO RESEARCH</div><h1>Research Lab</h1><p>Explore how evidence becomes a decision, from Trust to a paper position.</p></div><a className="refresh-button" href="#overview">Return to Overview</a></section>
           <DataContext mode="DEMO" />
           {system?.runtime_mode === 'DEMO' && askReady ? <DemoTrustSandbox key={`sandbox:${system.run_id}`} /> : <section className="panel demo-unavailable" aria-label="Research Lab availability">
             <h2>{available ? 'Scenario research is disabled on this backend.' : 'A verified isolated research backend is required.'}</h2>
             <p>This workspace uses isolated synthetic scenarios. No production Trust assessment or live data is substituted.</p>
             <p>Use the existing startup runbook to enable the isolated research runtime. Production gates remain unchanged.</p>
-            <button className="refresh-button" disabled={query.isFetching} onClick={() => { void query.refetch() }}>Refresh status</button>
+            <Button className="refresh-button" disabled={query.isFetching} onClick={() => { void query.refetch() }}>Refresh status</Button>
           </section>}
         </> : <>
-        <section className="overview-hero"><div><div className="eyebrow">EQUITIES / EVIDENCE / EXPOSURE</div><h1>Markets move.<br /> <span>Evidence matters.</span></h1><p>Monitor tokenized equities. Compare representations.<br className="desktop-break" /> Understand the evidence behind every dislocation.</p><div className="hero-actions"><a className="primary-button" href="#terminal">Explore Markets <ArrowUpRight size={15} /></a><a className="refresh-button" href="#demo-sandbox">Open Research Lab <ArrowUpRight size={15} /></a></div></div><aside className="hero-summary" aria-label="Workspace context"><span className="eyebrow">YOUR OBSERVATION DESK</span><p className="desk-description">Independent evidence. Clearer exposure.</p><dl><div><dt>Data context</dt><dd>{system ? dataLabel(system.data_mode) : 'Unknown'}</dd></div><div><dt>Execution</dt><dd>{system ? 'Disabled · proposals only' : 'Awaiting verification'}</dd></div><div><dt>US session / next opening</dt><dd>See per-asset market observations</dd></div></dl><a href="#settings" className="text-link">Inspect Data Sources <ArrowUpRight size={14} /></a></aside></section>
+        <section className="overview-hero"><div><div className="eyebrow">EQUITIES / EVIDENCE / EXPOSURE</div><h1>Markets move.<br /> <span>Evidence matters.</span></h1><p>Monitor tokenized equities. Compare representations.<br className="desktop-break" /> Understand the evidence behind every dislocation.</p><div className="hero-actions"><MetalLink className="primary-button" href="#terminal">Explore Markets <ArrowUpRight size={15} /></MetalLink><a className="refresh-button" href="#demo-sandbox">Open Research Lab <ArrowUpRight size={15} /></a></div></div><aside className="hero-summary" aria-label="Workspace context"><span className="eyebrow">YOUR OBSERVATION DESK</span><p className="desk-description">Independent evidence. Clearer exposure.</p><dl><div><dt>Data context</dt><dd>{system ? dataLabel(system.data_mode) : 'Unknown'}</dd></div><div><dt>Execution</dt><dd>{system ? 'Disabled · proposals only' : 'Awaiting verification'}</dd></div><div><dt>US session / next opening</dt><dd>See per-asset market observations</dd></div></dl><a href="#settings" className="text-link">Inspect Data Sources <ArrowUpRight size={14} /></a></aside></section>
         {query.isError && <div role="alert" className="connection-alert"><Radio size={19} /><div><strong>We couldn’t reach a healthy backend.</strong><p>Check that the local backend is running, then refresh. Service values remain unknown until verified.</p></div></div>}
         {query.isPending && <p role="status">Checking workspace connectivity…</p>}
         <MarketSnapshot key={system ? `snapshot:${system.run_id}:${system.data_mode}` : 'unverified-snapshot'} mode={askReady && system ? system.data_mode : undefined} />
         <div className="panels">
-          <section className="panel" id="system"><div className="panel-heading"><div><h2>System health</h2><p>The essentials behind your workspace.</p></div><button className="refresh-button" onClick={() => void query.refetch()} disabled={query.isFetching}><RefreshCw size={14} />Refresh status</button></div>
+          <section className="panel" id="system"><div className="panel-heading"><div><h2>System health</h2><p>The essentials behind your workspace.</p></div><ReadRefresh refetch={query.refetch} busy={query.isFetching} description="Backend health and configuration rechecked."><RefreshCw size={14} />Refresh status</ReadRefresh></div>
             <div className="health-row"><div className="row-icon"><Radio size={17} /></div><div><strong>Backend service</strong><small>FastAPI application</small></div><StatusBadge tone={available ? 'green' : 'amber'}>{query.isPending ? 'Checking' : available ? 'Healthy' : 'Unavailable'}</StatusBadge></div>
             <div className="health-row"><div className="row-icon"><Database size={17} /></div><div><strong>Database</strong><small>Persisted workspace records</small></div><StatusBadge tone={system?.database_status === 'connected' ? 'green' : 'neutral'}>{system?.database_status === 'connected' ? 'Connected' : 'Unknown'}</StatusBadge></div>
             <div className="health-row"><div className="row-icon"><Layers3 size={17} /></div><div><strong>Illustrative dataset</strong><small>{system?.demo_fixture ? 'Synthetic inputs · no execution authority' : 'No synthetic dataset loaded'}</small></div><StatusBadge tone={system?.demo_fixture ? 'green' : 'neutral'}>{system?.demo_fixture ? 'Loaded' : system ? 'Not loaded' : 'Unknown'}</StatusBadge></div>
@@ -120,7 +125,7 @@ export function App() {
         <footer className="page-footer"><span>Parity Pulse <span className="footer-dot">·</span> Tokenized equity intelligence</span><span>{system ? 'Review required · simulation required · no live trading' : 'Service status unverified'}</span></footer>
         </>}
       </main>
-        <section className="execution-controls" aria-label="Execution authority"><span className="eyebrow">EXECUTION AUTHORITY</span><button className="refresh-button" disabled={!askReady} onClick={() => { window.location.hash = 'ask' }}><ArrowDownUp size={15} />Direct Exposure</button><button className="refresh-button" disabled title="Execution blocked by production safety gates"><Sparkles size={15} />Opportunity<LockKeyhole size={13} /></button><button className="refresh-button" disabled title="Execution blocked by production safety gates"><Workflow size={15} />Autopilot<LockKeyhole size={13} /></button><p>Analytical proposals are available when verified. Live execution remains disabled.</p></section>
+        <section className="execution-controls" aria-label="Execution authority"><span className="eyebrow">EXECUTION AUTHORITY</span><Button className="refresh-button" disabled={!askReady} onClick={() => { window.location.hash = 'ask' }}><ArrowDownUp size={15} />Direct Exposure</Button><Button className="refresh-button" disabled title="Execution blocked by production safety gates"><Sparkles size={15} />Opportunity<LockKeyhole size={13} /></Button><Button className="refresh-button" disabled title="Execution blocked by production safety gates"><Workflow size={15} />Autopilot<LockKeyhole size={13} /></Button><p>Analytical proposals are available when verified. Live execution remains disabled.</p></section>
     </div></div>
   </div>
 }

@@ -1,3 +1,5 @@
+import { ReadRefresh } from '../ui/ReadRefresh'
+import { Button } from '../ui/Button'
 import { DataContext } from './DataContext'
 import { readRefresh } from '../hooks/readRefresh'
 import { useState } from 'react'
@@ -24,9 +26,9 @@ export function ScorecardAudit({ mode, initialDecision }: { initialDecision?: st
       <label>Evaluation type <select value={kind} onChange={e => setKind(e.target.value)}><option value="">All types</option>{['OPPORTUNITY','DIRECT_EXPOSURE','AUTOPILOT'].map(k => <option key={k}>{k}</option>)}</select></label>
       <label>Scorecard ticker <input value={ticker} maxLength={15} onChange={e => setTicker(e.target.value)} /></label>
       <label>Outcome <select value={outcome} onChange={e => setOutcome(e.target.value)}><option value="">All outcomes</option>{['PROPOSED','REJECTED','DEFERRED','BLOCKED','SIMULATED','CONFIRMED','UNKNOWN','RECONCILIATION_REQUIRED','PAPER_FILLED','PAPER_EXITED','COMPLETED','NO_ACTION'].map(o => <option key={o}>{o}</option>)}</select></label>
-      <button className="refresh-button">Filter evaluations</button>
+      <Button className="refresh-button">Filter evaluations</Button>
     </form>
-    <button className="refresh-button" disabled={query.isFetching} onClick={() => { setDecision(''); void query.refetch() }}>Refresh evaluations</button>
+    <ReadRefresh refetch={query.refetch} busy={query.isFetching} beforeRead={()=>setDecision('')}>Refresh evaluations</ReadRefresh>
     {query.isFetching && <p role="status">Loading scorecards…</p>}
     {query.isError && <p role="alert">Scorecard unavailable. No fallback or cached outcome is displayed.</p>}
     {data && <>
@@ -47,9 +49,9 @@ export function ScorecardAudit({ mode, initialDecision }: { initialDecision?: st
         {!c.executions.length ? <p>No execution evidence. A proposal, local simulation or paper fill does not establish a real investment outcome.</p> : c.executions.map(e => <p key={e.execution_id}>{e.category} / {e.lifecycle_state} · Actual completed trade: {e.actual_completed_trade ? 'Yes' : 'No'} · Filled {value(e.filled_base_units)} · Remaining {value(e.remaining_base_units)} · Position {value(e.position_state)} · {codes(e.reasons)}</p>)}
         {c.paper_pnl && <details><summary>Existing illustrative paper accounting</summary><pre>{JSON.stringify(c.paper_pnl, null, 2)}</pre></details>}
         {!!c.allocations.length && <details><summary>Autopilot allocation / drift / proposed actions</summary><pre>{JSON.stringify({ allocations: c.allocations, proposed_actions: c.proposed_actions }, null, 2)}</pre></details>}
-        <p>Decision reference {c.decision_id}</p><button className="refresh-button" onClick={() => { setDecision(c.decision_id); if (decision === c.decision_id) void trace.refetch() }}>Trace decision {c.decision_id}</button>
+        <p>Decision reference {c.decision_id}</p><Button className="refresh-button" onClick={() => { setDecision(c.decision_id); if (decision === c.decision_id) void trace.refetch() }}>Trace decision {c.decision_id}</Button>
       </article>)}
-      <div className="terminal-filter"><button className="refresh-button" disabled={!offset} onClick={() => { setDecision(''); setOffset(Math.max(0, offset - 25)) }}>Previous evaluations</button><span>Evaluation offset {offset}</span><button className="refresh-button" disabled={!data.page.has_more} onClick={() => { setDecision(''); setOffset(offset + 25) }}>Next evaluations</button></div>
+      <div className="terminal-filter"><Button className="refresh-button" disabled={!offset} onClick={() => { setDecision(''); setOffset(Math.max(0, offset - 25)) }}>Previous evaluations</Button><span>Evaluation offset {offset}</span><Button className="refresh-button" disabled={!data.page.has_more} onClick={() => { setDecision(''); setOffset(offset + 25) }}>Next evaluations</Button></div>
     </>}
     {decision && <section className="decision-audit" aria-label="Decision audit trace"><h3>Decision audit trace</h3>
       {trace.isFetching && <p role="status">Loading decision trace…</p>}

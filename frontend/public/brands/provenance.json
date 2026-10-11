@@ -1,0 +1,34 @@
+[
+  {
+    "symbol": "NVDA",
+    "source": "https://www.nvidia.com/favicon.ico",
+    "asset": "frontend/public/brands/nvda.ico",
+    "mime": "image/vnd.microsoft.icon",
+    "sha256": "bedcb14e0470ff8abe26405a630e9604ac4fa581b385a7cfb00420c22f541b6e",
+    "bytes": 25214
+  },
+  {
+    "symbol": "AAPL",
+    "source": "https://www.apple.com/favicon.ico",
+    "asset": "frontend/public/brands/aapl.ico",
+    "mime": "image/x-icon",
+    "sha256": "5493c61cf725cf3a1d63cd9d07de75b0d6faa5564e772f7d0a6074f341442938",
+    "bytes": 22382
+  },
+  {
+    "symbol": "GOOGL",
+    "source": "https://www.google.com/favicon.ico",
+    "asset": "frontend/public/brands/googl.ico",
+    "mime": "image/x-icon",
+    "sha256": "6da5620880159634213e197fafca1dde0272153be3e4590818533fab8d040770",
+    "bytes": 5430
+  },
+  {
+    "symbol": "ONDO",
+    "source": "https://ondo.finance/favicon.ico",
+    "asset": "frontend/public/brands/ondo.ico",
+    "mime": "image/x-icon",
+    "sha256": "700ab482214cac6ca7eddd4d74256860604ceabe4bedefd0324e44fd3b1576a6",
+    "bytes": 12007
+  }
+]

@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button'
 import { RouteComparison } from './RouteComparison'
 import { useDemoPipeline } from './DemoPipeline'
 import { DemoPaperFlow } from './DemoPaperFlow'
@@ -71,9 +72,9 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
     <h4>Quote → Risk revalidation → Transaction Preparation → Simulation</h4>
     <p>Illustrative data · synthetic quote and unsigned request. Not live market data.</p>
     <p>Unsigned synthetic request only. No wallet, order, broadcast or moved funds.</p>
-    <button className="refresh-button" disabled={busy !== null || opportunityExpired || paperFilled} onClick={() => { void run('quote') }}>
+    <Button className="refresh-button" disabled={busy !== null || opportunityExpired || paperFilled} onClick={() => { void run('quote') }}>
       {busy === 'quote' ? 'Generating illustrative quote…' : 'Generate Illustrative Quote'}
-    </button>
+    </Button>
     {error && <p role="alert">{error}</p>}
     {quote && <>
       <h4>Quote: <strong>{quote.status}</strong>{expired || opportunityExpired ? ' (expired)' : ''}</h4>
@@ -100,9 +101,9 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
         <p>Underlying synthetic observation: {q.market_observed_at} / {q.market_observation_kind}. No live market refresh is claimed.</p>
       </>}
       {(expired || opportunityExpired) && <p role="status">Illustrative quote or Opportunity expired. Re-run analysis and obtain a fresh quote.</p>}
-      {quote.status === 'QUOTED' && <button className="refresh-button" disabled={disabled} onClick={() => { void run('prepare') }}>
+      {quote.status === 'QUOTED' && <Button className="refresh-button" disabled={disabled} onClick={() => { void run('prepare') }}>
         {busy === 'prepare' ? 'Preparing unsigned request…' : 'Prepare Unsigned Request'}
-      </button>}
+      </Button>}
     </>}
     {prepared && <>
       <h4>Transaction: <strong>{prepared.status}</strong></h4>
@@ -113,9 +114,9 @@ export function DemoPreparationFlow({ trust, opportunity, risk, opportunityExpir
         <p>Synthetic request representation · Not signed · Not executed · Not broadcastable</p>
         <details><summary>Prepared request parameters and provenance</summary><pre>{JSON.stringify(transaction.parameters, null, 2)}</pre></details>
         <p>Request fingerprint: <code>{transaction.fingerprint}</code></p>
-        <button className="refresh-button" disabled={disabled} onClick={() => { void run('simulate') }}>
+        <Button className="refresh-button" disabled={disabled} onClick={() => { void run('simulate') }}>
           {busy === 'simulate' ? 'Evaluating local constraints…' : 'Run Local Simulation'}
-        </button>
+        </Button>
       </>}
     </>}
     {s && <>

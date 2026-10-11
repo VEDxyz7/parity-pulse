@@ -1,0 +1,2564 @@
+{
+  "milestone": "EMERALD_FRONTEND_REDESIGN",
+  "forwarding_serialized": false,
+  "api_timings": [
+    {
+      "path": "/api/health",
+      "elapsed_ms": 4.256582999999864
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 3.5785839999998643
+    },
+    {
+      "path": "/api/demo/trust/scenarios",
+      "elapsed_ms": 51.76195800000005
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 85.55262500000003
+    },
+    {
+      "path": "/api/demo/trust/scenarios/steady",
+      "elapsed_ms": 16.742291999999907
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 10.927832999999737
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 10.953665999999885
+    },
+    {
+      "path": "/api/demo/trust/scenarios/thin-move",
+      "elapsed_ms": 141.8947089999997
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 11.963959000000159
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 10.837542000000212
+    },
+    {
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "elapsed_ms": 204.5914170000001
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 2.1895830000003116
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 6.615666000000147
+    },
+    {
+      "path": "/api/demo/quote",
+      "elapsed_ms": 25.552250000000186
+    },
+    {
+      "path": "/api/demo/prepare",
+      "elapsed_ms": 4.283708999999817
+    },
+    {
+      "path": "/api/demo/simulate",
+      "elapsed_ms": 20.74933400000009
+    },
+    {
+      "path": "/api/demo/paper/fills",
+      "elapsed_ms": 10.535957999999937
+    },
+    {
+      "path": "/api/demo/paper/positions/0cca0832-1a8b-51a5-a2de-42ff41ad5255/monitor",
+      "elapsed_ms": 6.854708000000301
+    },
+    {
+      "path": "/api/demo/paper/positions/0cca0832-1a8b-51a5-a2de-42ff41ad5255/exit",
+      "elapsed_ms": 47.95658400000002
+    },
+    {
+      "path": "/api/demo/paper/positions/0cca0832-1a8b-51a5-a2de-42ff41ad5255/scorecard",
+      "elapsed_ms": 8.218041000000085
+    },
+    {
+      "path": "/api/demo/trust/scenarios",
+      "elapsed_ms": 26.33374999999978
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 112.62654199999997
+    },
+    {
+      "path": "/api/demo/trust/scenarios/steady",
+      "elapsed_ms": 20.086957999999868
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 2.7719170000000304
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 11.982874999999694
+    },
+    {
+      "path": "/api/demo/trust/scenarios/thin-move",
+      "elapsed_ms": 149.71179199999915
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 3.5099589999999807
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 57.552708000000166
+    },
+    {
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "elapsed_ms": 178.5920419999993
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 1.9335000000000946
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 4.854084000000512
+    },
+    {
+      "path": "/api/demo/quote",
+      "elapsed_ms": 14.70366600000034
+    },
+    {
+      "path": "/api/demo/prepare",
+      "elapsed_ms": 40.09404199999972
+    },
+    {
+      "path": "/api/demo/simulate",
+      "elapsed_ms": 16.189916999999696
+    },
+    {
+      "path": "/api/demo/paper/fills",
+      "elapsed_ms": 15.792750000000524
+    },
+    {
+      "path": "/api/demo/paper/positions/79b09ce1-75f1-54c9-86d3-5c7ecc27f7c0/monitor",
+      "elapsed_ms": 10.476125000000138
+    },
+    {
+      "path": "/api/demo/paper/positions/79b09ce1-75f1-54c9-86d3-5c7ecc27f7c0/exit",
+      "elapsed_ms": 7.513292000000547
+    },
+    {
+      "path": "/api/demo/paper/positions/79b09ce1-75f1-54c9-86d3-5c7ecc27f7c0/scorecard",
+      "elapsed_ms": 8.108459000000039
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 2.5887919999995574
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 2.568457999999737
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 49.794167000000016
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 32.92766599999959
+    },
+    {
+      "path": "/api/assets/NVDA/trust",
+      "elapsed_ms": 3.130000000000109
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.6568340000003445
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.9234589999996388
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 30.370958000000428
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 21.475874999999178
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 22.513582999999926
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 184.7086250000002
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 174.30000000000018
+    },
+    {
+      "path": "/api/audit/decisions/9f0729f8-e97d-4a0c-9de0-ef1db5d1aeb3",
+      "elapsed_ms": 206.80670800000007
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 175.4395000000004
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 172.64220899999964
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.3627919999998994
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.3291250000002037
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 24.947250000001077
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 19.48529199999939
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 23.38091700000041
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 207.21387499999946
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 174.7046250000003
+    },
+    {
+      "path": "/api/audit/decisions/9f0729f8-e97d-4a0c-9de0-ef1db5d1aeb3",
+      "elapsed_ms": 186.09000000000015
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 176.5451669999984
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 202.5302499999998
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.3817500000004657
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.4119169999994483
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 26.7623339999991
+    },
+    {
+      "path": "/api/agent/tools",
+      "elapsed_ms": 195.96508299999914
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 69.05216700000165
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 124.60654200000135
+    },
+    {
+      "path": "/api/agent/tools",
+      "elapsed_ms": 194.4728329999998
+    },
+    {
+      "path": "/api/agent/tools",
+      "elapsed_ms": 220.1659579999996
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.680833000000348
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.7473750000008295
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 25.322916000000987
+    },
+    {
+      "path": "/api/agent/tools",
+      "elapsed_ms": 192.24204199999986
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 57.3882909999993
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 94.12266699999964
+    },
+    {
+      "path": "/api/agent/tools",
+      "elapsed_ms": 210.51187500000015
+    },
+    {
+      "path": "/api/agent/tools",
+      "elapsed_ms": 194.963667
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.9155829999999696
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.7868330000001151
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 37.92041599999902
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.378458999999566
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.297708000000057
+    },
+    {
+      "path": "/api/exposure/quote",
+      "elapsed_ms": 4.105125000000044
+    },
+    {
+      "path": "/api/assets/AAPL/trust",
+      "elapsed_ms": 8.40887499999917
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 221.46862499999952
+    },
+    {
+      "path": "/api/audit/decisions/8800def3-8b59-460c-b2e2-8f629e811f05",
+      "elapsed_ms": 421.06825000000026
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 617.9256249999999
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.3581249999988358
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.263582999999926
+    },
+    {
+      "path": "/api/opportunities/scan",
+      "elapsed_ms": 44.3011660000011
+    },
+    {
+      "path": "/api/opportunities/scan",
+      "elapsed_ms": 45.12412500000028
+    },
+    {
+      "path": "/api/opportunities/1f04651092737513a140414558ea69f3307e03eb221b37047b217e347132b92f",
+      "elapsed_ms": 1.9735409999993863
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.914334000000963
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.7837079999990237
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 29.155416000001424
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.4504579999993439
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.414334000000963
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 16.052457999998296
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.508958000002167
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.3905830000003334
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 28.170083999997587
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 8.581667000002199
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 16.083167000000685
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 2.4500000000007276
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 2.277084000001196
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 219.39733400000114
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 430.0188750000016
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 6.3127499999973224
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 4.544499999999971
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 35.27883400000064
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.449416999999812
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.3913339999999152
+    },
+    {
+      "path": "/api/exposure/quote",
+      "elapsed_ms": 11.901291999998648
+    },
+    {
+      "path": "/api/assets/AAPL/trust",
+      "elapsed_ms": 3.2264170000016748
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 257.53762500000084
+    },
+    {
+      "path": "/api/audit/decisions/57a0ff54-a11f-4e94-874e-cc37e72d38db",
+      "elapsed_ms": 457.57487500000207
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 631.9689579999977
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 7.799749999998312
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 7.6788329999981215
+    },
+    {
+      "path": "/api/opportunities/scan",
+      "elapsed_ms": 45.98883299999943
+    },
+    {
+      "path": "/api/opportunities/scan",
+      "elapsed_ms": 44.64666600000055
+    },
+    {
+      "path": "/api/opportunities/985dacb8d338b3aac5606a71eb25a034e0fb23c2f40b45184954a3bd26f8b319",
+      "elapsed_ms": 1.3685000000004948
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.9059999999990396
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.6555829999997513
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 29.686792000000423
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.3030830000025162
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.1716249999990396
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 26.211875000000873
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.639791999998124
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.5452919999988808
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 19.789332999996986
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 7.573499999998603
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 17.670750000001135
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 2.9446250000000873
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 2.6059580000001006
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 216.6342079999995
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 405.0172080000011
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 2.954375000001164
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 2.7576669999980368
+    },
+    {
+      "path": "/api/terminal",
+      "elapsed_ms": 37.98937499999738
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.9270410000026459
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.8798329999990528
+    },
+    {
+      "path": "/api/exposure/quote",
+      "elapsed_ms": 4.008499999999913
+    },
+    {
+      "path": "/api/assets/AAPL/trust",
+      "elapsed_ms": 2.207125000000815
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 205.54979200000162
+    },
+    {
+      "path": "/api/audit/decisions/b546ddc0-84e2-410b-b985-b59467c39532",
+      "elapsed_ms": 418.2980409999982
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 592.1969589999972
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.5447079999976268
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.405040999998164
+    },
+    {
+      "path": "/api/opportunities/scan",
+      "elapsed_ms": 34.86395900000207
+    },
+    {
+      "path": "/api/opportunities/scan",
+      "elapsed_ms": 74.77870899999834
+    },
+    {
+      "path": "/api/opportunities/a82f6cdaa51df336ee881efe3fb49c5ae969403172c6b0d602dec88de3e322db",
+      "elapsed_ms": 1.3951249999990978
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 2.347083999997267
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 2.498374999999214
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 27.347624999994878
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.3450000000011642
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.3041249999951106
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 27.30320799999754
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.4931250000008731
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.4854580000028363
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 27.70304199999373
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 8.764042000002519
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 18.47704199999862
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 1.6731669999935548
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 1.5921669999952428
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 224.50020800000493
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 418.44391599999653
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 12.324165999998513
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 10.688042000001587
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 10.2754999999961
+    },
+    {
+      "path": "/api/autopilot",
+      "elapsed_ms": 5.596250000002328
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 14.263333000002604
+    },
+    {
+      "path": "/api/portfolio/plans",
+      "elapsed_ms": 7.029291999999259
+    },
+    {
+      "path": "/api/workspace",
+      "elapsed_ms": 6.995540999996592
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 7.404500000004191
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 7.204333000001498
+    },
+    {
+      "path": "/api/demo/trust/scenarios",
+      "elapsed_ms": 29.526499999999942
+    },
+    {
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "elapsed_ms": 26.670165999996243
+    },
+    {
+      "path": "/api/demo/opportunity",
+      "elapsed_ms": 3.7984589999978198
+    },
+    {
+      "path": "/api/demo/risk",
+      "elapsed_ms": 18.798125000001164
+    },
+    {
+      "path": "/api/demo/quote",
+      "elapsed_ms": 28.51445799999783
+    },
+    {
+      "path": "/api/demo/prepare",
+      "elapsed_ms": 20.350917000003392
+    },
+    {
+      "path": "/api/demo/simulate",
+      "elapsed_ms": 8.771583000001556
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 239.36945800000103
+    },
+    {
+      "path": "/api/health",
+      "elapsed_ms": 2.276499999999942
+    },
+    {
+      "path": "/api/system-status",
+      "elapsed_ms": 2.4396659999983967
+    },
+    {
+      "path": "/api/scorecard",
+      "elapsed_ms": 223.79991699999664
+    },
+    {
+      "path": "/api/audit/decisions/decision:a82f6cdaa51df336ee881efe3fb49c5ae969403172c6b0d602dec88de3e322db",
+      "elapsed_ms": 435.03191700000025
+    },
+    {
+      "path": "/api/audit",
+      "elapsed_ms": 610.9161249999961
+    }
+  ],
+  "load_timings": [
+    {
+      "tag": "desktop-home",
+      "ready_ms": 212.67583399999967,
+      "navigation": {
+        "dom_content_loaded_ms": 7.5,
+        "load_ms": 7.799999952316284
+      }
+    },
+    {
+      "tag": "desktop-ask",
+      "ready_ms": 214.37720900000022,
+      "navigation": {
+        "dom_content_loaded_ms": 8.600000143051147,
+        "load_ms": 8.900000095367432
+      }
+    },
+    {
+      "tag": "desktop-opportunity",
+      "ready_ms": 213.18787499999962,
+      "navigation": {
+        "dom_content_loaded_ms": 11,
+        "load_ms": 11.200000047683716
+      }
+    },
+    {
+      "tag": "desktop-portfolio",
+      "ready_ms": 221.9953749999986,
+      "navigation": {
+        "dom_content_loaded_ms": 13.400000095367432,
+        "load_ms": 13.599999904632568
+      }
+    },
+    {
+      "tag": "desktop-autopilot",
+      "ready_ms": 211.96358300000065,
+      "navigation": {
+        "dom_content_loaded_ms": 6.200000047683716,
+        "load_ms": 6.5
+      }
+    },
+    {
+      "tag": "desktop-settings",
+      "ready_ms": 217.27470899999753,
+      "navigation": {
+        "dom_content_loaded_ms": 11.100000143051147,
+        "load_ms": 11.400000095367432
+      }
+    },
+    {
+      "tag": "desktop-audit",
+      "ready_ms": 214.77216699999917,
+      "navigation": {
+        "dom_content_loaded_ms": 15.5,
+        "load_ms": 15.799999952316284
+      }
+    },
+    {
+      "tag": "mobile-home",
+      "ready_ms": 211.77462500000183,
+      "navigation": {
+        "dom_content_loaded_ms": 5.299999952316284,
+        "load_ms": 5.5
+      }
+    },
+    {
+      "tag": "mobile-ask",
+      "ready_ms": 214.59500000000116,
+      "navigation": {
+        "dom_content_loaded_ms": 7.3999998569488525,
+        "load_ms": 7.599999904632568
+      }
+    },
+    {
+      "tag": "mobile-opportunity",
+      "ready_ms": 212.6419160000005,
+      "navigation": {
+        "dom_content_loaded_ms": 6.5,
+        "load_ms": 6.799999952316284
+      }
+    },
+    {
+      "tag": "mobile-portfolio",
+      "ready_ms": 219.27349999999933,
+      "navigation": {
+        "dom_content_loaded_ms": 11.799999952316284,
+        "load_ms": 12
+      }
+    },
+    {
+      "tag": "mobile-autopilot",
+      "ready_ms": 209.37574999999924,
+      "navigation": {
+        "dom_content_loaded_ms": 10.599999904632568,
+        "load_ms": 10.799999952316284
+      }
+    },
+    {
+      "tag": "mobile-settings",
+      "ready_ms": 219.48154200000135,
+      "navigation": {
+        "dom_content_loaded_ms": 12.100000143051147,
+        "load_ms": 12.300000190734863
+      }
+    },
+    {
+      "tag": "mobile-audit",
+      "ready_ms": 224.25979200000074,
+      "navigation": {
+        "dom_content_loaded_ms": 14.899999856948853,
+        "load_ms": 15.200000047683716
+      }
+    },
+    {
+      "tag": "tablet-home",
+      "ready_ms": 212.9575410000034,
+      "navigation": {
+        "dom_content_loaded_ms": 7.299999952316284,
+        "load_ms": 7.5
+      }
+    },
+    {
+      "tag": "tablet-ask",
+      "ready_ms": 211.79629200000272,
+      "navigation": {
+        "dom_content_loaded_ms": 6.200000047683716,
+        "load_ms": 6.5
+      }
+    },
+    {
+      "tag": "tablet-opportunity",
+      "ready_ms": 212.20437499999753,
+      "navigation": {
+        "dom_content_loaded_ms": 6.200000047683716,
+        "load_ms": 6.5
+      }
+    },
+    {
+      "tag": "tablet-portfolio",
+      "ready_ms": 211.04866700000275,
+      "navigation": {
+        "dom_content_loaded_ms": 11.200000047683716,
+        "load_ms": 11.299999952316284
+      }
+    },
+    {
+      "tag": "tablet-autopilot",
+      "ready_ms": 212.64295900000434,
+      "navigation": {
+        "dom_content_loaded_ms": 6.5,
+        "load_ms": 6.700000047683716
+      }
+    },
+    {
+      "tag": "tablet-settings",
+      "ready_ms": 217.45924999999988,
+      "navigation": {
+        "dom_content_loaded_ms": 11.300000190734863,
+        "load_ms": 11.600000143051147
+      }
+    },
+    {
+      "tag": "tablet-audit",
+      "ready_ms": 222.53399999999965,
+      "navigation": {
+        "dom_content_loaded_ms": 13.299999952316284,
+        "load_ms": 13.600000143051147
+      }
+    },
+    {
+      "tag": "ordinary-empty",
+      "ready_ms": 215.41170799999963,
+      "navigation": {
+        "dom_content_loaded_ms": 8.299999952316284,
+        "load_ms": 8.5
+      }
+    },
+    {
+      "tag": "simulation-failure",
+      "ready_ms": 110.64662499999395,
+      "navigation": {
+        "dom_content_loaded_ms": 6.200000047683716,
+        "load_ms": 6.5
+      }
+    },
+    {
+      "tag": "encoded-agent-audit",
+      "ready_ms": 211.42579200000182,
+      "navigation": {
+        "dom_content_loaded_ms": 11.299999952316284,
+        "load_ms": 11.5
+      }
+    }
+  ],
+  "verified_at_utc": "2026-10-11T03:35:56.602Z",
+  "status": "PASS",
+  "browser": "Disposable headless Google Chrome",
+  "frontend": "Built UI at localhost:5178",
+  "dataset_type": "DEMO_FIXTURE",
+  "synthetic": true,
+  "production_eligible": false,
+  "actual_local_backends": {
+    "desktop": 8054,
+    "mobile": 8055,
+    "ordinary_runtime_with_synthetic_data": 8056,
+    "simulation_failure": 8057
+  },
+  "workspace_scenarios": [
+    {
+      "viewport": "desktop",
+      "journey": "Home / keyboard navigation",
+      "journey_elapsed_ms": 738.0204589999994,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "keyboard_skip_link": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Direct / routing / Trust-blocked / dry-run review",
+      "journey_elapsed_ms": 835.3482089999998,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "backend_proposal": true,
+      "approval_unavailable": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Direct proposal → decision audit",
+      "journey_elapsed_ms": 1760.7135419999995,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Opportunity / no qualifying opportunity",
+      "journey_elapsed_ms": 740.1584579999999,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "stand_down": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Opportunity scan / detail",
+      "journey_elapsed_ms": 1210.6943330000013,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "ranked_by_backend": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Persisted scan GET",
+      "journey_elapsed_ms": 1418.7700830000013,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Portfolio / allocation / drift / persistent position",
+      "journey_elapsed_ms": 981.4552499999991,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "backend_values": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Autopilot / rules / risk / rebalance",
+      "journey_elapsed_ms": 521.721292000002,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "no_automatic_action": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Wallet unavailable / live blocked",
+      "journey_elapsed_ms": 1008.0051669999993,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Workspace API failure / recovery",
+      "journey_elapsed_ms": 1418.818292,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "no_zero_substitution": true
+    },
+    {
+      "viewport": "desktop",
+      "journey": "Scorecard / audit pagination / decision links",
+      "journey_elapsed_ms": 1387.1729169999999,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Home / keyboard navigation",
+      "journey_elapsed_ms": 689.1299590000017,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "keyboard_skip_link": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Direct / routing / Trust-blocked / dry-run review",
+      "journey_elapsed_ms": 707.6801659999983,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "backend_proposal": true,
+      "approval_unavailable": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Direct proposal → decision audit",
+      "journey_elapsed_ms": 1627.4384160000009,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Opportunity / no qualifying opportunity",
+      "journey_elapsed_ms": 737.1411250000019,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "stand_down": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Opportunity scan / detail",
+      "journey_elapsed_ms": 1068.7909160000017,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "ranked_by_backend": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Persisted scan GET",
+      "journey_elapsed_ms": 1275.0830830000014,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Portfolio / allocation / drift / persistent position",
+      "journey_elapsed_ms": 892.2009170000019,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "backend_values": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Autopilot / rules / risk / rebalance",
+      "journey_elapsed_ms": 517.3664160000008,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "no_automatic_action": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Wallet unavailable / live blocked",
+      "journey_elapsed_ms": 880.4952499999999,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Workspace API failure / recovery",
+      "journey_elapsed_ms": 1295.865417000001,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "no_zero_substitution": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Scorecard / audit pagination / decision links",
+      "journey_elapsed_ms": 1283.1761250000018,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Home / keyboard navigation",
+      "journey_elapsed_ms": 625.5920409999999,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "keyboard_skip_link": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Direct / routing / Trust-blocked / dry-run review",
+      "journey_elapsed_ms": 761.3376669999998,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "backend_proposal": true,
+      "approval_unavailable": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Direct proposal → decision audit",
+      "journey_elapsed_ms": 1678.8531250000015,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Opportunity / no qualifying opportunity",
+      "journey_elapsed_ms": 729.4807079999991,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "stand_down": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Opportunity scan / detail",
+      "journey_elapsed_ms": 1208.6121249999997,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "ranked_by_backend": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Persisted scan GET",
+      "journey_elapsed_ms": 1415.329999999998,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Portfolio / allocation / drift / persistent position",
+      "journey_elapsed_ms": 907.512999999999,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "backend_values": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Autopilot / rules / risk / rebalance",
+      "journey_elapsed_ms": 520.2784170000014,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "no_automatic_action": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Wallet unavailable / live blocked",
+      "journey_elapsed_ms": 926.1366249999992,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Workspace API failure / recovery",
+      "journey_elapsed_ms": 1340.3062910000008,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "no_zero_substitution": true
+    },
+    {
+      "viewport": "tablet",
+      "journey": "Scorecard / audit pagination / decision links",
+      "journey_elapsed_ms": 1322.3148749999964,
+      "status": "PASS",
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Reviewed mandate → backend drift → blocked rebalance",
+      "journey_elapsed_ms": 1343.702541999999,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "expected_version": true,
+      "no_execution": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Actual simulation failure",
+      "journey_elapsed_ms": 848.8896669999958,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "risk_revalidation": true,
+      "no_paper_fill": true
+    },
+    {
+      "viewport": "mobile",
+      "journey": "Encoded original agent/scan decision → audit trace",
+      "journey_elapsed_ms": 1128.2427920000046,
+      "status": "PASS",
+      "no_page_overflow": true,
+      "encoded_colon_contract": true
+    }
+  ],
+  "agent_api_scenarios": [
+    {
+      "viewport": "desktop",
+      "status": "PASS",
+      "seven_tools": true,
+      "schema_expansion": true,
+      "inspection_only": true,
+      "no_overflow": true,
+      "production_navigation_locked": true,
+      "api_failure_recovery": true
+    },
+    {
+      "viewport": "mobile",
+      "status": "PASS",
+      "seven_tools": true,
+      "schema_expansion": true,
+      "inspection_only": true,
+      "no_overflow": true,
+      "production_navigation_locked": true,
+      "api_failure_recovery": true
+    }
+  ],
+  "scenario_results": [
+    {
+      "viewport": "desktop",
+      "scenario": "steady",
+      "trust": "NORMAL",
+      "opportunity": "NO_OPPORTUNITY",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "desktop",
+      "scenario": "thin-move",
+      "trust": "LIKELY_NOISE",
+      "opportunity": "REJECTED_BY_TRUST",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "desktop",
+      "scenario": "supported-move",
+      "trust": "LIKELY_INFORMATION",
+      "opportunity": "ACTIONABLE",
+      "full_hero_flow": true,
+      "stand_down": false,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile",
+      "scenario": "steady",
+      "trust": "NORMAL",
+      "opportunity": "NO_OPPORTUNITY",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile",
+      "scenario": "thin-move",
+      "trust": "LIKELY_NOISE",
+      "opportunity": "REJECTED_BY_TRUST",
+      "full_hero_flow": false,
+      "stand_down": true,
+      "status": "PASS"
+    },
+    {
+      "viewport": "mobile",
+      "scenario": "supported-move",
+      "trust": "LIKELY_INFORMATION",
+      "opportunity": "ACTIONABLE",
+      "full_hero_flow": true,
+      "stand_down": false,
+      "status": "PASS"
+    }
+  ],
+  "terminal_scenarios": [
+    {
+      "viewport": "desktop",
+      "status": "PASS",
+      "sections": 6,
+      "backend_exact_values": true,
+      "empty_filter": true,
+      "api_failure_clears_values": true,
+      "recovery": true,
+      "no_overflow": true,
+      "live_calls": 0
+    },
+    {
+      "viewport": "mobile",
+      "status": "PASS",
+      "sections": 6,
+      "backend_exact_values": true,
+      "empty_filter": true,
+      "api_failure_clears_values": true,
+      "recovery": true,
+      "no_overflow": true,
+      "live_calls": 0
+    }
+  ],
+  "scorecard_scenarios": [
+    {
+      "viewport": "desktop",
+      "status": "PASS",
+      "scorecard": true,
+      "paper_outcome_distinct": true,
+      "abstention": true,
+      "audit_complete_for_recorded_scope": true,
+      "unrecorded_stages_unknown": true,
+      "no_false_confirmation": true,
+      "api_error_clears_values": true,
+      "recovery": true,
+      "no_page_overflow": true
+    },
+    {
+      "viewport": "mobile",
+      "status": "PASS",
+      "scorecard": true,
+      "paper_outcome_distinct": true,
+      "abstention": true,
+      "audit_complete_for_recorded_scope": true,
+      "unrecorded_stages_unknown": true,
+      "no_false_confirmation": true,
+      "api_error_clears_values": true,
+      "recovery": true,
+      "no_page_overflow": true
+    }
+  ],
+  "portfolio_api_smoke": {
+    "superseded_by": "actual_frontend_mandate_and_drift_journey"
+  },
+  "desktop_mobile_no_page_overflow": true,
+  "dedicated_navigation": "#demo-sandbox",
+  "pipeline_statuses_verified": true,
+  "production_trust_calls_from_demo_sandbox": 0,
+  "ordinary_overview_trust": "INSUFFICIENT_EVIDENCE",
+  "ordinary_runtime_demo_requests": 0,
+  "production_opportunity_navigation_disabled": true,
+  "cancelled_snapshot_reads": [
+    {
+      "phase": "DEMO_DESKTOP",
+      "path": "/api/terminal",
+      "reason": "CLIENT_CANCELLED_SNAPSHOT_READ"
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "path": "/api/terminal",
+      "reason": "CLIENT_CANCELLED_SNAPSHOT_READ"
+    }
+  ],
+  "network_origins": [
+    "http://127.0.0.1:5178"
+  ],
+  "external_browser_requests": 0,
+  "live_provider_calls": 0,
+  "live_execution_calls": 0,
+  "runtime_errors": [],
+  "request_log": [
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/steady",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/thin-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/quote",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/prepare",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/simulate",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/paper/fills",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/0cca0832-1a8b-51a5-a2de-42ff41ad5255/monitor",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/0cca0832-1a8b-51a5-a2de-42ff41ad5255/exit",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/demo/paper/positions/0cca0832-1a8b-51a5-a2de-42ff41ad5255/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_DESKTOP",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/steady",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/thin-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/quote",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/prepare",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/simulate",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/paper/fills",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/79b09ce1-75f1-54c9-86d3-5c7ecc27f7c0/monitor",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "POST",
+      "path": "/api/demo/paper/positions/79b09ce1-75f1-54c9-86d3-5c7ecc27f7c0/exit",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/demo/paper/positions/79b09ce1-75f1-54c9-86d3-5c7ecc27f7c0/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_MOBILE",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "ORDINARY_OVERVIEW",
+      "method": "GET",
+      "path": "/api/assets/NVDA/trust",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/audit/decisions/9f0729f8-e97d-4a0c-9de0-ef1db5d1aeb3",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/audit/decisions/9f0729f8-e97d-4a0c-9de0-ef1db5d1aeb3",
+      "status": 200
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "TERMINAL",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/agent/tools",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/agent/tools",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/agent/tools",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/agent/tools",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/agent/tools",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "AGENT_API",
+      "method": "GET",
+      "path": "/api/agent/tools",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/exposure/quote",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/assets/AAPL/trust",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit/decisions/8800def3-8b59-460c-b2e2-8f629e811f05",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/opportunities/scan",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/opportunities/scan",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/opportunities/1f04651092737513a140414558ea69f3307e03eb221b37047b217e347132b92f",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/exposure/quote",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/assets/AAPL/trust",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit/decisions/57a0ff54-a11f-4e94-874e-cc37e72d38db",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/opportunities/scan",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/opportunities/scan",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/opportunities/985dacb8d338b3aac5606a71eb25a034e0fb23c2f40b45184954a3bd26f8b319",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/terminal",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/exposure/quote",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/assets/AAPL/trust",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit/decisions/b546ddc0-84e2-410b-b985-b59467c39532",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/opportunities/scan",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/opportunities/scan",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/opportunities/a82f6cdaa51df336ee881efe3fb49c5ae969403172c6b0d602dec88de3e322db",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 503,
+      "injected": true
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/autopilot",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "POST",
+      "path": "/api/portfolio/plans",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/workspace",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "GET",
+      "path": "/api/demo/trust/scenarios/supported-move",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "POST",
+      "path": "/api/demo/opportunity",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "POST",
+      "path": "/api/demo/risk",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "POST",
+      "path": "/api/demo/quote",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "POST",
+      "path": "/api/demo/prepare",
+      "status": 200
+    },
+    {
+      "phase": "DEMO_SIMULATION_FAILURE",
+      "method": "POST",
+      "path": "/api/demo/simulate",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/system-status",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/scorecard",
+      "status": 200
+    },
+    {
+      "phase": "WORKSPACE",
+      "method": "GET",
+      "path": "/api/audit/decisions/decision:a82f6cdaa51df336ee881efe3fb49c5ae969403172c6b0d602dec88de3e322db",
+      "status": 200
+    }
+  ]
+}

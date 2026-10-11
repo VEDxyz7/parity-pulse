@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button'
 import { ProposalReview } from './ProposalReview'
 import { RouteComparison } from './RouteComparison'
 import { useEffect, useRef, useState } from 'react'
@@ -40,7 +41,7 @@ export function AskFlow({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
     <form onSubmit={event => { void submit(event) }} className="ask-form">
       <label htmlFor="stock-request">Stock request</label>
       <input id="stock-request" value={text} onChange={event => setText(event.target.value)} maxLength={240} required disabled={pending} autoComplete="off" />
-      <button className="refresh-button" type="submit" disabled={pending}>{pending ? 'Preparing estimate' : 'Create exposure proposal'}</button>
+      <Button className="refresh-button" type="submit" disabled={pending}>{pending ? 'Preparing estimate' : 'Create exposure proposal'}</Button>
       <small>Use “Buy $50 Apple” or “I have $50 of Nvidia”. Budget is USD notional before unavailable fees.</small>
     </form>
     {error && <p role="alert" className="connection-alert">{error}</p>}

@@ -8,12 +8,16 @@ import json
 from pathlib import Path
 
 from app.api.workspace import WorkspaceState
+from app.models.display_history import DisplayHistory
 from app.models.opportunity_scan import OpportunityRequest, OpportunityScan
 from app.models.portfolio import ConfigRequest, PortfolioConfig, RebalancePlan
+from app.models.presentation import PresentationAnalysis, PresentationScan, PresentationWorkspace
+from app.models.routing import RouteDecision
 from app.models.scorecard import AuditPage
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = (
+    DisplayHistory,
     WorkspaceState,
     OpportunityScan,
     OpportunityRequest,
@@ -21,6 +25,10 @@ MODELS = (
     RebalancePlan,
     PortfolioConfig,
     AuditPage,
+    PresentationWorkspace,
+    PresentationAnalysis,
+    PresentationScan,
+    RouteDecision,
 )
 
 
@@ -100,7 +108,7 @@ def main():
                 raise SystemExit("Frontend contracts differ from backend schemas")
         else:
             path.write_text(content)
-    print("PASS: seven Pydantic-derived frontend contracts")
+    print(f"PASS: {len(MODELS)} Pydantic-derived frontend contracts")
 
 
 if __name__ == "__main__":

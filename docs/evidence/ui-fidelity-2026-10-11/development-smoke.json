@@ -1,0 +1,14 @@
+{
+  "previous_pid": 3085,
+  "new_pid": 6593,
+  "backend_health": "PASS",
+  "display_periods": "PASS",
+  "gates": {
+    "DATA_GATE": "PASS",
+    "DRY_RUN_GATE": "PASS",
+    "SWAP_LIVE_GATE": "BLOCKED",
+    "RFQ_LIVE_GATE": "BLOCKED",
+    "AGENTIC_WALLET_LIVE_GATE": "BLOCKED"
+  },
+  "live_trading_enabled": false
+}

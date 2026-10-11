@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button'
 import { useEffect, useRef, useState } from 'react'
 import type { OpportunityResult } from '../services/demoOpportunity'
 import type { PreparationResult, QuoteResult, SimulationResult } from '../services/demoPreparation'
@@ -49,9 +50,9 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
     <h4>PAPER EXECUTION → Position → Monitor → Exit → Scorecard</h4>
     <p><strong>SIMULATED DATA — NOT LIVE TRADING</strong><br />NO REAL FUNDS MOVED</p>
     <p>Session-only paper ledger; restarting the isolated backend clears paper records. Production databases are untouched.</p>
-    <button className="refresh-button" disabled={busy || (!row && expired)} onClick={() => { void run('fill') }}>
+    <Button className="refresh-button" disabled={busy || (!row && expired)} onClick={() => { void run('fill') }}>
       {row ? 'Retrieve Paper Fill' : 'Create Paper Fill'}
-    </button>
+    </Button>
     {!row && expired && <p role="status">Simulation/quote expired. Refresh the analysis before creating a paper fill.</p>}
     {error && <p role="alert">{error}</p>}
     {row && <>
@@ -67,7 +68,7 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
         <div><dt>Execution reserve / USD, released on exit</dt><dd>{row.position.reserved_usd}</dd></div>
       </dl>
       <p>Entry synthetic time: {row.fill.filled_at}. Current paper Risk was revalidated using ledger cash, exposure, losses, trade count and cooldown.</p>
-      {row.position.state === 'OPEN' && !row.observation && <button className="refresh-button" disabled={busy} onClick={() => { void run('monitor') }}>Monitor Synthetic Opening Observation</button>}
+      {row.position.state === 'OPEN' && !row.observation && <Button className="refresh-button" disabled={busy} onClick={() => { void run('monitor') }}>Monitor Synthetic Opening Observation</Button>}
       {row.observation && <>
         <h4>Monitor: explicit synthetic observation</h4>
         <p>{row.observation.description}</p>
@@ -78,7 +79,7 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
           <div><dt>Exit fee / USD</dt><dd>{row.observation.fees_usd}</dd></div>
           <div><dt>Exit gas / USD</dt><dd>{row.observation.gas_usd}</dd></div>
         </dl>
-        {row.position.state === 'OPEN' && <button className="refresh-button" disabled={busy} onClick={() => { void run('exit') }}>Exit Paper Position</button>}
+        {row.position.state === 'OPEN' && <Button className="refresh-button" disabled={busy} onClick={() => { void run('exit') }}>Exit Paper Position</Button>}
       </>}
       {row.pnl && <>
         <h4>Realized PAPER P&amp;L</h4>
@@ -89,7 +90,7 @@ export function DemoPaperFlow({ quote, prepared, simulation, origin, expired, on
           <div><dt>Return on entry cost basis / %</dt><dd>{row.pnl.return_pct}</dd></div>
         </dl>
         <p>Slippage is already in entry/exit prices. The unused reserve is released, not charged as a fee.</p>
-        <button className="refresh-button" disabled={busy} onClick={() => { void run('score') }}>View Paper Scorecard</button>
+        <Button className="refresh-button" disabled={busy} onClick={() => { void run('score') }}>View Paper Scorecard</Button>
       </>}
       {score && <>
         <h4>Scorecard: <strong>EXITED</strong></h4>

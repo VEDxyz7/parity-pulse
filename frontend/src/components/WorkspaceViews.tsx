@@ -1,3 +1,5 @@
+import { ReadRefresh } from '../ui/ReadRefresh'
+import { Button } from '../ui/Button'
 import { dataLabel, DataContext } from './DataContext'
 import { useQuery } from '@tanstack/react-query'
 import { getWorkspace, getAudit, readRefresh, type Mode, type WorkspaceState } from '../services/workspace'
@@ -14,7 +16,7 @@ export function useWorkspace(mode: Mode) {
 function Inspection({ mode, children }: { mode: Mode; children: (data: WorkspaceState) => React.ReactNode }) {
   const query = useWorkspace(mode)
   return <>
-    <button className="refresh-button" disabled={query.isFetching} onClick={() => void query.refetch()}>Refresh workspace state</button>
+    <ReadRefresh refetch={query.refetch} busy={query.isFetching}>Refresh workspace state</ReadRefresh>
     {query.isFetching && <p role="status">Loading authoritative workspace state…</p>}
     {query.isError && <p role="alert">Workspace unavailable. Holdings, wallet and financial values remain unknown. No cached healthy result is substituted.</p>}
     {!query.isError && !query.isFetching && query.data && <><p>Observed <time>{query.data.generated_at}</time> · {dataLabel(query.data.data_mode)} · {query.data.source}</p>{children(query.data)}</>}
@@ -76,8 +78,8 @@ function MandateControls({ mode, version, unavailable }: { mode: Mode; version: 
     finally { pending.current = false; if (!controller.signal.aborted) setBusy(false) }
   }
   return <section className="panel"><h2>Reviewed non-executable mandate</h2><p>Weights and drift bands are fractions. Backend validates the exact total and platform limits. Risk budget is ex-ante and does not guarantee maximum realized loss.</p>
-    <form className="workspace-form" onSubmit={e => void submit(e)}>{[["Stock ticker",ticker,setTicker],["Stock target fraction",weight,setWeight],["Cash target fraction",cash,setCash],["Drift band fraction",band,setBand],["Rebalance cap USD",cap,setCap],["Risk budget USD",risk,setRisk],["Stock exposure cap USD",exposure,setExposure]].map(([label,input,setter]) => <label key={String(label)}>{String(label)}<input required autoComplete="off" maxLength={60} disabled={busy || unavailable} value={String(input)} onChange={e => (setter as (v:string)=>void)(e.target.value)} /></label>)}<button className="refresh-button" disabled={busy || unavailable}>Save reviewed mandate</button></form>
-    <button className="refresh-button" disabled={busy || unavailable || version === 0} onClick={() => void submit()}>Evaluate drift proposal</button>
+    <form className="workspace-form" onSubmit={e => void submit(e)}>{[["Stock ticker",ticker,setTicker],["Stock target fraction",weight,setWeight],["Cash target fraction",cash,setCash],["Drift band fraction",band,setBand],["Rebalance cap USD",cap,setCap],["Risk budget USD",risk,setRisk],["Stock exposure cap USD",exposure,setExposure]].map(([label,input,setter]) => <label key={String(label)}>{String(label)}<input required autoComplete="off" maxLength={60} disabled={busy || unavailable} value={String(input)} onChange={e => (setter as (v:string)=>void)(e.target.value)} /></label>)}<Button className="refresh-button" disabled={busy || unavailable}>Save reviewed mandate</Button></form>
+    <Button className="refresh-button" disabled={busy || unavailable || version === 0} onClick={() => void submit()}>Evaluate drift proposal</Button>
     <p>Retries and repeat reads retain the same planning identity until a new reviewed mandate is saved. Refreshing state never submits an action.</p>
     {message && <p role="status">{message}</p>}
   </section>
@@ -92,5 +94,5 @@ export function AuditEvents({ mode }: { mode: Mode }) {
   const [offset,setOffset]=useState(0)
   const query=useQuery({queryKey:['audit-events',mode,offset],queryFn:({signal})=>getAudit(mode,offset,signal),...readRefresh})
   const data=query.isError||query.isFetching?null:query.data
-  return <section className="panel"><h2>Audit events</h2><button className="refresh-button" disabled={query.isFetching} onClick={()=>void query.refetch()}>Refresh audit events</button>{query.isFetching&&<p role="status">Loading audit events…</p>}{query.isError&&<p role="alert">Audit events unavailable; no prior events substituted.</p>}{data&&<><p>As of {data.generated_at} · Recorded backend evidence</p>{!data.page.items.length&&<p>No recorded audit events in this scope.</p>}{data.page.items.map(e=><details key={e.event_id}><summary>{e.timestamp} · {e.event_type} · {e.status}</summary><p>{e.capture_kind} · {e.source} · {(e.reasons??[]).join(' · ')}</p><p>Correlation {e.correlation_id??'Unavailable'} · Decision {e.decision_id}</p><a className="refresh-button" href={`#audit/${encodeURIComponent(e.decision_id)}`}>Inspect decision trace</a></details>)}<div className="terminal-filter"><button disabled={!offset} className="refresh-button" onClick={()=>setOffset(Math.max(0,offset-25))}>Previous events</button><span>Event offset {offset}</span><button disabled={!data.page.has_more} className="refresh-button" onClick={()=>setOffset(offset+25)}>Next events</button></div></>}</section>
+  return <section className="panel"><h2>Audit events</h2><ReadRefresh refetch={query.refetch} busy={query.isFetching}>Refresh audit events</ReadRefresh>{query.isFetching&&<p role="status">Loading audit events…</p>}{query.isError&&<p role="alert">Audit events unavailable; no prior events substituted.</p>}{data&&<><p>As of {data.generated_at} · Recorded backend evidence</p>{!data.page.items.length&&<p>No recorded audit events in this scope.</p>}{data.page.items.map(e=><details key={e.event_id}><summary>{e.timestamp} · {e.event_type} · {e.status}</summary><p>{e.capture_kind} · {e.source} · {(e.reasons??[]).join(' · ')}</p><p>Correlation {e.correlation_id??'Unavailable'} · Decision {e.decision_id}</p><a className="refresh-button" href={`#audit/${encodeURIComponent(e.decision_id)}`}>Inspect decision trace</a></details>)}<div className="terminal-filter"><Button disabled={!offset} className="refresh-button" onClick={()=>setOffset(Math.max(0,offset-25))}>Previous events</Button><span>Event offset {offset}</span><Button disabled={!data.page.has_more} className="refresh-button" onClick={()=>setOffset(offset+25)}>Next events</Button></div></>}</section>
 }

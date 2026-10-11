@@ -1,5 +1,46 @@
 # Parity Pulse
 
+## Scenario product workspace
+
+The default frontend opens a cinematic 3D paper entrance. **Enter Parity Pulse** or
+scroll one viewport to reveal the existing, populated offline **Scenario workspace**.
+Direct dashboard hash URLs bypass the entrance. Reduced motion and unavailable WebGL
+retain a static branded entrance and working entry action. The workspace uses
+fixed modeled market data, fictional Atlas/Meridian representations, and the existing
+Trust, Opportunity, Risk, Routing, Quote, preparation and local simulation engines.
+Markets, Trust & Signals, Opportunities, Portfolio, Research Lab and Scorecard share
+one backend presentation adapter. Prices are explicitly modeled, not current quotes;
+proposals never authorize execution or enter production evidence.
+
+Overview and asset details separately display captured **Alpaca historical equity bars**
+for NVDA/AAPL, October 5–9, 2026: five-minute regular-session closes, USD, UTC axes.
+These observations do not price the modeled portfolio or become Trust references.
+Liquidity in the scenario workspace is a labelled USD assumption, not executable depth.
+Refresh controls re-read backend state and report completion without implying new quotes.
+See [UI polish, data provenance and verification](docs/UI_POLISH_REPORT.md). See [final charting, allocation and interaction evidence](docs/UI_FIDELITY_REPORT.md).
+
+Run the canonical commands in separate terminals from the repository root:
+
+```sh
+.venv/bin/python -m uvicorn app.main:create_app --factory --app-dir backend --host 127.0.0.1 --port 8000 --no-access-log
+npm run dev
+```
+
+Open `http://127.0.0.1:5173/`. Routes are `#overview`, `#markets`, `#trust`,
+`#opportunities`, `#portfolio`, `#research` and `#scorecard`.
+In Research Lab, run a news, normal or low-liquidity study, adjust assumptions,
+pin a comparison and reset. Opportunities supports a budget, risk mandate, universe
+and market window; reopening studies stand down pending opening-model evidence.
+The portfolio contains modeled holdings and target-drift suggestions, not account balances.
+Scorecard agreement comes from its displayed fixture records, not live performance.
+
+The unchanged provider/operations workspace is explicitly available at
+`http://127.0.0.1:5173/?workspace=verified#overview`. It retains the actual provider,
+Trust gate, execution-gate, paper lifecycle, Agent API and diagnostic behavior.
+Selecting the scenario workspace never substitutes data inside that workspace or the
+production APIs. See [productization evidence and limitations](docs/PRODUCTIZATION_REPORT.md).
+See [landing implementation and browser verification](docs/LANDING_PAGE_REPORT.md).
+
 Master Phase 16 — Hardening is **PASS for the non-live release-candidate scope**.
 See [the hardening report and release checklist](docs/PHASE_16_REPORT.md) for exact
 tests, performance, recovery evidence and unresolved provider/LIVE blockers.
@@ -12,7 +53,7 @@ approval capabilities are accurately unavailable; production gates remain unchan
 [Phase 15 report, exact files and validation](docs/PHASE_15_REPORT.md).
 The older milestone notes below are historical.
 
-Navigate to `#overview`, `#ask` (route comparison / proposal review), `#opportunity`
+In the explicit `?workspace=verified` workspace, navigate to `#overview`, `#ask` (route comparison / proposal review), `#opportunity`
 (or `#opportunity/<run_id>`), `#autopilot`, `#portfolio`, `#terminal`, `#agent-api`,
 `#settings`, `#audit` (or `#audit/<decision_id>`) and `#demo-sandbox`.
 Analytical navigation does not unlock the disabled execution controls. All numbers,

@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button'
 import { RouteComparison } from './RouteComparison'
 import { useEffect, useRef, useState } from 'react'
 import type { DemoResult } from '../services/demoSandbox'
@@ -62,9 +63,9 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
     <h3>Trust → Opportunity → Risk</h3>
     <p>Illustrative data · synthetic inputs, not live market data</p>
     <p>Economic targets, costs and risk limits are explicitly synthetic assumptions. Trust confidence remains uncalibrated. Illustrative quotes, unsigned requests and local constraint checks grant no execution authority.</p>
-    <button className="refresh-button" disabled={busy !== null} onClick={() => { void analyze('opportunity') }}>
+    <Button className="refresh-button" disabled={busy !== null} onClick={() => { void analyze('opportunity') }}>
       {busy === 'opportunity' ? 'Analyzing opportunity…' : 'Analyze Opportunity'}
-    </button>
+    </Button>
     {error && <p role="alert">{error}</p>}
     {decision && <>
       <h4>Opportunity: <strong>{decision.status}</strong></h4>
@@ -90,9 +91,9 @@ export function DemoOpportunityFlow({ trust }: { trust: DemoResult }) {
       </dl>}
       <p>Synthetic-clock validity: {decision.evaluated_at} → {decision.valid_until}</p>
       {expired && <p role="status">This analytical proposal has expired. Run the scenario again.</p>}
-      <button className="refresh-button" disabled={busy !== null || expired} onClick={() => { void analyze('risk') }}>
+      <Button className="refresh-button" disabled={busy !== null || expired} onClick={() => { void analyze('risk') }}>
         {busy === 'risk' ? 'Checking risk…' : 'Analyze Risk'}
-      </button>
+      </Button>
     </>}
     {risk && <>
       <h4>Risk: <strong>{risk.risk.status}</strong>{expired ? ' (expired analytical result)' : ''}</h4>

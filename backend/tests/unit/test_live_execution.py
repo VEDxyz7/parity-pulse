@@ -222,7 +222,9 @@ def test_receipt_only_recovery_fails_then_complete_evidence_recovers():
     claimed(store)
     rpc, receipt, _, _, expected = rpc_fixture()
     store.upsert("action", status="QUOTED", evidence={"route": "SWAP", **expected})
-    store.begin_submission("action", kind="SWAP", identity=HASH, nonce=7, payload_digest="a" * 64)
+    store.begin_submission(
+        "action", kind="SWAP", identity=HASH, nonce=7, payload_digest=expected["transaction_digest"]
+    )
     store.upsert("action", status="SUBMITTED", swap_tx=HASH)
     logs = receipt["logs"]
     receipt["logs"] = []
@@ -246,7 +248,11 @@ def test_provider_nonfill_status_never_releases_wallet(status):
         },
     )
     store.begin_submission(
-        "action", kind="RFQ", identity="request-1", nonce=None, payload_digest="a" * 64
+        "action",
+        kind="RFQ",
+        identity="request-1",
+        nonce=None,
+        payload_digest="a" * 64,
     )
     store.upsert("action", status="SUBMITTED")
     worker = executor(store)
@@ -392,7 +398,9 @@ def test_crash_after_durable_identity_before_presentation_update_recovers(tmp_pa
     claimed(store)
     rpc, _, _, _, expected = rpc_fixture()
     store.upsert("action", status="QUOTED", evidence={"route": "SWAP", **expected})
-    store.begin_submission("action", kind="SWAP", identity=HASH, nonce=7, payload_digest="a" * 64)
+    store.begin_submission(
+        "action", kind="SWAP", identity=HASH, nonce=7, payload_digest=expected["transaction_digest"]
+    )
     store.close()  # Crash before swap_tx assignment/response: persisted hash remains usable.
     recovered = LiveFillStore(path)
     assert executor(recovered, rpc).reconcile("action")["status"] == "CONFIRMED"
@@ -405,7 +413,9 @@ def test_canonical_settlement_reorg_relocks_wallet():
     claimed(store)
     rpc, _, _, _, expected = rpc_fixture()
     store.upsert("action", status="QUOTED", evidence={"route": "SWAP", **expected})
-    store.begin_submission("action", kind="SWAP", identity=HASH, nonce=7, payload_digest="a" * 64)
+    store.begin_submission(
+        "action", kind="SWAP", identity=HASH, nonce=7, payload_digest=expected["transaction_digest"]
+    )
     worker = executor(store, rpc)
     assert worker.reconcile("action")["status"] == "CONFIRMED"
     assert worker.reconcile("action")["status"] == "CONFIRMED"
@@ -414,6 +424,187 @@ def test_canonical_settlement_reorg_relocks_wallet():
     assert store.unresolved("plan")
     with pytest.raises(ValueError, match="UNRESOLVED"):
         claimed(store, "another")
+
+
+@pytest.mark.parametrize("settled", [False, True])
+@pytest.mark.parametrize(
+    "defect",
+    [
+        "nonce",
+        "missing_nonce",
+        "digest",
+        "hash",
+        "payload",
+        "minimum",
+        "missing_prepared_minimum",
+        "route",
+        "missing_route",
+        "missing_attempt",
+        "null_evidence",
+        "malformed_evidence",
+        "null_settlement",
+        "rpc_nonce",
+    ],
+)
+def test_restart_conflicting_settlement_keeps_or_restores_wallet_lock(tmp_path, settled, defect):
+    path = tmp_path / "binding.sqlite"
+    store = LiveFillStore(path)
+    claimed(store)
+    rpc, _, _, _, expected = rpc_fixture()
+    store.upsert("action", status="QUOTED", evidence={"route": "SWAP", **expected})
+    store.begin_submission(
+        "action", kind="SWAP", identity=HASH, nonce=7, payload_digest=expected["transaction_digest"]
+    )
+    store.upsert("action", status="SUBMISSION_UNKNOWN", swap_tx=HASH)
+    if settled:
+        assert executor(store, rpc).reconcile("action")["status"] == "CONFIRMED"
+        assert not store.unresolved()
+    # Simulate corrupted/incomplete persisted evidence, not a supported terminal-state edit.
+    if defect in {"nonce", "missing_nonce", "digest", "hash"}:
+        column, value = {
+            "nonce": ("nonce", 8),
+            "missing_nonce": ("nonce", None),
+            "digest": ("payload_digest", "f" * 64),
+            "hash": ("identity", "0x" + "f" * 64),
+        }[defect]
+        store.db.execute(
+            f"UPDATE submission_attempts SET {column}=? WHERE action_id=?", (value, "action")
+        )
+    elif defect == "rpc_nonce":
+        rpc.read("eth_getTransactionByHash", HASH)["nonce"] = "0x8"
+    elif defect == "missing_attempt":
+        store.db.execute("DELETE FROM submission_attempts WHERE action_id=?", ("action",))
+    else:
+        import json
+
+        evidence = store.get("action")["evidence"]
+        if defect == "payload":
+            evidence["transaction"]["data"] = "0x5678"
+        elif defect == "minimum":
+            evidence["minimum_out"] = str(int(evidence["minimum_out"]) + 1)
+        elif defect == "missing_prepared_minimum":
+            del evidence["transaction"]["minReceiveAmount"]
+        elif defect == "route":
+            evidence["route"] = "RFQ"
+        elif defect == "null_evidence":
+            evidence = None
+        elif defect == "malformed_evidence":
+            evidence = []
+        elif defect == "null_settlement":
+            evidence["settlement"] = None
+        else:
+            del evidence["route"]
+        store.db.execute(
+            "UPDATE fills SET evidence=? WHERE action_id=?", (json.dumps(evidence), "action")
+        )
+    store.db.commit()
+    store.close()
+    recovered = LiveFillStore(path)
+    try:
+        worker = executor(recovered, rpc)  # no signer methods and no submission transport
+        assert worker.reconcile("action")["status"] == "RECONCILIATION_REQUIRED"
+        assert worker.reconcile("action")["status"] == "RECONCILIATION_REQUIRED"
+        assert recovered.unresolved("plan")
+        with pytest.raises(ValueError, match="UNRESOLVED"):
+            claimed(recovered, "another")
+    finally:
+        recovered.close()
+
+
+def test_confirmed_restart_rechecks_identity_without_using_later_balances(tmp_path):
+    path = tmp_path / "confirmed.sqlite"
+    store = LiveFillStore(path)
+    claimed(store)
+    rpc, _, _, _, expected = rpc_fixture()
+    store.upsert("action", status="QUOTED", evidence={"route": "SWAP", **expected})
+    store.begin_submission(
+        "action", kind="SWAP", identity=HASH, nonce=7, payload_digest=expected["transaction_digest"]
+    )
+    confirmed = executor(store, rpc).reconcile("action")
+    store.close()
+    recovered = LiveFillStore(path)
+    try:
+
+        def no_current_balance(*_):
+            raise AssertionError("Later balances do not describe the original transaction")
+
+        rpc.erc20_balance = no_current_balance
+        assert executor(recovered, rpc).reconcile("action") == confirmed
+        assert not recovered.unresolved()
+    finally:
+        recovered.close()
+
+
+@pytest.mark.parametrize("nonce", [None, True, 7.0, "7", -1, 2**63])
+def test_journal_rejects_invalid_transaction_nonce_without_releasing_claim(nonce):
+    store = LiveFillStore()
+    claimed(store)
+    store.upsert("action", status="QUOTED")
+    with pytest.raises(ValueError, match="NONCE"):
+        store.begin_submission(
+            "action", kind="SWAP", identity=HASH, nonce=nonce, payload_digest="a" * 64
+        )
+    assert store.submission("action", "SWAP") is None
+    assert store.get("action")["status"] == "QUOTED"
+    with pytest.raises(ValueError, match="UNRESOLVED"):
+        claimed(store, "another")
+
+
+def test_rfq_submission_cannot_journal_order_nonce_as_transaction_nonce():
+    store = LiveFillStore()
+    claimed(store)
+    store.upsert("action", status="SIGNED")
+    with pytest.raises(ValueError, match="NONCE_DOMAIN"):
+        store.begin_submission(
+            "action", kind="RFQ", identity="request", nonce=7, payload_digest="a" * 64
+        )
+    assert store.submission("action", "RFQ") is None
+    store.begin_submission(
+        "action", kind="RFQ", identity="request", nonce=None, payload_digest="a" * 64
+    )
+    assert store.submission("action", "RFQ")["nonce"] is None
+
+
+@pytest.mark.parametrize("conflicting", [False, True])
+def test_mock_preparation_persists_exact_envelope_before_mock_boundary(conflicting):
+    from app.models.execution_envelope import BoundSwapEnvelope
+
+    route, _ = route_and_sim()
+    store = LiveFillStore()
+    claimed(store)
+    store.upsert("action", status="QUOTED", evidence={"route": "SWAP"})
+    prepared = SimpleNamespace(
+        tx_hash=HASH,
+        nonce=7,
+        payload_digest="f" * 64 if conflicting else fingerprint(route.build.tx),
+    )
+    calls = []
+
+    def observe_mock_boundary(*_, **__):
+        evidence = store.get("action")["evidence"]
+        envelope = BoundSwapEnvelope.model_validate(evidence["envelope"])
+        envelope.matches(route, route.build.tx, nonce=7)
+        assert store.submission("action", "SWAP") == {
+            "identity": HASH,
+            "nonce": 7,
+            "payload_digest": fingerprint(route.build.tx),
+        }
+        calls.append("mock")
+
+    signer = SimpleNamespace(
+        kind="LOCAL_KEY",
+        address=WALLET,
+        prepare=lambda _: prepared,
+        broadcast=observe_mock_boundary,
+    )
+    worker = executor(store, signer=signer)
+    if conflicting:
+        with pytest.raises(LiveExecutionError, match="PAYLOAD_CONFLICT"):
+            worker._broadcast("action", route.build.tx, route=route)
+        assert store.submission("action", "SWAP") is None and calls == []
+    else:
+        assert worker._broadcast("action", route.build.tx, route=route)["status"] == "SUBMITTED"
+        assert calls == ["mock"]
 
 
 def test_invalid_transitions_cannot_restart_an_unknown_submission():

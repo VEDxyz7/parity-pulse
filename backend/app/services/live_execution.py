@@ -11,6 +11,7 @@ from uuid import uuid4
 
 from app.clients.common import ProviderError
 from app.models.execution import AllowanceState, fingerprint, parse_object
+from app.models.execution_envelope import BoundSwapEnvelope
 from app.models.live import TERMINAL, ExecutionConsent
 from app.services.execution_builders import ExecutionRouteBuilder, current_quote
 from app.services.execution_gates import LIVE_GATES, LiveExecutionError
@@ -343,7 +344,7 @@ class LiveRebalanceExecutor:
                 ],
             }
             self.journal.upsert(action.action_id, status="QUOTED", evidence=evidence)
-            return self._broadcast(action.action_id, tx)
+            return self._broadcast(action.action_id, tx, route=leg.route)
         except (LiveExecutionError, ProviderError, ValueError, ArithmeticError) as error:
             attempted = self.journal.submission(action.action_id, "SWAP") or (
                 self.journal.submission(action.action_id, "RFQ")
@@ -360,9 +361,22 @@ class LiveRebalanceExecutor:
                 ],
             )
 
-    def _broadcast(self, action_id, tx):
+    def _broadcast(self, action_id, tx, *, route=None):
         self.gates.require("SWAP", wallet=self.signer.kind != "LOCAL_KEY")
         prepared = self.signer.prepare(tx)
+        if prepared.payload_digest != fingerprint(tx):
+            raise LiveExecutionError("SIGNED_PREPARED_PAYLOAD_CONFLICT")
+        if route is not None:
+            envelope = BoundSwapEnvelope.bind(route, nonce=prepared.nonce)
+            envelope.matches(route, tx, nonce=prepared.nonce)
+            record = self.journal.get(action_id)
+            self.journal.upsert(
+                action_id,
+                evidence={
+                    **record["evidence"],
+                    "envelope": envelope.model_dump(mode="json", by_alias=True),
+                },
+            )
         self.journal.begin_submission(
             action_id,
             kind="SWAP",
@@ -459,19 +473,50 @@ class LiveRebalanceExecutor:
         if record["status"] in {"CONFIRMED", "FAILED"}:
             # Recheck the original block, not today's mutable account balances. A
             # temporary RPC outage retains a wallet lock until this is established.
-            settlement = record["evidence"].get("settlement", {})
             try:
+                evidence = record["evidence"]
+                if not isinstance(evidence, dict):
+                    raise LiveExecutionError("SETTLEMENT_EVIDENCE_MISSING_OR_INVALID")
+                settlement = evidence.get("settlement", {})
+                if not isinstance(settlement, dict):
+                    raise LiveExecutionError("SETTLEMENT_EVIDENCE_MISSING_OR_INVALID")
                 if self.rpc.chain_id() != 56:
                     raise LiveExecutionError("RPC_CHAIN_MISMATCH")
                 block = self.rpc.read("eth_getBlockByNumber", settlement["block_number"], False)
                 if not isinstance(block, dict) or block.get("hash") != settlement["block_hash"]:
                     raise LiveExecutionError("SETTLEMENT_BLOCK_REORG")
-            except (LiveExecutionError, ProviderError, ValueError, TypeError, KeyError):
-                return self.journal.reopen_reorg(action_id)
+                route = record["evidence"].get("route")
+                if route not in {"SWAP", "RFQ"}:
+                    raise LiveExecutionError("SETTLEMENT_ROUTE_MISSING_OR_INVALID")
+                if route == "SWAP" or self.journal.submission(action_id, "SWAP"):
+                    # Recheck immutable identity/nonce/minimum/transfers on restart.
+                    # Today's balances may legitimately change after a confirmed fill.
+                    result = self._swap_settlement(record, check_balances=False)
+                    if (
+                        result is None
+                        or result != settlement
+                        or result["status"] != record["status"]
+                    ):
+                        raise LiveExecutionError("SETTLEMENT_COMMITMENT_CHANGED")
+            except (LiveExecutionError, ProviderError, ValueError, TypeError, KeyError) as error:
+                reason = (
+                    "SETTLEMENT_BLOCK_REORG_RECONCILE"
+                    if getattr(error, "code", None) == "SETTLEMENT_BLOCK_REORG"
+                    else "INCOMPLETE_OR_CONFLICTING_SETTLEMENT_EVIDENCE"
+                )
+                return self.journal.reopen_reorg(action_id, reason=reason)
         if record["status"] in TERMINAL:
             return record
         evidence = record["evidence"]
         try:
+            if not isinstance(evidence, dict):
+                raise LiveExecutionError("SETTLEMENT_EVIDENCE_MISSING_OR_INVALID")
+            if "settlement" in evidence and not isinstance(evidence["settlement"], dict):
+                raise LiveExecutionError("SETTLEMENT_EVIDENCE_MISSING_OR_INVALID")
+            if evidence.get("route") not in {"SWAP", "RFQ"}:
+                raise LiveExecutionError("SETTLEMENT_ROUTE_MISSING_OR_INVALID")
+            if evidence.get("route") == "RFQ" and self.journal.submission(action_id, "SWAP"):
+                raise LiveExecutionError("SETTLEMENT_SUBMISSION_KIND_CONFLICT")
             if evidence.get("route") == "RFQ":
                 order_id = evidence.get("rfq_status_order_id")
                 if not order_id:
@@ -486,17 +531,7 @@ class LiveRebalanceExecutor:
                 )
                 result["status"] = "CONFIRMED"
             else:
-                attempt = self.journal.submission(action_id, "SWAP")
-                if not attempt:
-                    raise LiveExecutionError("EXECUTION_INTERRUPTED_RECONCILE_IDENTITY")
-                if record.get("swap_tx") and attempt["identity"] != record["swap_tx"]:
-                    raise LiveExecutionError("SUBMISSION_HASH_CONFLICT")
-                # A crash can occur immediately after the durable attempt, before the
-                # presentation field is updated or the RPC is invoked. Observe that
-                # signed identity only; absence on chain is never permission to retry.
-                if not record.get("swap_tx"):
-                    self.journal.upsert(action_id, swap_tx=attempt["identity"])
-                result = verify_swap(self.rpc, attempt["identity"], evidence)
+                result = self._swap_settlement(record)
                 if result is None:
                     return record
             return self.journal.upsert(
@@ -511,3 +546,23 @@ class LiveRebalanceExecutor:
                 status="RECONCILIATION_REQUIRED",
                 reasons=["INCOMPLETE_OR_CONFLICTING_SETTLEMENT_EVIDENCE"],
             )
+
+    def _swap_settlement(self, record, *, check_balances=True):
+        action_id = record["action_id"]
+        if record["evidence"].get("route") != "SWAP" or self.journal.submission(action_id, "RFQ"):
+            raise LiveExecutionError("SETTLEMENT_SUBMISSION_KIND_CONFLICT")
+        attempt = self.journal.submission(action_id, "SWAP")
+        if not attempt:
+            raise LiveExecutionError("EXECUTION_INTERRUPTED_RECONCILE_IDENTITY")
+        if record.get("swap_tx") and attempt["identity"] != record["swap_tx"]:
+            raise LiveExecutionError("SUBMISSION_HASH_CONFLICT")
+        # Crash before swap_tx assignment still has the durable signed identity.
+        if not record.get("swap_tx"):
+            self.journal.upsert(action_id, swap_tx=attempt["identity"])
+        return verify_swap(
+            self.rpc,
+            attempt["identity"],
+            record["evidence"],
+            submission=attempt,
+            check_balances=check_balances,
+        )

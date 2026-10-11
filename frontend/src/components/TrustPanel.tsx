@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button'
 import { useEffect, useRef, useState } from 'react'
 import { fetchTrust, type TrustResult } from '../services/trust'
 import { TrustEvidence } from './TrustEvidence'
@@ -37,7 +38,7 @@ export function TrustPanel({ mode }: { mode: 'DEMO' | 'LIVE_READ_ONLY' }) {
     <form onSubmit={event => { void assess(event) }} className="trust-form">
       <label htmlFor="trust-ticker">Stock ticker</label>
       <input id="trust-ticker" value={ticker} maxLength={15} onChange={event => setTicker(event.target.value)} required />
-      <button type="submit" className="refresh-button" disabled={busy}>{busy ? 'Assessing evidence…' : 'Assess trust'}</button>
+      <Button type="submit" className="refresh-button" disabled={busy}>{busy ? 'Assessing evidence…' : 'Assess trust'}</Button>
     </form>
     <p className="trust-note">{mode === 'DEMO' ? 'Illustrative synthetic inputs stay separate from real provider data.' : 'Read-only provider evidence; unavailable current equity data fails closed.'} Confidence is an uncalibrated heuristic. This assessment does not authorize execution or alter an Ask proposal.</p>
     {error && <p role="alert">{error}</p>}

@@ -1,3 +1,6 @@
+import { AssetIdentity } from '../ui/AssetIdentity'
+import { ReadRefresh } from '../ui/ReadRefresh'
+import { Button } from '../ui/Button'
 import { dataLabel, DataContext } from './DataContext'
 import { readRefresh } from '../hooks/readRefresh'
 import { useState } from 'react'
@@ -18,12 +21,12 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
   const query = useQuery({ queryKey: ['terminal', mode, ticker, offset], queryFn: ({ signal }) => fetchTerminal(mode, ticker, offset, signal), ...readRefresh })
   const data = query.isError || query.isFetching ? null : query.data
   return <section className="terminal" aria-label="Terminal analytics">
-    <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / ANALYTICS</div><h1>Terminal</h1><p>Backend-authoritative evidence. Observation only; no trading actions.</p></div><button className="refresh-button" disabled={query.isFetching} onClick={() => { void query.refetch() }}>Refresh Terminal</button></div>
+    <div className="page-heading"><div><div className="eyebrow">PARITY PULSE / ANALYTICS</div><h1>Terminal</h1><p>Backend-authoritative evidence. Observation only; no trading actions.</p></div><ReadRefresh refetch={query.refetch} busy={query.isFetching}>Refresh Terminal</ReadRefresh></div>
     <DataContext mode={mode} />
-    <button className="refresh-button" aria-expanded={evaluationOpen} onClick={() => setEvaluationOpen(v => !v)}>Scorecard &amp; audit</button>
+    <Button className="refresh-button" aria-expanded={evaluationOpen} onClick={() => setEvaluationOpen(v => !v)}>Scorecard &amp; audit</Button>
     {evaluationOpen && <ScorecardAudit key={mode} mode={mode} />}
     <form className="terminal-filter" onSubmit={e => { e.preventDefault(); setOffset(0); setTicker(input.trim().toUpperCase()) }}>
-      <label htmlFor="terminal-ticker">Underlying ticker</label><input id="terminal-ticker" value={input} maxLength={15} placeholder="All cached stocks" onChange={e => setInput(e.target.value)} /><button className="refresh-button">Apply filter</button>
+      <label htmlFor="terminal-ticker">Underlying ticker</label><input id="terminal-ticker" value={input} maxLength={15} placeholder="All cached stocks" onChange={e => setInput(e.target.value)} /><Button className="refresh-button">Apply filter</Button>
     </form>
     {query.isFetching && <p role="status">Loading Terminal evidence…</p>}
     {query.isError && <div role="alert" className="connection-alert">Terminal unavailable. No fallback values are displayed. Refresh or revise the ticker filter.</div>}
@@ -32,7 +35,7 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
       <p className="terminal-note">{reasons(data.limitations)}. Cached rows are not a live refresh. Missing values stay unavailable.</p>
       <section className="panel"><h2>Issuer spread board / normalized prices</h2><p>Token price, share ratio, independent reference and normalized share cost are supplied by backend services.</p>
         {!data.issuers.items.length ? <p>No cached representations match this filter.</p> : <div className="terminal-table-wrap" tabIndex={0} role="region" aria-label="Issuer spread table"><table><thead><tr>{['Stock / issuer','Token / ratio','Token price','Effective $/share','Independent equity','Spread / deviation','Liquidity','Trust / market','Evidence'].map(h => <th key={h}>{h}</th>)}</tr></thead><tbody>{data.issuers.items.map(row => <tr key={`${row.ticker}:${row.chain_id}:${row.contract}`}>
-          <td><strong>{row.ticker}</strong><small>{row.company}</small>{row.issuer}<small>{row.chain_id} · {row.contract}</small></td>
+          <td><AssetIdentity ticker={row.ticker} issuer={row.issuer}/><small>{row.company}</small>{row.issuer}<small>{row.chain_id} · {row.contract}</small></td>
           <td>{row.token}<small>{row.token_to_share_ratio} shares/token</small><small>Ratio observed {row.ratio_observed_at}</small><small>Source as-of {value(row.ratio_source_timestamp)}</small></td>
           <td>{money(row.token_price_usd)}</td><td>{money(row.effective_price_per_share_usd)}</td><td>{money(row.independent_equity_price_usd)}<small>{row.reference.status}</small><small>{value(row.reference.reference_asof)}</small></td>
           <td>{money(row.spread_usd_per_share)}<small>{row.deviation_percent === null ? 'Unavailable' : `${row.deviation_percent}%`}</small><small>Skew {value(row.reference.timestamp_skew_seconds)} seconds</small></td>
@@ -62,7 +65,7 @@ export function Terminal({ mode }: { mode: TerminalResult['data_mode'] }) {
         {data.episodes.items.map(row => <article className="terminal-record" key={`${row.run_id}:${row.episode_id}`}><strong>{row.ticker} / {row.issuer} · {row.evidence_kind}</strong><p>{row.decision_at} · {row.regime} · {row.eligibility} · {row.trust_state}</p><p>Deviation fraction {value(row.deviation)} · USD volume {money(row.volume_usd)} · USD liquidity {money(row.liquidity_usd)}</p><p>Prediction {row.prediction.status} · Return fraction {value(row.prediction.predicted_return)} · Samples {row.prediction.sample_count}</p><p>Analogues {row.retrieval.status} · Retrieved {row.retrieval.retrieved_count}</p><p>Opening outcome {row.outcome_state} · Return fraction {value(row.opening_outcome?.opening_return)} · Outcome available {value(row.opening_outcome?.available_at)}</p><details><summary>Replay identity / reasons / provenance</summary><p>Run {row.run_id} · Episode {row.episode_id}<br />Dataset {row.dataset_digest}<br />Query as-of {row.query_as_of}</p><p>{reasons(row.reasons)}</p>{row.retrieval.matches.map(m => <p key={m.episode_id}>Analogue {m.episode_id}</p>)}{row.provenance.map((p,i) => <p key={i}>{p.source} · Available {p.available_at}</p>)}</details></article>)}
       </section>
       <section className="panel"><h2>Portfolio / Autopilot context</h2><p>{data.portfolio.status} · Configuration version {data.portfolio.config_version ?? 'Unavailable'} · Pending plan {value(data.portfolio.pending_plan_id)}</p><p>{reasons(data.portfolio.reasons)}</p></section>
-      <div className="terminal-filter"><button className="refresh-button" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 25))}>Previous records</button><span>Record offset {offset}</span><button className="refresh-button" disabled={!['issuers','trust','agents','executions','episodes'].some(k => data[k as 'issuers'].has_more)} onClick={() => setOffset(offset + 25)}>Next records</button></div>
+      <div className="terminal-filter"><Button className="refresh-button" disabled={offset === 0} onClick={() => setOffset(Math.max(0, offset - 25))}>Previous records</Button><span>Record offset {offset}</span><Button className="refresh-button" disabled={!['issuers','trust','agents','executions','episodes'].some(k => data[k as 'issuers'].has_more)} onClick={() => setOffset(offset + 25)}>Next records</Button></div>
     </>}
   </section>
 }

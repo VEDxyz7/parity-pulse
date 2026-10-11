@@ -4,6 +4,7 @@ Requires local Google Chrome. Uses ports 8054-8057/5178; refuses occupied ports.
 No .env is loaded and no provider/wallet credentials are forwarded. Own processes only.
 """
 
+import argparse
 import json
 import os
 import signal
@@ -18,6 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--presentation-only", action="store_true")
+    parser.add_argument("--landing-only", action="store_true")
+    options = parser.parse_args()
     assert (ROOT / "frontend/dist/index.html").is_file(), "Run npm run build first"
     assert Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome").is_file()
     ports = (8054, 8055, 8056, 8057, 5178)
@@ -92,17 +97,27 @@ def main():
                     if attempt == 149:
                         raise RuntimeError("Isolated test readiness failed") from None
                     time.sleep(0.1)
+        if not options.presentation_only and not options.landing_only:
+            subprocess.run(
+                [str(ROOT / ".venv/bin/python"), str(ROOT / "scripts/check-mcp-hardening.py")],
+                cwd=ROOT,
+                env=safe,
+                check=True,
+            )
+            subprocess.run(
+                ["node", str(ROOT / "scripts/check-frontend-phase15.mjs")],
+                cwd=ROOT,
+                env=safe,
+                check=True,
+            )
+        if not options.landing_only:
+            subprocess.run(
+                ["node", str(ROOT / "scripts/check-presentation-browser.mjs")],
+                cwd=ROOT, env=safe, check=True,
+            )
         subprocess.run(
-            [str(ROOT / ".venv/bin/python"), str(ROOT / "scripts/check-mcp-hardening.py")],
-            cwd=ROOT,
-            env=safe,
-            check=True,
-        )
-        subprocess.run(
-            ["node", str(ROOT / "scripts/check-frontend-phase15.mjs")],
-            cwd=ROOT,
-            env=safe,
-            check=True,
+            ["node", str(ROOT / "scripts/check-landing-browser.mjs")],
+            cwd=ROOT, env=safe, check=True,
         )
     finally:
         for process in jobs:

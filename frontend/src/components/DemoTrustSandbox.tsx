@@ -1,3 +1,4 @@
+import { Button } from '../ui/Button'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { fetchDemoCatalog, fetchDemoScenario, type DemoResult, type DemoScenario, type ScenarioId } from '../services/demoSandbox'
 import { TrustEvidence } from './TrustEvidence'
@@ -63,11 +64,11 @@ export function DemoTrustSandbox() {
         resetFrom('TRUST')
         setSelected(event.target.value as ScenarioId)
       }}>{scenarios.map(row => <option key={row.scenario_id} value={row.scenario_id}>{row.title}</option>)}</select>
-      <div className="demo-scenario-buttons" role="group" aria-label="Research scenarios">{scenarios.map(row => <button
+      <div className="demo-scenario-buttons" role="group" aria-label="Research scenarios">{scenarios.map(row => <Button
         key={row.scenario_id} type="button" className="refresh-button" aria-pressed={selected === row.scenario_id}
         onClick={() => { pending.current?.abort(); pending.current = null; setBusy(false); setResult(null); setError(''); resetFrom('TRUST'); setSelected(row.scenario_id) }}
-      >{row.title}</button>)}</div>
-      <button type="submit" className="refresh-button" disabled={busy || scenarios.length === 0}>{busy ? 'Evaluating scenario evidence…' : 'Run scenario'}</button>
+      >{row.title}</Button>)}</div>
+      <Button type="submit" className="refresh-button" disabled={busy || scenarios.length === 0}>{busy ? 'Evaluating scenario evidence…' : 'Run scenario'}</Button>
     </form>
     <p>{scenarios.find(row => row.scenario_id === selected)?.description}</p>
     {error && <p role="alert">{error}</p>}

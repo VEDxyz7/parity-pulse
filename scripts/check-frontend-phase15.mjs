@@ -124,7 +124,7 @@ try {
   ]) {
     backendPort = viewport.backend; phase = 'DEMO_' + viewport.name.toUpperCase()
     await call('Emulation.setDeviceMetricsOverride', { width: viewport.width, height: viewport.height, mobile: viewport.mobile, deviceScaleFactor: 1 })
-    await call('Page.navigate', { url: 'http://127.0.0.1:5178/#overview' })
+    await call('Page.navigate', { url: 'http://127.0.0.1:5178/?workspace=verified#overview' })
     await wait('Array.from(document.querySelectorAll("a")).some(a => a.textContent.trim() === "Open Research Lab")', true)
     await evaluate('Array.from(document.querySelectorAll("a")).find(a => a.textContent.trim() === "Open Research Lab").click()')
     await wait('document.querySelector("#demo-scenario")?.options.length', 3)
@@ -181,7 +181,7 @@ try {
   assert.equal(requests.filter(r => r.phase.startsWith('DEMO') && r.path === '/api/assets/NVDA/trust').length, 0)
   phase = 'ORDINARY_OVERVIEW'; backendPort = 8056
   // A new document clears the prior DEMO status query when switching test backends.
-  await call('Page.navigate', { url: 'http://127.0.0.1:5178/?verification=ordinary#overview' })
+  await call('Page.navigate', { url: 'http://127.0.0.1:5178/?workspace=verified&verification=ordinary#overview' })
   await wait('Array.from(document.querySelectorAll(".status-badge")).some(b => b.textContent === "Backend connected")', true)
   await click('Assess trust')
   await wait('document.querySelector("#trust .trust-representation strong")?.textContent', 'INSUFFICIENT_EVIDENCE')
@@ -192,7 +192,7 @@ try {
   for (const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',width:390,height:844}]) {
     phase='TERMINAL'; backendPort=8054;
     await call('Emulation.setDeviceMetricsOverride', {width:viewport.width,height:viewport.height,deviceScaleFactor:1,mobile:viewport.name==='mobile'});
-    await call('Page.navigate',{url:'http://127.0.0.1:5178/?terminal='+viewport.name+'#terminal'});
+    await call('Page.navigate',{url:'http://127.0.0.1:5178/?workspace=verified&terminal='+viewport.name+'#terminal'});
     await wait('document.querySelector(".terminal h2")?.textContent','Issuer spread board / normalized prices');
     const text = await evaluate('document.querySelector(".terminal").innerText');
     for (const expected of ['Synthetic inputs, not live market data.','$102','2.00%','STALE','INSUFFICIENT_EVIDENCE','Agent evidence','SYNTHETIC FIXTURE — NOT A REAL TRADE','Historical episodes','Opening outcome AVAILABLE']) assert(text.includes(expected),expected);
@@ -242,7 +242,7 @@ try {
   for(const viewport of [{name:'desktop',width:1440,height:1000},{name:'mobile',width:390,height:844}]) {
     phase='AGENT_API'; backendPort=8054;
     await call('Emulation.setDeviceMetricsOverride',{width:viewport.width,height:viewport.height,deviceScaleFactor:1,mobile:viewport.name==='mobile'});
-    await call('Page.navigate',{url:'http://127.0.0.1:5178/?agent='+viewport.name+'#overview'});
+    await call('Page.navigate',{url:'http://127.0.0.1:5178/?workspace=verified&agent='+viewport.name+'#overview'});
     await wait('Array.from(document.querySelectorAll("a")).some(a=>a.textContent.trim()==="Agent API")',true);
     await evaluate('Array.from(document.querySelectorAll("a")).find(a=>a.textContent.trim()==="Agent API").click()');
     await wait('document.querySelector(".agent-api-inspection")?.innerText.includes("Backend: Ready")',true);
@@ -254,7 +254,7 @@ try {
     assert.equal(await evaluate('document.querySelectorAll(".agent-api-inspection button").length'),0);
     await shot(viewport.name+'-phase14-agent-api');
     agentFailure=true;
-    await call('Page.navigate',{url:'http://127.0.0.1:5178/?agent-error='+viewport.name+'#agent-api'});
+    await call('Page.navigate',{url:'http://127.0.0.1:5178/?workspace=verified&agent-error='+viewport.name+'#agent-api'});
     await wait('document.querySelector(".agent-api-inspection [role=alert]") !== null',true);
     agentFailure=false;
     await click('Retry catalog');
@@ -264,7 +264,7 @@ try {
   const text = () => evaluate('document.body.innerText');
   const input = (label,value) => evaluate(`(()=>{const l=Array.from(document.querySelectorAll('label')).find(l=>l.textContent.startsWith(${JSON.stringify(label)})); const i=l?.querySelector('input,select'); if(!i)throw Error('Input unavailable'); Object.getOwnPropertyDescriptor(i.tagName==='SELECT'?HTMLSelectElement.prototype:HTMLInputElement.prototype,'value').set.call(i,${JSON.stringify(value)});i.dispatchEvent(new Event(i.tagName==='SELECT'?'change':'input',{bubbles:true}));})()`);
   let journeyStarted; const loadTimings=[];
-  const navigate = async(hash,tag='') => {journeyStarted=performance.now();await call('Page.navigate',{url:'http://127.0.0.1:5178/?phase15='+tag+hash});await wait('Array.from(document.querySelectorAll(".status-badge")).some(b=>b.textContent==="Backend connected")',true);loadTimings.push({tag,ready_ms:performance.now()-journeyStarted,navigation:await evaluate('(()=>{const n=performance.getEntriesByType("navigation")[0];return n?{dom_content_loaded_ms:n.domContentLoadedEventEnd,load_ms:n.loadEventEnd}:null})()')})};
+  const navigate = async(hash,tag='') => {journeyStarted=performance.now();await call('Page.navigate',{url:'http://127.0.0.1:5178/?workspace=verified&phase15='+tag+hash});await wait('Array.from(document.querySelectorAll(".status-badge")).some(b=>b.textContent==="Backend connected")',true);loadTimings.push({tag,ready_ms:performance.now()-journeyStarted,navigation:await evaluate('(()=>{const n=performance.getEntriesByType("navigation")[0];return n?{dom_content_loaded_ms:n.domContentLoadedEventEnd,load_ms:n.loadEventEnd}:null})()')})};
   const mark = async(viewport,journey,details={})=>{assert(await evaluate('document.documentElement.scrollWidth<=innerWidth'),journey+' overflow');workspaceObservations.push({viewport,journey,journey_elapsed_ms:performance.now()-journeyStarted,status:'PASS',no_page_overflow:true,...details});console.log(JSON.stringify({viewport,journey,status:'PASS'}));};
   for (const viewport of [{name:'desktop',width:1440,height:1100,backend:8054},{name:'mobile',width:390,height:844,backend:8055},{name:'tablet',width:768,height:1024,backend:8054}]) {
     phase='WORKSPACE';backendPort=viewport.backend;

@@ -5,13 +5,15 @@ Any missing identity, noncanonical block, incomplete transfer or unsupported eve
 unresolved. These checks do not establish pre-execution RFQ simulation equivalence.
 """
 
+import re
 from functools import wraps
 
 from eth_abi import decode
 from eth_abi.exceptions import DecodingError
 from eth_utils import keccak
 
-from app.models.execution import address
+from app.models.execution import EvmTransaction, address, fingerprint, units
+from app.models.execution_envelope import BoundSwapEnvelope
 from app.services.execution_gates import LiveExecutionError
 
 TRANSFER = "0x" + keccak(text="Transfer(address,address,uint256)").hex()
@@ -113,19 +115,73 @@ def wallet_transfers(receipt, *, wallet, sell, buy, sell_max, minimum_out):
     return spent, received
 
 
+def swap_commitment(tx_hash, expected, submission):
+    """Bind host preparation to the durable signed EVM identity, never an RFQ nonce.
+
+    Amounts are canonical uint256 base units. The plan minimum may differ from the
+    prepared minimum; neither can weaken the other. Optional envelope evidence must
+    agree exactly, rather than silently replacing the prepared transaction.
+    """
+    tx = expected["transaction"]
+    try:
+        prepared_minimum = int(units(tx.get("minReceiveAmount")))
+        require(prepared_minimum > 0, "PREPARED_MIN_OUTPUT_INVALID")
+    except (ValueError, TypeError):
+        raise LiveExecutionError("PREPARED_MIN_OUTPUT_MISSING_OR_INVALID") from None
+    plan_minimum = int(units(expected["minimum_out"]))
+    require(plan_minimum > 0, "SETTLEMENT_MIN_OUTPUT_INVALID")
+    prepared = EvmTransaction.model_validate(tx)
+    nonce = submission.get("nonce") if submission is not None else expected.get("nonce")
+    require(type(nonce) is int and 0 <= nonce < 2**64, "SETTLEMENT_NONCE_MISSING_OR_INVALID")
+    if "nonce" in expected:
+        require(
+            type(expected["nonce"]) is int and expected["nonce"] == nonce,
+            "SETTLEMENT_NONCE_EVIDENCE_CONFLICT",
+        )
+    if submission is not None:
+        require(
+            submission.get("identity") == tx_hash
+            and submission.get("payload_digest") == fingerprint(prepared),
+            "SETTLEMENT_SIGNED_IDENTITY_CONFLICT",
+        )
+    if "envelope" in expected:
+        envelope = BoundSwapEnvelope.model_validate(expected["envelope"])
+        require(envelope.nonce == nonce, "SETTLEMENT_ENVELOPE_NONCE_CONFLICT")
+        require(
+            envelope.transaction == prepared
+            and envelope.minimum_out == prepared.minReceiveAmount
+            and envelope.recipient == prepared.sender
+            and envelope.spender == prepared.to
+            and envelope.sell_token == expected["sell"]
+            and envelope.buy_token == expected["buy"]
+            and envelope.amount_in == expected["amount_in"]
+            and envelope.route_fingerprint == expected["route_fingerprint"],
+            "SETTLEMENT_PREPARED_ENVELOPE_CONFLICT",
+        )
+    return prepared, nonce, max(prepared_minimum, plan_minimum)
+
+
 @evidence_validation
-def verify_swap(rpc, tx_hash, expected, *, confirmations=3):
+def verify_swap(rpc, tx_hash, expected, *, submission=None, confirmations=3, check_balances=True):
+    prepared, nonce, minimum = swap_commitment(tx_hash, expected, submission)
     receipt = canonical_receipt(rpc, tx_hash, confirmations=confirmations)
     if receipt is None:
         return None
     transaction = rpc.read("eth_getTransactionByHash", tx_hash)
     require(isinstance(transaction, dict), "SETTLEMENT_TRANSACTION_MISSING")
-    tx = expected["transaction"]
+    tx = prepared.model_dump(mode="json", by_alias=True)
     require(
         transaction.get("hash", "").lower() == tx_hash.lower()
         and transaction.get("blockHash") == receipt["blockHash"],
         "SETTLEMENT_TX_HASH_MISMATCH",
     )
+    observed_nonce = transaction.get("nonce")
+    require(
+        isinstance(observed_nonce, str)
+        and re.fullmatch(r"0x(?:0|[1-9a-fA-F][0-9a-fA-F]{0,15})", observed_nonce) is not None,
+        "SETTLEMENT_NONCE_MISSING_OR_INVALID",
+    )
+    require(int(observed_nonce, 16) == nonce, "SETTLEMENT_NONCE_MISMATCH")
     require(
         (
             transaction.get("from", "").lower(),
@@ -149,6 +205,8 @@ def verify_swap(rpc, tx_hash, expected, *, confirmations=3):
         return {
             "status": "FAILED",
             "reason": "SWAP_REVERTED_ON_CHAIN",
+            "nonce": nonce,
+            "minimum_out": str(minimum),
             "block_hash": receipt["blockHash"],
             "block_number": receipt["blockNumber"],
         }
@@ -157,20 +215,25 @@ def verify_swap(rpc, tx_hash, expected, *, confirmations=3):
         wallet=tx["from"],
         sell=expected["sell"],
         buy=expected["buy"],
-        sell_max=int(expected["amount_in"]),
-        minimum_out=int(expected["minimum_out"]),
+        sell_max=int(units(expected["amount_in"])),
+        minimum_out=minimum,
     )
     require("balances_before" in expected, "PRE_BALANCES_MISSING")
     before = expected["balances_before"]
-    require(
-        int(before[0]) - rpc.erc20_balance(expected["sell"], tx["from"]) == spent
-        and rpc.erc20_balance(expected["buy"], tx["from"]) - int(before[1]) == received,
-        "SETTLEMENT_BALANCE_LOG_CONFLICT",
-    )
+    require(isinstance(before, list) and len(before) == 2, "PRE_BALANCES_MISSING")
+    before = tuple(int(units(value)) for value in before)
+    if check_balances:
+        require(
+            before[0] - rpc.erc20_balance(expected["sell"], tx["from"]) == spent
+            and rpc.erc20_balance(expected["buy"], tx["from"]) - before[1] == received,
+            "SETTLEMENT_BALANCE_LOG_CONFLICT",
+        )
     return {
         "status": "CONFIRMED",
         "spent": str(spent),
         "received": str(received),
+        "nonce": nonce,
+        "minimum_out": str(minimum),
         "block_hash": receipt["blockHash"],
         "block_number": receipt["blockNumber"],
     }

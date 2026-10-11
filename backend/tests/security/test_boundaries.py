@@ -102,6 +102,12 @@ def test_exact_allowlisted_data_and_proposal_routes(client):
         "/api/health",
         "/api/agent/tools",
         "/api/workspace",
+        "/api/presentation/workspace",
+        "/api/display-history/{ticker}",  # Local validated historical capture; GET only.
+        "/api/presentation/research",
+        "/api/presentation/research/{identifier}",
+        "/api/presentation/scan",
+        "/api/presentation/exposure",
         "/api/agent/tools/{name}",
         "/api/system-status",
         "/api/assets",

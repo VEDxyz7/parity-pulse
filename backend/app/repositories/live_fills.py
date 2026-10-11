@@ -193,6 +193,12 @@ class LiveFillStore:
 
     def begin_submission(self, action_id, *, kind, identity, nonce, payload_digest):
         """Durably record hash/nonce or RFQ request UUID BEFORE any broadcast/POST."""
+        # SQLite's INTEGER stores this EVM sender nonce exactly in a signed 64-bit
+        # column. Reject coercion/overflow; RFQ request identity has no EVM nonce.
+        if kind == "SWAP" and not (type(nonce) is int and 0 <= nonce < 2**63):
+            raise ValueError("SUBMISSION_NONCE_MISSING_OR_INVALID")
+        if kind == "RFQ" and nonce is not None:
+            raise ValueError("RFQ_SUBMISSION_NONCE_DOMAIN_INVALID")
         with self.lock, self.db:
             self.db.execute("BEGIN IMMEDIATE")
             record = self.get(action_id)
@@ -206,8 +212,8 @@ class LiveFillStore:
             )
             self._write(action_id, {**record, "status": "SUBMITTING"})
 
-    def reopen_reorg(self, action_id):
-        """Revoke locally confirmed settlement when its recorded block becomes noncanonical.
+    def reopen_reorg(self, action_id, *, reason="SETTLEMENT_BLOCK_REORG_RECONCILE"):
+        """Revoke settlement when its block or immutable evidence cannot be reverified.
 
         Never replace a newer wallet claim. An additional unresolved row blocks subsequent
         claims/planning until the operator reconciles both outstanding identities.
@@ -229,7 +235,7 @@ class LiveFillStore:
                 {
                     **record,
                     "status": "RECONCILIATION_REQUIRED",
-                    "reasons": ["SETTLEMENT_BLOCK_REORG_RECONCILE"],
+                    "reasons": [reason],
                 },
             )
 

@@ -21,6 +21,7 @@ from app.api.demo_opportunity import router as demo_opportunity_router
 from app.api.demo_paper import router as demo_paper_router
 from app.api.demo_preparation import router as demo_preparation_router
 from app.api.demo_sandbox import router as demo_sandbox_router
+from app.api.display_history import router as display_history_router
 from app.api.exposure import router as exposure_router
 from app.api.live import router as live_router
 from app.api.middleware import RequestContextMiddleware
@@ -28,6 +29,7 @@ from app.api.opportunity_scan import router as opportunity_scan_router
 from app.api.portfolio import autopilot_router
 from app.api.portfolio import router as portfolio_router
 from app.api.positions import router as positions_router
+from app.api.presentation import router as presentation_router
 from app.api.scorecard import router as scorecard_router
 from app.api.system import router
 from app.api.terminal import router as terminal_router
@@ -63,6 +65,7 @@ from app.services.opportunity_sources import DataLayerScanSource, DemoScanSource
 from app.services.portfolio import PortfolioService
 from app.services.portfolio_sources import CachedPortfolioSource
 from app.services.position import PositionService
+from app.services.presentation import PresentationService
 from app.services.scorecard import ScorecardService
 from app.services.terminal import TerminalService
 from app.services.trust import TrustService
@@ -123,6 +126,7 @@ def create_app(
                 else configured.database_url
             )
             database.initialize()
+            app.state.presentation = PresentationService()
             app.state.database = database
             app.state.data_layer = DataLayer(configured, database)
             app.state.exposure = ExposureService(app.state.data_layer, database)
@@ -399,6 +403,8 @@ def create_app(
     app.include_router(scorecard_router)
     app.include_router(agent_api_router)
     app.include_router(workspace_router)
+    app.include_router(presentation_router)
+    app.include_router(display_history_router)
     if configured.runtime_mode == "DEMO":
         app.include_router(demo_sandbox_router)
         app.include_router(demo_opportunity_router)
