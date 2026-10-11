@@ -24,7 +24,7 @@ beforeEach(() => {
 afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers() })
 
 describe('cinematic entrance navigation', () => {
-  it('offers semantic copy and a working dashboard entry without remounting the application', async () => {
+  it('offers semantic copy and scroll entry without a CTA or remounting the application', async () => {
     let mounts = 0
     function Workspace() {
       const [value, set] = useState('preserved')
@@ -34,13 +34,17 @@ describe('cinematic entrance navigation', () => {
     render(<LandingEntrance><Workspace/></LandingEntrance>)
     expect(screen.getByRole('heading', { name: /Markets move around the clock/ })).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Workspace state'), { target: { value: 'my existing state' } })
-    fireEvent.click(screen.getByRole('link', { name: 'Enter Parity Pulse' }))
+    expect(screen.queryByRole('link', { name: 'Enter Parity Pulse' })).not.toBeInTheDocument()
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: innerHeight })
+    fireEvent.scroll(window)
     await waitFor(() => expect(screen.queryByText('Drag to turn. Hover to light.')).not.toBeInTheDocument())
     expect(location.hash).toBe('#overview')
     expect(mounts).toBe(1)
     expect(screen.getByLabelText('Workspace state')).toHaveValue('my existing state')
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 0 })
     act(() => { history.replaceState(null, '', '/'); window.dispatchEvent(new PopStateEvent('popstate')) })
-    expect(screen.getByRole('link', { name: 'Enter Parity Pulse' })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('heading', { name: /Markets move around the clock/ })).toHaveFocus())
+    expect(screen.queryByRole('link', { name: 'Enter Parity Pulse' })).not.toBeInTheDocument()
     expect(screen.getByLabelText('Workspace state')).toHaveValue('my existing state')
     expect(mounts).toBe(1)
   })
@@ -49,6 +53,7 @@ describe('cinematic entrance navigation', () => {
     const restoration = history.scrollRestoration
     render(<LandingEntrance><main>Original workspace</main></LandingEntrance>)
     expect(isLandingLocation()).toBe(false)
+    expect(screen.queryByRole('heading', { name: /Markets move around the clock/ })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Enter Parity Pulse' })).not.toBeInTheDocument()
     expect(screen.getByText('Original workspace')).toBeInTheDocument()
     expect(renderer.create).not.toHaveBeenCalled()
@@ -66,7 +71,7 @@ describe('cinematic entrance navigation', () => {
     fireEvent.scroll(window)
     await act(() => vi.advanceTimersByTimeAsync(30))
     expect(location.hash).toBe('#overview')
-    expect(screen.queryByRole('link', { name: 'Enter Parity Pulse' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /Markets move around the clock/ })).not.toBeInTheDocument()
   })
 })
 
@@ -95,11 +100,16 @@ describe('paper lifecycle and fallbacks', () => {
     expect(renderer.dispose).toHaveBeenCalledTimes(1)
     expect(view.container.firstElementChild).toHaveAttribute('data-render-state', 'fallback')
   })
-  it('retains the brand fallback and entry action when WebGL initialization fails', async () => {
+  it('retains the brand fallback and scroll entry when WebGL initialization fails', async () => {
     renderer.create.mockImplementation(() => { throw new Error('No WebGL context') })
     const view = render(<LandingEntrance><h1>Overview</h1></LandingEntrance>)
     await waitFor(() => expect(view.container.querySelector('.landing-paper')).toHaveAttribute('data-render-state', 'fallback'))
-    expect(screen.getByRole('link', { name: 'Enter Parity Pulse' })).toHaveAttribute('href', '#overview')
+    expect(view.container.querySelector('.landing-paper-fallback strong')).toHaveTextContent('Clarity,beforeexposure.')
+    expect(screen.queryByRole('link', { name: 'Enter Parity Pulse' })).not.toBeInTheDocument()
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: innerHeight })
+    fireEvent.scroll(window)
+    await waitFor(() => expect(screen.queryByRole('heading', { name: /Markets move around the clock/ })).not.toBeInTheDocument())
+    expect(location.hash).toBe('#overview')
   })
   it('ignores asynchronous initialization after unmount', async () => {
     const view = render(<PaperScene progress={{ current: 0 }}/>)

@@ -41,7 +41,7 @@ summary { cursor: pointer; color: #bad9c8; padding: 10px 0; line-height: 1.6; }d
 .product-workspace .product-footer { line-height: 1.7; padding-bottom: 24px; }
 :is(button,.refresh-button,.header-action) { border-radius: 999px; }
 .product-workspace button.text-link { border: 1px solid #2e4a39; padding: 7px 12px; min-height: 36px; font-size: 11px; background: #10251966; }
-.landing-enter.pp-button { border-radius: 999px; gap: 32px; }.paper-monogram { font-size: clamp(11px,1.6vw,22px); letter-spacing: 1px; font-weight: 600; }
+.paper-monogram { font-size: clamp(11px,1.6vw,22px); letter-spacing: 1px; font-weight: 600; }
 .historical-chart { margin: 22px 0; padding: 18px 0 0; border-top: 1px solid #294035; }
 .history-heading { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }.history-period { font-size: 9px; color: #a4b5aa; letter-spacing: 1px; }
 .history-readout { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; margin: 12px 0 6px; min-height: 36px; }.history-readout strong { font-size: 24px; font-weight: 450; font-variant-numeric: tabular-nums; }.history-readout span { font-size: 10px; color: #a4b5aa; }
@@ -58,7 +58,6 @@ summary { cursor: pointer; color: #bad9c8; padding: 10px 0; line-height: 1.6; }d
 .read-refresh { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 10px; max-width: 400px; }.read-refresh .refresh-feedback { margin: 0; line-height: 1.6; font-weight: 400; }.product-workspace .chart-separation { margin: 0 0 12px; color: #a4b5aa; font-size: 10px; }
 .site-header .mobile-menu { display: none; }
 @media(max-width:767px){.site-header .mobile-menu{display:inline-flex}.site-header{padding:22px 5%}}
-.landing-enter.pp-button { position: absolute; }
 .product-workspace .panel-heading input[type="search"] { min-width: 210px; }
 @media(max-width:700px){.product-workspace button.text-link{min-height:44px}}
 /* The dashboard's fixed atmosphere must not paint over the specialized landing hero. */
@@ -96,8 +95,8 @@ summary { cursor: pointer; color: #bad9c8; padding: 10px 0; line-height: 1.6; }d
 @media(max-width:800px){.product-workspace .overview-hero{grid-template-columns:minmax(0,1fr)}.product-workspace .overview-hero>div{padding:20px 0}.product-workspace .hero-actions{flex-direction:row}.product-workspace .hero-summary{margin-top:0}}
 @media(max-width:700px){.product-workspace .site-header{padding-top:18px;padding-bottom:18px}.product-workspace main{padding-top:14px}.product-workspace .page-heading{gap:12px}.product-workspace .metrics{gap:12px}.product-workspace .metrics>.metric{padding:14px 12px}.product-workspace .panel-heading,.product-workspace .study-body,.product-workspace .product-controls{padding:18px}.product-workspace .overview-hero{gap:12px}.product-workspace .overview-hero h1{font-size:34px}}
 /* Final fidelity: emerald hierarchy, restrained chart panels and stable brand identity. */
-:is(.pp-button[data-variant="primary"],.primary-button):not(.landing-enter){color:#052319;background:linear-gradient(125deg,#b4f4d8,#6ce9bc);border-color:#9af3ca;box-shadow:inset 0 1px 1px #fff8,0 2px 18px #63e1a91a;font-weight:600}
-:is(.pp-button[data-variant="primary"],.primary-button):not(.landing-enter):hover{color:#052319;background:linear-gradient(125deg,#cefbe6,#80efc6);box-shadow:0 0 24px #63e1a926}
+:is(.pp-button[data-variant="primary"],.primary-button){color:#052319;background:linear-gradient(125deg,#b4f4d8,#6ce9bc);border-color:#9af3ca;box-shadow:inset 0 1px 1px #fff8,0 2px 18px #63e1a91a;font-weight:600}
+:is(.pp-button[data-variant="primary"],.primary-button):hover{color:#052319;background:linear-gradient(125deg,#cefbe6,#80efc6);box-shadow:0 0 24px #63e1a926}
 .product-workspace button.text-link,.pp-button[data-variant="tertiary"]{border-color:transparent;background:transparent;color:#a1edce;box-shadow:none;padding:8px 10px;min-height:44px}
 .product-workspace button.text-link:hover,.pp-button[data-variant="tertiary"]:hover{background:#80eaba0b;border-color:#3c644d}
 .asset-identity{display:inline-flex;gap:10px;align-items:center;text-align:left;vertical-align:middle}.asset-identity>span:last-child{min-width:0}.asset-identity strong{font-weight:550}.asset-logo{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;flex-shrink:0;background:#0a1810;border:1px solid #2d4a38;border-radius:7px;color:#a1edce;font-size:10px;font-weight:600}.asset-logo img{width:24px;height:24px;object-fit:contain;border-radius:3px}.issuer-logo{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;vertical-align:middle;color:#9ab8a7;font-size:8px;border:1px solid #35513e;border-radius:4px;flex-shrink:0}.issuer-logo img{width:16px;height:16px;object-fit:contain}.chart-brand{display:flex;gap:10px;align-items:center}.chart-brand .asset-logo{width:24px;height:24px}.chart-brand img{width:20px;height:20px}.chart-periods{display:flex;gap:4px}.chart-periods .pp-button{min-height:32px;padding:4px 12px;font-size:10px;border-color:#294035;border-radius:5px}.chart-periods [aria-pressed="true"]{color:#d9f9eb;background:#224737;border-color:#517b62}.negative-text{color:#e9ab9b!important}
