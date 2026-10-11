@@ -1,114 +1,99 @@
 # Parity Pulse
 
-**Clarity before exposure.** Parity Pulse is a tokenized-equity intelligence platform that compares tokenized stock representations with their underlying equities. It brings together independent evidence, share-ratio normalization, market-session context, provenance and risk checks to help explain a price difference before proposing exposure.
+**Clarity before exposure.** Parity Pulse analyzes tokenized equity representations against their underlying stocks using independent reference evidence, share-ratio normalization, market-session context, provenance and deterministic risk checks. It helps explain a price difference before proposing exposure, and abstains when the evidence is insufficient.
 
-The application includes an interactive scenario dashboard and a separate provider/operations workspace. It supports analysis and non-executable proposals; **live SWAP, RFQ and Agentic Wallet execution remain blocked**.
+## Public demo
 
-## Why it exists
+- **[Open the dashboard](https://parity-pulse-frontend.onrender.com)** — Render Static Site; scenario prices, fictional issuers and modeled holdings are labeled in the interface.
+- **[Backend health](https://parity-pulse.onrender.com/api/health)** — Render Docker Web Service. Health checks database connectivity; it does not verify every workflow or market feed.
+- **[Runtime status](https://parity-pulse.onrender.com/api/system-status)** — active data/execution settings and execution-gate status.
 
-A tokenized stock can trade while its underlying equity market is closed. A price difference may reflect new information, stale quotes, thin liquidity, different issuer economics or a corporate action. Comparing two displayed prices without checking those conditions can give a misleading result.
+The public deployment is a shared, non-live demo. **No real funds move; live SWAP, RFQ and Agentic Wallet execution remain blocked.** Scroll past the interactive paper entrance to reach the dashboard.
 
-Parity Pulse makes the evidence behind a comparison visible. Missing or conflicting evidence produces an explicit limitation or `INSUFFICIENT_EVIDENCE`, rather than a forced recommendation.
+## Capabilities
 
-## What you can explore
+| Capability | Implementation and scope |
+|---|---|
+| Discovery and comparison | Stock resolution, tokenized representation discovery, issuer comparison and deterministic shares-per-token normalization; real-provider availability depends on credentials and entitlement. |
+| Trust analysis | Freshness, timestamp alignment, session compatibility, liquidity, news context and historical coverage checks. Missing evidence produces limitations or `INSUFFICIENT_EVIDENCE`. Production admission remains blocked. |
+| Opportunity, routing and risk | Shared deterministic services evaluate eligibility, exposure economics and risk constraints. The scenario dashboard demonstrates decisions; production Opportunity admission remains blocked by Trust. |
+| Proposals and preparation | Structured dry-run proposals, quote/preparation contracts and readiness diagnostics. Demo quotes and local constraint simulation do not establish executable mainnet equivalence. |
+| Portfolio and scorecard | Position lifecycle, modeled exposure, paper P&L, evaluation records and decision traces. Scenario balances and outcomes are not connected account balances or verified predictive performance. |
+| Research | Labeled scenario assumptions and point-in-time historical replay where the required evidence exists. Optional bounded language-model interpretation is disabled in the public demo. |
+| Charts and navigation | Overview, Markets, Trust & Signals, Opportunities, Portfolio, Research Lab and Scorecard, with a separate provider/operations workspace. Captured historical equity charts are kept separate from modeled token economics. |
 
-- **Markets and representations:** discover supported underlying stocks and tokenized representations; inspect issuer metadata and read-only observations where providers support them.
-- **Comparable exposure:** normalize token prices using verified shares-per-token ratios, calculate effective price per real share and compare deviations when compatible reference evidence exists.
-- **Session-aware history:** distinguish regular, extended and closed markets; inspect captured historical equity bars without presenting them as current quotes.
-- **Trust and evidence quality:** inspect freshness, source and ingestion times, liquidity evidence, news context, baseline coverage and reasons for classification or abstention.
-- **Opportunities and routing:** evaluate deterministic eligibility, risk constraints and route economics. The scenario workspace demonstrates this flow; production Opportunity admission remains blocked by Trust evidence.
-- **Portfolio and evaluation:** inspect exposure, target drift, position lifecycle, paper P&L, scorecards and decision traces. Scenario holdings are modeled values, not connected account balances.
-- **Research:** vary explicitly labeled scenario assumptions and compare results; replay historical episodes only where point-in-time evidence supports them.
-- **Preparation and dry runs:** review proposals, quote/preparation contracts, local demo simulation and readiness diagnostics. Synthetic simulation is not proof of executable mainnet equivalence.
+The explicit DEMO Sandbox also supports NORMAL, LIKELY_NOISE and LIKELY_INFORMATION through the existing Trust → Opportunity → Risk → Routing → Quote → Preparation → local Simulation → Paper Position/Exit/Scorecard pipeline where scenario rules permit. Stand-down scenarios stop with their actual decision reasons. This sandbox requires `RUNTIME_MODE=DEMO`; it is separate from the default presentation dashboard.
 
-Features share backend services, but their data availability differs. A working screen or service does not imply verified live inputs for every asset.
+## Architecture
 
-## How it works
-
-1. Collect tokenized-asset, independent-equity and market-context evidence.
-2. Validate source identity, timestamps, units, coverage and market-session compatibility.
-3. Normalize comparable exposure and calculate price differences with exact decimal arithmetic.
-4. Evaluate Trust, eligibility, route economics and risk constraints.
-5. Present an assessment, a stand-down reason or a bounded, non-executable proposal with its evidence trail.
-
-Backend deterministic logic owns financial calculations and safety decisions. Optional language-model adapters provide bounded interpretation; they cannot replace missing observations or authorize execution.
+The React/TypeScript frontend is built with Vite, TanStack Query, Tailwind/CSS and Lucide. The paper entrance uses Three.js/WebGL with a static fallback; transitions use GSAP. FastAPI, Pydantic and HTTPX provide typed APIs and provider adapters. Backend services own financial arithmetic, provenance and safety decisions; React renders their results.
 
 ```mermaid
 flowchart LR
-    P[Read-only provider adapters] --> E[Typed evidence and provenance]
-    H[Historical observations] --> E
-    E --> A[Normalization and Trust]
-    A --> R[Opportunity, routing and risk]
-    R --> D[Proposals and readiness checks]
-    E --> S[SQLite and local artifact stores]
-    D --> S
-    A --> API[FastAPI]
-    D --> API
-    API --> UI[React dashboard]
-    F[Isolated synthetic scenarios] --> DEMO[Shared analytical services]
-    DEMO --> API
+    Browser[Browser] --> Static[Render Static Site: React bundle]
+    Static --> Browser
+    Browser -->|VITE_API_BASE_URL: HTTPS /api requests| API[Render Web Service: FastAPI]
+    API -->|CORS_ORIGINS: explicit frontend origin| Browser
+    API --> Services[Normalization, Trust, routing, risk and proposals]
+    Providers[Read-only provider adapters] --> Services
+    Fixtures[Isolated synthetic fixtures] --> Services
+    Services --> Storage[SQLite, JSON journals and in-memory stores]
+    History[Captured equity bars: display only] --> API
 ```
 
-The synthetic scenario path does not populate production historical coverage or satisfy production gates.
+The browser calls the backend directly in the public deployment. Locally, an unset API origin preserves same-origin `/api` requests through Vite or nginx. CORS controls browser access to responses; it is not authentication and does not relax execution policies.
 
-## Technology
+Provider integrations include Binance Web3/RWA market data, Massive equity/news, explicitly selected Alpaca equity data, and optional Finnhub event/calendar context. Twelve Data, GeckoTerminal and Hyperliquid investigation scripts do not automatically admit those sources into production Trust. An optional MCP stdio bridge exposes allowlisted analytical/proposal tools. The Agent Studio sidecar is not an enabled or verified execution path and is unnecessary for the dashboard.
 
-| Area | Implementation |
+## Safety and execution model
+
+`DATA_MODE=DEMO` selects fixture inputs, `EXECUTION_MODE=DRY_RUN` permits non-executable proposals, and `APPROVAL_MODE=PROPOSE_ONLY` prevents autonomous execution. `LIVE_TRADING_ENABLED=false` and `REQUIRE_SIMULATION=true` are mandatory. Startup rejects live execution, autonomous approval, enabled trading and disabled simulation.
+
+`RUNTIME_MODE=LIVE` names the ordinary backend runtime and its storage/API wiring; it does **not** enable trading. `RUNTIME_MODE=DEMO` requires DEMO data and uses isolated in-memory lifecycle stores with sandbox routes. The default presentation dashboard uses synthetic analytical inputs in either runtime.
+
+| Production gate | Status |
 |---|---|
-| Frontend | React, TypeScript, Vite, TanStack Query, Tailwind/CSS, Lucide icons |
-| Visuals | Custom SVG charts, Three.js/WebGL paper scene with static fallback, GSAP route transitions |
-| Backend | Python 3.12+, FastAPI, Pydantic, HTTPX |
-| Persistence | SQLAlchemy with SQLite; local JSON journals and artifact stores for analytical/lifecycle workflows |
-| Provider adapters | Binance Web3/RWA market data; Massive equity/news; explicitly selected Alpaca equity data; optional Finnhub event/calendar research context |
-| Interfaces | HTTP APIs and an optional MCP stdio bridge over allowlisted analytical/proposal tools |
-| Verification | pytest, Vitest, Testing Library, Ruff, generated-schema checks, security checks and a Chromium browser harness |
+| DATA_GATE | PASS |
+| DRY_RUN_GATE | PASS |
+| TRUST_GATE | BLOCKED |
+| OPPORTUNITY_GATE | BLOCKED_BY_TRUST |
+| SWAP_LIVE_GATE | BLOCKED |
+| RFQ_LIVE_GATE | BLOCKED |
+| AGENTIC_WALLET_LIVE_GATE | BLOCKED |
 
-Twelve Data, GeckoTerminal and Hyperliquid investigation scripts are diagnostics, not automatically admitted production Trust references or liquidity sources.
+Synthetic evidence never contributes to production historical coverage or unlocks these gates. Binance `referencePrice` is not an independent traditional-equity reference. Stale quotes, unknown historical ratios and local simulations cannot substitute for verified point-in-time evidence or exact execution-envelope equivalence.
 
-## Getting started
+## Local development
 
-Requirements: **Python 3.12+** and **Node.js 22.12+**. Run these commands from the repository root:
+Requirements: **Python 3.12+** and **Node.js 22.12+**. From the repository root:
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-dev.txt
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
 npm ci
 ```
 
-Use [.env.example](.env.example) as the configuration template. If `.env` does not exist, copy the template to `.env`; preserve any existing local configuration. Provider credentials are optional for the default scenario experience and must stay in the ignored local environment, never frontend variables or Git.
+Use [.env.example](.env.example) as the backend template. Copy it to `.env` only if that file does not already exist; preserve existing configuration. Credentials are unnecessary for the default scenario experience. Keep them out of Git and all frontend variables.
 
-Keep these settings for non-live use:
-
-```dotenv
-DATA_MODE=DEMO
-EXECUTION_MODE=DRY_RUN
-APPROVAL_MODE=PROPOSE_ONLY
-LIVE_TRADING_ENABLED=false
-REQUIRE_SIMULATION=true
-```
-
-`RUNTIME_MODE=LIVE` names the ordinary backend runtime; it does **not** enable trading. `RUNTIME_MODE=DEMO` requires `DATA_MODE=DEMO` and uses isolated in-memory stores for the explicit demo pipeline.
-
-Start FastAPI in one terminal:
+Start the backend in one terminal:
 
 ```sh
 .venv/bin/python -m uvicorn app.main:create_app --factory \
   --app-dir backend --host 127.0.0.1 --port 8000 --no-access-log
 ```
 
-Start Vite in another terminal, also from the repository root:
+From the repository root, start the frontend in another terminal:
 
 ```sh
 npm run dev
 ```
 
-Open [http://127.0.0.1:5173/](http://127.0.0.1:5173/). Scroll past the interactive paper entrance to enter the scenario dashboard. Reduced motion or unavailable WebGL uses a static branded fallback. Vite proxies `/api` to the backend on port 8000.
+Open [http://127.0.0.1:5173/](http://127.0.0.1:5173/). Vite proxies `/api` to `http://127.0.0.1:8000`. The paper scene supports dragging/hover lighting, reduced motion and a branded WebGL fallback.
 
-The dashboard includes Overview, Markets, Trust & Signals, Opportunities, Portfolio, Research Lab and Scorecard. Its default prices, holdings, fictional Atlas/Meridian representations and evaluation outcomes are explicitly modeled scenario data.
+The [provider/operations workspace](http://127.0.0.1:5173/?workspace=verified#overview) is a separate interface; its URL does not certify data quality. Real-provider reads require explicit `DATA_MODE=LIVE_READ_ONLY`, provider selection and applicable credentials/feed entitlement. Unavailable reads do not silently fall back to synthetic data.
 
-The separate provider/operations workspace is available at [http://127.0.0.1:5173/?workspace=verified#overview](http://127.0.0.1:5173/?workspace=verified#overview). The URL selects that interface; it does not certify provider data. Read-only real-provider access requires `DATA_MODE=LIVE_READ_ONLY` and the relevant credentials/feed configuration in `.env.example`. The equity provider must be selected explicitly; unavailable reads do not silently fall back to synthetic data.
-
-For the explicit demo pipeline, replace the backend command with:
+To use the isolated sandbox, replace the backend command with:
 
 ```sh
 RUNTIME_MODE=DEMO DATA_MODE=DEMO .venv/bin/python -m uvicorn \
@@ -116,13 +101,132 @@ RUNTIME_MODE=DEMO DATA_MODE=DEMO .venv/bin/python -m uvicorn \
   --host 127.0.0.1 --port 8000 --no-access-log
 ```
 
-Then open [http://127.0.0.1:5173/?workspace=verified#demo-sandbox](http://127.0.0.1:5173/?workspace=verified#demo-sandbox). NORMAL and LIKELY_NOISE demonstrate stand-down paths; LIKELY_INFORMATION can proceed through supported opportunity, risk, routing, synthetic quote/preparation, local simulation and paper position/exit/P&L stages. No funds move, and the paper state clears on restart.
+Then open the [DEMO Sandbox](http://127.0.0.1:5173/?workspace=verified#demo-sandbox). Keep the other execution settings at their safe defaults below.
 
-Backend health is available at `/api/health`; configuration and gate status are available at `/api/system-status`.
+## Docker and Compose
 
-## Development checks
+The root [Dockerfile](Dockerfile) uses Python 3.12, runs as non-root UID/GID `10001`, binds `0.0.0.0:8000` and checks `/api/health`. It copies `backend/`, `data/demo/`, `data/calendar/` and `data/display/`, and creates writable database/research directories. Offline `HistoricalSource` inputs in `data/historical/` are not consumed by the API or included in the image. No pre-existing SQLite database is required; schemas and fixtures initialize at startup.
 
-Run from the repository root:
+[Compose](compose.yaml) serves the frontend through unprivileged nginx and proxies `/api` to the backend. Published ports bind to loopback; its named volume preserves stores under `/app/var`, including the ordinary-runtime SQLite database. Presentation caches and the session-only paper ledger are not persisted by that volume, nor is the separate research directory. Compose leaves `RUNTIME_MODE` at its ordinary `LIVE` default while using DEMO data and dry-run safeguards.
+
+```sh
+docker compose up --build
+```
+
+Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/). Render reports a successful backend Docker deployment, and public health was verified. **A local Docker build/run and Compose smoke test have not been performed in this environment; Docker is unavailable.** The Compose service hostname `backend` is not the public static-site API origin.
+
+## Render deployment
+
+Use two separate resources connected to this repository's `main` branch:
+
+| Setting | Backend | Frontend |
+|---|---|---|
+| Resource | Docker Web Service, Free plan | Static Site |
+| Root directory | Repository root | `frontend` |
+| Dockerfile | `./Dockerfile` | Not used |
+| Build command | Dockerfile build | `npm ci && npm run build` |
+| Publish directory | Not applicable | `dist` |
+| Startup | Dockerfile default uvicorn command | Static hosting |
+| Health check | `/api/health` | Not applicable |
+
+The supplied Render backend configuration is:
+
+```dotenv
+APP_ENV=production
+RUNTIME_MODE=LIVE
+DATA_MODE=DEMO
+EXECUTION_MODE=DRY_RUN
+APPROVAL_MODE=PROPOSE_ONLY
+LIVE_TRADING_ENABLED=false
+REQUIRE_SIMULATION=true
+LLM_ENABLED=false
+PORT=8000
+LOG_LEVEL=INFO
+CORS_ORIGINS=["https://parity-pulse-frontend.onrender.com"]
+```
+
+**Configuration discrepancy:** the public `/api/system-status` response checked on October 11, 2026 reports `runtime_mode=DEMO`, and `/openapi.json` includes the DEMO Sandbox routes. This differs from the supplied `RUNTIME_MODE=LIVE` setting. Check the active service environment and deployment in Render before treating that supplied value as effective. Both modes retain the same execution restrictions; this documentation audit changed neither environment nor gates.
+
+The Dockerfile supplies `DATABASE_URL=sqlite:////app/var/parity-pulse.db`. Explicit DEMO runtime uses in-memory SQLite regardless of that URL. Keep `PORT=8000`: the current startup command and health check use the literal port 8000 rather than interpolating `PORT`. Provider/wallet credentials and `EXECUTION_WORKER_TOKEN` are unnecessary for this public demo.
+
+Set the frontend **build-time** variable:
+
+```dotenv
+VITE_API_BASE_URL=https://parity-pulse.onrender.com
+```
+
+Use an HTTPS origin with no `/api` suffix or other path. Changing it requires a new frontend build/deploy. The backend CORS JSON array must contain the frontend origin exactly, without a trailing slash. Configure the static-site SPA rewrite `/*` → `/index.html` if needed for navigation; it is not an API proxy. The rewrite's dashboard configuration has not been independently inspected.
+
+For a new deployment: deploy the backend with reviewed non-live settings; verify health and effective status; build/deploy the frontend with its backend origin; verify browser data loading and CORS. Test state-changing demo journeys only on isolated disposable state, and verify cold-start recovery separately. No capability gate passes as part of deployment.
+
+### Verification scope
+
+Public checks on October 11, 2026 established:
+
+- Frontend HTML and its JavaScript bundle: HTTP 200; the bundle contains the configured backend origin.
+- `/api/health`: HTTP 200, `ok`, database `connected`.
+- `/api/system-status`: HTTP 200; DEMO data, DRY_RUN, PROPOSE_ONLY, trading disabled, simulation required, all three live gates blocked.
+- Allowed-origin POST preflight with `Content-Type` and `X-Correlation-ID`: HTTP 200. Unlisted-origin preflight: HTTP 400, no allow-origin header. No cross-origin credentials allowance.
+- NVDA/AAPL display history: HTTP 200, historical Alpaca/SIP five-minute bars for October 5–9; explicitly ineligible as production references.
+- DEMO scenario catalog: HTTP 200, synthetic and production-ineligible.
+- Stateless `/api/intent/parse`: HTTP 200, a valid $50 Nvidia request, with the allowed-origin response header. This only parses intent; it does not save a proposal or submit an order.
+- Chrome rendered the landing content, Overview data and historical chart, and navigation to Markets with labeled scenario comparisons. This verifies representative browser data loading, not every interaction or workflow.
+
+Saved research, scans, proposal persistence and paper-execution writes were not exercised against shared public state. Cold-start/restart recovery and local containers remain unverified. `/api/status` is not implemented; use `/api/system-status`.
+
+Local `main`, `origin/main` and GitHub `main` matched commit `52ad7f743d0fb0a329644db254c7472a3a53986f` during review. The public APIs expose service version `0.1.0`, not a Git commit identifier; the exact deployed commit remains unverified and must be checked in Render's deployment details.
+
+## Configuration reference
+
+Backend settings load the repository-root `.env`; environment variables override it. The frontend does not load that backend file. [frontend/.env.example](frontend/.env.example) documents its separate public build setting. Defaults below are from the implementation, not a claim about the deployed environment.
+
+| Variable | Default | Supported values / requirement |
+|---|---|---|
+| `APP_ENV` | `development` | `development`, `test`, `production`; optional |
+| `RUNTIME_MODE` | `LIVE` | `LIVE`, `DEMO`; DEMO requires DEMO data |
+| `DATA_MODE` | `DEMO` | `DEMO`, `LIVE_READ_ONLY` |
+| `EXECUTION_MODE` | `DRY_RUN` | Only DRY_RUN accepted by current startup policy |
+| `APPROVAL_MODE` | `PROPOSE_ONLY` | Only PROPOSE_ONLY accepted |
+| `LIVE_TRADING_ENABLED` | `false` | Must remain false |
+| `REQUIRE_SIMULATION` | `true` | Must remain true |
+| `LLM_ENABLED` | `false` | Explicit true/false; leave false for the demo |
+| `DATABASE_URL` | SQLite file at repository `data/parity-pulse.db` | SQLite only, no URL credentials/options; Docker overrides the path; ordinary production runtime rejects in-memory SQLite |
+| `LOG_LEVEL` | `INFO` | DEBUG, INFO, WARNING, ERROR, CRITICAL |
+| `CORS_ORIGINS` | `[]` | JSON array of explicit origins; required for separate frontend/backend origins |
+| `VITE_API_BASE_URL` | Unset | Frontend build-time HTTP(S) origin; production requires HTTPS; unset/empty preserves same-origin requests |
+| `PORT` | Not a backend Settings field | Render configuration: 8000, matching the fixed Docker command |
+| `POSTOPEN_EXIT_MINUTES` | `10` | Integer 1–120; lifecycle configuration |
+| `EQUITY_PROVIDER` | `MASSIVE` | MASSIVE or ALPACA; explicit selection, no automatic fallback |
+| `MASSIVE_DATA_QUALITY`, `ALPACA_DATA_QUALITY` | `UNKNOWN` | UNKNOWN, DELAYED, REALTIME; labels require verified entitlement/timestamp semantics |
+| `ALPACA_FEED` | `iex` | iex, sip, delayed_sip, boats, overnight; entitlement-dependent |
+
+Optional backend-only credentials: `BINANCE_WEB3_API_KEY`, `BINANCE_WEB3_SECRET_KEY`, `MASSIVE_API_KEY`, `ALPACA_API_KEY`, `ALPACA_SECRET_KEY`, `FINNHUB_API_KEY`, `LLM_API_KEY` and `EXECUTION_WORKER_TOKEN`. Each defaults to unset; never place them in a frontend build variable. The worker token does not unlock a live gate.
+
+If LLM interpretation is explicitly enabled, `LLM_PROVIDER`, `LLM_MODEL` and credential-free HTTPS `LLM_BASE_URL` must be supplied. Limits default to `LLM_TIMEOUT_SECONDS=5` (1–30), `LLM_MAX_OUTPUT_BYTES=50000` (1024–50000), `LLM_MAX_OUTPUT_TOKENS=4096` (128–8192), and `LLM_STRUCTURED_OUTPUT=true`. Interpretation cannot authorize execution or replace missing evidence.
+
+Origin validation rejects credentials, wildcard hosts, non-origin paths, queries and fragments. Production frontend origins require HTTPS; development also supports explicit HTTP loopback origins. CORS allows GET/POST/PUT and the transport's content-type/correlation headers, exposing `X-Request-ID`, `X-Correlation-ID` and `X-Run-ID` without cross-origin cookies. The API client retains canonical `/api/...` path validation, same-origin credentials policy, refused redirects, bounded timeouts, structured errors and no automatic proposal retries. Invalid configured origins fail closed.
+
+## Data and persistence
+
+| Data/state | Storage and meaning |
+|---|---|
+| Scenario prices, issuers, liquidity, holdings and outcomes | Isolated synthetic fixtures; modeled values, not live market observations or actual accounts |
+| Display equity charts | Bundled historical Alpaca NVDA/AAPL capture under `data/display/`; historical, raw/unadjusted USD bars, excluded from Trust and execution inputs |
+| Provider observations, proposals and assessments | SQLite; source, observation/publication time, ingestion time and quality remain distinct |
+| Ordinary-runtime scans, agent records, execution/position/portfolio records, audit scorecards and tool receipts | Local stores/journals under the configured database directory; reset on Render Free filesystem loss |
+| Explicit DEMO lifecycle and paper execution | In-memory stores; positions, exits, P&L and scorecards derived from that ledger reset with the process |
+| Presentation workspace and saved scenario studies | Bounded in-memory cache shared across visitors; resets with the process |
+| Terminal research artifacts | Separate local `data/research/phase5/` store; also ephemeral on Render Free |
+
+No existing runtime database is needed to open the demo. Schemas initialize automatically and fixtures load from the image. Render Free can sleep after idle traffic and loses local filesystem changes on restart, redeploy or spin-down; persistent disks are unavailable on that plan. Do not rely on saved proposals, portfolio state or history surviving. [Render Free behavior](https://render.com/docs/free).
+
+The public demo is not an authenticated, per-visitor isolated workspace. Avoid putting private account information into shared inputs. A cold start can exceed the client's bounded timeout; let the backend wake and use the existing Retry control. Successful cold-start recovery has not been verified here. Durable lifecycle operation requires a storage/deployment change; PostgreSQL is not a supported drop-in replacement in the current settings model.
+
+Fixtures under [backend/tests/fixtures](backend/tests/fixtures) retain sanitized provider provenance and manifest hashes. Synthetic Finnhub protocol fixtures are not real event evidence. Local brand assets have [source provenance](frontend/public/brands/provenance.json); their presence does not establish endorsement or public/commercial redistribution rights.
+
+## Tests and quality checks
+
+From the repository root:
 
 ```sh
 npm test
@@ -133,85 +237,25 @@ PYTHONPATH=backend .venv/bin/python scripts/generate-ui-contracts.py --check
 .venv/bin/python scripts/check-security.py
 ```
 
-`npm run build` includes TypeScript checking. The security check inspects local configured-secret leakage and frontend isolation without printing credentials.
+`npm run build` includes TypeScript checking. Backend and frontend tests cover deterministic analytical contracts, fixture isolation, fail-closed execution and transport behavior. Schema checks compare generated frontend contracts; security checks inspect configured-secret leakage and frontend isolation without printing credentials.
 
-For browser journeys, build first, then run:
+`npm run test:integration` requires the local backend on port 8000 and Vite on port 5173. It creates a dry-run proposal and Trust assessment in that local instance; use disposable DEMO state. It is not a public deployment check.
+
+The local browser harness uses disposable credential-free backends and temporary screenshots, stopping only its own processes:
 
 ```sh
 .venv/bin/python scripts/verify-frontend-phase15.py
 ```
 
-This requires local Google Chrome and free ports 8054–8057 and 5178. It uses disposable credential-free fixture backends, retains screenshots in a temporary directory and stops only its own processes. `--landing-only` restricts it to landing-page checks.
+Build first; this requires Google Chrome and free ports 8054–8057 and 5178. `--landing-only` restricts the journey to landing checks. Local fixture tests and browser journeys do not prove remote provider entitlement or live execution readiness.
 
-## Data and execution boundaries
+## Known limitations and next work
 
-- **Provider observations** retain source identity, observation/publication time, retrieval time and quality status. Credentials, feed entitlements and coverage determine what is available.
-- **Historical observations** remain historical. The bundled Alpaca NVDA/AAPL display capture is separate from modeled token economics and is not a current-equity reference.
-- **Synthetic fixtures and scenario values** are labeled and isolated. Their liquidity, holdings, prices and outcomes are not verified market data or predictive performance.
-- **Independent references matter.** Binance `referencePrice` is not substituted for an independent traditional-equity quote. A stale quote or an unknown historical share ratio cannot be treated as current or known as-of evidence.
+- Production Trust requires admitted independent references, authoritative liquidity and qualifying as-of history, including the unchanged 30 baseline / 30 opening-model / 3 analogue safeguards in their applicable scopes. Historical ratios, coverage, entitlements and synchronization remain evidence blockers; event ingestion alone cannot resolve them.
+- A successful display chart is not a fresh independent reference. No token history or historical share ratio is inferred from the equity capture. Provider feeds are not all live or complete, and their current entitlements were not retested during this documentation audit.
+- Mainnet quote/build/simulation equivalence, wallet runtime authorization and live settlement readiness remain gated. Offline execution interfaces/tests do not establish a deployable trading service.
+- Follow-up verification: reconcile the runtime-setting discrepancy and deployed commit in Render, test shared-state writes in an isolated environment, verify cold-start recovery, and run a local container smoke test when Docker is available. These checks must preserve all existing gates.
 
-Current production gates:
+## Disclaimer
 
-| Gate | Status |
-|---|---|
-| DATA_GATE | PASS |
-| DRY_RUN_GATE | PASS |
-| TRUST_GATE | BLOCKED |
-| OPPORTUNITY_GATE | BLOCKED_BY_TRUST |
-| SWAP_LIVE_GATE | BLOCKED |
-| RFQ_LIVE_GATE | BLOCKED |
-| AGENTIC_WALLET_LIVE_GATE | BLOCKED |
-
-Trust still requires admitted independent references, authoritative liquidity and qualifying point-in-time history, including the existing 30 baseline / 30 opening-model / 3 analogue safeguards in their applicable scopes. Event ingestion or synthetic demonstrations do not resolve those requirements.
-
-Execution interfaces and offline safety tests exist, but live swap, RFQ and Agentic Wallet readiness is not established. Startup rejects live trading configuration. A passing test suite, a prepared payload or a local simulation does not establish production trading readiness or unlock any gate.
-
-## Deployment
-
-The included [Compose configuration](compose.yaml) builds the Python backend and serves the Vite production bundle through unprivileged nginx. nginx forwards `/api` to FastAPI; a named volume persists SQLite data. Both published ports bind to loopback.
-
-```sh
-docker compose up --build
-```
-
-Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/). Keep the backend reachable by the frontend proxy and retain durable writable storage for ordinary lifecycle records. The backend image includes the demo fixtures, market calendar and display-only historical capture, and provides a writable research directory. Offline `HistoricalSource` replay inputs under `data/historical` are not consumed by the API or included in this image.
-
-This is a local non-live deployment configuration. Docker build/run verification is not established here; remote authenticated execution deployment is not provided. `.dockerignore` excludes local credentials, and deployment configuration must retain the same execution restrictions.
-
-For a public Render demo, use a **Docker web service for the backend** and a **static site for the frontend**, both with repository root as their working/build context. The existing nginx/Compose configuration depends on the local `backend` service hostname; it is not the Render static-site configuration.
-
-Set these backend environment variables in Render:
-
-```dotenv
-APP_ENV=production
-RUNTIME_MODE=DEMO
-DATA_MODE=DEMO
-EXECUTION_MODE=DRY_RUN
-APPROVAL_MODE=PROPOSE_ONLY
-LIVE_TRADING_ENABLED=false
-REQUIRE_SIMULATION=true
-LLM_ENABLED=false
-PORT=8000
-DATABASE_URL=sqlite:////app/var/parity-pulse.db
-CORS_ORIGINS=["https://YOUR-FRONTEND-HOST"]
-```
-
-Replace the CORS placeholder with the actual frontend HTTPS origin. `CORS_ORIGINS` is a JSON array of explicit origins, defaults to `[]`, and accepts no wildcards, credentials, paths, queries or fragments. Trailing slashes and default ports normalize away. HTTP is accepted only for explicitly listed loopback development origins. CORS permits GET/POST/PUT and the transport's `Content-Type`/`X-Correlation-ID` headers, exposes `X-Request-ID`, `X-Correlation-ID` and `X-Run-ID`, and does not permit cross-origin cookies. It controls browser response access; it is not authentication and does not relax execution-worker restrictions.
-
-Use the root `Dockerfile`, retain its default command, and set the Render health-check path to `/api/health`. The command and Docker health check use port 8000, so keep `PORT=8000`. Leave all provider/wallet credentials and `EXECUTION_WORKER_TOKEN` unset for this demo.
-
-For the frontend, use build command `npm ci && npm run build`, publish directory `frontend/dist`, and a Node version satisfying the repository's `>=22.12.0` requirement. Set `VITE_API_BASE_URL` in the **frontend build environment** to the backend's actual public HTTPS origin, with no `/api` suffix. Rebuild after changing it; Vite embeds this public setting in the bundle. Configure the static site's SPA rewrite `/*` → `/index.html`; this serves frontend navigation, not an API proxy. The browser calls the backend directly, so the backend CORS allowlist must match the frontend origin exactly.
-
-When `VITE_API_BASE_URL` is unset or empty, requests remain same-origin `/api/...`, preserving Vite development and Compose. A separate local frontend configuration template is at [frontend/.env.example](frontend/.env.example); the backend root `.env` is intentionally not loaded into Vite. Configured origins are validated before requests; production builds require HTTPS. Development builds also accept explicit HTTP loopback origins. Invalid configuration fails closed without falling back to another backend. Credentials, redirect refusal, bounded timeouts and absence of automatic proposal retries remain unchanged.
-
-Render Free provides no persistent disk and loses filesystem changes on restart, redeploy or idle shutdown. Explicit `RUNTIME_MODE=DEMO` uses in-memory SQLite and a session-only paper ledger, regardless of the configured file database URL. No pre-existing database is required; fixtures reload at startup. Proposals, scans, saved scenario studies, paper positions/P&L and scorecards reset on restart. State is shared within one process rather than isolated per visitor. Ordinary lifecycle persistence requires a different storage/deployment setup; PostgreSQL is not a supported drop-in database here. [Render Free storage and idle behavior](https://render.com/docs/free).
-
-Deployment sequence: review the changes and verify an actual Docker build; deploy the backend with the settings above; build/deploy the frontend with the public API origin; then verify public health/status, allowed and rejected preflights, scenario GET/POST flows, charts and restart behavior. Free-service cold starts can exceed the client's request timeout; allow the backend to wake and use the existing Retry control. No live capability gate passes as part of deployment. [Render static frontend/API wiring](https://render.com/tutorials/web-service-vs-static-site/the-hybrid-pattern).
-
-## Fixtures and identification assets
-
-JSON fixtures remain under [backend/tests/fixtures](backend/tests/fixtures). Provider captures are sanitized and their manifest records hashes; numeric money values are canonical decimal strings rather than byte-identical raw responses. Finnhub fixtures are synthetic protocol inputs, not real events or qualifying Trust evidence. Tests use fixed clocks, mocked transports and isolated stores.
-
-Bundled company/issuer identification assets are served locally. [Brand provenance](frontend/public/brands/provenance.json) records original source URLs and hashes. These proprietary identifiers imply neither endorsement nor a redistribution license; fictional scenario issuers use labeled initials. Public/commercial redistribution rights have not been established by this repository.
-
-The Agent Studio sidecar remains in the source tree but is not a verified or enabled execution path. It is not needed to run the dashboard.
+Parity Pulse is experimental financial demo software, not investment advice or an execution service. Scenario results and historical evaluations do not guarantee future performance.
