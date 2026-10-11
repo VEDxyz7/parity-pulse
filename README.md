@@ -1,207 +1,73 @@
 # Parity Pulse
 
-## Scenario product workspace
+**Clarity before exposure.** Parity Pulse is a tokenized-equity intelligence platform that compares tokenized stock representations with their underlying equities. It brings together independent evidence, share-ratio normalization, market-session context, provenance and risk checks to help explain a price difference before proposing exposure.
 
-The default frontend opens a cinematic 3D paper entrance. **Enter Parity Pulse** or
-scroll one viewport to reveal the existing, populated offline **Scenario workspace**.
-Direct dashboard hash URLs bypass the entrance. Reduced motion and unavailable WebGL
-retain a static branded entrance and working entry action. The workspace uses
-fixed modeled market data, fictional Atlas/Meridian representations, and the existing
-Trust, Opportunity, Risk, Routing, Quote, preparation and local simulation engines.
-Markets, Trust & Signals, Opportunities, Portfolio, Research Lab and Scorecard share
-one backend presentation adapter. Prices are explicitly modeled, not current quotes;
-proposals never authorize execution or enter production evidence.
+The application includes an interactive scenario dashboard and a separate provider/operations workspace. It supports analysis and non-executable proposals; **live SWAP, RFQ and Agentic Wallet execution remain blocked**.
 
-Overview and asset details separately display captured **Alpaca historical equity bars**
-for NVDA/AAPL, October 5–9, 2026: five-minute regular-session closes, USD, UTC axes.
-These observations do not price the modeled portfolio or become Trust references.
-Liquidity in the scenario workspace is a labelled USD assumption, not executable depth.
-Refresh controls re-read backend state and report completion without implying new quotes.
-See [UI polish, data provenance and verification](docs/UI_POLISH_REPORT.md). See [final charting, allocation and interaction evidence](docs/UI_FIDELITY_REPORT.md).
+## Why it exists
 
-Run the canonical commands in separate terminals from the repository root:
+A tokenized stock can trade while its underlying equity market is closed. A price difference may reflect new information, stale quotes, thin liquidity, different issuer economics or a corporate action. Comparing two displayed prices without checking those conditions can give a misleading result.
 
-```sh
-.venv/bin/python -m uvicorn app.main:create_app --factory --app-dir backend --host 127.0.0.1 --port 8000 --no-access-log
-npm run dev
+Parity Pulse makes the evidence behind a comparison visible. Missing or conflicting evidence produces an explicit limitation or `INSUFFICIENT_EVIDENCE`, rather than a forced recommendation.
+
+## What you can explore
+
+- **Markets and representations:** discover supported underlying stocks and tokenized representations; inspect issuer metadata and read-only observations where providers support them.
+- **Comparable exposure:** normalize token prices using verified shares-per-token ratios, calculate effective price per real share and compare deviations when compatible reference evidence exists.
+- **Session-aware history:** distinguish regular, extended and closed markets; inspect captured historical equity bars without presenting them as current quotes.
+- **Trust and evidence quality:** inspect freshness, source and ingestion times, liquidity evidence, news context, baseline coverage and reasons for classification or abstention.
+- **Opportunities and routing:** evaluate deterministic eligibility, risk constraints and route economics. The scenario workspace demonstrates this flow; production Opportunity admission remains blocked by Trust evidence.
+- **Portfolio and evaluation:** inspect exposure, target drift, position lifecycle, paper P&L, scorecards and decision traces. Scenario holdings are modeled values, not connected account balances.
+- **Research:** vary explicitly labeled scenario assumptions and compare results; replay historical episodes only where point-in-time evidence supports them.
+- **Preparation and dry runs:** review proposals, quote/preparation contracts, local demo simulation and readiness diagnostics. Synthetic simulation is not proof of executable mainnet equivalence.
+
+Features share backend services, but their data availability differs. A working screen or service does not imply verified live inputs for every asset.
+
+## How it works
+
+1. Collect tokenized-asset, independent-equity and market-context evidence.
+2. Validate source identity, timestamps, units, coverage and market-session compatibility.
+3. Normalize comparable exposure and calculate price differences with exact decimal arithmetic.
+4. Evaluate Trust, eligibility, route economics and risk constraints.
+5. Present an assessment, a stand-down reason or a bounded, non-executable proposal with its evidence trail.
+
+Backend deterministic logic owns financial calculations and safety decisions. Optional language-model adapters provide bounded interpretation; they cannot replace missing observations or authorize execution.
+
+```mermaid
+flowchart LR
+    P[Read-only provider adapters] --> E[Typed evidence and provenance]
+    H[Historical observations] --> E
+    E --> A[Normalization and Trust]
+    A --> R[Opportunity, routing and risk]
+    R --> D[Proposals and readiness checks]
+    E --> S[SQLite and local artifact stores]
+    D --> S
+    A --> API[FastAPI]
+    D --> API
+    API --> UI[React dashboard]
+    F[Isolated synthetic scenarios] --> DEMO[Shared analytical services]
+    DEMO --> API
 ```
 
-Open `http://127.0.0.1:5173/`. Routes are `#overview`, `#markets`, `#trust`,
-`#opportunities`, `#portfolio`, `#research` and `#scorecard`.
-In Research Lab, run a news, normal or low-liquidity study, adjust assumptions,
-pin a comparison and reset. Opportunities supports a budget, risk mandate, universe
-and market window; reopening studies stand down pending opening-model evidence.
-The portfolio contains modeled holdings and target-drift suggestions, not account balances.
-Scorecard agreement comes from its displayed fixture records, not live performance.
+The synthetic scenario path does not populate production historical coverage or satisfy production gates.
 
-The unchanged provider/operations workspace is explicitly available at
-`http://127.0.0.1:5173/?workspace=verified#overview`. It retains the actual provider,
-Trust gate, execution-gate, paper lifecycle, Agent API and diagnostic behavior.
-Selecting the scenario workspace never substitutes data inside that workspace or the
-production APIs. See [productization evidence and limitations](docs/PRODUCTIZATION_REPORT.md).
-See [landing implementation and browser verification](docs/LANDING_PAGE_REPORT.md).
+## Technology
 
-Master Phase 16 — Hardening is **PASS for the non-live release-candidate scope**.
-See [the hardening report and release checklist](docs/PHASE_16_REPORT.md) for exact
-tests, performance, recovery evidence and unresolved provider/LIVE blockers.
-Trust, Opportunity and all LIVE gates remain unchanged. Phase 17 is not started.
+| Area | Implementation |
+|---|---|
+| Frontend | React, TypeScript, Vite, TanStack Query, Tailwind/CSS, Lucide icons |
+| Visuals | Custom SVG charts, Three.js/WebGL paper scene with static fallback, GSAP route transitions |
+| Backend | Python 3.12+, FastAPI, Pydantic, HTTPX |
+| Persistence | SQLAlchemy with SQLite; local JSON journals and artifact stores for analytical/lifecycle workflows |
+| Provider adapters | Binance Web3/RWA market data; Massive equity/news; explicitly selected Alpaca equity data; optional Finnhub event/calendar research context |
+| Interfaces | HTTP APIs and an optional MCP stdio bridge over allowlisted analytical/proposal tools |
+| Verification | pytest, Vitest, Testing Library, Ruff, generated-schema checks, security checks and a Chromium browser harness |
 
-Master Phase 15 — Frontend Integration is **PASS for the non-live frontend gate**.
-React consumes existing backend authorities for exposure/routes, Opportunity scans,
-Portfolio/Autopilot, Terminal, Scorecard/Audit and Agent API inspection. Wallet and
-approval capabilities are accurately unavailable; production gates remain unchanged.
-[Phase 15 report, exact files and validation](docs/PHASE_15_REPORT.md).
-The older milestone notes below are historical.
+Twelve Data, GeckoTerminal and Hyperliquid investigation scripts are diagnostics, not automatically admitted production Trust references or liquidity sources.
 
-In the explicit `?workspace=verified` workspace, navigate to `#overview`, `#ask` (route comparison / proposal review), `#opportunity`
-(or `#opportunity/<run_id>`), `#autopilot`, `#portfolio`, `#terminal`, `#agent-api`,
-`#settings`, `#audit` (or `#audit/<decision_id>`) and `#demo-sandbox`.
-Analytical navigation does not unlock the disabled execution controls. All numbers,
-rankings, drift, P&L and outcome states come from backend responses. Periodic 30-second
-GET refreshes never scan, save mandates, propose plans, sign or execute automatically.
+## Getting started
 
-From the repository root, verify generated contracts and the isolated browser journeys:
-
-```sh
-PYTHONPATH=backend .venv/bin/python scripts/generate-ui-contracts.py --check
-npm test
-.venv/bin/python -m pytest -q
-npm run build
-.venv/bin/python scripts/verify-frontend-phase15.py
-```
-
-The browser runner needs installed Google Chrome and free ports 8054–8057/5178.
-It serves the built UI with disposable synthetic fixture backends, forwards no credentials,
-refuses occupied ports, and stops only its own processes. It prints the retained temporary
-evidence/screenshot directory. No production data, provider verification or real funds.
-The same runner now verifies concurrent forwarding, external-request detection and
-the actual MCP stdio bridge against its disposable fixtures. For offline timings:
-
-```sh
-.venv/bin/python scripts/benchmark-hardening.py --evidence /tmp/parity-phase16-performance.json
-```
-
-The benchmark refuses an existing evidence file. It uses temporary synthetic stores;
-its timings do not certify provider latency or live readiness.
-`npm run dev` remains the canonical command from the repository root.
-
-Master Phase 14 — Agent API / MCP: a bounded interface over the existing backend.
-Seven typed tools are documented at `#agent-api` and `GET /api/agent/tools`.
-Analytical tools inspect backend state; proposal tools cannot execute, sign, broadcast,
-submit RFQs, or change wallet/portfolio rules. Production gates remain unchanged.
-See [Phase 14 report](docs/PHASE_14_REPORT.md) for acceptance and remaining provider blockers.
-
-For local MCP clients, keep the canonical backend running on loopback, then launch from
-the repository root:
-
-```sh
-.venv/bin/python -m pip install -e '.[mcp]'
-PYTHONPATH=backend .venv/bin/python -m app.mcp_server --port 8000
-```
-
-This uses the official SDK's stdio transport and forwards only the seven allowlisted tools
-to that backend. It owns no wallet, provider credentials, or second database. The HTTP
-invocation endpoint is loopback-only and rejects foreign Host/Origin and forwarded headers;
-remote authenticated MCP deployment is not implemented. Proposal calls require separate
-decimal-string USD and risk budgets and a stable UUID `idempotency_key`. Repeat the same
-key after a lost response; a pending receipt returns `RECONCILIATION_REQUIRED` and cannot
-automatically resubmit. Returned receipts keep their original timestamps and expiration.
-Phase 15 has not started. Earlier dated milestones below are historical records.
-
-Master Phase 9 — Agentic Wallet: **IMPLEMENTATION PASS; local runtime UNAVAILABLE**.
-The official `baw` read adapter, normalized wallet contracts, DRY_RUN gateway checks and
-read-only reconciliation reuse Phase 8 safety infrastructure. No wallet executor is enabled.
-See [Phase 9 report](docs/PHASE_9_REPORT.md) and
-[capability matrix](docs/AGENTIC_WALLET_CAPABILITIES.md).
-
-From the repository root, `.venv/bin/python scripts/inspect-wallet.py --read-only` opts into
-installed official CLI reads and prints only sanitized capability metadata. It currently returns
-`BAW_UNAVAILABLE`; it never installs, authenticates, signs or submits an order. The public app
-does not spawn a CLI worker. DATA/DRY_RUN remain PASS, TRUST remains BLOCKED, OPPORTUNITY
-remains BLOCKED_BY_TRUST, and all three LIVE gates remain BLOCKED. Phase 10 was NOT started.
-The dated milestones below remain historical checkpoints.
-
-Master Phase 8 — Safety and Execution: **IMPLEMENTATION PASS**. Deterministic Risk,
-funding/base-unit checks, Binance quote/build contracts, approvals, fingerprints, simulation,
-durable state/status tracking and a fail-closed ExecutionGateway are implemented as host-only
-services. No public execution API, signing, broadcast or RFQ submission is enabled.
-See [Phase 8 report and changed files](docs/PHASE_8_REPORT.md) and
-[verification evidence](docs/evidence/PHASE_8_VERIFICATION.json).
-
-Production gates remain DATA_GATE=PASS, DRY_RUN_GATE=PASS, TRUST_GATE=BLOCKED,
-OPPORTUNITY_GATE=BLOCKED_BY_TRUST and all three LIVE gates=BLOCKED.
-Fixture simulation does not prove live execution equivalence. Phase 9 was NOT started.
-The sole authoritative specification is [docs/MASTER_SPEC.md](docs/MASTER_SPEC.md).
-The dated milestone descriptions below remain historical checkpoints.
-
-Master Phase 7 — Opportunity Mode: **IMPLEMENTATION PASS**. The production Opportunity gate
-remains **BLOCKED_BY_TRUST**; all LIVE execution remains blocked. See
-[Phase 7 report](docs/PHASE_7_REPORT.md) for the full candidate contract, rejection/ranking,
-risk-budget semantics, tests and remaining real-data limitations. Phase 8 is not started.
-
-Offline synthetic scan (existing DEMO fixtures; no provider calls or real funds):
-
-```sh
-.venv/bin/python scripts/scan-opportunities.py --demo supported-move --budget 60 --risk-budget 2
-```
-
-Analytical API: `POST /api/opportunities/scan`, `GET /api/opportunities/{run_id}`.
-Budget and risk budget are explicit separate inputs; the risk budget is ex-ante and does
-not guarantee a maximum realized loss. Ordinary production navigation remains locked.
-The older dated milestone descriptions below are retained as history.
-
-Master Phase 6 — Multi-Agent Intelligence is implemented; its production data dependency remains
-BLOCKED. The authoritative specification is [docs/MASTER_SPEC.md](docs/MASTER_SPEC.md).
-Six structured agents share DEMO/LIVE_READ_ONLY evidence adapters, bounded calls/tools,
-look-ahead-safe memory and server-calculated confidence. Existing UI and production gates are unchanged.
-[Phase 6 report and validation](docs/PHASE_6_REPORT.md). Phase 7 has NOT started.
-
-Offline structured JSON, from the repository root; no credentials/network/execution calls:
-
-```sh
-.venv/bin/python scripts/analyze-agents.py --demo steady
-.venv/bin/python scripts/analyze-agents.py --demo thin-move
-.venv/bin/python scripts/analyze-agents.py --demo supported-move
-# Existing real replay only; expected DEFER/INSUFFICIENT_EVIDENCE:
-.venv/bin/python scripts/analyze-agents.py --real-replay \
-  data/research/phase5/a3e7be2630acccb2b7496d87f2e584ce2cf8af34811461738336d42aba59e98e.json
-```
-
-The default sample mandate is $60 with a separately explicit $2 risk budget, matching the existing
-synthetic risk inputs; it proposes no more than the existing $50 scenario notional. These are DEMO
-assumptions, not recommendations or live prices. `--intent` supplies another bounded explicit mandate;
-a risk-budget mismatch safely defers. Audit/memory storage is isolated under `data/agents/phase6/`;
-`--store` can select another separate directory. Optional LLM_PROVIDER/LLM_MODEL configuration
-belongs to a verified injected transport host; no provider is automatically enabled or assumed available.
-
-The following dated Phase 5 and earlier sections remain historical evidence.
-
-Master engineering Phase 5 — Research / Prediction is implemented; its real data gate remains
-**BLOCKED**. Offline point-in-time episodes, cosine retrieval, rolling Decimal OLS and deterministic
-replay reuse existing Trust evidence. No production gate or completed DEMO behavior changes.
-See [Phase 5 architecture, exact data blockers and verification](docs/PHASE_5_REPORT.md).
-From the repository root, run `.venv/bin/python scripts/replay-research.py`; it needs no API key or
-network and writes only to the separate, Git-ignored `data/research/phase5/` artifact store.
-Predictions remain unavailable on the current real history: 0/30 baseline, 0/30 model episodes,
-0/3 analogues. Next engineering phase is Phase 6, requiring separate authorization.
-
-Hackathon Demo Stage 4 extends the explicit **DEMO SANDBOX** through Trust → Opportunity → Risk → synthetic Quote → Risk revalidation → unsigned Request Preparation → local constraint Simulation → Paper Fill → Position → synthetic Monitor/Exit → calculated P&L → ledger-derived Scorecard. Three synthetic scenarios use the unchanged Trust engine; economic targets/costs and financial risk limits are separate marked assumptions. Opt in with `RUNTIME_MODE=DEMO DATA_MODE=DEMO`; sandbox databases are disposable memory and analysis references are bounded in-memory caches. Production Trust and Opportunity remain blocked. The default `RUNTIME_MODE=LIVE` preserves the existing application path and does not enable live trading. See the [Stage 1 sandbox runbook](docs/DEMO_TRUST_SANDBOX.md), [Stage 3A core contracts](docs/DEMO_OPPORTUNITY_STAGE_3A.md) and [Stage 3B contracts, flow and verification](docs/DEMO_PREPARATION_STAGE_3B.md). These quotes/requests are synthetic, simulation is a local constraint check, and nothing is executable, signed or broadcast. The paper ledger is isolated in memory, idempotent within a DEMO backend session and cleared on restart. See the [Stage 4 paper lifecycle, runbook and evidence](docs/DEMO_PAPER_STAGE_4.md). No real funds move.
-
-Canonical Phase 1 — Working Ask Flow is PASS for deterministic, non-executable exposure estimates and persisted DRY_RUN proposals. Engineering Stages 1/2 remain PASS. The backend implements dynamic Binance RWA discovery, market data, independent Massive equity/news adapters, a versioned U.S. calendar, exact Decimal normalization and isolated SQLite persistence. The frontend accepts stock budget requests and displays backend-authoritative estimates, issuer comparison, unknown costs and execution blockers. Canonical Phase 2 adds a separate deterministic analytical Trust endpoint/panel; its gate remains BLOCKED by unavailable real evidence. Production Opportunity scanning and live execution remain deferred. Master Phase 6 adds bounded, non-executable agents; see the current Phase 6 report.
-
-**All LIVE execution is blocked.** The application rejects LIVE configuration even if a flag is set to true. Its ordinary runtime provides non-executable portfolio/mandate/plan APIs, and has no live order, broadcast or wallet-mutation endpoints. DEMO paper APIs operate only on synthetic memory records.
-
-## Product roadmap and engineering stages
-
-Canonical product roadmap: Phase 0 — Reconnaissance; Phase 1 — Working Ask Flow; Phase 2 — Trust Layer; Phase 3 — Opportunity Mode; Phase 4 — Safety + Execution / remaining terminal capabilities. The master section 88 engineering stages and all later definitions remain unchanged; [PHASE_MAP.md](docs/PHASE_MAP.md) provides the complete mapping.
-
-Engineering Stage 1 — Foundation and Engineering Stage 2 — Data Layer have passed. Foundation supports Canonical Phase 1; Data Layer supports Canonical Phase 1 and prepares Canonical Phase 2. **The current canonical milestone is Phase 1 — Working Ask Flow, PASS:** request parsing, exposure comparison, indicative result/route and persisted DRY_RUN proposal are verified. Vendor quotes and transaction simulation remain unavailable and never reported as successful. Canonical Phase 2 — Trust Layer is analytically implemented and software-verified, with TRUST_GATE=BLOCKED by current equity403, missing mandatory metrics/history and partial news. Production Canonical Phase 3 — Opportunity Mode must not begin before Trust completion and TRUST_GATE=PASS. Separately authorized DEMO Stage 3A demonstrates Opportunity/Risk core calculations using synthetic evidence, without advancing either production gate.
-
-Original PHASE_1/PHASE_2 reports and the legacy `phase: 2` status field refer to engineering milestones. PHASE_1_REPORT now additionally records the completed canonical Ask milestone, while the current UI also links to the later Master Phase 15 analytical surfaces. The Data Layer report remains PASS and is not renamed as Trust Layer; [EXECUTION_GATES.md](docs/EXECUTION_GATES.md) records current development gates.
-
-## Local startup
-
-Requirements: Python 3.12+; Node 22.12+ (verified with Python 3.12.10 and Node 24.12.0). Run from the repository root.
+Requirements: **Python 3.12+** and **Node.js 22.12+**. Run these commands from the repository root:
 
 ```sh
 python3 -m venv .venv
@@ -209,234 +75,113 @@ python3 -m venv .venv
 npm ci
 ```
 
-Start the backend in one terminal:
+Use [.env.example](.env.example) as the configuration template. If `.env` does not exist, copy the template to `.env`; preserve any existing local configuration. Provider credentials are optional for the default scenario experience and must stay in the ignored local environment, never frontend variables or Git.
 
-```sh
-.venv/bin/python -m uvicorn app.main:create_app --factory --app-dir backend --host 127.0.0.1 --port 8000 --no-access-log
+Keep these settings for non-live use:
+
+```dotenv
+DATA_MODE=DEMO
+EXECUTION_MODE=DRY_RUN
+APPROVAL_MODE=PROPOSE_ONLY
+LIVE_TRADING_ENABLED=false
+REQUIRE_SIMULATION=true
 ```
 
-Start the frontend in another terminal:
+`RUNTIME_MODE=LIVE` names the ordinary backend runtime; it does **not** enable trading. `RUNTIME_MODE=DEMO` requires `DATA_MODE=DEMO` and uses isolated in-memory stores for the explicit demo pipeline.
+
+Start FastAPI in one terminal:
+
+```sh
+.venv/bin/python -m uvicorn app.main:create_app --factory \
+  --app-dir backend --host 127.0.0.1 --port 8000 --no-access-log
+```
+
+Start Vite in another terminal, also from the repository root:
 
 ```sh
 npm run dev
 ```
 
-Open <http://127.0.0.1:5173>. Vite proxies `/api` to the backend at port 8000. No provider credentials are needed. Stop each service with Ctrl+C; backend shutdown disposes its database engine.
+Open [http://127.0.0.1:5173/](http://127.0.0.1:5173/). Scroll past the interactive paper entrance to enter the scenario dashboard. Reduced motion or unavailable WebGL uses a static branded fallback. Vite proxies `/api` to the backend on port 8000.
 
-### Judge-facing DEMO SANDBOX
+The dashboard includes Overview, Markets, Trust & Signals, Opportunities, Portfolio, Research Lab and Scorecard. Its default prices, holdings, fictional Atlas/Meridian representations and evaluation outcomes are explicitly modeled scenario data.
 
-Start the existing backend with `RUNTIME_MODE=DEMO DATA_MODE=DEMO` (see the [DEMO UI runbook](docs/DEMO_UI_INTEGRATION.md) for the complete command), then run `npm run dev` from the repository root. Open <http://127.0.0.1:5173/#demo-sandbox> or select **DEMO SANDBOX** in navigation. NORMAL and LIKELY_NOISE show backend stand-down reasons; LIKELY_INFORMATION can proceed through the existing quote, preparation, local simulation, paper position/exit/P&L and scorecard stages. Every stage has an explicit status; React performs no financial calculations.
+The separate provider/operations workspace is available at [http://127.0.0.1:5173/?workspace=verified#overview](http://127.0.0.1:5173/?workspace=verified#overview). The URL selects that interface; it does not certify provider data. Read-only real-provider access requires `DATA_MODE=LIVE_READ_ONLY` and the relevant credentials/feed configuration in `.env.example`. The equity provider must be selected explicitly; unavailable reads do not silently fall back to synthetic data.
 
-Overview's **Assess trust** remains the canonical assessment. The production Opportunity sidebar item remains disabled. In the ordinary runtime, the sandbox page explains that DEMO APIs are disabled and makes no fallback calls. Production gates and all live execution restrictions are unchanged.
-
-### Master Phase 10: durable position machinery
-
-The canonical lifecycle now persists positions, execution evidence, quantities, exit intents and monitor jobs in mode-separated SQLite stores under `data/positions/phase10/`. `GET /api/positions` and `GET /api/positions/{position_id}` inspect the local single-account records. They expose no write or execution operation. The existing DEMO paper ledger remains separate and synthetic.
-
-`POSTOPEN_EXIT_MINUTES=10` schedules the deterministic exit after the first verified NYSE regular opening at or after confirmed entry. It accepts integer minutes from 1 to 120. A bounded startup recovery restores jobs and reconciles existing execution IDs; an expired lease can be reclaimed, while unresolved settlement blocks dependent preparation. Run the one-shot monitor from the repository root (a host scheduler may invoke it once per minute):
+For the explicit demo pipeline, replace the backend command with:
 
 ```sh
-.venv/bin/python scripts/monitor-positions.py --limit 100
+RUNTIME_MODE=DEMO DATA_MODE=DEMO .venv/bin/python -m uvicorn \
+  app.main:create_app --factory --app-dir backend \
+  --host 127.0.0.1 --port 8000 --no-access-log
 ```
 
-The monitor only reads existing status and records due exits. Fresh host-verified risk/funding/allowance facts are still required for exit preparation through the existing safety pipeline. Actual exits remain blocked; a quote or simulation does not close a position. Production refuses in-memory canonical storage. See the [Phase 10 report](docs/PHASE_10_REPORT.md) for evidence, recovery behavior and remaining live blockers. Phase 11 has not started.
+Then open [http://127.0.0.1:5173/?workspace=verified#demo-sandbox](http://127.0.0.1:5173/?workspace=verified#demo-sandbox). NORMAL and LIKELY_NOISE demonstrate stand-down paths; LIKELY_INFORMATION can proceed through supported opportunity, risk, routing, synthetic quote/preparation, local simulation and paper position/exit/P&L stages. No funds move, and the paper state clears on restart.
 
-### An existing development server occupies the port
+Backend health is available at `/api/health`; configuration and gate status are available at `/api/system-status`.
 
-Run only one backend on port 8000 and one frontend on port 5173. A second launch can initialize successfully and then fail to bind because the first instance is still running. Inspect the listener before taking action:
+## Development checks
+
+Run from the repository root:
 
 ```sh
-lsof -nP -iTCP:8000 -sTCP:LISTEN
-lsof -nP -iTCP:5173 -sTCP:LISTEN
-```
-
-Confirm the process command and working directory belong to this project. For a previous Parity Pulse instance, stop it with Ctrl+C in its original terminal or send SIGTERM to its confirmed PID, then rerun the documented command. Do not terminate an unrelated listener. `npm run dev` is the canonical frontend command from the repository root; the root npm workspace delegates to `frontend`.
-
-See the [post-gate startup verification](docs/PHASE_1_POST_GATE_DEBUG.md) for the resolved duplicate-instance conflict and fresh backend/frontend checks.
-
-## Configuration
-
-Defaults work without an environment file. Optional settings can be supplied through the process environment or a local root `.env`; process variables take precedence. See [.env.example](.env.example). Preserve any existing `.env`; never overwrite it with the example or commit it. The frontend reads no backend configuration file.
-
-| Variable | Default / allowed values through Engineering Stage 2 |
-|---|---|
-| APP_ENV | development; development/test/production |
-| DATA_MODE | DEMO; DEMO/LIVE_READ_ONLY |
-| EXECUTION_MODE | DRY_RUN; LIVE is rejected |
-| APPROVAL_MODE | PROPOSE_ONLY; AUTONOMOUS is rejected |
-| LIVE_TRADING_ENABLED | false; true is rejected |
-| REQUIRE_SIMULATION | true; false is rejected |
-| DATABASE_URL | SQLite file under root data/; local SQLite only; sqlite:///:memory: supported for tests |
-| LOG_LEVEL | INFO; DEBUG/INFO/WARNING/ERROR/CRITICAL |
-| BINANCE_WEB3_API_KEY / BINANCE_WEB3_SECRET_KEY | Required only for Binance LIVE_READ_ONLY reads |
-| MASSIVE_API_KEY | Required only for independent LIVE_READ_ONLY equity/news reads |
-| MASSIVE_DATA_QUALITY | UNKNOWN; UNKNOWN/DELAYED/REALTIME, subject to verified entitlement; a missing source time is never a fresh quote |
-| EQUITY_PROVIDER | MASSIVE for existing installations; explicitly select ALPACA as the primary equity reader; no automatic fallback |
-| ALPACA_API_KEY / ALPACA_SECRET_KEY | Local read-only market-data credentials, never exposed to the frontend |
-| ALPACA_FEED | iex; explicit iex/sip/delayed_sip/boats/overnight selection, not proof of entitlement |
-| ALPACA_DATA_QUALITY | UNKNOWN; keep UNKNOWN until actual feed/freshness verification; REALTIME is an operator assertion and does not pass Trust |
-| LLM_API_KEY | Reserved for explicitly injected LLM transport; excluded from agent inputs/output; CLI does not load it |
-
-Boolean settings use `true` or `false`. Invalid enum values, malformed database URLs and unsafe combinations refuse startup with a sanitized error. LIVE_READ_ONLY enables reviewed provider reads when configured. It never loads DEMO fixtures or enables execution. Credential absence, permission failure or invalid data returns an explicit limitation/error, not substitute data. Keep MASSIVE_DATA_QUALITY=UNKNOWN unless an entitlement is independently verified; this account currently rejects current snapshots/NBBO.
-
-The new [Alpaca read-only adapter and gap report](docs/SESSION_AWARE_DATA_REPORT.md) documents
-the staged independent-equity migration. Existing news still uses Massive. Alpaca credentials are
-currently absent; no actual entitlement/price/history is verified and Trust still rejects the new
-source pending evidence-driven reference-policy integration. The isolated diagnostic makes only
-quote/1m/5m data reads and writes no market observations:
-
-```sh
-PYTHONPATH=backend .venv/bin/python scripts/verify-alpaca-readonly.py --live \
-  --start 2026-10-08T13:30:00Z --end 2026-10-08T14:00:00Z
-```
-
-Keep DRY_RUN, PROPOSE_ONLY, LIVE_TRADING_ENABLED=false and REQUIRE_SIMULATION=true.
-Finnhub, optional HIP-3 and broader session-aware reference selection remain subsequent work;
-no Trust/Opportunity/LIVE gate is advanced by provider selection.
-
-## Architecture through Canonical Phase 2
-
-```text
-backend/app/        FastAPI, read clients/providers, normalized models, repositories, ingestion, calendar
-backend/tests/      unit, API/lifecycle and security tests
-frontend/src/       React shell, typed status service, TanStack Query hook, tests
-data/demo/          deterministic, explicitly labeled DEMO metadata and financial fixtures
-scripts/           localhost/security audits and bounded read-only verification
-docs/              canonical specifications, capability gates and phase reports
-```
-
-Startup validates settings and initializes SQLite schema revision4, retaining existing data/checkpoint/proposal tables and adding isolated Trust assessment/sample/episode tables. DEMO seeds only explicitly labeled fixtures. LIVE_READ_ONLY startup performs no external calls; asset inspection invokes bounded provider reads. The fixture's fixed ID/timestamp, DEMO label and `execution_allowed=false` prevent a data fixture from claiming execution authority. The frontend tests' synthetic fixture is isolated from production code and is never an unavailable-backend fallback.
-
-Each request has a generated `X-Request-ID`, a validated/generated UUID `X-Correlation-ID` and an application `X-Run-ID`. Responses and error envelopes retain these IDs. Application/request logs are JSON; request logs include route templates, not raw query strings, bodies or headers. Known credentials are redacted, raw exception messages/tracebacks are omitted, and unexpected log metadata is dropped. Provider fields are excluded from settings serialization; API responses use explicit public schemas.
-
-`GET /api/health` checks lifecycle readiness and a real SQLite query. `GET /api/system-status` returns safe environment/mode/gate/version/fixture status. Database unavailability returns HTTP 503. Unknown routes and errors use sanitized envelopes. Neither endpoint accepts settings changes; query parameters cannot enable execution. Engineering Stage 2 adds only `GET /api/assets` and `GET /api/assets/{ticker}` for backend-authoritative data inspection, with Decimal strings and explicit mode/quality/provenance/limitations.
-
-The frontend shows verified status or an explicit unavailable state and discards stale health/results after failure. The Ask form makes a proposal POST only after explicit submission; it displays financial strings computed by the backend and hides expired selected quantities. Opportunity and Autopilot remain disabled. No execution controls or frontend financial calculations exist.
-
-## Tests and checks
-
-```sh
-.venv/bin/python -m pytest --cov=app --cov-report=term-missing
-.venv/bin/ruff check backend scripts
-.venv/bin/ruff format --check backend scripts
 npm test
 npm run build
+.venv/bin/python -m pytest -q
+.venv/bin/python -m ruff check backend scripts
+PYTHONPATH=backend .venv/bin/python scripts/generate-ui-contracts.py --check
 .venv/bin/python scripts/check-security.py
 ```
 
-With both local servers running:
+`npm run build` includes TypeScript checking. The security check inspects local configured-secret leakage and frontend isolation without printing credentials.
+
+For browser journeys, build first, then run:
 
 ```sh
-npm run test:integration
+.venv/bin/python scripts/verify-frontend-phase15.py
 ```
 
-Tests use temporary SQLite databases, sanitized real response fixtures and synthetic credentials without loading the developer's `.env` or contacting providers. They cover signing/wire contracts, adapters, precision, source timestamps, data quality, malformed schemas, retries/rate limits, calendar/DST, discovery, pagination, persistence/conflicts/resumability, mode isolation and Engineering Stage 1 regressions. The security audit reads configured values only into memory, scans source/docs/build/fixture/local-database artifacts without printing matches, validates Git ignore semantics in a temporary repository and checks frontend bundle isolation. This workspace is not automatically initialized or committed as a Git repository.
+This requires local Google Chrome and free ports 8054–8057 and 5178. It uses disposable credential-free fixture backends, retains screenshots in a temporary directory and stops only its own processes. `--landing-only` restricts it to landing-page checks.
 
-## Deterministic routing milestone
+## Data and execution boundaries
 
-The Ask Flow now evaluates every discovered representation with the shared `RoutingService`, also used by the DEMO Opportunity and Quote adapters. The Route Comparison view exposes eligibility, ranking, rejection reasons and provenance. Verified complete costs use exact all-in cost per real share; missing costs produce a clearly labeled, non-executable price-only comparison. Opportunity routing additionally requires the existing Trust, Risk, liquidity and cost controls. No issuer or ticker is hardcoded as the winner.
+- **Provider observations** retain source identity, observation/publication time, retrieval time and quality status. Credentials, feed entitlements and coverage determine what is available.
+- **Historical observations** remain historical. The bundled Alpaca NVDA/AAPL display capture is separate from modeled token economics and is not a current-equity reference.
+- **Synthetic fixtures and scenario values** are labeled and isolated. Their liquidity, holdings, prices and outcomes are not verified market data or predictive performance.
+- **Independent references matter.** Binance `referencePrice` is not substituted for an independent traditional-equity quote. A stale quote or an unknown historical share ratio cannot be treated as current or known as-of evidence.
 
-See the [routing architecture, policy, examples and verification](docs/ROUTING_MILESTONE.md). Production Trust and Opportunity gates remain blocked; all live execution gates remain blocked. Existing DEMO fixtures, production historical coverage and the scheduled timestamp-alignment diagnostic are unchanged. Routing does not authorize execution.
+Current production gates:
 
-## Docker
+| Gate | Status |
+|---|---|
+| DATA_GATE | PASS |
+| DRY_RUN_GATE | PASS |
+| TRUST_GATE | BLOCKED |
+| OPPORTUNITY_GATE | BLOCKED_BY_TRUST |
+| SWAP_LIVE_GATE | BLOCKED |
+| RFQ_LIVE_GATE | BLOCKED |
+| AGENTIC_WALLET_LIVE_GATE | BLOCKED |
 
-Docker Engine with Compose is required. No Binance credentials are passed to containers; `.env` files are excluded from build contexts. Compose only interpolates the explicitly listed application settings.
+Trust still requires admitted independent references, authoritative liquidity and qualifying point-in-time history, including the existing 30 baseline / 30 opening-model / 3 analogue safeguards in their applicable scopes. Event ingestion or synthetic demonstrations do not resolve those requirements.
+
+Execution interfaces and offline safety tests exist, but live swap, RFQ and Agentic Wallet readiness is not established. Startup rejects live trading configuration. A passing test suite, a prepared payload or a local simulation does not establish production trading readiness or unlock any gate.
+
+## Deployment
+
+The included [Compose configuration](compose.yaml) builds the Python backend and serves the Vite production bundle through unprivileged nginx. nginx forwards `/api` to FastAPI; a named volume persists SQLite data. Both published ports bind to loopback.
 
 ```sh
-docker compose build
-docker compose up -d
-docker compose ps
-curl --fail http://127.0.0.1:8080/api/health
-docker compose down
+docker compose up --build
 ```
 
-Open <http://127.0.0.1:8080>. The frontend container serves the production bundle and proxies `/api` to the backend. Both services bind host ports to loopback. The backend runs as an unprivileged user and persists SQLite data-layer records in `parity_data`. Fixture files are separate from the writable database volume. Each image defines a health check; frontend startup waits for backend health. The frontend uses an unprivileged nginx image. Named database data survives `down`.
+Open [http://127.0.0.1:8080/](http://127.0.0.1:8080/). Keep the backend reachable by the frontend proxy and retain durable writable storage for ordinary lifecycle records. The backend image currently includes `data/demo`, but not the separate `data/display` history capture; those charts report unavailable when that capture is absent.
 
-Optional environment configuration uses the same typed settings table; changing a setting to an unsafe LIVE combination causes backend startup to fail. For a backend-only image: `docker build -t parity-pulse-backend .`; `docker run --rm -p 127.0.0.1:8000:8000 parity-pulse-backend`. The SQLite file is ephemeral in that standalone command unless a volume is mounted at `/app/var`.
+This is a local non-live deployment configuration. Docker build/run verification is not established here; remote authenticated execution deployment is not provided. `.dockerignore` excludes local credentials, and deployment configuration must retain the same execution restrictions.
 
-Docker configuration is included, but Docker is unavailable in the current development environment; image build/run verification is recorded as NOT_RUN in the phase report.
+## Fixtures and identification assets
 
-## Gates and phase boundary
+JSON fixtures remain under [backend/tests/fixtures](backend/tests/fixtures). Provider captures are sanitized and their manifest records hashes; numeric money values are canonical decimal strings rather than byte-identical raw responses. Finnhub fixtures are synthetic protocol inputs, not real events or qualifying Trust evidence. Tests use fixed clocks, mocked transports and isolated stores.
 
-```text
-CANONICAL_PHASE_1_GATE=PASS
-DATA_GATE=PASS
-TRUST_GATE=BLOCKED
-OPPORTUNITY_GATE=BLOCKED_BY_TRUST
-DRY_RUN_GATE=PASS
-SWAP_LIVE_GATE=BLOCKED
-RFQ_LIVE_GATE=BLOCKED
-AGENTIC_WALLET_LIVE_GATE=BLOCKED
-```
+Bundled company/issuer identification assets are served locally. [Brand provenance](frontend/public/brands/provenance.json) records original source URLs and hashes. These proprietary identifiers imply neither endorsement nor a redistribution license; fictional scenario issuers use labeled initials. Public/commercial redistribution rights have not been established by this repository.
 
-DRY_RUN_GATE=PASS is scoped to verified indicative Ask estimates and non-executable proposals, with unavailable simulations failing execution readiness. REQUIRE_SIMULATION stays true; transaction simulation is UNAVAILABLE. All three LIVE blockers remain unresolved. The five legacy system-status fields report DATA/DRY_RUN PASS and three blocked LIVE gates; the separate Trust endpoint returns trust_gate=BLOCKED. Production Opportunity remains gated; the separately authorized synthetic Opportunity/Risk engine does not advance that gate.
-
-See [Engineering Stage 2 Data Layer report](docs/PHASE_2_REPORT.md), [phase map](docs/PHASE_MAP.md), [architecture](docs/ARCHITECTURE.md), [API matrix](docs/API_MATRIX.md) and [execution gates](docs/EXECUTION_GATES.md). See [Canonical Phase 1 report](docs/PHASE_1_REPORT.md#canonical-phase-1--working-ask-flow) and [automated gate evidence](docs/evidence/CANONICAL_PHASE_1_GATE.json). See the [Canonical Phase 2 Trust report](docs/PHASE_2_TRUST_REPORT.md), [data contracts/policy](docs/DATA_CONTRACTS.md), [test matrix](docs/TEST_MATRIX.md) and [Trust gate evidence](docs/evidence/CANONICAL_PHASE_2_TRUST_GATE.json). Production advancement still requires Phase 2 data/capability remediation and Trust gate re-verification. The historical [DEMO Stage 3B](docs/DEMO_PREPARATION_STAGE_3B.md) stops after local synthetic simulation. The separately authorized [DEMO Stage 4](docs/DEMO_PAPER_STAGE_4.md) adds isolated paper fills, positions, synthetic exit/P&L and scorecards without advancing production gates.
-
-
-## Read-only data inspection and verification
-
-With the backend running in its default DEMO mode:
-
-```sh
-curl --fail http://127.0.0.1:8000/api/assets
-curl --fail http://127.0.0.1:8000/api/assets/NVDA
-```
-
-For provider inspection, configure credentials locally and start with DATA_MODE=LIVE_READ_ONLY while retaining DRY_RUN, PROPOSE_ONLY, false LIVE enablement and required simulation. No source-code port or safety setting changes are required. BSC stock discovery uses runtime issuer/chain/catalog data; invalid representations are excluded with an explicit PARTIAL limitation. Unavailable equity snapshots do not become Binance reference prices.
-
-The optional verification command is an explicit bounded real-data operation, not a startup hook or scheduler. It reads configured credentials only in memory, uses the same allowlisted clients and writes LIVE records into `data/phase2-verification.db`, independently of the running DEMO database. Safe result metadata goes to `docs/evidence/PHASE_2_PIPELINE.json`.
-
-```sh
-.venv/bin/python scripts/verify-data-layer.py --recv-window 60000
-```
-
-The client default receive window remains5000ms. The documented optional60000ms window was used for this verification after slow requests returned401; authentication errors are not automatically retried. The script makes no order, transaction, wallet or fund-moving call. It can take over a minute because Massive reads are conservatively paced at12.1 seconds/request.
-
-Historical ingestion is a backend service with bounded page budgets/checkpoints and explicit completion status. News history is partial, token trade price units and candle volume units are unverified, and historical token ratios come from metadata available at ingestion rather than proven as-of ratios. Current independent snapshot/NBBO access is403; historical close is labeled HISTORICAL. The static calendar covers only verified NYSE2026–2028 sessions and NYSE American extended hours. These limitations must be resolved before affected later-phase analysis.
-
-## Working Ask Flow — DRY_RUN only
-
-At <http://127.0.0.1:5173>, submit “I have $50 of Nvidia” or “Buy $50 Apple”. In DEMO, all prices/issuers/ratios are visibly synthetic. LIVE_READ_ONLY dynamically discovers real representations; failed reads never fall back to fixtures.
-
-```sh
-curl --fail http://127.0.0.1:8000/api/exposure/quote \
-  -H 'Content-Type: application/json' \
-  --data '{"text":"I have $50 of Nvidia"}'
-.venv/bin/python scripts/verify-ask-flow.py
-```
-
-The result includes resolved company/ticker, eligible and excluded representations, selected issuer, exact shares/token and USD/token, effective USD/share, budget, rounded tokens/share exposure, cost/remainder, source times, route reason, explicit unknown costs, independent-reference availability, expiry, proposal UUID and no-broadcast statement. POST /api/intent/parse separately exposes bounded parsing; GET /api/exposure/proposals/{proposal_id} retrieves an isolated stored proposal.
-
-Indicative estimates use token price and ratio only, before unknown fees/gas/slippage/funding conversion. Selection is not a tradable route or cheapest all-in execution. Unknown/closed/paused/overnight issuer states, stale/malformed/contradictory token data, missing decimals and unsupported requests fail closed. Missing/stale independent equity prevents any current equity comparison or execution readiness; it cannot become a Binance reference price or historical-current substitute. Every proposal has execution_ready=false, simulation_status=UNAVAILABLE, require_simulation=true and transaction_broadcast=false.
-
-The verification command above uses only existing synthetic DEMO fixtures and an isolated database. Optional actual provider verification uses configured secrets in memory and the unchanged market-only allowlist:
-
-```sh
-.venv/bin/python scripts/verify-ask-flow.py --live-read-only
-```
-
-It writes a separate LIVE verification database and sanitized evidence; it never starts a wallet, obtains a signature, calls a Trading/Transaction endpoint, submits an RFQ order or broadcasts. Actual verification found two NVDA representations and selected Ondo for an indicative proposal; current independent snapshot returned403. This is a measured read-only result, not a current-equity entitlement, executable vendor quote or simulation certificate.
-
-## Canonical Phase 2 — analytical Trust Layer
-
-Submit a supported uppercase ticker in the separate Trust panel, or request:
-
-```sh
-curl --fail http://127.0.0.1:8000/api/assets/NVDA/trust
-.venv/bin/python scripts/verify-trust.py
-```
-
-Results include representations/ratios/prices, independent reference source/kind/quality/times, scheduled regime, exact comparable value/deviation where available, freshness, baseline/sample counts, verified liquidity, aligned news, historical analogues, classification/reasons and explicit missing evidence. The backend is authoritative; the frontend performs no Trust/financial calculation. Default fixed DEMO fixtures are not refreshed into fictitious current data or history, so insufficient evidence is expected. All live/ready/broadcast flags remain false. Trust never changes Ask proposals or execution behavior.
-
-REGULAR requires a fresh verified independent current quote; Massive snapshot403 yields INSUFFICIENT_EVIDENCE, not a Binance or historical-current fallback. Closed sessions may use the previous actual regular close explicitly labeled HISTORICAL. Required baseline30/analogue3 safeguards, exact stock/representation/regime/ratio partitions and available-time checks remain mandatory. V1 classification rules are documented uncalibrated engineering heuristics with LOW confidence cap, not validated profitability or news causality. No LLM is used, including provider LLM sentiment.
-
-Optional explicit read-only verification:
-
-```sh
-.venv/bin/python scripts/verify-trust.py --live-read-only
-node scripts/check-trust-browser.mjs
-node scripts/check-ask-browser.mjs
-```
-
-Provider verification uses new isolated phase2-trust databases and sanitized evidence. Browser checks use disposable Chrome profiles against the running DEMO app; their new Trust/Ask-regression artifacts preserve historical Phase 1/Data Layer evidence. Actual NVDA evaluation discovered two issuers but current-equity403, absent mandatory liquidity/activity, partial news and insufficient real history keep TRUST_GATE=BLOCKED. No executable transaction is constructed or submitted.
+The Agent Studio sidecar remains in the source tree but is not a verified or enabled execution path. It is not needed to run the dashboard.
